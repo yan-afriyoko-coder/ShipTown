@@ -4,8 +4,8 @@ namespace Tests\Feature\Modules\SystemHeartbeats;
 
 use App\Events\EveryDayEvent;
 use App\Events\EveryFiveMinutesEvent;
-use App\Events\EveryHourEvent;
 use App\Events\EveryTenMinutesEvent;
+use App\Jobs\DispatchEveryDayEventJob;
 use App\Jobs\DispatchEveryMinuteEventJob;
 use App\Models\Heartbeat;
 use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsEventServiceProviderBase;
@@ -62,7 +62,7 @@ class BasicModuleTest extends TestCase
         /** @test */
     public function test_hourlyEvent_heartbeat()
     {
-        EveryHourEvent::dispatch();
+        DispatchEveryDayEventJob::dispatch();
 
         $this->assertDatabaseHas('heartbeats', [
             'code' => EveryHourEventListener::class

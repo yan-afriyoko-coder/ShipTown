@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Jobs\temp;
 
-use App\Events\EveryHourEvent;
+use App\Jobs\DispatchEveryDayEventJob;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsEventServiceProviderBase;
@@ -33,7 +33,7 @@ class StockInReservationWarehouseMonitorJobTest extends TestCase
         $inventory = $product->inventory->first;
         $inventory->update(['quantity' => 1]);
 
-        EveryHourEvent::dispatch();
+        DispatchEveryDayEventJob::dispatch();
 
         $this->assertNotTrue(
             Inventory::query()
