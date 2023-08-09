@@ -26,7 +26,8 @@ class BasicModuleTest extends TestCase
 
         Bus::fake();
 
-        DispatchEveryFiveMinutesEventJob::dispatch();
+        $job = new DispatchEveryFiveMinutesEventJob();
+        $job->handle();
 
         Bus::assertDispatched(DispatchImportOrdersJobs::class);
     }
