@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use App\Models\CacheLock;
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\Heartbeat;
@@ -61,7 +60,6 @@ trait ResetsDatabase
         Automation::query()->forceDelete();
         Condition::query()->forceDelete();
         Action::query()->forceDelete();
-        CacheLock::query()->forceDelete();
         Heartbeat::query()->forceDelete();
 
         Module::query()->forceDelete();

@@ -2,13 +2,13 @@
 
 namespace App\Modules\Automations\src\Helpers;
 
-use App\Models\CacheLock;
 use App\Models\Order;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class AutomationHelper
@@ -121,7 +121,9 @@ class AutomationHelper
      */
     private static function runActions(Automation $automation, Order $order): bool
     {
-        if (! CacheLock::acquire(__METHOD__, $order->id, 60)) {
+        $lock = Cache::lock(implode('', [__METHOD__, $order->id]), 60);
+
+        if (! $lock->get()) {
             return false;
         }
 
@@ -154,7 +156,7 @@ class AutomationHelper
             ]);
             $result = false;
         } finally {
-            CacheLock::release(__METHOD__, $order->id);
+            $lock->release();
         }
 
         // log
