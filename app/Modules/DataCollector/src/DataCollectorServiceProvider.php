@@ -3,7 +3,6 @@
 namespace App\Modules\DataCollector\src;
 
 use App\Events\EveryTenMinutesEvent;
-use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 use App\Modules\DataCollector\src\Jobs\DispatchCollectionsTasksJob;
 

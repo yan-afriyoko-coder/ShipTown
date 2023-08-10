@@ -11,11 +11,6 @@ class EveryFiveMinutesEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct()
-    {
-        //
-    }
-
     public function broadcastOn(): PrivateChannel
     {
         return new PrivateChannel('channel-name');

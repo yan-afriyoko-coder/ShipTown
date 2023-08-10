@@ -2,7 +2,6 @@
 
 namespace App\Modules\Automations\src\Jobs;
 
-use App\Models\CacheLock;
 use App\Models\Order;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Services\AutomationService;

@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Events\EveryMinuteEvent;
 use App\Events\SyncRequestedEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

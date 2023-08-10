@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Api\Run;
 
-use App\Events\EveryMinuteEvent;
-use App\Events\SyncRequestedEvent;
 use App\Http\Controllers\Controller;
 use App\Jobs\SyncRequestJob;
 use Illuminate\Support\Facades\Request;

@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Modules\AutoPilot;
 
-use App\Events\EveryHourEvent;
+use App\Jobs\DispatchEveryDayEventJob;
+use App\Jobs\DispatchEveryFiveMinutesEventJob;
+use App\Jobs\DispatchEveryHourEventJobs;
 use App\Modules\AutoPilot\src\AutoPilotServiceProvider;
 use App\Modules\AutoPilot\src\Jobs\ClearPackerIdJob;
 use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsEventServiceProviderBase;
@@ -26,7 +28,8 @@ class BasicModuleTest extends TestCase
 
         Bus::fake();
 
-        EveryHourEvent::dispatch();
+        $job = new DispatchEveryHourEventJobs();
+        $job->handle();
 
         Bus::assertDispatched(ClearPackerIdJob::class);
     }

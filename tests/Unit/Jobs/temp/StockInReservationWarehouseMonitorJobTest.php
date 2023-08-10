@@ -2,44 +2,39 @@
 
 namespace Tests\Unit\Jobs\temp;
 
-use App\Events\EveryHourEvent;
+use App\Jobs\DispatchEveryDayEventJob;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsEventServiceProviderBase;
 use App\Modules\InventoryReservations\src\Models\Configuration;
-use App\Modules\Maintenance\src\EventServiceProviderBase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Modules\Maintenance\src\EventServiceProviderBase as MaintenanceEventServiceProviderBase;
 use Tests\TestCase;
 
 class StockInReservationWarehouseMonitorJobTest extends TestCase
 {
-    use RefreshDatabase;
-
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testExample()
+    public function testIfFixesQuantityReserved()
     {
-        EventServiceProviderBase::enableModule();
+        MaintenanceEventServiceProviderBase::enableModule();
         InventoryReservationsEventServiceProviderBase::enableModule();
 
-        $inventoryReservationsWarehouseId = Configuration::first()->warehouse_id;
+        /** @var Configuration $configuration */
+        $configuration = Configuration::first();
 
         /** @var Product $product */
         $product = Product::factory()->create();
 
+        /** @var Inventory $inventory */
         $inventory = $product->inventory->first;
         $inventory->update(['quantity' => 1]);
 
-        EveryHourEvent::dispatch();
+        DispatchEveryDayEventJob::dispatch();
 
         $this->assertNotTrue(
             Inventory::query()
-                ->where(['warehouse_id' => $inventoryReservationsWarehouseId])
-                ->where('quantity', '>', 0)
+                ->where(['warehouse_id' => $configuration->warehouse_id])
+                ->where('quantity_reserved', '>', 0)
                 ->exists()
         );
+
     }
 }

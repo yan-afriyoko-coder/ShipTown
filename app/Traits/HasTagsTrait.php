@@ -168,10 +168,16 @@ trait HasTagsTrait
     {
         $tag = $this->tags()->where(['type' => $tagType])->first();
 
-        if ($tag && $tag->name !== $tagName) {
-            $this->detachTag($tag);
+        if ($tag === null) {
+            $this->attachTag($tagName, $tagType);
+            return;
         }
 
+        if ($tag->name === $tagName) {
+            return;
+        }
+
+        $this->detachTag($tag);
         $this->attachTag($tagName, $tagType);
     }
 }
