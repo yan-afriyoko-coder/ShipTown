@@ -51,8 +51,6 @@ class TransferOutJob implements ShouldQueue, ShouldBeUnique
                 });
             });
 
-        Log::debug('TransferOutJob finished', ['data_collection_id' => $this->dataCollection_id]);
-
         if (DataCollectionRecord::query()->where('quantity_scanned', '!=', 0)->exists()) {
             return;
         }
@@ -61,12 +59,10 @@ class TransferOutJob implements ShouldQueue, ShouldBeUnique
             ->where('id', $this->dataCollection_id)
             ->update(['currently_running_task' => null]);
 
-        if (DataCollectionRecord::query()->where('quantity_to_scan', '!=', 0)->exists()) {
-            return;
-        }
-
         DataCollection::query()
             ->where('id', $this->dataCollection_id)
             ->delete();
+
+        Log::debug('TransferOutJob finished', ['data_collection_id' => $this->dataCollection_id]);
     }
 }
