@@ -3,27 +3,18 @@
 namespace App\Http\Controllers\Api\DataCollectorActions;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\DataCollectionResource;
-use App\Models\DataCollection;
-use App\Modules\DataCollector\src\Services\DataCollectorService;
+use App\Modules\DataCollector\src\Jobs\TransferToJob;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class TransferToWarehouseController extends Controller
 {
-    public function store(Request $request): DataCollectionResource
+    public function store(Request $request): JsonResponse
     {
-        $destinationDataCollection = null;
+        TransferToJob::dispatch($request->get('data_collector_id'), $request->get('destination_warehouse_id'));
 
-        DB::transaction(function () use ($request, &$destinationDataCollection) {
-            $sourceDataCollection = DataCollection::findOrFail($request->get('data_collector_id'));
-
-            $destinationDataCollection = DataCollectorService::transferScannedTo(
-                $sourceDataCollection,
-                $request->get('destination_warehouse_id')
-            );
-        });
-
-        return DataCollectionResource::make($destinationDataCollection);
+        return response()->json([
+            'message' => 'Transfer started',
+        ]);
     }
 }
