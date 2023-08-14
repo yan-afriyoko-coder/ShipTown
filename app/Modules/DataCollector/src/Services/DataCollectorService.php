@@ -26,6 +26,8 @@ class DataCollectorService
                 'currently_running_task' => TransferInJob::class,
             ]);
 
+            $dataCollection->delete();
+
             TransferInJob::dispatch($dataCollection->id);
             return;
         }
@@ -35,6 +37,8 @@ class DataCollectorService
                 'type' => DataCollectionTransferOut::class,
                 'currently_running_task' => TransferOutJob::class
             ]);
+
+            $dataCollection->delete();
 
             TransferOutJob::dispatch($dataCollection->id);
             return;
