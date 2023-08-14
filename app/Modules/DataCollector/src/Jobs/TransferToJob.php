@@ -25,12 +25,10 @@ class TransferToJob implements ShouldQueue, ShouldBeUnique
     public int $uniqueFor = 60;
 
     public int $dataCollection_id;
-    public int $destination_warehouse_id;
 
-    public function __construct(int $dataCollection_id, int $destination_warehouse_id)
+    public function __construct(int $dataCollection_id)
     {
         $this->dataCollection_id = $dataCollection_id;
-        $this->destination_warehouse_id = $destination_warehouse_id;
     }
 
     public function uniqueId(): int
@@ -45,7 +43,7 @@ class TransferToJob implements ShouldQueue, ShouldBeUnique
 
             DataCollectorService::transferScannedTo(
                 $sourceDataCollection,
-                $this->destination_warehouse_id
+                $sourceDataCollection->destination_warehouse_id
             );
         });
     }

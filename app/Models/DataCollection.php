@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
  *  DataCollection
  * @property int $id
  * @property int $warehouse_id
+ * @property int $destination_warehouse_id
  * @property string $name
  * @property Carbon $deleted_at
  * @property Carbon $created_at
@@ -40,6 +41,7 @@ class DataCollection extends BaseModel
     protected $fillable = [
         'type',
         'warehouse_id',
+        'destination_warehouse_id',
         'name',
         'currently_running_task'
     ];
