@@ -1,7 +1,7 @@
 <template>
     <div>
         <template v-if="dataCollection && dataCollection['currently_running_task'] != null">
-            <div class="alert alert-danger">Please wait while stock being transferred in</div>
+            <div class="alert alert-danger">Please wait while stock being transferred</div>
         </template>
 
         <swiping-card>
@@ -152,21 +152,13 @@
 
         </b-modal>
 
-        <b-modal id="transferToModal" no-fade hide-header
-                 @hidden="setFocusElementById(100,'barcodeInput', true, true)"
-        >
+        <b-modal id="transferToModal" no-fade hide-header @hidden="setFocusElementById(100,'barcodeInput', true, true)">
             <template v-for="warehouse in warehouses">
-                <button @click.prevent="transferToWarehouse(warehouse)" v-b-toggle class="col btn mb-2 btn-primary">{{ warehouse.name }}</button>
+                <button @click.prevent="transferToWarehouse(warehouse)" v-if="warehouse.id !== dataCollection.warehouse_id" v-b-toggle class="col btn mb-2 btn-primary">{{ warehouse.name }}</button>
             </template>
 
             <template #modal-footer>
-                <b-button
-                    variant="outline-secondary"
-                    class="float-right"
-                    @click="$bvModal.hide('transferToModal');"
-                >
-                    Close
-                </b-button>
+                <b-button variant="outline-secondary" class="float-right" @click="$bvModal.hide('transferToModal');">Close</b-button>
             </template>
         </b-modal>
 
@@ -189,52 +181,53 @@
     import ModalInventoryMovement from './SharedComponents/ModalInventoryMovement';
 
     export default {
-            mixins: [loadingOverlay, beep, url, api, helpers],
+        mixins: [loadingOverlay, beep, url, api, helpers],
 
-            components: {
-                FiltersModal,
-                NumberCard,
-                SwipingCard,
-                VueCsvImport,
-                ModalInventoryMovement
-            },
+        components: {
+            FiltersModal,
+            NumberCard,
+            SwipingCard,
+            VueCsvImport,
+            ModalInventoryMovement
+        },
 
-            props: {
-                data_collection_id: null,
-            },
+        props: {
+            data_collection_id: null,
+        },
 
-            data: function() {
-                return {
-                    singleScanEnabled: false,
-                    scannedDataCollectionRecord: null,
-                    scannedProduct: null,
-                    scannedProductPrices: null,
-                    scannedInQuantity: 1,
-                    dataCollection: null,
-                    dataCollectionRecords: [],
-                    nextUrl: null,
-                    page: 1,
-                    per_page: 15,
-                    csv: null,
-                    warehouses: [],
-                    buttonsEnabled: false,
-                    showMovementSku: null
-                };
-            },
+        data: function() {
+            return {
+                singleScanEnabled: false,
+                scannedDataCollectionRecord: null,
+                scannedProduct: null,
+                scannedProductPrices: null,
+                scannedInQuantity: 1,
+                dataCollection: null,
+                dataCollectionRecords: [],
+                nextUrl: null,
+                page: 1,
+                per_page: 15,
+                csv: null,
+                warehouses: [],
+                buttonsEnabled: false,
+                showMovementSku: null
+            };
+        },
+
         mounted() {
-                if (! Vue.prototype.$currentUser['warehouse_id']) {
-                    this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
-                    return;
-                }
+            if (! Vue.prototype.$currentUser['warehouse_id']) {
+                this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
+                return;
+            }
 
-                window.onscroll = () => this.loadMoreWhenNeeded();
+            window.onscroll = () => this.loadMoreWhenNeeded();
 
-                this.getUrlFilterOrSet('warehouse_code', Vue.prototype.$currentUser['warehouse']['code']);
+            this.getUrlFilterOrSet('warehouse_code', Vue.prototype.$currentUser['warehouse']['code']);
 
-                this.loadWarehouses();
+            this.loadWarehouses();
 
-                this.reloadDataCollection();
-            },
+            this.reloadDataCollection();
+        },
 
         methods: {
             submitCount(data) {
@@ -342,17 +335,17 @@
 
             transferToWarehouse(warehouse) {
                 let data = {
-                    'data_collector_id': this.data_collection_id,
+                    'action': 'transfer_to_scanned',
                     'destination_warehouse_id': warehouse['id'],
                 }
 
-                this.apiDataCollectorActions('transfer-to-warehouse', data)
+                this.apiUpdateDataCollection(this.data_collection_id, data)
                     .then(response => {
-                        this.$snotify.success('Transfer to warehouse initiated');
-                        setTimeout(() => {
-                            this.reloadDataCollection();
-                        }, 500);
-
+                        this.$bvModal.hide('configuration-modal');
+                        location.href = '/data-collector';
+                        // setTimeout(() => {
+                        //     this.reloadDataCollection();
+                        // }, 500);
                     })
                     .catch(error => {
                         this.showException(error);

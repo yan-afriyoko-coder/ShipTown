@@ -46,7 +46,6 @@ class DataCollectorController extends Controller
         $data_collector = DataCollection::findOrFail($data_collection_id);
         $data_collector->delete();
 
-
         return DataCollectionResource::make($data_collector);
     }
 }

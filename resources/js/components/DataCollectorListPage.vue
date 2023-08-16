@@ -20,6 +20,13 @@
             </div>
         </div>
 
+        <div class="row mt-2" v-if="data.length === 0">
+            <div class="col">
+                <div class="alert alert-info" role="alert">
+                    No data collections found
+                </div>
+            </div>
+        </div>
 
         <template v-for="record in data">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">

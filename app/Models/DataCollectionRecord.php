@@ -38,6 +38,8 @@ class DataCollectionRecord extends Model
 
     protected $fillable = [
         'data_collection_id',
+        'inventory_id',
+        'warehouse_id',
         'product_id',
         'total_transferred_in',
         'total_transferred_out',
