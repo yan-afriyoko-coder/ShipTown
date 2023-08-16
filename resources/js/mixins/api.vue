@@ -99,10 +99,6 @@ export default {
                 return axios.post('/api/data-collector', data);
             },
 
-            apiDataCollectorActions(action_name, data) {
-                return axios.post("/api/data-collector-actions/" + action_name, data);
-            },
-
             apiUpdateDataCollection(id, data) {
                 return axios.put("/api/data-collector/" + id, data);
             },

@@ -10,7 +10,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Class SyncCheckFailedProductsJob.
@@ -38,13 +37,12 @@ class TransferToJob implements ShouldQueue, ShouldBeUnique
 
     public function handle()
     {
-        DB::transaction(function () use (&$destinationDataCollection) {
-            $sourceDataCollection = DataCollection::findOrFail($this->dataCollection_id);
+        /** @var DataCollection $sourceDataCollection */
+        $sourceDataCollection = DataCollection::withTrashed()->findOrFail($this->dataCollection_id);
 
-            DataCollectorService::transferScannedTo(
-                $sourceDataCollection,
-                $sourceDataCollection->destination_warehouse_id
-            );
-        });
+        DataCollectorService::transferScannedTo(
+            $sourceDataCollection,
+            $sourceDataCollection->destination_warehouse_id
+        );
     }
 }

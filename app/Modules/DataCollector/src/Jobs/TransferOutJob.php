@@ -42,8 +42,10 @@ class TransferOutJob implements ShouldQueue, ShouldBeUnique
     {
         Log::debug('TransferOutJob started', ['data_collection_id' => $this->dataCollection_id]);
 
-        DataCollectionRecord::query()
-            ->where('data_collection_id', $this->dataCollection_id)
+        /** @var DataCollection $dataCollection */
+        $dataCollection = DataCollection::withTrashed()->findOrFail($this->dataCollection_id);
+
+        $dataCollection->records()
             ->where('quantity_scanned', '!=', DB::raw(0))
             ->chunkById(10, function ($records) {
                 $records->each(function (DataCollectionRecord $record) {
@@ -51,17 +53,17 @@ class TransferOutJob implements ShouldQueue, ShouldBeUnique
                 });
             });
 
-        if (DataCollectionRecord::query()->where('quantity_scanned', '!=', 0)->exists()) {
+        $haveMoreRecordsToTransferOut = $dataCollection->records()
+            ->where('quantity_scanned', '!=', DB::raw(0))
+            ->exists();
+
+        if ($haveMoreRecordsToTransferOut) {
             return;
         }
 
-        DataCollection::query()
-            ->where('id', $this->dataCollection_id)
-            ->update(['currently_running_task' => null]);
+        $dataCollection->update(['currently_running_task' => null]);
 
-        DataCollection::query()
-            ->where('id', $this->dataCollection_id)
-            ->delete();
+        $dataCollection->delete();
 
         Log::debug('TransferOutJob finished', ['data_collection_id' => $this->dataCollection_id]);
     }

@@ -11,6 +11,7 @@ use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Modules\DataCollector\src\Jobs\TransferInJob;
 use App\Modules\DataCollector\src\Jobs\TransferOutJob;
+use App\Modules\DataCollector\src\Jobs\TransferToJob;
 use App\Services\InventoryService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -44,6 +45,18 @@ class DataCollectorService
             return;
         }
 
+        if ($action === 'transfer_to_scanned') {
+            $dataCollection->update([
+                'type' => DataCollectionTransferOut::class,
+                'currently_running_task' => TransferToJob::class
+            ]);
+
+            $dataCollection->delete();
+
+            TransferToJob::dispatch($dataCollection->id);
+            return;
+        }
+
         if ($action === 'auto_scan_all_requested') {
             DB::transaction(function () use ($dataCollection) {
                 $dataCollection->records()
@@ -67,46 +80,22 @@ class DataCollectorService
 
         DB::transaction(function () use ($warehouse_id, $sourceDataCollection, &$destinationDataCollection) {
             // create collection
-            $destinationDataCollection = $sourceDataCollection->replicate(['deleted_at']);
+            $destinationDataCollection = $sourceDataCollection->replicate(['destination_warehouse_id','currently_running_task','deleted_at']);
             $destinationDataCollection->type = DataCollectionTransferIn::class;
             $destinationDataCollection->warehouse_id = $warehouse_id;
-            $destinationDataCollection->name = implode('', [
-                'Transfer from ',
-                $sourceDataCollection->warehouse->code,
-                ' - ',
-                $destinationDataCollection->name,
-                ''
-            ]);
+            $destinationDataCollection->name = implode(' ', ['Transfer from', $sourceDataCollection->warehouse->code, '-', $sourceDataCollection->name]);
             $destinationDataCollection->save();
 
-            $sourceDataCollection->delete();
             $sourceDataCollection->update([
-                'name' => implode(' ', [
-                    'Transfer To',
-                    $destinationDataCollection->warehouse->code,
-                    '-',
-                    $sourceDataCollection->name
-                ])
-            ]);
-
-            $sourceDataCollection->records()
-                ->where('quantity_scanned', '!=', DB::raw(0))
-                ->get()
-                ->each(function (DataCollectionRecord $record) use ($destinationDataCollection) {
-                    $destinationDataCollectionRecord = $record->replicate(['quantity_to_scan']);
-                    $destinationDataCollectionRecord->data_collection_id = $destinationDataCollection->id;
-                    $destinationDataCollectionRecord->quantity_requested = $record->quantity_scanned;
-                    $destinationDataCollectionRecord->quantity_scanned = 0;
-                    $destinationDataCollectionRecord->save();
-                });
-
-            $sourceDataCollection->update([
+                'name' => implode(' ', ['Transfer To', $destinationDataCollection->warehouse->code, '-', $sourceDataCollection->name]),
                 'type' => DataCollectionTransferOut::class,
                 'currently_running_task' => TransferOutJob::class,
             ]);
+            $sourceDataCollection->delete();
 
             TransferOutJob::dispatch($sourceDataCollection->getKey());
         });
+
 
         return $destinationDataCollection;
     }
