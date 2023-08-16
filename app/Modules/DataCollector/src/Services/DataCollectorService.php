@@ -93,6 +93,17 @@ class DataCollectorService
             ]);
             $sourceDataCollection->delete();
 
+            $sourceDataCollection->records()
+                ->where('quantity_scanned', '!=', DB::raw(0))
+                ->get()
+                ->each(function (DataCollectionRecord $record) use ($destinationDataCollection) {
+                    $destinationDataCollectionRecord = $record->replicate(['quantity_to_scan']);
+                    $destinationDataCollectionRecord->data_collection_id = $destinationDataCollection->id;
+                    $destinationDataCollectionRecord->quantity_requested = $record->quantity_scanned;
+                    $destinationDataCollectionRecord->quantity_scanned = 0;
+                    $destinationDataCollectionRecord->save();
+                });
+
             TransferOutJob::dispatch($sourceDataCollection->getKey());
         });
 
@@ -142,31 +153,31 @@ class DataCollectorService
     {
         Log::debug('TransferInJob transferring record', [$record->toArray()]);
 
-        DB::transaction(function () use ($record) {
-            $inventory = Inventory::query()->firstOrCreate([
-                'warehouse_id' => $record->dataCollection->warehouse_id,
-                'product_id' => $record->product_id
-            ], []);
+        $inventory = Inventory::query()->firstOrCreate([
+            'warehouse_id' => $record->dataCollection->warehouse_id,
+            'product_id' => $record->product_id
+        ], []);
 
-            $custom_unique_reference_id = implode(':', [
-                'data_collection_id', $record->data_collection_id,
-                'data_collection_record_id', $record->getKey(),
-                $record->updated_at
-            ]);
+        $custom_unique_reference_id = implode(':', [
+            'data_collection_id', $record->data_collection_id,
+            'data_collection_record_id', $record->getKey(),
+            $record->updated_at
+        ]);
 
+        Log::debug('TransferInJob adjusting quantity', [
+            'inventory' => $inventory->toArray(),
+            'record' => $record->toArray(),
+            'custom_unique_reference_id' => $custom_unique_reference_id
+        ]);
+
+        $record->refresh();
+
+        if ($record->quantity_scanned == 0) {
+            return;
+        }
+
+        DB::transaction(function () use ($record, $inventory, $custom_unique_reference_id) {
             try {
-                Log::debug('TransferInJob adjusting quantity', [
-                    'inventory' => $inventory->toArray(),
-                    'record' => $record->toArray(),
-                    'custom_unique_reference_id' => $custom_unique_reference_id
-                ]);
-
-                $record->refresh();
-
-                if ($record->quantity_scanned == 0) {
-                    return;
-                }
-
                 $inventoryMovement = InventoryService::adjustQuantity(
                     $inventory,
                     $record->quantity_scanned,
@@ -174,6 +185,10 @@ class DataCollectorService
                     $custom_unique_reference_id
                 );
 
+                $record->update([
+                    'total_transferred_in' => $record->total_transferred_in + $record->quantity_scanned,
+                    'quantity_scanned' => 0
+                ]);
                 Log::debug('TransferInJob adjusted quantity', ['inventoryMovement' => $inventoryMovement->toArray()]);
             } catch (\Exception $e) {
                 Log::error('TransferInJob failed to adjust quantity (exception)', [$e->getMessage()]);
@@ -182,11 +197,6 @@ class DataCollectorService
                     throw $e;
                 }
             }
-
-            $record->update([
-                'total_transferred_in' => $record->total_transferred_in + $record->quantity_scanned,
-                'quantity_scanned' => 0
-            ]);
         });
     }
 
