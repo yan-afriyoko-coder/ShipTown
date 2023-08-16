@@ -10,8 +10,7 @@ return new class extends Migration
     {
         Schema::create('inventory_movements_temp', function (Blueprint $table) {
             $table->id();
-            $table->boolean('verified')->nullable();
-            $table->unsignedBigInteger('previous_movement_id')->nullable()->unique();
+            $table->boolean('is_first_movement')->nullable();
             $table->foreignId('inventory_id');
             $table->foreignId('product_id');
             $table->string('warehouse_code', 5)->nullable();
@@ -23,9 +22,16 @@ return new class extends Migration
             $table->decimal('quantity_after', 20);
             $table->string('description', 50);
             $table->string('custom_unique_reference_id')->nullable()->unique();
+            $table->unsignedBigInteger('previous_movement_id')->nullable()->unique();
             $table->timestamps();
 
             $table->index('type');
+            $table->index('is_first_movement');
+
+            $table->foreign('previous_movement_id')
+                ->references('id')
+                ->on('inventory_movements')
+                ->restrictOnDelete();
 
             $table->foreign('inventory_id')
                 ->references('id')
