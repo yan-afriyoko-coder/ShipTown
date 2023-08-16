@@ -92,6 +92,7 @@ class BasicModuleTest extends TestCase
     {
         $product = Product::factory()->create();
         $sourceWarehouse = Warehouse::factory()->create();
+        /** @var Warehouse $destinationWarehouse */
         $destinationWarehouse = Warehouse::factory()->create();
 
         /** @var Inventory $inventory */
@@ -121,6 +122,13 @@ class BasicModuleTest extends TestCase
 
         $dataCollection->refresh();
 
+        $this->assertDatabaseHas('data_collections', [
+            'warehouse_id' => $destinationWarehouse->getKey(),
+        ]);
+        $this->assertDatabaseHas('data_collection_records', [
+            'warehouse_id' => $destinationWarehouse->getKey(),
+            'product_id' => $product->getKey(),
+        ]);
         $this->assertNull($dataCollection->currently_running_task);
         $this->assertEmpty(DataCollectionRecord::query()->where('quantity_scanned', '!=', 0)->get());
         $this->assertEquals(0, $record->total_transferred_in);

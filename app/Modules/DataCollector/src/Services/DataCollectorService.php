@@ -97,11 +97,17 @@ class DataCollectorService
                 ->where('quantity_scanned', '!=', DB::raw(0))
                 ->get()
                 ->each(function (DataCollectionRecord $record) use ($destinationDataCollection) {
-                    $destinationDataCollectionRecord = $record->replicate(['quantity_to_scan']);
-                    $destinationDataCollectionRecord->data_collection_id = $destinationDataCollection->id;
-                    $destinationDataCollectionRecord->quantity_requested = $record->quantity_scanned;
-                    $destinationDataCollectionRecord->quantity_scanned = 0;
-                    $destinationDataCollectionRecord->save();
+                    $inventory = Inventory::query()->firstOrCreate([
+                        'warehouse_id' => $destinationDataCollection->warehouse_id,
+                        'product_id' => $record->product_id,
+                    ]);
+                    DataCollectionRecord::query()->create([
+                        'data_collection_id' => $destinationDataCollection->id,
+                        'inventory_id' => $inventory->id,
+                        'warehouse_id' => $inventory->warehouse_id,
+                        'product_id' => $inventory->product_id,
+                        'quantity_requested' => $record->quantity_scanned,
+                    ]);
                 });
 
             TransferOutJob::dispatch($sourceDataCollection->getKey());
