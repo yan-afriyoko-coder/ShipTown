@@ -9,6 +9,7 @@ use App\Modules\Webhooks\src\Models\PendingWebhook;
 use App\Modules\Webhooks\src\Services\SnsService;
 use Exception;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -17,19 +18,17 @@ use Illuminate\Queue\SerializesModels;
 /**
  * Class PublishOrdersWebhooksJob.
  */
-class PublishInventoryMovementWebhooksJob implements ShouldQueue
+class PublishInventoryMovementWebhooksJob implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     * @throws Exception
-     */
+    public int $uniqueFor = 600;
+
+    public function uniqueId(): string
+    {
+        return get_class($this);
+    }
+
     public function handle()
     {
         Warehouse::query()

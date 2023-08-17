@@ -2,16 +2,14 @@
 
 namespace App\Modules\Webhooks\src\Jobs;
 
-use App\Events\OrderProductShipmentCreatedEvent;
-use App\Http\Resources\InventoryMovementResource;
 use App\Http\Resources\OrderProductShipmentResource;
-use App\Models\InventoryMovement;
 use App\Models\OrderProductShipment;
 use App\Models\Warehouse;
 use App\Modules\Webhooks\src\Models\PendingWebhook;
 use App\Modules\Webhooks\src\Services\SnsService;
 use Exception;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -20,19 +18,17 @@ use Illuminate\Queue\SerializesModels;
 /**
  * Class PublishOrdersWebhooksJob.
  */
-class PublishOrderProductShipmentWebhooksJob implements ShouldQueue
+class PublishOrderProductShipmentWebhooksJob implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     * @throws Exception
-     */
+    public int $uniqueFor = 600;
+
+    public function uniqueId(): string
+    {
+        return get_class($this);
+    }
+
     public function handle()
     {
         Warehouse::query()
