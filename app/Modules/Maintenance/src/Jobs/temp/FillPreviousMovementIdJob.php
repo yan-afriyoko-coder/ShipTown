@@ -3,15 +3,23 @@
 namespace App\Modules\Maintenance\src\Jobs\temp;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
-class FillPreviousMovementIdJob implements ShouldQueue
+class FillPreviousMovementIdJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public int $uniqueFor = 600;
+
+    public function uniqueId(): string
+    {
+        return get_class($this);
+    }
 
     public function handle()
     {
