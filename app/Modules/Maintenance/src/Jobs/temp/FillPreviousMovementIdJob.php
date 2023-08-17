@@ -31,8 +31,7 @@ class FillPreviousMovementIdJob implements ShouldQueue
                 WHERE
                     inventory_movements.previous_movement_id IS NULL
                     AND is_first_movement IS NULL
-                ORDER BY id DESC
-                LIMIT 20
+                LIMIT 500
             )
             UPDATE inventory_movements
             INNER JOIN tbl ON
