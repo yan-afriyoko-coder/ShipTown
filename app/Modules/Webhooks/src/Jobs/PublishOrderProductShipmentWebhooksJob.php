@@ -50,7 +50,7 @@ class PublishOrderProductShipmentWebhooksJob implements ShouldQueue, ShouldBeUni
                 'ops.warehouse_id' => $warehouse_id,
             ])
             ->orderBy('modules_webhooks_pending_webhooks.id')
-            ->limit(100);
+            ->limit(50);
 
         $chunk = $query->get();
 
