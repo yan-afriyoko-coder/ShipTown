@@ -10,6 +10,6 @@ class EveryTenMinutesEventListener
     public function handle()
     {
         FillPreviousMovementIdJob::dispatch();
-        FixIncorrectQuantityBeforeAndAfterJob::dispatch();
+//        FixIncorrectQuantityBeforeAndAfterJob::dispatch();
     }
 }

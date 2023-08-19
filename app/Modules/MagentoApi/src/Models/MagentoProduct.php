@@ -29,6 +29,7 @@ class MagentoProduct extends BaseModel
 
     protected $fillable = [
         'product_id',
+        'exists_in_magento',
         'connection_id',
         'is_in_stock',
         'quantity',

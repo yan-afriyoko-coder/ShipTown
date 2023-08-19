@@ -17,7 +17,7 @@ class EveryTenMinutesEventListener
     {
         EnsureProductRecordsExistJob::dispatch();
 
-        FetchOrdersJob::dispatch();
+//        FetchOrdersJob::dispatch();
         FetchStockItemsJob::dispatch();
         FetchBasePricesJob::dispatch();
         FetchSpecialPricesJob::dispatch();
