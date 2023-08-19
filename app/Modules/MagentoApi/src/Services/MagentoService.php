@@ -152,8 +152,17 @@ class MagentoService
     {
         $response = self::api()->getStockItems($product->product->sku);
 
-        if ($response === null || $response->failed()) {
-            throw new Exception('Failed to fetch stock items for product '.$product->product->sku);
+        if ($response === null) {
+            throw new Exception('RMSAPI api call returned null'.$magentoProduct->product->sku);
+        }
+
+        if ($response->notFound()) {
+            $product->update(['exists_in_magento' => false]);
+            return;
+        }
+
+        if ($response->failed()) {
+            throw new Exception('Failed to fetch stock items for product '.$magentoProduct->product->sku);
         }
 
         $product->stock_items_raw_import    = $response->json();
