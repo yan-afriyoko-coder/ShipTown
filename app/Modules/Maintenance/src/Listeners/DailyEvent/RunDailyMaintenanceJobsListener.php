@@ -22,6 +22,5 @@ class RunDailyMaintenanceJobsListener
         EnsureAllInventoryRecordsExistsJob::dispatchAfterResponse();
         EnsureAllProductPriceRecordsExistsJob::dispatchAfterResponse();
         FixQuantityAvailableJob::dispatchAfterResponse();
-        RecalculateProductQuantityJob::dispatch();
     }
 }
