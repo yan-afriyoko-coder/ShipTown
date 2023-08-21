@@ -27,7 +27,11 @@ class DataCollectorService
                 'currently_running_task' => TransferInJob::class,
             ]);
 
-            $dataCollection->delete();
+            if (! $dataCollection->records()
+                ->where('quantity_to_scan', '>', 0)
+                ->exists()) {
+                $dataCollection->delete();
+            }
 
             TransferInJob::dispatch($dataCollection->id);
             return;
@@ -39,7 +43,11 @@ class DataCollectorService
                 'currently_running_task' => TransferOutJob::class
             ]);
 
-            $dataCollection->delete();
+            if (! $dataCollection->records()
+                ->where('quantity_to_scan', '>', 0)
+                ->exists()) {
+                $dataCollection->delete();
+            }
 
             TransferOutJob::dispatch($dataCollection->id);
             return;
@@ -80,11 +88,20 @@ class DataCollectorService
 
         DB::transaction(function () use ($warehouse_id, $sourceDataCollection, &$destinationDataCollection) {
             // create collection
-            $destinationDataCollection = $sourceDataCollection->replicate(['destination_warehouse_id','currently_running_task','deleted_at']);
-            $destinationDataCollection->type = DataCollectionTransferIn::class;
-            $destinationDataCollection->warehouse_id = $warehouse_id;
-            $destinationDataCollection->name = implode(' ', ['Transfer from', $sourceDataCollection->warehouse->code, '-', $sourceDataCollection->name]);
-            $destinationDataCollection->save();
+
+            $destinationDataCollection = $sourceDataCollection->destinationCollection;
+
+            if ($destinationDataCollection == null) {
+                $name = implode(' ', ['Transfer from', $sourceDataCollection->warehouse->code, '-', $sourceDataCollection->name]);
+
+                $destinationDataCollection = $sourceDataCollection->replicate(['destination_warehouse_id','currently_running_task','deleted_at']);
+                $destinationDataCollection->type = DataCollectionTransferIn::class;
+                $destinationDataCollection->warehouse_id = $warehouse_id;
+                $destinationDataCollection->name = $name;
+                $destinationDataCollection->save();
+
+                $sourceDataCollection->update(['destination_collection_id' => $destinationDataCollection->id]);
+            }
 
             $sourceDataCollection->update([
                 'name' => implode(' ', ['Transfer To', $destinationDataCollection->warehouse->code, '-', $sourceDataCollection->name]),
