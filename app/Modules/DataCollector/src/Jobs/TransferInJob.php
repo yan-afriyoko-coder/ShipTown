@@ -53,18 +53,19 @@ class TransferInJob implements ShouldQueue, ShouldBeUnique
                 });
             });
 
-        $haveMoreRecordsToTransferOut = $dataCollection->records()
+        $hasMoreRecordsToTransfer = $dataCollection->records()
             ->where('quantity_scanned', '!=', DB::raw(0))
             ->exists();
 
-        if ($haveMoreRecordsToTransferOut) {
+        if ($hasMoreRecordsToTransfer) {
             return;
+        } else {
+            $dataCollection->update(['currently_running_task' => null]);
+            Log::debug('TransferInJob finished', ['data_collection_id' => $this->dataCollection_id]);
         }
 
-        $dataCollection->update(['currently_running_task' => null]);
-
-        $dataCollection->delete();
-
-        Log::debug('TransferInJob finished', ['data_collection_id' => $this->dataCollection_id]);
+        if ($dataCollection->records()->where('quantity_to_scan', '>', 0)->doesntExist()) {
+            $dataCollection->delete();
+        }
     }
 }
