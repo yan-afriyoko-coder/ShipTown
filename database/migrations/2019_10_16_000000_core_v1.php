@@ -279,6 +279,7 @@ return new class extends Migration
             $table->dateTime('first_sold_at')->nullable();
             $table->dateTime('last_sold_at')->nullable();
             $table->timestamp('last_counted_at')->nullable();
+            $table->unsignedBigInteger('last_movement_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
@@ -351,6 +352,7 @@ return new class extends Migration
             $table->index('is_on_hold');
             $table->index('label_template');
             $table->index('order_placed_at');
+            $table->fullText(['order_number','status_code']);
 
             $table->foreign('status_code')
                 ->on('orders_statuses')
@@ -449,6 +451,9 @@ return new class extends Migration
             $table->longText('base64_pdf_labels');
             $table->timestamps();
 
+
+            $table->fullText(['shipping_number']);
+
             $table->foreign('order_id')
                 ->references('id')
                 ->on('orders')
@@ -482,6 +487,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable();
             $table->foreignId('product_id')->nullable();
+            $table->string('warehouse_code')->nullable();
             $table->string('sku_ordered');
             $table->string('name_ordered');
             $table->decimal('quantity_picked', 10, 2)->default(0);
@@ -504,6 +510,16 @@ return new class extends Migration
             $table->id();
             $table->string('code', 25)->unique()->nullable(false);
             $table->string('service_provider_class');
+            $table->timestamps();
+        });
+
+        Schema::create('picks_orders_products', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('pick_id')->constrained('picks')->cascadeOnDelete();
+            $table->foreignId('order_product_id')->nullable()->constrained('orders_products')->nullOnDelete();
+            $table->decimal('quantity_picked', 10, 2)->default(0);
+            $table->decimal('quantity_skipped_picking', 10, 2)->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -700,6 +716,18 @@ return new class extends Migration
                 ->cascadeOnDelete();
         });
 
+        Schema::create('modules_rmsapi_shipping_imports', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('connection_id');
+            $table->json('raw_import');
+            $table->timestamps();
+
+            $table->foreign('connection_id')
+                ->references('id')
+                ->on('modules_rmsapi_connections')
+                ->onDelete('cascade');
+        });
+
         Schema::create('modules_rmsapi_products_imports', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('connection_id');
@@ -859,6 +887,7 @@ return new class extends Migration
 
         Schema::create('inventory_movements', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('previous_movement_id')->nullable()->unique();
             $table->string('type')->nullable();
             $table->string('custom_unique_reference_id')->nullable()->unique();
             $table->foreignId('inventory_id');
@@ -1047,6 +1076,8 @@ return new class extends Migration
             $table->string('type')->nullable()->index();
             $table->unsignedBigInteger('inventory_movement_id')->nullable();
             $table->foreignId('connection_id');
+            $table->foreignId('warehouse_id')->nullable();
+            $table->foreignId('product_id')->nullable();
             $table->dateTime('reserved_at')->nullable();
             $table->dateTime('processed_at')->nullable();
             $table->string('sku')->nullable();
