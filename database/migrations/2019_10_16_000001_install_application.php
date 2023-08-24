@@ -15,6 +15,7 @@ use App\Modules\InventoryMovementsStatistics\src\InventoryMovementsStatisticsSer
 use App\Modules\InventoryQuantityIncoming\src\InventoryQuantityIncomingServiceProvider;
 use App\Modules\NonInventoryProductTag\src\NonInventoryProductTagServiceProvider;
 use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
+use App\Modules\Slack\src\SlackServiceProvider;
 use App\Modules\StocktakeSuggestions\src\StocktakeSuggestionsServiceProvider;
 use App\Modules\Telescope\src\TelescopeModuleServiceProvider;
 use Illuminate\Database\Migrations\Migration;
@@ -59,6 +60,7 @@ return new class extends Migration
         QueueMonitorServiceProvider::installModule();
         TelescopeModuleServiceProvider::installModule();
         InventoryMovementsStatisticsServiceProvider::enableModule();
+        SlackServiceProvider::installModule();
     }
 
     private function createDefaultNavigationLinks(): void

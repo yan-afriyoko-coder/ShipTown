@@ -294,6 +294,7 @@ return new class extends Migration
             $table->index('quantity_required');
             $table->index('restock_level');
             $table->index('reorder_point');
+            $table->index('last_sold_at');
             $table->index('last_counted_at');
 
             $table->foreign('product_id')
@@ -931,6 +932,7 @@ return new class extends Migration
             $table->foreignId('product_id')->index();
             $table->foreignId('warehouse_id')->index();
             $table->string('warehouse_code', 5)->index();
+            $table->dateTime('last_sold_at')->nullable()->index();
             $table->foreignId('last_inventory_movement_id')->index()->nullable();
             $table->decimal('quantity_sold_last_7_days', 10)->index()->nullable();
             $table->decimal('quantity_sold_last_14_days', 10)->index()->nullable();
@@ -941,6 +943,26 @@ return new class extends Migration
             $table->decimal('quantity_sold_3weeks_ago', 10)->index()->nullable();
             $table->decimal('quantity_sold_4weeks_ago', 10)->index()->nullable();
             $table->timestamps();
+
+            $table->foreign('inventory_id')
+                ->references('id')
+                ->on('inventory')
+                ->onDelete('cascade');
+
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->onDelete('cascade');
+
+            $table->foreign('warehouse_id')
+                ->references('id')
+                ->on('warehouses')
+                ->onDelete('cascade');
+
+            $table->foreign('warehouse_code')
+                ->references('code')
+                ->on('warehouses')
+                ->onDelete('cascade');
         });
 
         Schema::create('modules_webhooks_pending_webhooks', function (Blueprint $table) {
@@ -1046,6 +1068,7 @@ return new class extends Migration
 
             $table->index('reason');
             $table->index(['warehouse_id', 'reason']);
+            $table->index(['inventory_id', 'reason']);
         });
 
         Schema::create('modules_magento2api_products', function (Blueprint $table) {
@@ -1149,6 +1172,22 @@ return new class extends Migration
             $table->bigInteger('seconds_running')
                 ->storedAs('TIMESTAMPDIFF(SECOND, processing_at, processed_at)')
                 ->comment('TIMESTAMPDIFF(SECOND, processing_at, processed_at)');
+        });
+
+        Schema::create('modules_inventory_movements_statistics_last28days_sale_movements', function (Blueprint $table) {
+            $table->foreignId('inventory_movement_id')->unique('inventory_movement_id_index');
+            $table->foreignId('inventory_id')->index('inventory_id_index');
+            $table->dateTime('sold_at')->index('sold_at_index');
+            $table->decimal('quantity_sold', 20, 3);
+            $table->boolean('included_in_7days')->nullable()->index('included_in_7days');
+            $table->boolean('included_in_14days')->nullable()->index('included_in_14days');
+            $table->boolean('included_in_28days')->nullable()->index('included_in_28days');
+        });
+
+        Schema::create('modules_slack_config', function (Blueprint $table) {
+            $table->id();
+            $table->string('incoming_webhook_url')->nullable();
+            $table->timestamps();
         });
 
         $this->installSpatiePermissions();
