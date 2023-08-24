@@ -3,6 +3,7 @@
 use App\Models\Configuration;
 use App\Models\MailTemplate;
 use App\Models\NavigationMenu;
+use App\Models\Warehouse;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\Conditions\Order\IsFullyPackedCondition;
 use App\Modules\Automations\src\Conditions\Order\IsFullyPickedCondition;
@@ -43,6 +44,10 @@ return new class extends Migration
 
             \App\Services\ModulesService::updateModulesTable();
         });
+
+        Configuration::create([
+            'warehouse_id' => Warehouse::query()->firstOrCreate(['code' => '999'], ['name' => '999'])->id,
+        ]);
 
         StocktakeSuggestionsServiceProvider::enableModule();
         AutoRestockLevelsServiceProvider::installModule();

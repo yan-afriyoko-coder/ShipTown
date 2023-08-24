@@ -948,6 +948,7 @@ return new class extends Migration
                 ->on('warehouses')
                 ->onDelete('cascade');
             $table->string('name');
+            $table->string('currently_running_task')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -1011,6 +1012,18 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('modules_inventory_reservations_configurations', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('warehouse_id')->nullable();
+            $table->timestamps();
+
+            $table->foreign('warehouse_id', 'modules_inventory_reservations_warehouse_id_foreign')
+                ->references('id')
+                ->on('warehouses');
+
+            $table->index('warehouse_id', 'modules_inventory_reservations_warehouse_id_index');
+        });
+
         Schema::create('modules_magento2api_connections', function (Blueprint $table) {
             $table->id();
             $table->string('base_url');
@@ -1023,6 +1036,8 @@ return new class extends Migration
 
         Schema::create('modules_rmsapi_sales_imports', function (Blueprint $table) {
             $table->id();
+            $table->string('uuid')->nullable()->index();
+            $table->string('type')->nullable()->index();
             $table->unsignedBigInteger('inventory_movement_id')->nullable();
             $table->foreignId('connection_id');
             $table->dateTime('reserved_at')->nullable();
