@@ -1177,6 +1177,7 @@ return new class extends Migration
         Schema::create('modules_inventory_movements_statistics_last28days_sale_movements', function (Blueprint $table) {
             $table->foreignId('inventory_movement_id')->unique('inventory_movement_id_index');
             $table->foreignId('inventory_id')->index('inventory_id_index');
+            $table->unsignedBigInteger('warehouse_id')->nullable()->index();
             $table->dateTime('sold_at')->index('sold_at_index');
             $table->decimal('quantity_sold', 20, 3);
             $table->boolean('included_in_7days')->nullable()->index('included_in_7days');
