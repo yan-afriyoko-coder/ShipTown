@@ -11,6 +11,7 @@ use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\AutoRestockLevels\src\AutoRestockLevelsServiceProvider;
 use App\Modules\DataCollector\src\DataCollectorServiceProvider;
+use App\Modules\InventoryMovementsStatistics\src\InventoryMovementsStatisticsServiceProvider;
 use App\Modules\InventoryQuantityIncoming\src\InventoryQuantityIncomingServiceProvider;
 use App\Modules\NonInventoryProductTag\src\NonInventoryProductTagServiceProvider;
 use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
@@ -57,6 +58,7 @@ return new class extends Migration
         NonInventoryProductTagServiceProvider::installModule();
         QueueMonitorServiceProvider::installModule();
         TelescopeModuleServiceProvider::installModule();
+        InventoryMovementsStatisticsServiceProvider::enableModule();
     }
 
     private function createDefaultNavigationLinks(): void

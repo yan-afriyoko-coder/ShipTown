@@ -841,6 +841,7 @@ return new class extends Migration
         Schema::create('configurations', function (Blueprint $table) {
             $table->id();
             $table->string('business_name')->default('');
+            $table->boolean('disable_2fa')->default(0);
             $table->timestamps();
         });
 
@@ -922,6 +923,24 @@ return new class extends Migration
                 ->references('id')
                 ->on('users')
                 ->cascadeOnDelete();
+        });
+
+        Schema::create('inventory_movements_statistics', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('inventory_id')->unique();
+            $table->foreignId('product_id')->index();
+            $table->foreignId('warehouse_id')->index();
+            $table->string('warehouse_code', 5)->index();
+            $table->foreignId('last_inventory_movement_id')->index()->nullable();
+            $table->decimal('quantity_sold_last_7_days', 10)->index()->nullable();
+            $table->decimal('quantity_sold_last_14_days', 10)->index()->nullable();
+            $table->decimal('quantity_sold_last_28_days', 10)->index()->nullable();
+            $table->decimal('quantity_sold_this_week', 10)->index()->nullable();
+            $table->decimal('quantity_sold_last_week', 10)->index()->nullable();
+            $table->decimal('quantity_sold_2weeks_ago', 10)->index()->nullable();
+            $table->decimal('quantity_sold_3weeks_ago', 10)->index()->nullable();
+            $table->decimal('quantity_sold_4weeks_ago', 10)->index()->nullable();
+            $table->timestamps();
         });
 
         Schema::create('modules_webhooks_pending_webhooks', function (Blueprint $table) {
