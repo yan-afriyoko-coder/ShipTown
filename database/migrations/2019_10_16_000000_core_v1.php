@@ -546,8 +546,8 @@ return new class extends Migration
             $table->string('location_id')->default('');
             $table->string('warehouse_code', 5)->nullable(false);
             $table->decimal('cost', 20, 2)->default(0);
-            $table->decimal('price', 10)->default(99999);
-            $table->decimal('sale_price', 10)->default(99999);
+            $table->decimal('price', 20)->default(0);
+            $table->decimal('sale_price', 20)->default(0);
             $table->date('sale_price_start_date')->default('2000-01-01');
             $table->date('sale_price_end_date')->default('2000-01-01');
             $table->softDeletes();
@@ -705,6 +705,7 @@ return new class extends Migration
             $table->string('url');
             $table->string('username');
             $table->string('password');
+            $table->string('price_field_name')->default('price');
             $table->unsignedBigInteger('products_last_timestamp')->default(0);
             $table->unsignedBigInteger('shippings_last_timestamp')->default(0);
             $table->unsignedBigInteger('sales_last_timestamp')->default(0);
@@ -1032,8 +1033,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('connection_id');
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
-            $table->decimal('magento_price', 10)->nullable();
-            $table->decimal('magento_sale_price', 10)->nullable();
+            $table->decimal('magento_price', 20)->nullable();
+            $table->decimal('magento_sale_price', 20)->nullable();
             $table->dateTime('magento_sale_price_start_date')->nullable();
             $table->dateTime('magento_sale_price_end_date')->nullable();
             $table->boolean('is_inventory_in_sync')->nullable();
@@ -1066,7 +1067,7 @@ return new class extends Migration
             $table->integer('magento_store_id')->nullable();
             $table->integer('inventory_source_warehouse_tag_id')->nullable();
             $table->integer('pricing_source_warehouse_id')->nullable();
-            $table->string('access_token_encrypted')->nullable();
+            $table->longText('access_token_encrypted')->nullable();
             $table->timestamps();
         });
 
