@@ -259,6 +259,9 @@ return new class extends Migration
                 ->storedAs('quantity - quantity_reserved')
                 ->comment('quantity - quantity_reserved');
             $table->decimal('quantity', 20)->default(0);
+            $table->boolean('is_in_stock')
+                ->storedAs('quantity_available > 0')
+                ->comment('quantity_available > 0');
             $table->decimal('quantity_reserved', 20)->default(0);
             $table->decimal('quantity_incoming', 20)->default(0);
             $table->decimal('quantity_required', 20)
@@ -284,6 +287,7 @@ return new class extends Migration
             $table->index('shelve_location');
             $table->index('quantity_available');
             $table->index('quantity');
+            $table->index('is_in_stock');
             $table->index('quantity_reserved');
             $table->index('quantity_incoming');
             $table->index('quantity_required');
@@ -855,6 +859,7 @@ return new class extends Migration
 
         Schema::create('inventory_movements', function (Blueprint $table) {
             $table->id();
+            $table->string('type')->nullable();
             $table->string('custom_unique_reference_id')->nullable()->unique();
             $table->foreignId('inventory_id');
             $table->foreignId('product_id');
@@ -865,6 +870,8 @@ return new class extends Migration
             $table->string('description', 50);
             $table->foreignId('user_id')->nullable();
             $table->timestamps();
+
+            $table->index('type');
 
             $table->foreign('inventory_id')
                 ->references('id')
@@ -1084,11 +1091,11 @@ return new class extends Migration
             $table->timestamp('dispatched_at')->default(DB::raw('CURRENT_TIMESTAMP'))->index();
             $table->timestamp('processing_at')->nullable();
             $table->timestamp('processed_at')->nullable();
-            $table->unsignedInteger('seconds_dispatching')
+            $table->bigInteger('seconds_dispatching')
                 ->storedAs('TIMESTAMPDIFF(SECOND, dispatched_at, processing_at)')
                 ->comment('TIMESTAMPDIFF(SECOND, dispatched_at, processing_at)');
 
-            $table->unsignedInteger('seconds_running')
+            $table->bigInteger('seconds_running')
                 ->storedAs('TIMESTAMPDIFF(SECOND, processing_at, processed_at)')
                 ->comment('TIMESTAMPDIFF(SECOND, processing_at, processed_at)');
         });
