@@ -9,7 +9,7 @@ use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
-class ImportProductsJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
+class ImportProductsJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -29,7 +29,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
 
     public string $batch_uuid;
 
-    public int $uniqueFor = 120;
+    public int $uniqueFor = 300;
 
     public function uniqueId(): string
     {

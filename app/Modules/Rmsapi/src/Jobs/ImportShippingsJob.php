@@ -17,7 +17,7 @@ use App\Services\InventoryService;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
-class ImportShippingsJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
+class ImportShippingsJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -38,7 +38,7 @@ class ImportShippingsJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
     private string $batch_uuid;
     private OrderProduct $orderProduct;
 
-    public int $uniqueFor = 120;
+    public int $uniqueFor = 300;
 
     public function uniqueId(): string
     {

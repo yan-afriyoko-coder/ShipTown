@@ -5,7 +5,7 @@ namespace App\Modules\Rmsapi\src\Jobs;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -13,7 +13,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
-class ImportAllJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
+class ImportAllJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -22,7 +22,7 @@ class ImportAllJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
 
     public string $batch_uuid;
 
-    public int $uniqueFor = 120;
+    public int $uniqueFor = 300;
 
     public function uniqueId(): string
     {
