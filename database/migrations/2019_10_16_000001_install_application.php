@@ -15,6 +15,7 @@ use App\Modules\InventoryQuantityIncoming\src\InventoryQuantityIncomingServicePr
 use App\Modules\NonInventoryProductTag\src\NonInventoryProductTagServiceProvider;
 use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
 use App\Modules\StocktakeSuggestions\src\StocktakeSuggestionsServiceProvider;
+use App\Modules\Telescope\src\TelescopeModuleServiceProvider;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -55,6 +56,7 @@ return new class extends Migration
         DataCollectorServiceProvider::installModule();
         NonInventoryProductTagServiceProvider::installModule();
         QueueMonitorServiceProvider::installModule();
+        TelescopeModuleServiceProvider::installModule();
     }
 
     private function createDefaultNavigationLinks(): void

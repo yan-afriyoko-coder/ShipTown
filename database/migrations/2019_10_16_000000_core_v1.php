@@ -1282,6 +1282,45 @@ return new class extends Migration
                 $table->primary(['permission_id', 'role_id'], 'role_has_permissions_permission_id_role_id_primary');
             });
         }
+        if (!Schema::hasTable('telescope_entries')) {
+            Schema::create('telescope_entries', function (Blueprint $table) {
+                $table->bigIncrements('sequence');
+                $table->uuid('uuid');
+                $table->uuid('batch_id');
+                $table->string('family_hash')->nullable();
+                $table->boolean('should_display_on_index')->default(true);
+                $table->string('type', 20);
+                $table->longText('content');
+                $table->dateTime('created_at')->nullable();
+
+                $table->unique('uuid');
+                $table->index('batch_id');
+                $table->index('family_hash');
+                $table->index('created_at');
+                $table->index(['type', 'should_display_on_index']);
+            });
+        }
+
+        if (!Schema::hasTable('telescope_entries_tags')) {
+            Schema::create('telescope_entries_tags', function (Blueprint $table) {
+                $table->uuid('entry_uuid');
+                $table->string('tag');
+
+                $table->index(['entry_uuid', 'tag']);
+                $table->index('tag');
+
+                $table->foreign('entry_uuid')
+                    ->references('uuid')
+                    ->on('telescope_entries')
+                    ->onDelete('cascade');
+            });
+        }
+
+        if (!Schema::hasTable('telescope_monitoring')) {
+            Schema::create('telescope_monitoring', function (Blueprint $table) {
+                $table->string('tag');
+            });
+        }
 
         app('cache')
             ->store(config('permission.cache.store') != 'default' ? config('permission.cache.store') : null)
