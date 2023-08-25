@@ -8,7 +8,7 @@ use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -16,7 +16,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class ImportSalesJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
+class ImportSalesJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -25,7 +25,7 @@ class ImportSalesJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
 
     private RmsapiConnection $rmsConnection;
 
-    public int $uniqueFor = 120;
+    public int $uniqueFor = 300;
 
     public function uniqueId(): string
     {

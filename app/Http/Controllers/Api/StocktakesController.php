@@ -30,6 +30,7 @@ class StocktakesController extends Controller
 
             /** @var InventoryMovement $inventoryMovement */
             $inventoryMovement = InventoryMovement::query()->create([
+                'type' => 'stocktake',
                 'inventory_id' => $inventory->id,
                 'product_id' => $inventory->product_id,
                 'warehouse_id' => $inventory->warehouse_id,

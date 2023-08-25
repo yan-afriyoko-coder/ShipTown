@@ -259,6 +259,9 @@ return new class extends Migration
                 ->storedAs('quantity - quantity_reserved')
                 ->comment('quantity - quantity_reserved');
             $table->decimal('quantity', 20)->default(0);
+            $table->boolean('is_in_stock')
+                ->storedAs('quantity_available > 0')
+                ->comment('quantity_available > 0');
             $table->decimal('quantity_reserved', 20)->default(0);
             $table->decimal('quantity_incoming', 20)->default(0);
             $table->decimal('quantity_required', 20)
@@ -276,6 +279,7 @@ return new class extends Migration
             $table->dateTime('first_sold_at')->nullable();
             $table->dateTime('last_sold_at')->nullable();
             $table->timestamp('last_counted_at')->nullable();
+            $table->unsignedBigInteger('last_movement_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
@@ -284,11 +288,13 @@ return new class extends Migration
             $table->index('shelve_location');
             $table->index('quantity_available');
             $table->index('quantity');
+            $table->index('is_in_stock');
             $table->index('quantity_reserved');
             $table->index('quantity_incoming');
             $table->index('quantity_required');
             $table->index('restock_level');
             $table->index('reorder_point');
+            $table->index('last_sold_at');
             $table->index('last_counted_at');
 
             $table->foreign('product_id')
@@ -347,6 +353,7 @@ return new class extends Migration
             $table->index('is_on_hold');
             $table->index('label_template');
             $table->index('order_placed_at');
+            $table->fullText(['order_number','status_code']);
 
             $table->foreign('status_code')
                 ->on('orders_statuses')
@@ -445,6 +452,9 @@ return new class extends Migration
             $table->longText('base64_pdf_labels');
             $table->timestamps();
 
+
+            $table->fullText(['shipping_number']);
+
             $table->foreign('order_id')
                 ->references('id')
                 ->on('orders')
@@ -478,6 +488,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable();
             $table->foreignId('product_id')->nullable();
+            $table->string('warehouse_code')->nullable();
             $table->string('sku_ordered');
             $table->string('name_ordered');
             $table->decimal('quantity_picked', 10, 2)->default(0);
@@ -500,6 +511,16 @@ return new class extends Migration
             $table->id();
             $table->string('code', 25)->unique()->nullable(false);
             $table->string('service_provider_class');
+            $table->timestamps();
+        });
+
+        Schema::create('picks_orders_products', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('pick_id')->constrained('picks')->cascadeOnDelete();
+            $table->foreignId('order_product_id')->nullable()->constrained('orders_products')->nullOnDelete();
+            $table->decimal('quantity_picked', 10, 2)->default(0);
+            $table->decimal('quantity_skipped_picking', 10, 2)->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -526,8 +547,8 @@ return new class extends Migration
             $table->string('location_id')->default('');
             $table->string('warehouse_code', 5)->nullable(false);
             $table->decimal('cost', 20, 2)->default(0);
-            $table->decimal('price', 10)->default(99999);
-            $table->decimal('sale_price', 10)->default(99999);
+            $table->decimal('price', 20)->default(0);
+            $table->decimal('sale_price', 20)->default(0);
             $table->date('sale_price_start_date')->default('2000-01-01');
             $table->date('sale_price_end_date')->default('2000-01-01');
             $table->softDeletes();
@@ -685,6 +706,7 @@ return new class extends Migration
             $table->string('url');
             $table->string('username');
             $table->string('password');
+            $table->string('price_field_name')->default('price');
             $table->unsignedBigInteger('products_last_timestamp')->default(0);
             $table->unsignedBigInteger('shippings_last_timestamp')->default(0);
             $table->unsignedBigInteger('sales_last_timestamp')->default(0);
@@ -696,10 +718,23 @@ return new class extends Migration
                 ->cascadeOnDelete();
         });
 
+        Schema::create('modules_rmsapi_shipping_imports', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('connection_id');
+            $table->json('raw_import');
+            $table->timestamps();
+
+            $table->foreign('connection_id')
+                ->references('id')
+                ->on('modules_rmsapi_connections')
+                ->onDelete('cascade');
+        });
+
         Schema::create('modules_rmsapi_products_imports', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('connection_id');
             $table->foreignId('warehouse_id')->nullable();
+            $table->string('warehouse_code')->nullable();
             $table->uuid('batch_uuid')->nullable();
             $table->timestamp('reserved_at')->nullable();
             $table->dateTime('when_processed')->nullable();
@@ -727,6 +762,11 @@ return new class extends Migration
 
             $table->foreign('warehouse_id')
                 ->references('id')
+                ->on('warehouses')
+                ->cascadeOnDelete();
+
+            $table->foreign('warehouse_code')
+                ->references('code')
                 ->on('warehouses')
                 ->cascadeOnDelete();
         });
@@ -808,6 +848,7 @@ return new class extends Migration
         Schema::create('configurations', function (Blueprint $table) {
             $table->id();
             $table->string('business_name')->default('');
+            $table->boolean('disable_2fa')->default(0);
             $table->timestamps();
         });
 
@@ -855,6 +896,8 @@ return new class extends Migration
 
         Schema::create('inventory_movements', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('previous_movement_id')->nullable()->unique();
+            $table->string('type')->nullable();
             $table->string('custom_unique_reference_id')->nullable()->unique();
             $table->foreignId('inventory_id');
             $table->foreignId('product_id');
@@ -865,6 +908,8 @@ return new class extends Migration
             $table->string('description', 50);
             $table->foreignId('user_id')->nullable();
             $table->timestamps();
+
+            $table->index('type');
 
             $table->foreign('inventory_id')
                 ->references('id')
@@ -887,6 +932,42 @@ return new class extends Migration
                 ->cascadeOnDelete();
         });
 
+        Schema::create('inventory_movements_statistics', function (Blueprint $table) {
+            $table->id();
+            $table->string('type')->nullable();
+            $table->foreignId('inventory_id');
+            $table->foreignId('product_id')->index();
+            $table->string('warehouse_code', 5)->index();
+            $table->double('last7days_quantity_delta', 10, 2)->default(0);
+            $table->double('last14days_quantity_delta', 10, 2)->default(0);
+            $table->double('last28days_quantity_delta', 10, 2)->default(0);
+            $table->unsignedBigInteger('last7days_min_movement_id')->nullable();
+            $table->unsignedBigInteger('last7days_max_movement_id')->nullable();
+            $table->unsignedBigInteger('last14days_min_movement_id')->nullable();
+            $table->unsignedBigInteger('last14days_max_movement_id')->nullable();
+            $table->unsignedBigInteger('last28days_min_movement_id')->nullable();
+            $table->unsignedBigInteger('last28days_max_movement_id')->nullable();
+            $table->dateTime('last_sold_at')->nullable()->index();
+            $table->timestamps();
+
+            $table->unique(['type', 'inventory_id']);
+
+            $table->foreign('inventory_id')
+                ->references('id')
+                ->on('inventory')
+                ->cascadeOnDelete();
+
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->cascadeOnDelete();
+
+            $table->foreign('warehouse_code')
+                ->references('code')
+                ->on('warehouses')
+                ->cascadeOnDelete();
+        });
+
         Schema::create('modules_webhooks_pending_webhooks', function (Blueprint $table) {
             $table->id();
             $table->string('model_class');
@@ -906,16 +987,6 @@ return new class extends Migration
             $table->id();
             $table->string('topic_arn')->nullable();
             $table->timestamps();
-        });
-
-        Schema::create('cache_locks', function (Blueprint $table) {
-            $table->id();
-            $table->string('key');
-            $table->integer('key_id');
-            $table->dateTime('expires_at');
-
-            $table->index('key');
-            $table->unique(['key', 'key_id']);
         });
 
         Schema::create('inventory_totals', function (Blueprint $table) {
@@ -948,6 +1019,7 @@ return new class extends Migration
                 ->on('warehouses')
                 ->onDelete('cascade');
             $table->string('name');
+            $table->string('currently_running_task')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -989,14 +1061,15 @@ return new class extends Migration
 
             $table->index('reason');
             $table->index(['warehouse_id', 'reason']);
+            $table->index(['inventory_id', 'reason']);
         });
 
         Schema::create('modules_magento2api_products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('connection_id');
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
-            $table->decimal('magento_price', 10)->nullable();
-            $table->decimal('magento_sale_price', 10)->nullable();
+            $table->decimal('magento_price', 20)->nullable();
+            $table->decimal('magento_sale_price', 20)->nullable();
             $table->dateTime('magento_sale_price_start_date')->nullable();
             $table->dateTime('magento_sale_price_end_date')->nullable();
             $table->boolean('is_inventory_in_sync')->nullable();
@@ -1011,20 +1084,36 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('modules_inventory_reservations_configurations', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('warehouse_id')->nullable();
+            $table->timestamps();
+
+            $table->foreign('warehouse_id', 'modules_inventory_reservations_warehouse_id_foreign')
+                ->references('id')
+                ->on('warehouses');
+
+            $table->index('warehouse_id', 'modules_inventory_reservations_warehouse_id_index');
+        });
+
         Schema::create('modules_magento2api_connections', function (Blueprint $table) {
             $table->id();
             $table->string('base_url');
             $table->integer('magento_store_id')->nullable();
             $table->integer('inventory_source_warehouse_tag_id')->nullable();
             $table->integer('pricing_source_warehouse_id')->nullable();
-            $table->string('access_token_encrypted')->nullable();
+            $table->longText('access_token_encrypted')->nullable();
             $table->timestamps();
         });
 
         Schema::create('modules_rmsapi_sales_imports', function (Blueprint $table) {
             $table->id();
+            $table->string('uuid')->nullable()->index();
+            $table->string('type')->nullable()->index();
             $table->unsignedBigInteger('inventory_movement_id')->nullable();
             $table->foreignId('connection_id');
+            $table->foreignId('warehouse_id')->nullable();
+            $table->foreignId('product_id')->nullable();
             $table->dateTime('reserved_at')->nullable();
             $table->dateTime('processed_at')->nullable();
             $table->string('sku')->nullable();
@@ -1069,13 +1158,30 @@ return new class extends Migration
             $table->timestamp('dispatched_at')->default(DB::raw('CURRENT_TIMESTAMP'))->index();
             $table->timestamp('processing_at')->nullable();
             $table->timestamp('processed_at')->nullable();
-            $table->unsignedInteger('seconds_dispatching')
+            $table->bigInteger('seconds_dispatching')
                 ->storedAs('TIMESTAMPDIFF(SECOND, dispatched_at, processing_at)')
                 ->comment('TIMESTAMPDIFF(SECOND, dispatched_at, processing_at)');
 
-            $table->unsignedInteger('seconds_running')
+            $table->bigInteger('seconds_running')
                 ->storedAs('TIMESTAMPDIFF(SECOND, processing_at, processed_at)')
                 ->comment('TIMESTAMPDIFF(SECOND, processing_at, processed_at)');
+        });
+
+        Schema::create('modules_inventory_movements_statistics_last28days_sale_movements', function (Blueprint $table) {
+            $table->foreignId('inventory_movement_id')->unique('inventory_movement_id_index');
+            $table->foreignId('inventory_id')->index('inventory_id_index');
+            $table->unsignedBigInteger('warehouse_id')->nullable()->index('warehouse_id_index');
+            $table->dateTime('sold_at')->index('sold_at_index');
+            $table->decimal('quantity_sold', 20, 3);
+            $table->boolean('included_in_7days')->nullable()->index('included_in_7days');
+            $table->boolean('included_in_14days')->nullable()->index('included_in_14days');
+            $table->boolean('included_in_28days')->nullable()->index('included_in_28days');
+        });
+
+        Schema::create('modules_slack_config', function (Blueprint $table) {
+            $table->id();
+            $table->string('incoming_webhook_url')->nullable();
+            $table->timestamps();
         });
 
         $this->installSpatiePermissions();
@@ -1227,6 +1333,45 @@ return new class extends Migration
                     ->onDelete('cascade');
 
                 $table->primary(['permission_id', 'role_id'], 'role_has_permissions_permission_id_role_id_primary');
+            });
+        }
+        if (!Schema::hasTable('telescope_entries')) {
+            Schema::create('telescope_entries', function (Blueprint $table) {
+                $table->bigIncrements('sequence');
+                $table->uuid('uuid');
+                $table->uuid('batch_id');
+                $table->string('family_hash')->nullable();
+                $table->boolean('should_display_on_index')->default(true);
+                $table->string('type', 20);
+                $table->longText('content');
+                $table->dateTime('created_at')->nullable();
+
+                $table->unique('uuid');
+                $table->index('batch_id');
+                $table->index('family_hash');
+                $table->index('created_at');
+                $table->index(['type', 'should_display_on_index']);
+            });
+        }
+
+        if (!Schema::hasTable('telescope_entries_tags')) {
+            Schema::create('telescope_entries_tags', function (Blueprint $table) {
+                $table->uuid('entry_uuid');
+                $table->string('tag');
+
+                $table->index(['entry_uuid', 'tag']);
+                $table->index('tag');
+
+                $table->foreign('entry_uuid')
+                    ->references('uuid')
+                    ->on('telescope_entries')
+                    ->onDelete('cascade');
+            });
+        }
+
+        if (!Schema::hasTable('telescope_monitoring')) {
+            Schema::create('telescope_monitoring', function (Blueprint $table) {
+                $table->string('tag');
             });
         }
 

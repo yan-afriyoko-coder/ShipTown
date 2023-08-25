@@ -52,9 +52,7 @@ class FixIncorrectQuantityBeforeAndAfterJob implements ShouldQueue, ShouldBeUniq
                 INNER JOIN inventory_movements as previous_movement
                  ON previous_movement.id = inventory_movements.previous_movement_id
                 WHERE
-                    inventory_movements.created_at > "2023-06-01 00:00:00"
-                    AND previous_movement.created_at > "2023-06-01 00:00:00"
-                    AND inventory_movements.previous_movement_id IS NOT NULL
+                    inventory_movements.previous_movement_id IS NOT NULL
                     AND inventory_movements.quantity_before != previous_movement.quantity_after
                 LIMIT 20
             )

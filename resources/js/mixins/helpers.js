@@ -1,5 +1,6 @@
 import beep from "./beep";
 import moment from "moment";
+import {isNull} from "lodash/lang";
 
 function getValueOrDefault(value, defaultValue)
 {
@@ -32,6 +33,12 @@ export default {
             },
 
             toNumberOrDash(value) {
+                if (isNaN(value)) {
+                    return '-';
+                }
+                if (value === null) {
+                    return '-';
+                }
                 return this.dashIfZero(Number(value)).toLocaleString().replace(',', ' ');
             },
 
