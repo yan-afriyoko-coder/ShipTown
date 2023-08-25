@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api;
-use App\Http\Controllers\Api\Modules as Modules;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,34 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-Route::put('print/order/{order_number}/{view}', [Api\PrintOrderController::class, 'store']);
-
-// this should be called "order reservation"
-// its job is to fetch next order and block it so no other user gets it again
-Route::apiResource('packlist/order', Api\PacklistOrderController::class, ['as' => 'packlist'])->only(['index']);
-
-Route::apiResource('csv-import/data-collections', Api\CsvImport\DataCollectionsImportController::class)->names('csv-import-data-collections')->only(['store']);
-Route::apiResource('run/sync', Api\Run\SyncController::class)->only('index');
-Route::apiResource('run/sync/api2cart', Api\Run\SyncApi2CartController::class)->only('index');
-Route::apiResource('run/hourly/jobs', Api\Run\HourlyJobsController::class, ['as' => 'run.hourly'])->only('index');
-Route::apiResource('run/daily/jobs', Api\Run\DailyJobsController::class, ['as' => 'run.daily'])->only('index');
-Route::apiResource('product/aliases', Api\ProductAliasController::class, ['as' => 'product'])->only(['index']);
-Route::apiResource('product/tags', Api\ProductTagController::class)->only(['index']);
-Route::apiResource('data-collector-records', Api\DataCollectorRecordController::class)->only(['store', 'index']);
-Route::apiResource('order/products', Api\OrderProductController::class, ['as' => 'order'])->only(['index', 'update']);
-Route::apiResource('orders/products/shipments', Api\OrderProductShipmentController::class)->only(['store']);
-Route::apiResource('order/shipments', Api\OrderShipmentController::class)->only(['index', 'store']);
-Route::apiResource('order/comments', Api\OrderCommentController::class)->only(['index', 'store']);
-Route::apiResource('picklist/picks', Api\Picklist\PicklistPickController::class)->only(['store', 'destroy']);
-Route::apiResource('admin/user/roles', Api\UserRoleController::class, ['as' => 'admin.users'])->only(['index']);
-Route::apiResource('admin/users', Api\UserController::class);
-Route::apiResource('settings/user/me', Api\UserMeController::class)->only(['index', 'store']);
-Route::apiResource('settings/widgets', Api\WidgetController::class)->only(['store', 'update']);
-Route::apiResource('settings/modules/automations/run', Api\Modules\OrderAutomations\RunAutomationController::class, ['as' => 'settings.modules.automations'])->only(['store']);
-Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');
-
 Route::name('api.')->group(function () {
+    Route::apiResource('run-scheduled-jobs', Api\RunScheduledJobsController::class)->only(['store']);
     Route::apiResource('configurations', Api\ConfigurationController::class)->only(['index', 'store']);
     Route::apiResource('heartbeats', Api\HeartbeatsController::class)->only(['index']);
     Route::apiResource('inventory', Api\InventoryController::class)->only(['index', 'store']);
@@ -84,3 +57,27 @@ Route::prefix('modules')->name('api.modules.')->group(function () {
     Route::apiResource('magento-api/connections', Api\Modules\MagentoApi\MagentoApiConnectionController::class, ['as' => 'magento-api'])->except(['show']);
     Route::apiResource('inventory-reservations/configuration', Api\Modules\InventoryReservation\InventoryReservationController::class, ['as' => 'inventory-reservations'])->only(['index', 'update']);
 });
+
+Route::put('print/order/{order_number}/{view}', [Api\PrintOrderController::class, 'store']);
+
+Route::apiResource('packlist/order', Api\PacklistOrderController::class, ['as' => 'packlist'])->only(['index']);
+
+Route::apiResource('csv-import/data-collections', Api\CsvImport\DataCollectionsImportController::class)->names('csv-import-data-collections')->only(['store']);
+Route::apiResource('run/sync', Api\Run\SyncController::class)->only('index');
+Route::apiResource('run/sync/api2cart', Api\Run\SyncApi2CartController::class)->only('index');
+Route::apiResource('run/hourly/jobs', Api\Run\HourlyJobsController::class, ['as' => 'run.hourly'])->only('index');
+Route::apiResource('run/daily/jobs', Api\Run\DailyJobsController::class, ['as' => 'run.daily'])->only('index');
+Route::apiResource('product/aliases', Api\ProductAliasController::class, ['as' => 'product'])->only(['index']);
+Route::apiResource('product/tags', Api\ProductTagController::class)->only(['index']);
+Route::apiResource('data-collector-records', Api\DataCollectorRecordController::class)->only(['store', 'index']);
+Route::apiResource('order/products', Api\OrderProductController::class, ['as' => 'order'])->only(['index', 'update']);
+Route::apiResource('orders/products/shipments', Api\OrderProductShipmentController::class)->only(['store']);
+Route::apiResource('order/shipments', Api\OrderShipmentController::class)->only(['index', 'store']);
+Route::apiResource('order/comments', Api\OrderCommentController::class)->only(['index', 'store']);
+Route::apiResource('picklist/picks', Api\Picklist\PicklistPickController::class)->only(['store', 'destroy']);
+Route::apiResource('admin/user/roles', Api\UserRoleController::class, ['as' => 'admin.users'])->only(['index']);
+Route::apiResource('admin/users', Api\UserController::class);
+Route::apiResource('settings/user/me', Api\UserMeController::class)->only(['index', 'store']);
+Route::apiResource('settings/widgets', Api\WidgetController::class)->only(['store', 'update']);
+Route::apiResource('settings/modules/automations/run', Api\Modules\OrderAutomations\RunAutomationController::class, ['as' => 'settings.modules.automations'])->only(['store']);
+Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');

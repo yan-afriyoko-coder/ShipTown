@@ -11,33 +11,23 @@
             </div>
 
             <div class="card-body">
-                <button
-                    :disabled="!btnRunHourlyJobsEnabled"
-                    @click.prevent="runHourlyJobs"
-                    class="btn btn-primary mb-2"
-                >
-                    Run Hourly Jobs
+                <button :disabled="buttonDisabled['EveryDayJobs']" @click.prevent="runSchedule('EveryDayJobs')" class="btn btn-block btn-primary mb-2">
+                    Run Every Day Jobs
                 </button>
-                <button
-                    :disabled="!btnRunDailyJobsEnabled"
-                    @click.prevent="runDailyJobs"
-                    class="btn btn-primary mb-2"
-                >
-                    Run Daily Jobs
+                <button :disabled="buttonDisabled['EveryDayJobs']" @click.prevent="runSchedule('EveryHourJobs')" class="btn btn-block btn-primary mb-2">
+                    Run Every Hour Jobs
                 </button>
-                <button
-                    :disabled="!btnRunApi2cartSyncEnabled"
-                    @click.prevent="runApi2cartSync"
-                    class="btn btn-primary mb-2"
-                >
-                    Run Api2cart Sync
+                <button :disabled="buttonDisabled['EveryDayJobs']" @click.prevent="runSchedule('EveryTenMinutesJobs')" class="btn btn-block btn-primary mb-2">
+                    Run Every 10 Minutes Jobs
                 </button>
-                <button
-                    :disabled="!btnRunSyncEnabled"
-                    @click.prevent="runSync"
-                    class="btn btn-primary mb-2"
-                >
-                    Run Sync
+                <button :disabled="buttonDisabled['EveryDayJobs']" @click.prevent="runSchedule('EveryFiveMinutesJobs')" class="btn btn-block btn-primary mb-2">
+                    Run Every 5 Minutes Jobs
+                </button>
+                <button :disabled="buttonDisabled['EveryDayJobs']" @click.prevent="runSchedule('EveryOneMinutes')" class="btn btn-block btn-primary mb-2">
+                    Run Every 1 Minute Jobs
+                </button>
+                <button :disabled="buttonDisabled['EveryDayJobs']" @click.prevent="runSchedule('ManualRequestJobs')" class="btn btn-block btn-primary mb-2">
+                    Run Manual Request Jobs
                 </button>
             </div>
         </div>
@@ -54,64 +44,22 @@ export default {
     name: "MaintenanceSection",
     data: function () {
         return {
-            btnRunHourlyJobsEnabled: true,
-            btnRunDailyJobsEnabled: true,
-            btnRunApi2cartSyncEnabled: true,
-            btnRunSyncEnabled: true,
+            buttonDisabled: {},
         }
     },
     methods: {
-        runHourlyJobs() {
-            this.btnRunHourlyJobsEnabled = false;
-            this.apiGetRunHourlyJobs()
+        runSchedule(schedule) {
+            this.apiPostRunScheduledJobsRequest({"schedule": schedule})
                 .then(() => {
-                        this.$snotify.success('Job run requested');
+                        this.$snotify.success('Cron run requested');
+                        this.buttonDisabled[schedule] = true;
                     }
                 )
                 .catch(() => {
-                        this.$snotify.error('Jub run request failed');
+                        this.$snotify.error('Cron run request failed');
                     }
                 );
         },
-
-        runDailyJobs() {
-            this.btnRunDailyJobsEnabled = false;
-            this.apiGetRunDailyJobs()
-                .then(() => {
-                        this.$snotify.success('Job run requested');
-                    }
-                )
-                .catch(() => {
-                        this.$snotify.error('Jub run request failed');
-                    }
-                );
-        },
-
-        runApi2cartSync() {
-            this.btnRunApi2cartSyncEnabled = false;
-            this.apiGetRunSyncApi2cart()
-                .then(() => {
-                        this.$snotify.success('Api2cart Sync requested');
-                    }
-                )
-                .catch(() => {
-                        this.$snotify.error('Sync request failed');
-                    }
-                );
-        },
-
-        runSync() {
-            this.btnRunSyncEnabled = false;
-            this.apiGetRunSync()
-                .then(() => {
-                        this.$snotify.success('Sync requested');
-                    }
-                )
-                .catch(() => {
-                        this.$snotify.error('Sync request failed');
-                    }
-                );
-        }
     }
 }
 </script>
