@@ -734,6 +734,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('connection_id');
             $table->foreignId('warehouse_id')->nullable();
+            $table->string('warehouse_code')->nullable();
             $table->uuid('batch_uuid')->nullable();
             $table->timestamp('reserved_at')->nullable();
             $table->dateTime('when_processed')->nullable();
@@ -761,6 +762,11 @@ return new class extends Migration
 
             $table->foreign('warehouse_id')
                 ->references('id')
+                ->on('warehouses')
+                ->cascadeOnDelete();
+
+            $table->foreign('warehouse_code')
+                ->references('code')
                 ->on('warehouses')
                 ->cascadeOnDelete();
         });
@@ -928,41 +934,38 @@ return new class extends Migration
 
         Schema::create('inventory_movements_statistics', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('inventory_id')->unique();
+            $table->string('type')->nullable();
+            $table->foreignId('inventory_id');
             $table->foreignId('product_id')->index();
-            $table->foreignId('warehouse_id')->index();
             $table->string('warehouse_code', 5)->index();
+            $table->double('last7days_quantity_delta', 10, 2)->default(0);
+            $table->double('last14days_quantity_delta', 10, 2)->default(0);
+            $table->double('last28days_quantity_delta', 10, 2)->default(0);
+            $table->unsignedBigInteger('last7days_min_movement_id')->nullable();
+            $table->unsignedBigInteger('last7days_max_movement_id')->nullable();
+            $table->unsignedBigInteger('last14days_min_movement_id')->nullable();
+            $table->unsignedBigInteger('last14days_max_movement_id')->nullable();
+            $table->unsignedBigInteger('last28days_min_movement_id')->nullable();
+            $table->unsignedBigInteger('last28days_max_movement_id')->nullable();
             $table->dateTime('last_sold_at')->nullable()->index();
-            $table->foreignId('last_inventory_movement_id')->index()->nullable();
-            $table->decimal('quantity_sold_last_7_days', 10)->index()->nullable();
-            $table->decimal('quantity_sold_last_14_days', 10)->index()->nullable();
-            $table->decimal('quantity_sold_last_28_days', 10)->index()->nullable();
-            $table->decimal('quantity_sold_this_week', 10)->index()->nullable();
-            $table->decimal('quantity_sold_last_week', 10)->index()->nullable();
-            $table->decimal('quantity_sold_2weeks_ago', 10)->index()->nullable();
-            $table->decimal('quantity_sold_3weeks_ago', 10)->index()->nullable();
-            $table->decimal('quantity_sold_4weeks_ago', 10)->index()->nullable();
             $table->timestamps();
+
+            $table->unique(['type', 'inventory_id']);
 
             $table->foreign('inventory_id')
                 ->references('id')
                 ->on('inventory')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
             $table->foreign('product_id')
                 ->references('id')
                 ->on('products')
-                ->onDelete('cascade');
-
-            $table->foreign('warehouse_id')
-                ->references('id')
-                ->on('warehouses')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
             $table->foreign('warehouse_code')
                 ->references('code')
                 ->on('warehouses')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
         });
 
         Schema::create('modules_webhooks_pending_webhooks', function (Blueprint $table) {
@@ -984,16 +987,6 @@ return new class extends Migration
             $table->id();
             $table->string('topic_arn')->nullable();
             $table->timestamps();
-        });
-
-        Schema::create('cache_locks', function (Blueprint $table) {
-            $table->id();
-            $table->string('key');
-            $table->integer('key_id');
-            $table->dateTime('expires_at');
-
-            $table->index('key');
-            $table->unique(['key', 'key_id']);
         });
 
         Schema::create('inventory_totals', function (Blueprint $table) {
@@ -1177,7 +1170,7 @@ return new class extends Migration
         Schema::create('modules_inventory_movements_statistics_last28days_sale_movements', function (Blueprint $table) {
             $table->foreignId('inventory_movement_id')->unique('inventory_movement_id_index');
             $table->foreignId('inventory_id')->index('inventory_id_index');
-            $table->unsignedBigInteger('warehouse_id')->nullable()->index();
+            $table->unsignedBigInteger('warehouse_id')->nullable()->index('warehouse_id_index');
             $table->dateTime('sold_at')->index('sold_at_index');
             $table->decimal('quantity_sold', 20, 3);
             $table->boolean('included_in_7days')->nullable()->index('included_in_7days');
