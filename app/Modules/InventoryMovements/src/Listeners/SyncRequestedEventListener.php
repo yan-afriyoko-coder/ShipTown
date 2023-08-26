@@ -15,8 +15,8 @@ class SyncRequestedEventListener
     {
         PreviousMovementIdJob::dispatch();
         QuantityBeforeJob::dispatch();
-        QuantityDeltaJob::dispatch();
-        QuantityAfterJob::dispatch();
+//        QuantityDeltaJob::dispatch();
+//        QuantityAfterJob::dispatch();
         InventoryLastMovementIdJob::dispatch();
         InventoryQuantityJob::dispatch();
     }
