@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Maintenance\src\Jobs\temp;
+namespace App\Modules\InventoryMovements\src\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -10,7 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
-class FixIncorrectQuantityBeforeAndAfterJob implements ShouldQueue, ShouldBeUnique
+class QuantityBeforeJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -23,12 +23,13 @@ class FixIncorrectQuantityBeforeAndAfterJob implements ShouldQueue, ShouldBeUniq
 
     public function handle()
     {
-        $maxRounds = 10;
+        $maxRounds = 100;
 
         do {
             $recordsUpdated = DB::update('
             WITH tbl AS (
                 SELECT
+                    inventory_movements.created_at as created_at,
                     inventory_movements.id as movement_id,
                     inventory_movements.description as description,
                     inventory_movements.inventory_id as inventory_id,
@@ -51,10 +52,8 @@ class FixIncorrectQuantityBeforeAndAfterJob implements ShouldQueue, ShouldBeUniq
                 FROM inventory_movements
                 INNER JOIN inventory_movements as previous_movement
                  ON previous_movement.id = inventory_movements.previous_movement_id
-                WHERE
-                    inventory_movements.previous_movement_id IS NOT NULL
-                    AND inventory_movements.quantity_before != previous_movement.quantity_after
-                LIMIT 20
+                 AND inventory_movements.quantity_before != previous_movement.quantity_after
+                LIMIT 5
             )
 
             UPDATE inventory_movements
@@ -63,7 +62,7 @@ class FixIncorrectQuantityBeforeAndAfterJob implements ShouldQueue, ShouldBeUniq
             SET
                 inventory_movements.quantity_before = tbl.quantity_before_expected,
                 inventory_movements.quantity_delta = tbl.quantity_delta_expected,
-                inventory_movements.quantity_after = tbl.quantity_after_expected
+                inventory_movements.quantity_after = tbl.quantity_after_expected;
             ');
             sleep(1);
             $maxRounds--;

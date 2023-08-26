@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Maintenance\src\Jobs\temp;
+namespace App\Modules\InventoryMovements\src\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -10,7 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
-class FillPreviousMovementIdJob implements ShouldQueue, ShouldBeUnique
+class PreviousMovementIdJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -23,7 +23,7 @@ class FillPreviousMovementIdJob implements ShouldQueue, ShouldBeUnique
 
     public function handle()
     {
-        $maxRounds = 400;
+        $maxRounds = 50;
 
         do {
             $recordsUpdated = DB::update('
@@ -39,7 +39,7 @@ class FillPreviousMovementIdJob implements ShouldQueue, ShouldBeUnique
                 WHERE
                     inventory_movements.previous_movement_id IS NULL
                     AND is_first_movement IS NULL
-                LIMIT 500
+                LIMIT 5000
             )
             UPDATE inventory_movements
             INNER JOIN tbl ON

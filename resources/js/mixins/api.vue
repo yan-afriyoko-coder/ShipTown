@@ -241,20 +241,8 @@ export default {
                 return axios.post(`/api/modules/autostatus/picking/configuration`, configuration);
             },
 
-            apiGetRunHourlyJobs: function () {
-                return axios.get('/api/run/hourly/jobs');
-            },
-
-            apiGetRunDailyJobs: function () {
-                return axios.get('/api/run/daily/jobs');
-            },
-
-            apiGetRunSync: function () {
-                return axios.get('/api/run/sync');
-            },
-
-            apiGetRunSyncApi2cart: function () {
-                return axios.get('/api/run/sync/api2cart');
+            apiPostRunScheduledJobsRequest: function (data) {
+                return axios.post('/api/run-scheduled-jobs', data);
             },
 
             apiGetPrintNodePrinters: function () {
@@ -262,18 +250,12 @@ export default {
             },
 
             apiPostPrintnodePrintJob: function (data) { return axios.post('/api/modules/printnode/printjobs', data) },
-
             apiPostRmsapiConnections: function (data) { return axios.post('/api/modules/rms_api/connections', data) },
-
             apiGetRmsapiConnections: function (params) { return axios.get('/api/modules/rms_api/connections', {params: params}) },
-
             apiPostModulesSlackConfig: function (data) { return axios.post('/api/modules/slack/config', data) },
             apiGetModulesSlackIncomingWebhook: function (params) { return axios.get('/api/modules/slack/config', {params: params}) },
-
             apiDeleteRmsapiConnection: function (connection_id) { return axios.delete(`/api/modules/rms_api/connections/${connection_id}`) },
-
             apiPostApi2cartConnection: function (data) { return axios.post('/api/modules/api2cart/connections', data) },
-
             apiPostWidget: function (data) {
                 return axios.post('/api/widgets', data);
             },
