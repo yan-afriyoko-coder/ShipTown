@@ -9,7 +9,7 @@ class QuantityBeforeJob extends UniqueJob
 {
     public function handle()
     {
-        $maxRounds = 100;
+        $maxRounds = 1000;
 
         do {
             $recordsUpdated = DB::update('
@@ -46,9 +46,18 @@ class QuantityBeforeJob extends UniqueJob
             INNER JOIN tbl ON
                 tbl.movement_id = inventory_movements.id
             SET
-                inventory_movements.quantity_before = tbl.quantity_before_expected,
-                inventory_movements.quantity_delta = tbl.quantity_delta_expected,
-                inventory_movements.quantity_after = tbl.quantity_after_expected;
+                inventory_movements.quantity_before = inventory_movements.quantity_before + tbl.quantity_before_delta,
+
+                inventory_movements.quantity_delta = CASE WHEN inventory_movements.description = "stocktake"
+                        THEN inventory_movements.quantity_delta - tbl.quantity_before_delta
+                        ElSE inventory_movements.quantity_delta
+                        END,
+
+                inventory_movements.quantity_after = CASE WHEN inventory_movements.description = "stocktake"
+                        THEN inventory_movements.quantity_after
+                        ELSE inventory_movements.quantity_after + tbl.quantity_before_delta
+                        END
+                ;
             ');
             sleep(1);
             $maxRounds--;
