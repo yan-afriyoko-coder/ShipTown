@@ -23,7 +23,7 @@ class QuantityBeforeJob implements ShouldQueue, ShouldBeUnique
 
     public function handle()
     {
-        $maxRounds = 10;
+        $maxRounds = 100;
 
         do {
             $recordsUpdated = DB::update('
@@ -53,7 +53,7 @@ class QuantityBeforeJob implements ShouldQueue, ShouldBeUnique
                 INNER JOIN inventory_movements as previous_movement
                  ON previous_movement.id = inventory_movements.previous_movement_id
                  AND inventory_movements.quantity_before != previous_movement.quantity_after
-                LIMIT 200
+                LIMIT 5
             )
 
             UPDATE inventory_movements
