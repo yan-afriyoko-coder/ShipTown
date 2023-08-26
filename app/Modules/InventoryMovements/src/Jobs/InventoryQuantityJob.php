@@ -2,25 +2,11 @@
 
 namespace App\Modules\InventoryMovements\src\Jobs;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use App\Abstracts\UniqueJob;
 use Illuminate\Support\Facades\DB;
 
-class InventoryQuantityJob implements ShouldQueue, ShouldBeUnique
+class InventoryQuantityJob extends UniqueJob
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    public int $uniqueFor = 600;
-
-    public function uniqueId(): string
-    {
-        return get_class($this);
-    }
-
     public function handle()
     {
         $maxRounds = 10;
