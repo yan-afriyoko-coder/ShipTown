@@ -38,7 +38,7 @@ class InventoryMovementsServiceProvider extends BaseModuleServiceProvider
             Listeners\SyncRequestedEventListener::class,
         ],
 
-        DailyEventListener::class => [
+        EveryTenMinutesEvent::class => [
             Listeners\EveryTenMinutesEventListener::class,
         ],
     ];
