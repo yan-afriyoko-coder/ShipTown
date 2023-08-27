@@ -29,7 +29,7 @@ class QuantityBeforeJob extends UniqueJob
             return;
         }
 
-        $maxRounds = 1000;
+        $maxRounds = 10000;
 
         do {
             $recordsUpdated = DB::update('
@@ -81,7 +81,7 @@ class QuantityBeforeJob extends UniqueJob
                         END
                 ;
             ', [$minMovementId]);
-            usleep(500000);
+            usleep(250000);
             $maxRounds--;
         } while ($recordsUpdated > 0 and $maxRounds > 0);
     }
