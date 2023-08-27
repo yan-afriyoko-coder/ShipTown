@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 
 class CleanupImportTablesJob implements ShouldQueue
 {
@@ -20,6 +21,16 @@ class CleanupImportTablesJob implements ShouldQueue
 
     public function handle(): bool
     {
+        // remove duplicates from products import table, keep the latest only
+        DB::statement('
+            DELETE FROM modules_rmsapi_products_imports WHERE ID NOT IN (
+                SELECT id FROM (
+                    SELECT max(id) as id
+                    FROM `modules_rmsapi_products_imports`
+                    GROUP BY product_id, warehouse_id
+                ) as tbl)
+        ');
+
         // Cleanup products import table
         RmsapiProductImport::query()
             ->whereNull('when_processed')

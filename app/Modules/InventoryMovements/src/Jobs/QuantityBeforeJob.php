@@ -9,29 +9,22 @@ class QuantityBeforeJob extends UniqueJob
 {
     public function handle()
     {
-        $firstIncorrectMovementRecord = DB::select('
-                SELECT
-                    inventory_movements.id as min_movement_id
-
-                FROM inventory_movements
-                INNER JOIN inventory_movements as previous_movement
-                 ON previous_movement.id = inventory_movements.previous_movement_id
-
-                WHERE inventory_movements.quantity_before != previous_movement.quantity_after
-
-                ORDER BY inventory_movements.id ASC
-                LIMIT 1
-        ');
-
-        $minMovementId = data_get($firstIncorrectMovementRecord, '0.min_movement_id');
-
-        if ($minMovementId === null) {
-            return;
-        }
-
-        $maxRounds = 10000;
+        $refreshCounter = 0;
+        $minMovementId = null;
 
         do {
+            if ($refreshCounter <= 0) {
+                $minMovementId = $this->getMinMovementId();
+
+                if ($minMovementId === null) {
+                    return;
+                }
+
+                $refreshCounter = 1000;
+            }
+
+            $refreshCounter--;
+
             $recordsUpdated = DB::update('
             WITH tbl AS (
                 SELECT
@@ -61,7 +54,7 @@ class QuantityBeforeJob extends UniqueJob
                  AND inventory_movements.quantity_before != previous_movement.quantity_after
 
                 WHERE inventory_movements.id >= IFNULL(?, 0)
-                LIMIT 10
+                LIMIT 15
             )
 
             UPDATE inventory_movements
@@ -81,8 +74,29 @@ class QuantityBeforeJob extends UniqueJob
                         END
                 ;
             ', [$minMovementId]);
-            usleep(250000);
-            $maxRounds--;
-        } while ($recordsUpdated > 0 and $maxRounds > 0);
+            usleep(200000);
+        } while ($recordsUpdated > 0);
+    }
+
+    /**
+     * @return array|mixed
+     */
+    private function getMinMovementId(): mixed
+    {
+        $firstIncorrectMovementRecord = DB::select('
+                SELECT
+                    inventory_movements.id as min_movement_id
+
+                FROM inventory_movements
+                INNER JOIN inventory_movements as previous_movement
+                 ON previous_movement.id = inventory_movements.previous_movement_id
+
+                WHERE inventory_movements.quantity_before != previous_movement.quantity_after
+
+                ORDER BY inventory_movements.id ASC
+                LIMIT 1
+        ');
+
+        return data_get($firstIncorrectMovementRecord, '0.min_movement_id');
     }
 }

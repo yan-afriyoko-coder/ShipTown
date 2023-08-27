@@ -2,6 +2,7 @@
 
 namespace App\Modules\Rmsapi\src\Listeners;
 
+use App\Modules\Rmsapi\src\Jobs\CleanupImportTablesJob;
 use App\Modules\Rmsapi\src\Jobs\ImportAllJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedSalesRecordsJob;
@@ -15,6 +16,7 @@ class SyncRequestedEventListener
      */
     public function handle()
     {
+        CleanupImportTablesJob::dispatch();
         ImportAllJob::dispatch();
         UpdateImportedSalesRecordsJob::dispatch();
         ProcessImportedProductRecordsJob::dispatch();
