@@ -14,7 +14,7 @@ class QuantityBeforeJob extends UniqueJob
 
         do {
             if ($refreshCounter <= 0) {
-                $minMovementId = $this->getMinMovementId();
+                $minMovementId = $this->getMinMovementId($minMovementId);
 
                 if ($minMovementId === null) {
                     return;
@@ -78,10 +78,7 @@ class QuantityBeforeJob extends UniqueJob
         } while ($recordsUpdated > 0);
     }
 
-    /**
-     * @return array|mixed
-     */
-    private function getMinMovementId(): mixed
+    private function getMinMovementId(int $minMovementId): mixed
     {
         $firstIncorrectMovementRecord = DB::select('
                 SELECT
@@ -92,10 +89,11 @@ class QuantityBeforeJob extends UniqueJob
                  ON previous_movement.id = inventory_movements.previous_movement_id
 
                 WHERE inventory_movements.quantity_before != previous_movement.quantity_after
+                AND inventory_movements.id >= IFNULL(?, 0)
 
                 ORDER BY inventory_movements.id ASC
                 LIMIT 1
-        ');
+        ', [$minMovementId]);
 
         return data_get($firstIncorrectMovementRecord, '0.min_movement_id');
     }
