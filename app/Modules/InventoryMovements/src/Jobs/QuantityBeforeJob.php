@@ -54,7 +54,7 @@ class QuantityBeforeJob extends UniqueJob
                  AND inventory_movements.quantity_before != previous_movement.quantity_after
 
                 WHERE inventory_movements.id >= IFNULL(?, 0)
-                LIMIT 15
+                LIMIT 100
             )
 
             UPDATE inventory_movements
@@ -78,7 +78,7 @@ class QuantityBeforeJob extends UniqueJob
         } while ($recordsUpdated > 0);
     }
 
-    private function getMinMovementId(int $minMovementId): mixed
+    private function getMinMovementId(int $minMovementId = null): mixed
     {
         $firstIncorrectMovementRecord = DB::select('
                 SELECT
