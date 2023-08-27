@@ -45,20 +45,27 @@ class BasicModuleTest extends TestCase
         ray(InventoryMovement::query()->get()->toArray());
         QuantityBeforeJob::dispatch();
 
-//        $this->assertDatabaseHas('inventory_movements', [
-//            'id' => $inventoryMovement02->getKey(),
-//            'previous_movement_id' => $inventoryMovement01->getKey(),
-//            'quantity_before' => 20,
-//            'quantity_delta' => -5,
-//            'quantity_after' => 15,
-//        ]);
+        $this->assertDatabaseHas('inventory_movements', [
+            'id' => $inventoryMovement02->getKey(),
+            'previous_movement_id' => $inventoryMovement01->getKey(),
+            'quantity_before' => 20,
+            'quantity_delta' => -5,
+        ]);
 
         QuantityDeltaJob::dispatch();
         QuantityAfterJob::dispatch();
+
+        $this->assertDatabaseHas('inventory_movements', [
+            'id' => $inventoryMovement02->getKey(),
+            'previous_movement_id' => $inventoryMovement01->getKey(),
+            'quantity_before' => 20,
+            'quantity_delta' => -5,
+            'quantity_after' => 15,
+        ]);
+
         InventoryLastMovementIdJob::dispatch();
         InventoryQuantityJob::dispatch();
 
-//        dd(1);
         $this->assertTrue(true, 'We did not run into any errors');
     }
     /** @test */
