@@ -59,4 +59,29 @@ class InventoryService
 
         return $inventoryMovement;
     }
+
+    public static function stocktake(Inventory $inventory, float $newQuantity, string $unique_reference_id = null): InventoryMovement
+    {
+        DB::beginTransaction();
+            /** @var InventoryMovement $inventoryMovement */
+            $inventoryMovement = InventoryMovement::query()->create([
+                'custom_unique_reference_id' => $unique_reference_id,
+                'type' => 'stocktake',
+                'description' => 'stocktake',
+                'inventory_id' => $inventory->id,
+                'product_id' => $inventory->product_id,
+                'warehouse_id' => $inventory->warehouse_id,
+                'quantity_before' => $inventory->quantity,
+                'quantity_delta' => $newQuantity - $inventory->quantity,
+                'quantity_after' => $newQuantity,
+            ]);
+
+            $inventory->update([
+                'last_movement_id' => $inventoryMovement->getKey(),
+                'quantity' => $inventoryMovement->quantity_after
+            ]);
+        DB::commit();
+
+        return $inventoryMovement;
+    }
 }
