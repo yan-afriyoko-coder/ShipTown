@@ -81,7 +81,7 @@ class QuantityBeforeJob extends UniqueJob
                         END
                 ;
             ', [$minMovementId]);
-            sleep(1);
+            usleep(500000);
             $maxRounds--;
         } while ($recordsUpdated > 0 and $maxRounds > 0);
     }
