@@ -9,7 +9,7 @@ class QuantityBeforeJob extends UniqueJob
 {
     public function handle()
     {
-        $minMovementId = DB::select('
+        $firstIncorrectMovementRecord = DB::select('
                 SELECT
                     inventory_movements.id as min_movement_id
 
@@ -23,12 +23,14 @@ class QuantityBeforeJob extends UniqueJob
                 LIMIT 1
         ');
 
-            $data_get = data_get($minMovementId, '0.min_movement_id');
-        ray($minMovementId, $data_get);
+        $minMovementId = data_get($firstIncorrectMovementRecord, '0.min_movement_id');
+
+        if ($minMovementId === null) {
+            return;
+        }
 
         $maxRounds = 1000;
 
-        ray('Starting quantity before job')->showQueries();
         do {
             $recordsUpdated = DB::update('
             WITH tbl AS (
@@ -78,7 +80,7 @@ class QuantityBeforeJob extends UniqueJob
                         ELSE inventory_movements.quantity_after + tbl.quantity_before_delta
                         END
                 ;
-            ', [$data_get]);
+            ', [$minMovementId]);
             sleep(1);
             $maxRounds--;
         } while ($recordsUpdated > 0 and $maxRounds > 0);
