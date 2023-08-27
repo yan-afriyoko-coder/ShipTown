@@ -42,7 +42,6 @@ class BasicModuleTest extends TestCase
             'previous_movement_id' => $inventoryMovement01->getKey(),
         ]);
 
-        ray(InventoryMovement::query()->get()->toArray());
         QuantityBeforeJob::dispatch();
 
         $this->assertDatabaseHas('inventory_movements', [
@@ -63,8 +62,26 @@ class BasicModuleTest extends TestCase
             'quantity_after' => 15,
         ]);
 
+
+        Inventory::query()->update([
+            'last_movement_id' => null,
+            'quantity' => 0,
+        ]);
+
         InventoryLastMovementIdJob::dispatch();
+
+        $this->assertDatabaseHas('inventory', [
+            'id' => $inventory->getKey(),
+            'last_movement_id' => $inventoryMovement02->getKey(),
+        ]);
+
         InventoryQuantityJob::dispatch();
+
+        $this->assertDatabaseHas('inventory', [
+            'id' => $inventory->getKey(),
+            'last_movement_id' => $inventoryMovement02->getKey(),
+            'quantity' => 15,
+        ]);
 
         $this->assertTrue(true, 'We did not run into any errors');
     }
