@@ -73,7 +73,6 @@ class BasicModuleTest extends TestCase
     {
         PreviousMovementIdJob::dispatch();
         QuantityBeforeJob::dispatch();
-        ray(InventoryMovement::query()->get()->toArray());
         QuantityDeltaJob::dispatch();
         QuantityAfterJob::dispatch();
         InventoryLastMovementIdJob::dispatch();
