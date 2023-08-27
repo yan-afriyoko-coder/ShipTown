@@ -97,7 +97,6 @@ class QuantityBeforeJob extends UniqueJob
                 LIMIT 1
         ');
 
-        $minMovementId = data_get($firstIncorrectMovementRecord, '0.min_movement_id');
-        return $minMovementId;
+        return data_get($firstIncorrectMovementRecord, '0.min_movement_id');
     }
 }
