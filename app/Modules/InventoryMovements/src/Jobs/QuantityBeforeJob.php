@@ -54,7 +54,6 @@ class QuantityBeforeJob extends UniqueJob
                             THEN inventory_movements.quantity_after
                             ELSE inventory_movements.quantity_after + tbl.quantity_before_delta
                             END
-                LIMIT 5000
             ', [$minMovementId]);
             sleep(1);
         } while ($recordsUpdated > 0);
