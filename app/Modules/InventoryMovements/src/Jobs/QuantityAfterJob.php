@@ -15,13 +15,8 @@ class QuantityAfterJob extends UniqueJob
                     SELECT inventory_movements.id
                     FROM inventory_movements
                     WHERE
-                        NOT (
-                            inventory_movements.type = "stocktake"
-                            OR inventory_movements.description = "stocktake"
-                        )
+                        inventory_movements.type != "stocktake"
                         AND inventory_movements.quantity_after != quantity_before + quantity_delta
-
-                    ORDER BY inventory_movements.id ASC
 
                     LIMIT 10
                 )

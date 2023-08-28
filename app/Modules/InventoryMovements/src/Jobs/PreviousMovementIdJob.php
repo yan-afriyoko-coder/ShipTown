@@ -9,8 +9,6 @@ class PreviousMovementIdJob extends UniqueJob
 {
     public function handle()
     {
-        $maxRounds = 50;
-
         do {
             $recordsUpdated = DB::update('
             WITH tbl AS (
@@ -35,7 +33,6 @@ class PreviousMovementIdJob extends UniqueJob
                 inventory_movements.previous_movement_id = tbl.previous_movement_id
             ');
             sleep(1);
-            $maxRounds--;
-        } while ($recordsUpdated > 0 and $maxRounds > 0);
+        } while ($recordsUpdated > 0);
     }
 }
