@@ -42,6 +42,10 @@ class InventoryMovementsServiceProvider extends BaseModuleServiceProvider
         EveryFiveMinutesEvent::class => [
             Listeners\EveryTenMinutesEventListener::class,
         ],
+
+        DailyEventListener::class => [
+            Listeners\DailyEventListener::class,
+        ],
     ];
 
     public static function disabling(): bool

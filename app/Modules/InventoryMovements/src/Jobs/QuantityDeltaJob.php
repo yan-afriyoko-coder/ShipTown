@@ -13,12 +13,28 @@ class QuantityDeltaJob extends UniqueJob
 
         do {
             $recordsUpdated = DB::update('
-            UPDATE inventory_movements
 
-            SET inventory_movements.quantity_delta = quantity_after - quantity_before
+                WITH tbl AS (
+                    SELECT inventory_movements.id
+                    FROM inventory_movements
+                    WHERE
+                        (
+                            inventory_movements.type = "stocktake"
+                            OR inventory_movements.description = "stocktake"
+                        )
+                        AND  inventory_movements.quantity_delta != quantity_after - quantity_before
 
-            WHERE  inventory_movements.quantity_delta != quantity_after - quantity_before
-                AND (inventory_movements.type = "stocktake" OR inventory_movements.description = "stocktake")
+                    ORDER BY inventory_movements.id ASC
+
+                    LIMIT 10
+                )
+
+                UPDATE inventory_movements
+
+                INNER JOIN tbl
+                  ON tbl.id = inventory_movements.id
+
+                SET inventory_movements.quantity_delta = quantity_after - quantity_before
             ');
             sleep(1);
             $maxRounds--;
