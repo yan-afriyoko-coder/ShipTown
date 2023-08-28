@@ -15,7 +15,7 @@ class QuantityBeforeJob extends UniqueJob
         do {
             if ($refreshCounter <= 0) {
                 $minMovementId = $this->getMinMovementId($minMovementId);
-                $refreshCounter = 1000;
+                $refreshCounter = 10;
             }
 
             $refreshCounter--;
@@ -73,7 +73,7 @@ class QuantityBeforeJob extends UniqueJob
                         END
                 ;
             ', [$minMovementId]);
-            usleep(200000);
+            usleep(100000);
         } while ($recordsUpdated > 0);
     }
 
