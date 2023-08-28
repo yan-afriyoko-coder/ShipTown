@@ -30,6 +30,11 @@ class QuantityBeforeJob extends UniqueJob
                         previous_movement.quantity_after - inventory_movements.quantity_before as quantity_before_delta
 
                     FROM inventory_movements
+
+                    INNER JOIN inventory as inventory
+                      ON inventory.id = inventory_movements.inventory_id
+                      AND inventory_movements.created_at > inventory.last_counted_at
+
                     INNER JOIN inventory_movements as previous_movement
                      ON previous_movement.id = inventory_movements.previous_movement_id
                      AND inventory_movements.quantity_before != previous_movement.quantity_after
