@@ -12,7 +12,7 @@ class QuantityBeforeJob extends UniqueJob
         $minMovementId = null;
 
         do {
-            if (($minMovementId === null) or (rand(0, 50) === 0)) {
+            if (($minMovementId === null) or (rand(0, 100) === 0)) {
                 $minMovementId = $this->getMinMovementId($minMovementId);
             }
 
@@ -56,7 +56,7 @@ class QuantityBeforeJob extends UniqueJob
                             END
                     ;
             ', [$minMovementId]);
-            sleep(1);
+            usleep(200000); // 0.2 seconds
         } while ($recordsUpdated > 0);
     }
 
