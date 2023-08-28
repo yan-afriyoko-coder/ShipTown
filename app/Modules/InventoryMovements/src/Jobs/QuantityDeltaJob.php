@@ -27,6 +27,8 @@ class QuantityDeltaJob extends UniqueJob
                   ON tbl.id = inventory_movements.id
 
                 SET inventory_movements.quantity_delta = quantity_after - quantity_before
+
+                WHERE inventory_movements.type = "stocktake"
             ');
             sleep(1);
         } while ($recordsUpdated > 0);
