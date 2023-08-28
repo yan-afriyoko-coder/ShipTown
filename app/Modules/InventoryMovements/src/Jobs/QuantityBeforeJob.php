@@ -12,7 +12,7 @@ class QuantityBeforeJob extends UniqueJob
         $minMovementId = null;
 
         do {
-            if (($minMovementId === null) or (rand(0, 100) === 0)) {
+            if (($minMovementId === null) or (rand(0, 1000) === 0)) {
                 $minMovementId = $this->getMinMovementId($minMovementId);
             }
 
