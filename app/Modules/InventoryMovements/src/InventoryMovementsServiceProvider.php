@@ -2,6 +2,8 @@
 
 namespace App\Modules\InventoryMovements\src;
 
+use App\Events\EveryFiveMinutesEvent;
+use App\Events\EveryTenMinutesEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\Api2cart\src\Listeners\DailyEventListener;
 use App\Modules\BaseModuleServiceProvider;
@@ -32,6 +34,10 @@ class InventoryMovementsServiceProvider extends BaseModuleServiceProvider
     protected $listen = [
         SyncRequestedEvent::class => [
             Listeners\SyncRequestedEventListener::class,
+        ],
+
+        EveryFiveMinutesEvent::class => [
+            Listeners\EveryFiveMinutesEventListener::class,
         ],
 
         DailyEventListener::class => [
