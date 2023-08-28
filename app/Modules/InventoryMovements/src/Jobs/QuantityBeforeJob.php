@@ -21,8 +21,6 @@ class QuantityBeforeJob extends UniqueJob
             }
 
             $recordsUpdated = DB::update('
-                SET @min_last_movement_id = ?;
-
                 WITH tbl AS (
                     SELECT
                         inventory_movements.created_at as created_at,
@@ -36,7 +34,7 @@ class QuantityBeforeJob extends UniqueJob
                      ON previous_movement.id = inventory_movements.previous_movement_id
                      AND inventory_movements.quantity_before != previous_movement.quantity_after
 
-                    WHERE inventory_movements.id >= IFNULL(@min_last_movement_id, 0)
+                    WHERE inventory_movements.id >= IFNULL(?, 0)
                     LIMIT 1
                 )
 
