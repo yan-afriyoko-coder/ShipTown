@@ -12,7 +12,7 @@ class QuantityBeforeJob extends UniqueJob
         $minMovementId = null;
 
         do {
-            if (($minMovementId === null) or (rand(0, 20) === 0)) {
+            if (($minMovementId === null) or (rand(0, 50) === 0)) {
                 $minMovementId = $this->getMinMovementId($minMovementId);
             }
 
@@ -21,6 +21,8 @@ class QuantityBeforeJob extends UniqueJob
             }
 
             $recordsUpdated = DB::update('
+                SET @min_last_movement_id = ?;
+
                 WITH tbl AS (
                     SELECT
                         inventory_movements.created_at as created_at,
@@ -34,15 +36,14 @@ class QuantityBeforeJob extends UniqueJob
                      ON previous_movement.id = inventory_movements.previous_movement_id
                      AND inventory_movements.quantity_before != previous_movement.quantity_after
 
-                    WHERE inventory_movements.id >= IFNULL(?, 0)
+                    WHERE inventory_movements.id >= IFNULL(@min_last_movement_id, 0)
                     LIMIT 1
                 )
 
                 UPDATE inventory_movements
                 INNER JOIN tbl ON
                     tbl.inventory_id = inventory_movements.inventory_id
-                    AND tbl.movement_id <= inventory_movements.id
-
+                    AND tbl.movement_id = inventory_movements.id
                 SET
                     inventory_movements.quantity_before = inventory_movements.quantity_before + tbl.quantity_before_delta,
 
@@ -55,8 +56,9 @@ class QuantityBeforeJob extends UniqueJob
                             THEN inventory_movements.quantity_after
                             ELSE inventory_movements.quantity_after + tbl.quantity_before_delta
                             END
+                    ;
             ', [$minMovementId]);
-            usleep(250000); // 0.25 seconds
+            sleep(1);
         } while ($recordsUpdated > 0);
     }
 
