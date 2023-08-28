@@ -2,9 +2,9 @@
 
 namespace App\Modules\InventoryTotals\src;
 
+use App\Events\EveryDayEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\Product\ProductCreatedEvent;
-use App\Modules\Api2cart\src\Listeners\DailyEventListener;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
@@ -33,6 +33,10 @@ class InventoryTotalsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
+        EveryDayEvent::class => [
+            Listeners\DailyEventListener::class,
+        ],
+
         ProductCreatedEvent::class => [
             Listeners\ProductCreatedEventListener::class,
         ],

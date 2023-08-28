@@ -15,15 +15,14 @@ class QuantityBeforeJob extends UniqueJob
         do {
             if ($refreshCounter <= 0) {
                 $minMovementId = $this->getMinMovementId($minMovementId);
-
-                if ($minMovementId === null) {
-                    return;
-                }
-
                 $refreshCounter = 1000;
             }
 
             $refreshCounter--;
+
+            if ($minMovementId === null) {
+                return;
+            }
 
             $recordsUpdated = DB::update('
             WITH tbl AS (
@@ -54,7 +53,7 @@ class QuantityBeforeJob extends UniqueJob
                  AND inventory_movements.quantity_before != previous_movement.quantity_after
 
                 WHERE inventory_movements.id >= IFNULL(?, 0)
-                LIMIT 10
+                LIMIT 1
             )
 
             UPDATE inventory_movements

@@ -9,19 +9,31 @@ class QuantityAfterJob extends UniqueJob
 {
     public function handle()
     {
-        $maxRounds = 10;
-
         do {
             $recordsUpdated = DB::update('
-            UPDATE inventory_movements
+                WITH tbl AS (
+                    SELECT inventory_movements.id
+                    FROM inventory_movements
+                    WHERE
+                        NOT (
+                            inventory_movements.type = "stocktake"
+                            OR inventory_movements.description = "stocktake"
+                        )
+                        AND inventory_movements.quantity_after != quantity_before + quantity_delta
 
-            SET inventory_movements.quantity_after = quantity_before + quantity_delta
+                    ORDER BY inventory_movements.id ASC
 
-            WHERE  inventory_movements.quantity_after != quantity_before + quantity_delta
-                AND NOT (inventory_movements.type = "stocktake" OR inventory_movements.description = "stocktake")
+                    LIMIT 10
+                )
+
+                UPDATE inventory_movements
+
+                INNER JOIN tbl
+                  ON tbl.id = inventory_movements.id
+
+                SET inventory_movements.quantity_after = quantity_before + quantity_delta
             ');
             sleep(1);
-            $maxRounds--;
-        } while ($recordsUpdated > 0 and $maxRounds > 0);
+        } while ($recordsUpdated > 0);
     }
 }
