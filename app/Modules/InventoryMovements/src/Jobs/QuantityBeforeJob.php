@@ -35,7 +35,7 @@ class QuantityBeforeJob extends UniqueJob
                      AND inventory_movements.quantity_before != previous_movement.quantity_after
 
                     WHERE inventory_movements.id >= IFNULL(?, 0)
-                    LIMIT 1
+                    LIMIT 5
                 )
 
                 UPDATE inventory_movements
