@@ -55,7 +55,7 @@ class QuantityBeforeJob extends UniqueJob
                             ELSE inventory_movements.quantity_after + tbl.quantity_before_delta
                             END
             ', [$minMovementId]);
-            sleep(1);
+            usleep(250000); // 0.25 seconds
         } while ($recordsUpdated > 0);
     }
 
