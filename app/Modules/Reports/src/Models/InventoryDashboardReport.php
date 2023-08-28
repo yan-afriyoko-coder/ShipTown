@@ -39,7 +39,7 @@ class InventoryDashboardReport extends Report
                 'END)'),
         ];
 
-        $inventoryReservationsWarehouseId = Configuration::first()->warehouse_id;
+        $inventoryReservationsWarehouseId = data_get(Configuration::first(), 'warehouse_id', 0);
 
         $this->baseQuery = Inventory::query()
             ->rightJoin('inventory as inventory_source', function (JoinClause $join) {
