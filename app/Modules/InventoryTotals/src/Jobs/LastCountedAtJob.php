@@ -19,7 +19,7 @@ class LastCountedAtJob extends UniqueJob
                     SELECT MAX(created_at)
                     FROM inventory_movements
                     WHERE inventory_movements.inventory_id = inventory.id
-                    AND inventory_movements.description = "stocktake"
+                    AND inventory_movements.type = "stocktake"
                 )
 
                 WHERE `last_movement_id` IS NOT NULL

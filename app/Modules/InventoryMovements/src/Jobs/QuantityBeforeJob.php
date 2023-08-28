@@ -56,7 +56,7 @@ class QuantityBeforeJob extends UniqueJob
                             END
                     ;
             ', [$minMovementId]);
-            usleep(200000); // 0.2 seconds
+            usleep(500000); // 0.5 seconds
         } while ($recordsUpdated > 0);
     }
 
