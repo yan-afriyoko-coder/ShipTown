@@ -16,8 +16,8 @@ class InventoryLastMovementIdJob extends UniqueJob
                 WITH tbl AS (
                     SELECT
                         inventory.id as inventory_id,
-                        max(inventory_movements.id) as last_movement_id,
-                        max(inventory_movements.created_at) as last_movement_at
+                        max(inventory_movements.id) as last_movement_id
+
                     FROM inventory
                     INNER JOIN inventory_movements
                       ON inventory_movements.inventory_id = inventory.id
@@ -30,9 +30,12 @@ class InventoryLastMovementIdJob extends UniqueJob
                 UPDATE inventory
                 INNER JOIN tbl
                  ON tbl.inventory_id = inventory.id
+                INNER JOIN inventory_movements
+                 ON inventory_movements.id = tbl.last_movement_id
                 SET
+                    inventory.quantity = inventory_movements.quantity_after,
                     inventory.last_movement_id = tbl.last_movement_id,
-                    inventory.last_movement_at = tbl.last_movement_at,
+                    inventory.last_movement_at = inventory_movements.created_at,
                     inventory.updated_at = now();
             ');
             sleep(1);
