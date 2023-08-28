@@ -9,16 +9,12 @@ class QuantityBeforeJob extends UniqueJob
 {
     public function handle()
     {
-        $refreshCounter = 0;
         $minMovementId = null;
 
         do {
-            if ($refreshCounter <= 0) {
+            if (($minMovementId === null) or (rand(0, 5) === 0)) {
                 $minMovementId = $this->getMinMovementId($minMovementId);
-                $refreshCounter = 10;
             }
-
-            $refreshCounter--;
 
             if ($minMovementId === null) {
                 return;
@@ -62,7 +58,7 @@ class QuantityBeforeJob extends UniqueJob
                             END
                     ;
             ', [$minMovementId]);
-            usleep(100000);
+            sleep(1);
         } while ($recordsUpdated > 0);
     }
 
