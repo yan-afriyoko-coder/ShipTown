@@ -42,6 +42,7 @@ class QuantityBeforeJob extends UniqueJob
                 INNER JOIN tbl ON
                     tbl.inventory_id = inventory_movements.inventory_id
                     AND tbl.movement_id <= inventory_movements.id
+
                 SET
                     inventory_movements.quantity_before = inventory_movements.quantity_before + tbl.quantity_before_delta,
 
