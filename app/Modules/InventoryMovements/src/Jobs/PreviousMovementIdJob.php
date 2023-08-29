@@ -23,7 +23,7 @@ class PreviousMovementIdJob extends UniqueJob
                 WHERE
                     inventory_movements.previous_movement_id IS NULL
                     AND IFNULL(is_first_movement, 0) = 0
-                LIMIT 5000
+                LIMIT 500
             )
             UPDATE inventory_movements
             INNER JOIN tbl ON
