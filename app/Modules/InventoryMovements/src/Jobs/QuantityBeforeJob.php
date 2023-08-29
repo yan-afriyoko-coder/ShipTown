@@ -94,7 +94,7 @@ class QuantityBeforeJob extends UniqueJob
                      ON previous_movement.id = inventory_movements.previous_movement_id
                      AND inventory_movements.quantity_before != previous_movement.quantity_after
 
-                    WHERE inventory_movements.id >= IFNULL(0, 0)
+                    WHERE inventory_movements.id >= IFNULL(?, 0)
                     LIMIT 1
         ', [$minMovementId]);
 
