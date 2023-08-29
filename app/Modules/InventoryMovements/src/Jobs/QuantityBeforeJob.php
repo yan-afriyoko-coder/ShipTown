@@ -12,14 +12,14 @@ class QuantityBeforeJob extends UniqueJob
 {
     public function handle()
     {
-        $maxRounds = 10;
+        $maxRounds = 20;
         $minMovementId = null;
 
         do {
             $maxRounds--;
 
             Log::debug('QuantityBeforeJob: ' . $maxRounds);
-            if (($minMovementId === null) or (rand(0, 1000) === 0)) {
+            if (($minMovementId === null) or ($maxRounds % 10 === 0)) {
                 $minMovementId = $this->getMinMovementId($minMovementId ?? 0);
             }
 
