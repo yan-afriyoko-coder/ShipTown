@@ -3,7 +3,6 @@
 namespace App\Modules\InventoryMovements\src\Jobs;
 
 use App\Abstracts\UniqueJob;
-use App\Models\InventoryMovement;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +11,7 @@ class QuantityBeforeJob extends UniqueJob
 {
     public function handle()
     {
-        $maxRounds = 50;
+        $maxRounds = 100;
         $minMovementId = null;
 
         do {
@@ -92,7 +91,7 @@ class QuantityBeforeJob extends UniqueJob
 
             Log::debug('QuantityBeforeJob round finished', ['rounds_left' => $maxRounds, 'recordsUpdated' => $recordsUpdated]);
 
-            sleep(1);
+            usleep(500000); // 0.5 seconds
         } while ($recordsUpdated > 0 && $maxRounds > 0);
     }
 
