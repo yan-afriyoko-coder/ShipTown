@@ -90,8 +90,6 @@ class QuantityBeforeJob extends UniqueJob
             ');
             sleep(1);
         } while ($recordsUpdated > 0 && $maxRounds > 0);
-
-        ray(InventoryMovement::query()->get()->toArray());
     }
 
     private function getMinMovementId(int $minMovementId = 0): mixed
