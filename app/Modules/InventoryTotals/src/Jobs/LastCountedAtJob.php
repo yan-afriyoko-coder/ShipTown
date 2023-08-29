@@ -13,18 +13,30 @@ class LastCountedAtJob extends UniqueJob
 
         do {
             $recordsUpdated = DB::update('
-                UPDATE `inventory`
+                WITH tempTable AS (
+                    SELECT
+                      DISTINCT inventory_id
+                    FROM `inventory`
 
-                SET last_counted_at = (
+                    INNER JOIN inventory_movements
+                      ON inventory_movements.inventory_id = inventory.id
+                      AND inventory_movements.type = "stocktake"
+                      AND inventory_movements.created_at > IFNULL(inventory.last_counted_at, "2000-01-01 00:00:00")
+
+                    LIMIT 1000
+                )
+
+                UPDATE inventory
+
+                INNER JOIN tempTable
+                  ON tempTable.inventory_id = inventory.id
+
+                SET inventory.last_counted_at = (
                     SELECT MAX(created_at)
                     FROM inventory_movements
                     WHERE inventory_movements.inventory_id = inventory.id
                     AND inventory_movements.type = "stocktake"
                 )
-
-                WHERE `last_movement_id` IS NOT NULL
-                AND last_counted_at IS NULL
-                LIMIT 5000
             ');
             sleep(1);
             $maxRounds--;

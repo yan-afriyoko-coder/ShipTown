@@ -11,9 +11,12 @@ class QuantityBeforeJob extends UniqueJob
 {
     public function handle()
     {
+        $maxRounds = 10;
         $minMovementId = null;
 
         do {
+            $maxRounds--;
+
             if (($minMovementId === null) or (rand(0, 1000) === 0)) {
                 $minMovementId = $this->getMinMovementId($minMovementId ?? 0);
             }
@@ -28,7 +31,7 @@ class QuantityBeforeJob extends UniqueJob
                 CREATE TEMPORARY TABLE tempTable AS
                     SELECT
                         previous_movement.type as previous_movement_type,
-                        previous_movement.id,
+                        previous_movement.is_first_movement as previous_movement_is_first_movement,
                         inventory_movements.type,
                         inventory_movements.is_first_movement,
                         inventory_movements.quantity_before as quantity_before_actual,
@@ -46,25 +49,27 @@ class QuantityBeforeJob extends UniqueJob
                         AND inventory_movements.created_at >= IFNULL(inventory.last_counted_at, inventory.created_at)
                     INNER JOIN inventory_movements as previous_movement
                         ON previous_movement.id = inventory_movements.previous_movement_id
-                    WHERE  inventory_movements.inventory_id = (
-                        SELECT
-                            inventory_movements.inventory_id as inventory_id
-                        FROM inventory_movements
+                    WHERE
+                        inventory_movements.type != "stocktake"
+                        AND inventory_movements.inventory_id = (
+                            SELECT
+                                inventory_movements.inventory_id as inventory_id
+                            FROM inventory_movements
 
-                        INNER JOIN inventory as inventory
-                            ON inventory.id = inventory_movements.inventory_id
-                            AND inventory_movements.created_at >= IFNULL(inventory.last_counted_at, inventory.created_at)
+                            INNER JOIN inventory as inventory
+                                ON inventory.id = inventory_movements.inventory_id
+                                AND inventory_movements.created_at >= IFNULL(inventory.last_counted_at, inventory.created_at)
 
-                        INNER JOIN inventory_movements as previous_movement
-                             ON previous_movement.id = inventory_movements.previous_movement_id
-                             AND inventory_movements.quantity_before != previous_movement.quantity_after
+                            INNER JOIN inventory_movements as previous_movement
+                                 ON previous_movement.id = inventory_movements.previous_movement_id
+                                 AND inventory_movements.quantity_before != previous_movement.quantity_after
 
-                        WHERE inventory_movements.id >= IFNULL(?, 0)
-                        AND inventory_movements.type != "stocktake"
+                            WHERE inventory_movements.id >= IFNULL(?, 0)
+                            AND inventory_movements.type != "stocktake"
 
-                        ORDER BY inventory_movements.id asc
-                        LIMIT 1
-                    )
+                            ORDER BY inventory_movements.id asc
+                            LIMIT 1
+                        )
                     ORDER BY inventory_movements.inventory_id asc, inventory_movements.id asc;
             ', [$minMovementId ?? 0]);
 
@@ -82,7 +87,7 @@ class QuantityBeforeJob extends UniqueJob
                 WHERE inventory_movements.type != "stocktake";
             ');
             sleep(1);
-        } while ($recordsUpdated > 0);
+        } while ($recordsUpdated > 0 && $maxRounds > 0);
 
         ray(InventoryMovement::query()->get()->toArray());
     }
