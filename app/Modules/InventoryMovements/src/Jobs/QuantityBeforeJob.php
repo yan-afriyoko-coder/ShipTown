@@ -5,6 +5,7 @@ namespace App\Modules\InventoryMovements\src\Jobs;
 use App\Abstracts\UniqueJob;
 use App\Models\InventoryMovement;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
 class QuantityBeforeJob extends UniqueJob
@@ -17,6 +18,7 @@ class QuantityBeforeJob extends UniqueJob
         do {
             $maxRounds--;
 
+            Log::debug('QuantityBeforeJob: ' . $maxRounds);
             if (($minMovementId === null) or (rand(0, 1000) === 0)) {
                 $minMovementId = $this->getMinMovementId($minMovementId ?? 0);
             }
