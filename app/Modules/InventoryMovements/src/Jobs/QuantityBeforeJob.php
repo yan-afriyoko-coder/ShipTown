@@ -51,6 +51,7 @@ class QuantityBeforeJob extends UniqueJob
                          AND inventory_movements.quantity_before != previous_movement.quantity_after
 
                         WHERE inventory_movements.id >= IFNULL(?, 0)
+                        AND inventory_movements.type != "stocktake"
                         LIMIT 1
                       )
 
