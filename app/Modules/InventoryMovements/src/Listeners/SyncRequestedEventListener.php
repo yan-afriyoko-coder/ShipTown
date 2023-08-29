@@ -14,8 +14,8 @@ class SyncRequestedEventListener
     public function handle()
     {
 //        PreviousMovementIdJob::dispatch();
-//        QuantityBeforeJob::dispatch();
-        QuantityDeltaJob::dispatch();
+        QuantityBeforeJob::dispatch();
+//        QuantityDeltaJob::dispatch();
 //        QuantityAfterJob::dispatch();
 //        InventoryLastMovementIdJob::dispatch();
 //        InventoryQuantityJob::dispatch();
