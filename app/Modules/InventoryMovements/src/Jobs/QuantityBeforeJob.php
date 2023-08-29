@@ -12,7 +12,7 @@ class QuantityBeforeJob extends UniqueJob
 {
     public function handle()
     {
-        $maxRounds = 20;
+        $maxRounds = 50;
         $minMovementId = null;
 
         do {
