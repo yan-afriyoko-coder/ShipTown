@@ -27,6 +27,8 @@ class QuantityAfterJob extends UniqueJob
                   ON tbl.id = inventory_movements.id
 
                 SET inventory_movements.quantity_after = quantity_before + quantity_delta
+
+                WHERE inventory_movements.type != "stocktake"
             ');
             sleep(1);
         } while ($recordsUpdated > 0);

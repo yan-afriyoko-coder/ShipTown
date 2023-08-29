@@ -42,6 +42,7 @@ class BasicModuleTest extends TestCase
             'previous_movement_id' => $inventoryMovement01->getKey(),
         ]);
 
+        ray()->showQueries();
         QuantityBeforeJob::dispatch();
 
         $this->assertDatabaseHas('inventory_movements', [

@@ -2,14 +2,11 @@
 
 namespace App\Modules\InventoryMovements\src;
 
-use App\Events\EveryDayEvent;
 use App\Events\EveryFiveMinutesEvent;
-use App\Events\EveryHourEvent;
 use App\Events\EveryTenMinutesEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\Api2cart\src\Listeners\DailyEventListener;
 use App\Modules\BaseModuleServiceProvider;
-use App\Modules\InventoryMovements\src\Jobs\PreviousMovementIdJob;
 
 /**
  * Class EventServiceProviderBase.
@@ -39,9 +36,9 @@ class InventoryMovementsServiceProvider extends BaseModuleServiceProvider
             Listeners\SyncRequestedEventListener::class,
         ],
 
-        EveryFiveMinutesEvent::class => [
-            Listeners\EveryTenMinutesEventListener::class,
-        ],
+//        EveryFiveMinutesEvent::class => [
+//            Listeners\EveryFiveMinutesEventListener::class,
+//        ],
 
         DailyEventListener::class => [
             Listeners\DailyEventListener::class,
