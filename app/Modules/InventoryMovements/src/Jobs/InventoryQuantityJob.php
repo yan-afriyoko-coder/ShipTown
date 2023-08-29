@@ -21,7 +21,10 @@ class InventoryQuantityJob extends UniqueJob
 
                 SET
                     inventory.quantity = inventory_movements.quantity_after
-                  , inventory.updated_at = now();
+                  , inventory.last_movement_at = inventory_movements.created_at
+                  , inventory.updated_at = now()
+
+                LIMIT 500
             ');
             sleep(1);
             $maxRounds--;

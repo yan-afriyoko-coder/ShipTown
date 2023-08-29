@@ -4,7 +4,7 @@ namespace App\Modules\InventoryMovements\src\Listeners;
 
 use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeJob;
 
-class EveryFiveMinutesEventListener
+class EveryTenMinutesEventListener
 {
     public function handle()
     {
