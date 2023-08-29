@@ -103,18 +103,20 @@ class QuantityBeforeJob extends UniqueJob
                 inventory_movements.type as type,
                 inventory_movements.inventory_id as inventory_id,
                 previous_movement.quantity_after - inventory_movements.quantity_before as quantity_before_delta
-
             FROM inventory_movements
 
             INNER JOIN inventory as inventory
-              ON inventory.id = inventory_movements.inventory_id
-              AND inventory_movements.created_at >= IFNULL(inventory.last_counted_at, inventory.created_at)
+                ON inventory.id = inventory_movements.inventory_id
+                AND inventory_movements.created_at >= IFNULL(inventory.last_counted_at, inventory.created_at)
 
             INNER JOIN inventory_movements as previous_movement
-             ON previous_movement.id = inventory_movements.previous_movement_id
-             AND inventory_movements.quantity_before != previous_movement.quantity_after
+                 ON previous_movement.id = inventory_movements.previous_movement_id
+                 AND inventory_movements.quantity_before != previous_movement.quantity_after
 
             WHERE inventory_movements.id >= IFNULL(?, 0)
+            AND inventory_movements.type != "stocktake"
+
+            ORDER BY inventory_movements.id asc
             LIMIT 1
         ', [$minMovementId]);
 
