@@ -11,7 +11,7 @@ class QuantityBeforeJob extends UniqueJob
 {
     public function handle()
     {
-        $maxRounds = 100;
+        $maxRounds = 500;
         $minMovementId = null;
 
         do {
@@ -91,7 +91,7 @@ class QuantityBeforeJob extends UniqueJob
 
             Log::debug('QuantityBeforeJob round finished', ['rounds_left' => $maxRounds, 'recordsUpdated' => $recordsUpdated]);
 
-            usleep(500000); // 0.5 seconds
+            usleep(400000); // 0.4 seconds
         } while ($recordsUpdated > 0 && $maxRounds > 0);
     }
 
