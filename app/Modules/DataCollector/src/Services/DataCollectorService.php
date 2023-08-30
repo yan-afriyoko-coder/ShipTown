@@ -174,60 +174,48 @@ class DataCollectorService
 
     public static function transferInRecord(DataCollectionRecord $record): void
     {
-        Log::debug('TransferInJob transferring record', [$record->toArray()]);
-
         DB::transaction(function () use ($record) {
-            try {
-                Log::debug('TransferInJob adjusting quantity', [
-                    'record' => $record->toArray(),
-                ]);
+            $record->refresh();
 
-                $record->refresh();
-
-                if ($record->quantity_scanned == 0) {
-                    return;
-                }
-
-                $custom_unique_reference_id = implode(':', [
-                    'data_collection_id', $record->data_collection_id,
-                    'data_collection_record_id', $record->getKey(),
-                    $record->updated_at
-                ]);
-
-                $inventory = Inventory::query()->firstOrCreate([
-                    'warehouse_id' => $record->dataCollection->warehouse_id,
-                    'product_id' => $record->product_id
-                ], []);
-
-                $inventoryMovement = InventoryService::adjustQuantity(
-                    $inventory,
-                    $record->quantity_scanned,
-                    'data collection transfer in',
-                    $custom_unique_reference_id
-                );
-
-                $record->update([
-                    'total_transferred_in' => $record->total_transferred_in + $record->quantity_scanned,
-                    'quantity_scanned' => 0
-                ]);
-                Log::debug('TransferInJob adjusted quantity', ['inventoryMovement' => $inventoryMovement->toArray()]);
-            } catch (\Exception $e) {
-                Log::error('TransferInJob failed to adjust quantity (exception)', [$e->getMessage()]);
-                if (!InventoryMovement::query()->where('custom_unique_reference_id', $custom_unique_reference_id ?? '')->exists()) {
-                    report($e);
-                    throw $e;
-                }
+            if ($record->quantity_scanned == 0) {
+                return;
             }
+
+            $custom_unique_reference_id = implode(':', [
+                'data_collection_id', $record->data_collection_id,
+                'data_collection_record_id', $record->getKey(),
+                $record->updated_at
+            ]);
+
+            $inventory = Inventory::query()->firstOrCreate([
+                'warehouse_id' => $record->dataCollection->warehouse_id,
+                'product_id' => $record->product_id
+            ], []);
+
+             InventoryService::adjustQuantity(
+                 $inventory,
+                 $record->quantity_scanned,
+                 'data collection transfer in',
+                 $custom_unique_reference_id
+             );
+
+            $record->update([
+                'total_transferred_in' => $record->total_transferred_in + $record->quantity_scanned,
+                'quantity_scanned' => 0
+            ]);
         });
     }
 
-    /**
-     * @param DataCollectionRecord $record
-     */
     public static function transferOutRecord(DataCollectionRecord $record): void
     {
         DB::transaction(function () use ($record) {
-            $inventory = Inventory::firstOrCreate([
+            $record->refresh();
+
+            if ($record->quantity_scanned == 0) {
+                return;
+            }
+
+            $inventory = Inventory::query()->firstOrCreate([
                 'warehouse_id' => $record->dataCollection->warehouse_id,
                 'product_id' => $record->product_id
             ], []);
@@ -238,19 +226,12 @@ class DataCollectorService
                 $record->updated_at
             ]);
 
-            try {
-                InventoryService::adjustQuantity(
-                    $inventory,
-                    $record->quantity_scanned * -1,
-                    'data collection transfer out',
-                    $custom_unique_reference_id
-                );
-            } catch (\Exception $e) {
-                if (! InventoryMovement::query()->where('custom_unique_reference_id', $custom_unique_reference_id)->exists()) {
-                    report($e);
-                    throw $e;
-                }
-            }
+            InventoryService::adjustQuantity(
+                $inventory,
+                $record->quantity_scanned * -1,
+                'data collection transfer out',
+                $custom_unique_reference_id
+            );
 
             $record->update([
                 'total_transferred_out' => $record->total_transferred_out + $record->quantity_scanned,
