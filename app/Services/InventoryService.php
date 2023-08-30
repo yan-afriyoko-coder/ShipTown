@@ -25,8 +25,9 @@ class InventoryService
             ]);
 
             $inventory->update([
-                'last_movement_id' => $inventoryMovement->getKey(),
-                'quantity' => $inventoryMovement->quantity_after
+                'quantity' => $inventoryMovement->quantity_after,
+                'last_movement_at' => $inventoryMovement->created_at,
+                'last_movement_id' => $inventoryMovement->id,
             ]);
 
             return $inventoryMovement;
@@ -50,8 +51,9 @@ class InventoryService
             ]);
 
             $inventory->update([
-                'last_movement_id' => $inventoryMovement->getKey(),
-                'quantity' => $inventoryMovement->quantity_after
+                'quantity' => $inventoryMovement->quantity_after,
+                'last_movement_at' => $inventoryMovement->created_at,
+                'last_movement_id' => $inventoryMovement->id
             ]);
 
             return $inventoryMovement;
@@ -75,8 +77,10 @@ class InventoryService
             ]);
 
             $inventory->update([
-                'last_movement_id' => $inventoryMovement->getKey(),
-                'quantity' => $inventoryMovement->quantity_after
+                'quantity' => $inventoryMovement->quantity_after,
+                'last_movement_at' => $inventoryMovement->created_at,
+                'last_movement_id' => $inventoryMovement->id,
+                'last_counted_at' => $inventoryMovement->created_at
             ]);
 
             return $inventoryMovement;
