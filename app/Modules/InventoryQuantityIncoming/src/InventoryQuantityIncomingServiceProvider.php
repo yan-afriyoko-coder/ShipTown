@@ -7,6 +7,7 @@ use App\Events\DataCollectionRecord\DataCollectionRecordCreatedEvent;
 use App\Events\DataCollectionRecord\DataCollectionRecordDeletedEvent;
 use App\Events\DataCollectionRecord\DataCollectionRecordUpdatedEvent;
 use App\Events\EveryHourEvent;
+use App\Modules\Api2cart\src\Listeners\DailyEventListener;
 use App\Modules\BaseModuleServiceProvider;
 use App\Modules\InventoryQuantityIncoming\src\Jobs\FixIncorrectQuantityIncomingJob;
 
@@ -36,10 +37,6 @@ class InventoryQuantityIncomingServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        EveryHourEvent::class => [
-            Listeners\HourlyEventListener::class,
-        ],
-
         DataCollectionRecordCreatedEvent::class => [
             Listeners\DataCollectionRecordCreatedEventListener::class,
         ],
@@ -54,6 +51,10 @@ class InventoryQuantityIncomingServiceProvider extends BaseModuleServiceProvider
 
         DataCollectionDeletedEvent::class => [
             Listeners\DataCollectionDeletedEventListener::class,
+        ],
+
+        DailyEventListener::class => [
+            Listeners\DailyEventListener::class,
         ],
     ];
 
