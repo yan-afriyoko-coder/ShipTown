@@ -167,6 +167,8 @@ class DataCollectorService
 
                 $inventory->update([
                     'quantity' => $inventoryMovement->quantity_after,
+                    'last_movement_at' => $inventoryMovement->created_at,
+                    'last_movement_id' => $inventoryMovement->id,
                     'last_counted_at' => now()
                 ]);
             });
