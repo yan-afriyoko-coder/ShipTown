@@ -14,10 +14,12 @@ class PreviousMovementIdJob extends UniqueJob
             WITH tbl AS (
                 SELECT id, inventory_id,
                        (
-                           SELECT MAX(ID) as id
+                           SELECT id as id
                            FROM inventory_movements as previous_inventory_movement
                            WHERE previous_inventory_movement.inventory_id = inventory_movements.inventory_id
                              AND previous_inventory_movement.id < inventory_movements.id
+                           ORDER BY ID DESC
+                           LIMIT 1
                        ) as previous_movement_id
                 FROM inventory_movements
                 WHERE
@@ -32,7 +34,7 @@ class PreviousMovementIdJob extends UniqueJob
                 is_first_movement = ISNULL(tbl.previous_movement_id),
                 inventory_movements.previous_movement_id = tbl.previous_movement_id
             ');
-            sleep(1);
+            usleep(1);
         } while ($recordsUpdated > 0);
     }
 }
