@@ -45,20 +45,8 @@ class EnsureCorrectTotalsJob implements ShouldQueue
      */
     public function handle()
     {
-        $this->prepareTempTable();
-
-        $this->fixMissingOrWrongTotals();
-
-        $this->recalculateTotals();
-    }
-
-    /**
-     *
-     */
-    private function prepareTempTable()
-    {
-        $query = /** @lang text */
-            'CREATE TEMPORARY TABLE ' . $this->recalculations_temp_table_name . '
+        DB::statement('
+            CREATE TEMPORARY TABLE temp_order_totals_recalculation
             AS (
                 SELECT
                         order_id,
@@ -76,23 +64,11 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                         max(updated_at) as max_updated_at_expected
                 FROM orders_products
                 GROUP BY order_id
-            )
-            ';
+            );
 
-        DB::statement($query);
-    }
-
-    /**
-     *
-     */
-    public function fixMissingOrWrongTotals()
-    {
-        DB::statement('
             UPDATE orders_products_totals
-
-            LEFT JOIN '.$this->recalculations_temp_table_name.' AS recalculations
+            LEFT JOIN temp_order_totals_recalculation AS recalculations
                 ON recalculations.order_id = orders_products_totals.order_id
-
             SET
                 orders_products_totals.count                    = recalculations.count_expected,
                 orders_products_totals.quantity_ordered         = recalculations.quantity_ordered_expected,
@@ -105,7 +81,6 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                 orders_products_totals.quantity_to_pick         = recalculations.quantity_to_pick_expected,
                 orders_products_totals.quantity_to_ship         = recalculations.quantity_to_ship_expected,
                 orders_products_totals.max_updated_at           = recalculations.max_updated_at_expected
-
             WHERE
                 orders_products_totals.count                       != recalculations.count_expected
                 OR orders_products_totals.quantity_ordered         != recalculations.quantity_ordered_expected
@@ -117,29 +92,18 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                 OR orders_products_totals.quantity_shipped         != recalculations.quantity_shipped_expected
                 OR orders_products_totals.quantity_to_pick         != recalculations.quantity_to_pick_expected
                 OR orders_products_totals.quantity_to_ship         != recalculations.quantity_to_ship_expected
-                OR orders_products_totals.max_updated_at           != recalculations.max_updated_at_expected
-            ');
-    }
+                OR orders_products_totals.max_updated_at           != recalculations.max_updated_at_expected;
 
-    private function recalculateTotals()
-    {
-        DB::statement('
+
             UPDATE orders
-
             LEFT JOIN orders_products_totals
                 ON orders_products_totals.order_id = orders.id
-
             SET total_products = orders_products_totals.total_price
+            WHERE orders.total_products != orders_products_totals.total_price;
 
-            WHERE orders.total_products != orders_products_totals.total_price
-        ');
-
-        DB::statement('
             UPDATE orders
-
             SET total = total_products + total_shipping
-
-            WHERE total != total_products + total_shipping
+            WHERE total != total_products + total_shipping;
         ');
     }
 }
