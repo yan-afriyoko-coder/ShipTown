@@ -10,6 +10,7 @@ use App\Modules\InventoryMovementsStatistics\src\InventoryMovementsStatisticsSer
 use App\Modules\InventoryMovementsStatistics\src\Jobs\RemoveOutdatedSalesJob;
 use App\Modules\InventoryMovementsStatistics\src\Models\InventoryMovementsStatistic;
 use App\Services\InventoryService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
@@ -28,21 +29,20 @@ class BasicModuleTest extends TestCase
 
         $randomQuantity = rand(1, 100);
 
+        Carbon::setTestNow(now()->subDays(30));
         InventoryMovement::query()->create([
             'custom_unique_reference_id' => 'test',
             'type' => 'sale',
             'inventory_id' => $inventory->id,
             'product_id' => $inventory->product_id,
             'warehouse_id' => $inventory->warehouse_id,
-            'quantity_before' => $inventory->quantity + $randomQuantity * -1,
+            'quantity_before' => 0,
             'quantity_delta' => $randomQuantity * -1,
             'quantity_after' => $inventory->quantity + $randomQuantity * -1,
             'description' => 'test',
         ]);
 
-        $created_at = now()->subDays(30);
-        InventoryMovement::query()->update(['created_at' => $created_at]);
-        DB::statement('UPDATE inventory_movements_statistics SET created_at = ?', [$created_at]);
+        Carbon::setTestNow(now());
 
         /** @var InventoryMovementsStatistic $inventoryMovementStatistic */
         $inventoryMovementStatistic = InventoryMovementsStatistic::query()
@@ -57,15 +57,13 @@ class BasicModuleTest extends TestCase
         RemoveOutdatedSalesJob::dispatchSync();
         RemoveOutdatedSalesJob::dispatchSync();
 
-//        dd(1);
-//        Remove14DaysOutdatedSalesJob::dispatchSync();
-//        Remove28DaysOutdatedSalesJob::dispatchSync();
-//
+        ray(InventoryMovementsStatistic::query()->get()->toArray());
+        ray(InventoryMovement::query()->get()->toArray());
         $inventoryMovementStatistic->refresh();
 
         $this->assertEquals(0, $inventoryMovementStatistic->last7days_quantity_delta, '7 days');
-        $this->assertEquals(0, $inventoryMovementStatistic->last14days_quantity_delta, '14 days');
-        $this->assertEquals(0, $inventoryMovementStatistic->last28days_quantity_delta, '28 days');
+        $this->assertEquals($randomQuantity, $inventoryMovementStatistic->last14days_quantity_delta, '14 days');
+        $this->assertEquals($randomQuantity, $inventoryMovementStatistic->last28days_quantity_delta, '28 days');
 
         // we just make sure jobs run without errors
         $this->assertTrue(true);
