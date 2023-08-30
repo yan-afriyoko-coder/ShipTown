@@ -99,7 +99,6 @@ class QuantityBeforeJob extends UniqueJob
     {
         $firstIncorrectMovementRecord = DB::select('
             SELECT
-                count(*),
                 inventory_movements.created_at as created_at,
                 inventory_movements.id as movement_id,
                 inventory_movements.type as type,
