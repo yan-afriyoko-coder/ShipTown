@@ -3,21 +3,23 @@
 namespace App\Modules\InventoryMovements\src\Jobs;
 
 use App\Abstracts\UniqueJob;
-use App\Models\InventoryMovement;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
 class QuantityBeforeJob extends UniqueJob
 {
     public function handle()
     {
-        $maxRounds = 10;
+        $maxRounds = 500;
         $minMovementId = null;
 
         do {
             $maxRounds--;
 
-            if (($minMovementId === null) or (rand(0, 1000) === 0)) {
+            Log::debug('QuantityBeforeJob round starting', ['rounds_left' => $maxRounds]);
+
+            if (($minMovementId === null) or ($maxRounds % 10 === 0)) {
                 $minMovementId = $this->getMinMovementId($minMovementId ?? 0);
             }
 
@@ -86,10 +88,11 @@ class QuantityBeforeJob extends UniqueJob
 
                 WHERE inventory_movements.type != "stocktake";
             ');
-            sleep(1);
-        } while ($recordsUpdated > 0 && $maxRounds > 0);
 
-        ray(InventoryMovement::query()->get()->toArray());
+            Log::debug('QuantityBeforeJob round finished', ['rounds_left' => $maxRounds, 'recordsUpdated' => $recordsUpdated]);
+
+            usleep(400000); // 0.4 seconds
+        } while ($recordsUpdated > 0 && $maxRounds > 0);
     }
 
     private function getMinMovementId(int $minMovementId = 0): mixed
@@ -101,18 +104,20 @@ class QuantityBeforeJob extends UniqueJob
                 inventory_movements.type as type,
                 inventory_movements.inventory_id as inventory_id,
                 previous_movement.quantity_after - inventory_movements.quantity_before as quantity_before_delta
-
             FROM inventory_movements
 
             INNER JOIN inventory as inventory
-              ON inventory.id = inventory_movements.inventory_id
-              AND inventory_movements.created_at >= IFNULL(inventory.last_counted_at, inventory.created_at)
+                ON inventory.id = inventory_movements.inventory_id
+                AND inventory_movements.created_at >= IFNULL(inventory.last_counted_at, inventory.created_at)
 
             INNER JOIN inventory_movements as previous_movement
-             ON previous_movement.id = inventory_movements.previous_movement_id
-             AND inventory_movements.quantity_before != previous_movement.quantity_after
+                 ON previous_movement.id = inventory_movements.previous_movement_id
+                 AND inventory_movements.quantity_before != previous_movement.quantity_after
 
             WHERE inventory_movements.id >= IFNULL(?, 0)
+            AND inventory_movements.type != "stocktake"
+
+            ORDER BY inventory_movements.id asc
             LIMIT 1
         ', [$minMovementId]);
 

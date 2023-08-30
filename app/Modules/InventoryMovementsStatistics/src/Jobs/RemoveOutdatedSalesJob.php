@@ -25,42 +25,38 @@ class RemoveOutdatedSalesJob implements ShouldQueue
 
     private function removeOutdatedSales($days): void
     {
-        $records = collect(DB::select('
-            SELECT
-              inventory_movements.type,
-              inventory_movements.inventory_id,
-              max(inventory_movements_statistics.last'.$days.'days_min_movement_id) as current_min_movement_id,
-              max(inventory_movements.id) as last_movement_id,
-              sum(inventory_movements.quantity_delta) as sum_quantity_delta
-            FROM inventory_movements_statistics
-            INNER JOIN inventory_movements
-             ON inventory_movements.inventory_id = inventory_movements_statistics.inventory_id
-             AND inventory_movements.type = inventory_movements_statistics.type
-             AND inventory_movements.id >= inventory_movements_statistics.last'.$days.'days_min_movement_id
-             AND inventory_movements.created_at < date_sub(now(), interval '.$days.' day)
-            GROUP BY inventory_movements.type, inventory_movements.inventory_id
-            LIMIT 200;
-        '));
+        collect(DB::select('
+            WITH tempTable AS (
+                SELECT
+                  inventory_movements.type,
+                  inventory_movements.inventory_id,
+                  min(inventory_movements_statistics.last'.$days.'days_min_movement_id) as current_first_movement_id,
+                  min(inventory_movements.id) as new_first_movement_id,
+                  sum(inventory_movements.quantity_delta) as sum_quantity_delta
+                FROM inventory_movements_statistics
+                INNER JOIN inventory_movements
+                 ON inventory_movements.inventory_id = inventory_movements_statistics.inventory_id
+                 AND inventory_movements.type = inventory_movements_statistics.type
+                 AND inventory_movements.id >= inventory_movements_statistics.last'.$days.'days_min_movement_id
+                 AND inventory_movements.created_at < date_sub(now(), interval '.$days.' day)
+                WHERE inventory_movements_statistics.last'.$days.'days_min_movement_id IS NOT NULL
+                GROUP BY inventory_movements.type, inventory_movements.inventory_id
+                LIMIT 1000
+            )
 
-        $records->each(function ($record) use ($days) {
-            DB::transaction(function () use ($record, $days) {
-                DB::update('
-                      UPDATE inventory_movements_statistics
-                      SET
-                         last'.$days.'days_quantity_delta = last'.$days.'days_quantity_delta - :sum_quantity_delta,
-                         last'.$days.'days_min_movement_id = :new_min_movement_id
-                      WHERE
-                         inventory_id = :inventory_id
-                         AND type = :type
-                         AND last'.$days.'days_min_movement_id = :current_min_movement_id
-                 ', [
-                    'sum_quantity_delta' => $record->sum_quantity_delta,
-                    'new_min_movement_id' => $record->last_movement_id + 1,
-                    'inventory_id' => $record->inventory_id,
-                    'type' => $record->type,
-                    'current_min_movement_id' => $record->current_min_movement_id,
-                ]);
-            });
-        });
+            UPDATE inventory_movements_statistics
+            INNER JOIN tempTable
+                ON tempTable.inventory_id = inventory_movements_statistics.inventory_id
+                AND tempTable.type = inventory_movements_statistics.type
+            SET
+              last7days_min_movement_id = (
+                    SELECT min(id)
+                    FROM inventory_movements
+                    WHERE inventory_movements.inventory_id = tempTable.inventory_id
+                    AND inventory_movements.type = tempTable.type
+                    AND inventory_movements.id > inventory_movements_statistics.last'.$days.'days_min_movement_id
+                ),
+              last'.$days.'days_quantity_delta = last'.$days.'days_quantity_delta - sum_quantity_delta
+        '));
     }
 }

@@ -2,29 +2,14 @@
 
 namespace App\Modules\Webhooks\src\Jobs;
 
+use App\Abstracts\UniqueJob;
 use App\Modules\Webhooks\src\Models\PendingWebhook;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 /**
  * Class PublishOrdersWebhooksJob.
  */
-class ClearOldWebhookRecordsJob implements ShouldQueue, ShouldBeUnique
+class ClearOldWebhookRecordsJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
     public function handle()
     {
         do {
