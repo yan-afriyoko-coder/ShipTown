@@ -38,18 +38,18 @@ class OrderTotalsService
             ->get()
             ->first();
 
-        $data = $record === null ? [] : [
-            'count' => $record->count_expected,
-            'quantity_ordered' => $record->quantity_ordered_expected,
-            'quantity_split' => $record->quantity_split_expected,
-            'total_price' => $record->total_price_expected,
-            'quantity_picked' => $record->quantity_picked_expected,
-            'quantity_skipped_picking' => $record->quantity_skipped_picking_expected,
-            'quantity_not_picked' => $record->quantity_not_picked_expected,
-            'quantity_shipped' => $record->quantity_shipped_expected,
-            'quantity_to_pick' => $record->quantity_to_pick_expected,
-            'quantity_to_ship' => $record->quantity_to_ship_expected,
-            'max_updated_at' => $record->max_updated_at_expected
+        $data = [
+            'count'                     => data_get($record, 'count_expected', 0),
+            'quantity_ordered'          => data_get($record, 'quantity_ordered_expected', 0),
+            'quantity_split'            => data_get($record, 'quantity_split_expected', 0),
+            'total_price'               => data_get($record, 'total_price_expected', 0),
+            'quantity_picked'           => data_get($record, 'quantity_picked_expected', 0),
+            'quantity_skipped_picking'  => data_get($record, 'quantity_skipped_picking_expected', 0),
+            'quantity_not_picked'       => data_get($record, 'quantity_not_picked_expected', 0),
+            'quantity_shipped'          => data_get($record, 'quantity_shipped_expected', 0),
+            'quantity_to_pick'          => data_get($record, 'quantity_to_pick_expected', 0),
+            'quantity_to_ship'          => data_get($record, 'quantity_to_ship_expected', 0),
+            'max_updated_at'            => data_get($record, 'max_updated_at_expected', 0)
         ];
 
         OrderProductTotal::query()->updateOrCreate(['order_id' => $order_id], $data);
