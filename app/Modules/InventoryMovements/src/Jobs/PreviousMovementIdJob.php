@@ -5,6 +5,7 @@ namespace App\Modules\InventoryMovements\src\Jobs;
 use App\Abstracts\UniqueJob;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 
 class PreviousMovementIdJob extends UniqueJob
 {
@@ -15,8 +16,10 @@ class PreviousMovementIdJob extends UniqueJob
         do {
             Log::debug('PreviousMovementIdJob', ['rounds_left' => $maxRounds]);
 
-            $recordsUpdated = DB::update('
-                WITH tbl AS (
+            Schema::dropIfExists('tempTable');
+
+            DB::statement('
+                CREATE TEMPORARY TABLE tempTable AS
                     SELECT id, inventory_id,
                            (
                                SELECT id as id
@@ -29,15 +32,17 @@ class PreviousMovementIdJob extends UniqueJob
                     FROM inventory_movements
                     WHERE
                         inventory_movements.previous_movement_id IS NULL
-                        OR inventory_movements.is_first_movement IS NULL
-                    LIMIT 500
-                )
+                        AND inventory_movements.is_first_movement IS NULL
+                    LIMIT 1000;
+            ');
+
+            $recordsUpdated = DB::update('
                 UPDATE inventory_movements
-                INNER JOIN tbl ON
-                    tbl.id = inventory_movements.id
+                INNER JOIN tempTable ON
+                    tempTable.id = inventory_movements.id
                 SET
-                    is_first_movement = ISNULL(tbl.previous_movement_id),
-                    inventory_movements.previous_movement_id = tbl.previous_movement_id
+                    is_first_movement = ISNULL(tempTable.previous_movement_id),
+                    inventory_movements.previous_movement_id = tempTable.previous_movement_id
             ');
 
             Log::debug('PreviousMovementIdJob round finished', [
