@@ -38,6 +38,11 @@ class OrderTotalsService
             ->get()
             ->first();
 
+        if (empty($record)) {
+            OrderProductTotal::query()->create(['order_id' => $order_id]);
+            return;
+        }
+
         $data = [
             'count'                     => data_get($record, 'count_expected', 0),
             'quantity_ordered'          => data_get($record, 'quantity_ordered_expected', 0),
