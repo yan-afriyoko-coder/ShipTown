@@ -26,7 +26,7 @@ class PreviousMovementIdJob extends UniqueJob
                     FROM inventory_movements
                     WHERE
                         inventory_movements.previous_movement_id IS NULL
-                        AND IFNULL(is_first_movement, 0) = 0
+                        OR inventory_movements.is_first_movement IS NULL
                     LIMIT 500
                 )
                 UPDATE inventory_movements
@@ -37,7 +37,7 @@ class PreviousMovementIdJob extends UniqueJob
                     inventory_movements.previous_movement_id = tbl.previous_movement_id
             ');
 
-            usleep(1);
+            sleep(1);
         } while ($recordsUpdated > 0 and $maxRounds-- > 0);
     }
 }
