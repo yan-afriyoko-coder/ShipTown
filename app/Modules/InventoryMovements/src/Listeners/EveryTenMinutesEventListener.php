@@ -10,6 +10,6 @@ class EveryTenMinutesEventListener
     public function handle()
     {
         QuantityBeforeJob::dispatch();
-        PreviousMovementIdJob::dispatch();
+//        PreviousMovementIdJob::dispatch();
     }
 }

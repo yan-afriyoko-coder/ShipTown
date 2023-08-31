@@ -4,11 +4,14 @@ namespace App\Modules\OrderTotals\src\Jobs;
 
 use App\Abstracts\UniqueJob;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class EnsureCorrectTotalsJob extends UniqueJob
 {
     public function handle()
     {
+        Schema::dropIfExists('temp_order_totals_recalculation');
+
         DB::statement("
             CREATE TEMPORARY TABLE temp_order_totals_recalculation AS (
                 SELECT
