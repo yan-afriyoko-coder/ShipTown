@@ -54,8 +54,8 @@ class EnsureCorrectTotalsJob implements ShouldQueue
      */
     private function prepareTempTable()
     {
-        $query = /** @lang text */
-            'CREATE TEMPORARY TABLE ' . $this->recalculations_temp_table_name . '
+        $query = /** @lang text */'
+            CREATE TEMPORARY TABLE ' . $this->recalculations_temp_table_name . '
             AS (
                 SELECT
                         order_id,
@@ -73,8 +73,7 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                 FROM orders_products
                 GROUP BY order_id
             )
-            ';
-
+        ';
         DB::statement($query);
     }
 

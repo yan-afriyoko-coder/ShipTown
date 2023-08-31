@@ -7,6 +7,7 @@ use App\Events\EveryHourEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
+use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 use App\Modules\OrderTotals\src\Jobs\EnsureAllRecordsExistsJob;
 use App\Modules\OrderTotals\src\Jobs\EnsureCorrectTotalsJob;
@@ -38,6 +39,10 @@ class OrderTotalsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
+        SyncRequestedEvent::class => [
+            Listeners\DispatchAllJobs::class
+        ],
+
         EveryDayEvent::class => [
             Listeners\EveryDayEventListener::class
         ],
