@@ -23,12 +23,13 @@ class InventoryMovementFactory extends Factory
 
         return [
             'inventory_id'      => $inventory->getKey(),
-            'product_id'        => $inventory->product_id,
-            'warehouse_id'      => $inventory->warehouse_id,
+            'type'              => $this->faker->word(),
             'quantity_delta'    => $quantity_delta,
             'quantity_before'   => $inventory->quantity,
             'quantity_after'    => $inventory->quantity + $quantity_delta,
             'description'       => $this->faker->word(),
+            'product_id'        => $inventory->product_id,
+            'warehouse_id'      => $inventory->warehouse_id,
             'user_id'           => $user->getKey(),
         ];
     }
