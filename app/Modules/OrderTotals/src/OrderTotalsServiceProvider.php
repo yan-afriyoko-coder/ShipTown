@@ -60,9 +60,6 @@ class OrderTotalsServiceProvider extends BaseModuleServiceProvider
     ];
     public static function enabling(): bool
     {
-        EnsureAllRecordsExistsJob::dispatch();
-        EnsureCorrectTotalsJob::dispatch();
-
         return true;
     }
 
