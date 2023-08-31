@@ -19,7 +19,6 @@ class EnsureCorrectTotalsJob implements ShouldQueue
         InteractsWithQueue,
         Queueable,
         SerializesModels;
-
     /**
      * @var Builder
      */
@@ -48,8 +47,6 @@ class EnsureCorrectTotalsJob implements ShouldQueue
         $this->prepareTempTable();
 
         $this->fixMissingOrWrongTotals();
-
-        $this->recalculateTotals();
     }
 
     /**
@@ -65,7 +62,6 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                         count(id) as count_expected,
                         sum(quantity_ordered) as quantity_ordered_expected,
                         sum(quantity_split) as quantity_split_expected,
-                        sum(total_price) as total_price_expected,
                         sum(quantity_picked) as quantity_picked_expected,
                         sum(quantity_skipped_picking) as quantity_skipped_picking_expected,
                         sum(quantity_not_picked) as quantity_not_picked_expected,
@@ -98,7 +94,6 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                 orders_products_totals.quantity_ordered         = recalculations.quantity_ordered_expected,
                 orders_products_totals.quantity_split           = recalculations.quantity_split_expected,
                 orders_products_totals.quantity_picked          = recalculations.quantity_picked_expected,
-                orders_products_totals.total_price              = recalculations.total_price_expected,
                 orders_products_totals.quantity_skipped_picking = recalculations.quantity_skipped_picking_expected,
                 orders_products_totals.quantity_not_picked      = recalculations.quantity_not_picked_expected,
                 orders_products_totals.quantity_shipped         = recalculations.quantity_shipped_expected,
@@ -110,7 +105,6 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                 orders_products_totals.count                       != recalculations.count_expected
                 OR orders_products_totals.quantity_ordered         != recalculations.quantity_ordered_expected
                 OR orders_products_totals.quantity_split           != recalculations.quantity_split_expected
-                OR orders_products_totals.total_price              != recalculations.total_price_expected
                 OR orders_products_totals.quantity_picked          != recalculations.quantity_picked_expected
                 OR orders_products_totals.quantity_skipped_picking != recalculations.quantity_skipped_picking_expected
                 OR orders_products_totals.quantity_not_picked      != recalculations.quantity_not_picked_expected
@@ -119,27 +113,5 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                 OR orders_products_totals.quantity_to_ship         != recalculations.quantity_to_ship_expected
                 OR orders_products_totals.max_updated_at           != recalculations.max_updated_at_expected
             ');
-    }
-
-    private function recalculateTotals()
-    {
-        DB::statement('
-            UPDATE orders
-
-            LEFT JOIN orders_products_totals
-                ON orders_products_totals.order_id = orders.id
-
-            SET total_products = orders_products_totals.total_price
-
-            WHERE orders.total_products != orders_products_totals.total_price
-        ');
-
-        DB::statement('
-            UPDATE orders
-
-            SET total = total_products + total_shipping
-
-            WHERE total != total_products + total_shipping
-        ');
     }
 }

@@ -48,7 +48,7 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
         ],
 
         EveryMinuteEvent::class => [
-            Listeners\EveryMinuteEventListener::class,
+            Listeners\DispatchEveryMinuteJobsListener::class,
         ],
 
         EveryDayEvent::class => [
