@@ -49,7 +49,7 @@ class OrderTotalsService
             'quantity_shipped'          => data_get($record, 'quantity_shipped_expected', 0),
             'quantity_to_pick'          => data_get($record, 'quantity_to_pick_expected', 0),
             'quantity_to_ship'          => data_get($record, 'quantity_to_ship_expected', 0),
-            'max_updated_at'            => data_get($record, 'max_updated_at_expected', 0)
+            'max_updated_at'            => data_get($record, 'max_updated_at_expected', now())
         ];
 
         OrderProductTotal::query()->updateOrCreate(['order_id' => $order_id], $data);
