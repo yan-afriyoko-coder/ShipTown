@@ -4,6 +4,7 @@ namespace App\Modules\InventoryMovements\src\Jobs;
 
 use App\Abstracts\UniqueJob;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PreviousMovementIdJob extends UniqueJob
 {
@@ -12,6 +13,8 @@ class PreviousMovementIdJob extends UniqueJob
         $maxRounds = 1000;
 
         do {
+            Log::debug('PreviousMovementIdJob', ['rounds_left' => $maxRounds]);
+
             $recordsUpdated = DB::update('
                 WITH tbl AS (
                     SELECT id, inventory_id,
@@ -36,6 +39,11 @@ class PreviousMovementIdJob extends UniqueJob
                     is_first_movement = ISNULL(tbl.previous_movement_id),
                     inventory_movements.previous_movement_id = tbl.previous_movement_id
             ');
+
+            Log::debug('PreviousMovementIdJob round finished', [
+                'rounds_left' => $maxRounds,
+                'recordsUpdated' => $recordsUpdated
+            ]);
 
             sleep(1);
         } while ($recordsUpdated > 0 and $maxRounds-- > 0);
