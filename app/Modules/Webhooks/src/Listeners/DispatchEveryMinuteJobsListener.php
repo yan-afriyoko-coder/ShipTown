@@ -4,7 +4,7 @@ namespace App\Modules\Webhooks\src\Listeners;
 
 use App\Modules\Webhooks\src\Services\WebhooksService;
 
-class SyncRequestedEventListener
+class DispatchEveryMinuteJobsListener
 {
     public function handle()
     {
