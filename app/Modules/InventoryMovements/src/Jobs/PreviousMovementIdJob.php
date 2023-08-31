@@ -11,7 +11,7 @@ class PreviousMovementIdJob extends UniqueJob
 {
     public function handle()
     {
-        $maxRounds = 300;
+        $maxRounds = 100;
 
         do {
             Log::debug('PreviousMovementIdJob', ['rounds_left' => $maxRounds]);
@@ -33,7 +33,7 @@ class PreviousMovementIdJob extends UniqueJob
                     WHERE
                         inventory_movements.previous_movement_id IS NULL
                         AND inventory_movements.is_first_movement IS NULL
-                    LIMIT 1000;
+                    LIMIT 500;
             ');
 
             $recordsUpdated = DB::update('
