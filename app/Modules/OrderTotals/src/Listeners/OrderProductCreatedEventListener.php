@@ -3,12 +3,12 @@
 namespace App\Modules\OrderTotals\src\Listeners;
 
 use App\Events\OrderProduct\OrderProductCreatedEvent;
-use App\Modules\OrderTotals\src\Jobs\UpdateOrderTotalsJob;
+use App\Modules\OrderTotals\src\Services\OrderTotalsService;
 
 class OrderProductCreatedEventListener
 {
     public function handle(OrderProductCreatedEvent $event)
     {
-        UpdateOrderTotalsJob::dispatchSync($event->orderProduct->order_id);
+        OrderTotalsService::updateTotals($event->orderProduct->order_id);
     }
 }

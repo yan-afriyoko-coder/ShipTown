@@ -3,7 +3,6 @@
 namespace App\Modules\OrderTotals\src;
 
 use App\Events\EveryDayEvent;
-use App\Events\EveryHourEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;

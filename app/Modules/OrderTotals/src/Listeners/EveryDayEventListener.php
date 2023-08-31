@@ -2,14 +2,12 @@
 
 namespace App\Modules\OrderTotals\src\Listeners;
 
-use App\Modules\OrderTotals\src\Jobs\EnsureAllRecordsExistsJob;
-use App\Modules\OrderTotals\src\Jobs\EnsureCorrectTotalsJob;
+use App\Modules\OrderTotals\src\Services\OrderTotalsService;
 
 class EveryDayEventListener
 {
     public function handle()
     {
-        EnsureAllRecordsExistsJob::dispatch();
-        EnsureCorrectTotalsJob::dispatch();
+        OrderTotalsService::dispatchDailyJobs();
     }
 }

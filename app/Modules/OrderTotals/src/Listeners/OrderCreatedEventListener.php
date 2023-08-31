@@ -3,12 +3,12 @@
 namespace App\Modules\OrderTotals\src\Listeners;
 
 use App\Events\Order\OrderCreatedEvent;
-use App\Models\OrderProductTotal;
+use App\Modules\OrderTotals\src\Services\OrderTotalsService;
 
 class OrderCreatedEventListener
 {
     public function handle(OrderCreatedEvent $event)
     {
-        OrderProductTotal::query()->firstOrCreate(['order_id' => $event->order->id], []);
+        OrderTotalsService::updateTotals($event->order->id);
     }
 }
