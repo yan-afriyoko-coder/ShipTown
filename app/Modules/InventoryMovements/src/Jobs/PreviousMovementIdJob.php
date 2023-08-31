@@ -11,7 +11,7 @@ class PreviousMovementIdJob extends UniqueJob
 {
     public function handle()
     {
-        $maxRounds = 1000;
+        $maxRounds = 300;
 
         do {
             Log::debug('PreviousMovementIdJob', ['rounds_left' => $maxRounds]);
