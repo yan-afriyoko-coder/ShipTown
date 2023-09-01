@@ -37,10 +37,6 @@ class CleanupImportTablesJob implements ShouldQueue
             ->where('reserved_at', '<', now()->subMinutes(5))
             ->update(['reserved_at' => null]);
 
-        RmsapiProductImport::query()
-            ->where('when_processed', '<', now()->subDays(7))
-            ->forceDelete();
-
         // Cleanup sales imports
         RmsapiSaleImport::query()
             ->whereNull('processed_at')
