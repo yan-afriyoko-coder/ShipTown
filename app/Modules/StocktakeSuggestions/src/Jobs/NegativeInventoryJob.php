@@ -44,7 +44,7 @@ class NegativeInventoryJob implements ShouldQueue
                     WHERE stocktake_suggestions.inventory_id = inventory.id
                     AND stocktake_suggestions.reason = "negative stock - have you received in the stock correctly?"
                 )
-        ', [$points, $reason, $reason]);
+        ');
     }
 
     /**
