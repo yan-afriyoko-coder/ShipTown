@@ -11,15 +11,17 @@ class QuantityBeforeStocktakeJob extends UniqueJob
 {
     public function handle()
     {
-        $maxRounds = 100;
+        $maxRounds = 500;
 
         do {
             $maxRounds--;
 
             Log::debug('QuantityBeforeStocktakeJob round starting', ['rounds_left' => $maxRounds]);
 
-            $recordsUpdated = DB::update('
-                WITH tempTable AS (
+            Schema::dropIfExists('tempTable');
+
+            DB::statement('
+                CREATE TEMPORARY tempTable AS
                     SELECT
                        inventory_movements.id as movement_id,
                        previous_movement.quantity_after as quantity_before_expected,
@@ -29,16 +31,17 @@ class QuantityBeforeStocktakeJob extends UniqueJob
                        inventory_movements.quantity_delta,
                        inventory_movements.quantity_after
 
-                    FROM `inventory_movements`
+                    FROM inventory_movements
                     LEFT JOIN inventory_movements as previous_movement
                       ON previous_movement.id = inventory_movements.previous_movement_id
 
                     WHERE inventory_movements.type = "stocktake"
                     AND previous_movement.quantity_after != inventory_movements.quantity_before
 
-                    LIMIT 50
-                )
+                    LIMIT 100;
+            ');
 
+            $recordsUpdated = DB::update('
                 UPDATE inventory_movements
                 INNER JOIN tempTable
                   ON tempTable.movement_id = inventory_movements.id
@@ -47,11 +50,10 @@ class QuantityBeforeStocktakeJob extends UniqueJob
                   inventory_movements.quantity_delta = tempTable.quantity_delta_expected
             ');
 
-            Log::debug('QuantityBeforeJob round finished', ['rounds_left' => $maxRounds, 'recordsUpdated' => $recordsUpdated]);
 
-            usleep(400000); // 0.4 seconds
+            Log::debug('QuantityBeforeStocktakeJob round finished', ['rounds_left' => $maxRounds, 'recordsUpdated' => $recordsUpdated]);
+
+            sleep(1);
         } while ($recordsUpdated > 0 && $maxRounds > 0);
-
-        Log::debug('QuantityBeforeJob finished', ['rounds_left' => $maxRounds]);
     }
 }

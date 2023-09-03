@@ -4,6 +4,7 @@ namespace App\Modules\InventoryMovements\src\Listeners;
 
 use App\Modules\InventoryMovements\src\Jobs\PreviousMovementIdJob;
 use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeJob;
+use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeStocktakeJob;
 
 class EveryTenMinutesEventListener
 {
@@ -11,5 +12,6 @@ class EveryTenMinutesEventListener
     {
         QuantityBeforeJob::dispatch();
         PreviousMovementIdJob::dispatch();
+        QuantityBeforeStocktakeJob::dispatch();
     }
 }
