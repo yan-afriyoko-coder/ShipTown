@@ -21,7 +21,7 @@ class QuantityBeforeStocktakeJob extends UniqueJob
             Schema::dropIfExists('tempTable');
 
             DB::statement('
-                CREATE TEMPORARY tempTable AS
+                CREATE TEMPORARY TABLE tempTable AS
                     SELECT
                        inventory_movements.id as movement_id,
                        previous_movement.quantity_after as quantity_before_expected,
