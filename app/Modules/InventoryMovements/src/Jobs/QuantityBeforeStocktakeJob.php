@@ -11,7 +11,7 @@ class QuantityBeforeStocktakeJob extends UniqueJob
 {
     public function handle()
     {
-        $maxRounds = 500;
+        $maxRounds = 50;
 
         do {
             $maxRounds--;
@@ -38,7 +38,7 @@ class QuantityBeforeStocktakeJob extends UniqueJob
                     WHERE inventory_movements.type = "stocktake"
                     AND previous_movement.quantity_after != inventory_movements.quantity_before
 
-                    LIMIT 100;
+                    LIMIT 1000;
             ');
 
             $recordsUpdated = DB::update('
