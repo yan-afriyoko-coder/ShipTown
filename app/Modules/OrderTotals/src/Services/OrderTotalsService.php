@@ -18,9 +18,6 @@ class OrderTotalsService
     public static function updateTotals(int $order_id)
     {
         $record = DB::table('orders_products')
-            ->where(['order_id' => $order_id])
-            ->whereNull('deleted_at')
-            ->groupBy('order_id')
             ->selectRaw('
                 order_id,
                 count(id) as count_expected,
@@ -35,6 +32,9 @@ class OrderTotalsService
                 sum(quantity_to_ship) as quantity_to_ship_expected,
                 max(updated_at) as max_updated_at_expected
             ')
+            ->where(['order_id' => $order_id])
+            ->whereNull('deleted_at')
+            ->groupBy('order_id')
             ->get()
             ->first();
 
