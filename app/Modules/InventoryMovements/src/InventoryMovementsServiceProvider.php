@@ -2,7 +2,6 @@
 
 namespace App\Modules\InventoryMovements\src;
 
-use App\Events\EveryFiveMinutesEvent;
 use App\Events\EveryTenMinutesEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\Api2cart\src\Listeners\DailyEventListener;

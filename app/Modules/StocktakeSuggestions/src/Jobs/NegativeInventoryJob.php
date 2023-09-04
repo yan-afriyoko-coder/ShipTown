@@ -58,8 +58,8 @@ class NegativeInventoryJob implements ShouldQueue
             LEFT JOIN inventory
                 ON inventory.id = stocktake_suggestions.inventory_id
 
-            WHERE stocktake_suggestions.reason = ?
+            WHERE stocktake_suggestions.reason = "negative stock - have you received in the stock correctly?"
             AND inventory.quantity >= 0
-        ', [$reason]);
+        ');
     }
 }
