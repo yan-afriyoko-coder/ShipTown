@@ -1,21 +1,22 @@
 <?php
 
-namespace {{ namespace }};
+namespace Tests\Feature\Modules\SystemNotifications;
 
 use App\Events\EveryDayEvent;
 use App\Events\EveryFiveMinutesEvent;
 use App\Events\EveryHourEvent;
 use App\Events\EveryMinuteEvent;
 use App\Events\EveryTenMinutesEvent;
+use App\Modules\SystemNotifications\src\SystemNotificationsServiceProvider;
 use Tests\TestCase;
 
-class {{ class }} extends TestCase
+class BasicModuleTest extends TestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
 
-        ModuleServiceProvider::enableModule();
+        SystemNotificationsServiceProvider::enableModule();
     }
 
     /** @test */
