@@ -3,6 +3,7 @@
 namespace Tests\Feature\Modules\OrderTotals;
 
 use App\Events\EveryDayEvent;
+use App\Events\EveryHourEvent;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderProductTotal;
@@ -20,7 +21,7 @@ class EnsureCorrectTotalsJobTest extends TestCase
 
         Bus::fake(EnsureCorrectTotalsJob::class);
 
-        EveryDayEvent::dispatch();
+        EveryHourEvent::dispatch();
 
         Bus::assertDispatched(EnsureCorrectTotalsJob::class);
     }
