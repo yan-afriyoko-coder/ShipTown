@@ -76,7 +76,7 @@
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.shipments') }}">{{ __('FC Shipments') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory') }}">{{ __('Inventory') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements') }}">{{ __('Inventory Movements') }}</a>
-                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements-summary') }}">{{ __('Inventory Movements Summary') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements-summary').'?filter[created_at_between]=-7days,now&per_page=1000' }}">{{ __('Inventory Movements Summary') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.restocking') }}">{{ __('Restocking') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.stocktake-suggestions.index') }}">{{ __('Stocktake Suggestions') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('activity-log') }}">{{ __('Activity Log') }}</a>
