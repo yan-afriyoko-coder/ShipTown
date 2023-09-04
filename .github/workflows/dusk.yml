@@ -10,7 +10,7 @@ env:
   DISABLE_2FA: true
 
 jobs:
-  dusk-php:
+  dusk:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2

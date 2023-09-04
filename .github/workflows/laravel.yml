@@ -9,7 +9,7 @@ env:
   DB_PASSWORD: root
 
 jobs:
-  dusk-php:
+  phpunit:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
