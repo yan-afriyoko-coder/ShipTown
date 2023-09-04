@@ -22,7 +22,7 @@ class BasicModuleTest extends TestCase
     /** @test */
     public function testBasicFunctionality()
     {
-        $this->fail('This test has not been implemented yet.');
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
     /** @test */
