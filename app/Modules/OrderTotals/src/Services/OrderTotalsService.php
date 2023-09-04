@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class OrderTotalsService
 {
-    public static function dispatchDailyJobs(): void
+    public static function dispatchAllJobs(): void
     {
         EnsureAllRecordsExistsJob::dispatch();
         EnsureCorrectTotalsJob::dispatch();
