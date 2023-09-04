@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\_SampleModuleStructure\src\Jobs;
+namespace App\Modules\Notifications\src\Jobs;
 
 use App\Abstracts\UniqueJob;
 
