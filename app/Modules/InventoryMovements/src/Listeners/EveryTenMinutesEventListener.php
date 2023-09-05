@@ -13,7 +13,6 @@ class EveryTenMinutesEventListener
     public function handle()
     {
         QuantityBeforeJob::dispatch();
-        QuantityBeforeSinceLastStocktakeJob::dispatch();
         PreviousMovementIdJob::dispatch();
         QuantityBeforeStocktakeJob::dispatch();
         FirstMovementAtJob::dispatch();
