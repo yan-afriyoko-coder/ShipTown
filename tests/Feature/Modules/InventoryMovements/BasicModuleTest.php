@@ -2,10 +2,15 @@
 
 namespace Tests\Feature\Modules\InventoryMovements;
 
+use App\Events\EveryDayEvent;
+use App\Events\EveryFiveMinutesEvent;
+use App\Events\EveryHourEvent;
+use App\Events\EveryMinuteEvent;
+use App\Events\EveryTenMinutesEvent;
 use App\Models\Inventory;
-use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\Warehouse;
+use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
 use App\Modules\InventoryMovements\src\Jobs\InventoryLastMovementIdJob;
 use App\Modules\InventoryMovements\src\Jobs\InventoryQuantityJob;
 use App\Modules\InventoryMovements\src\Jobs\PreviousMovementIdJob;
@@ -17,6 +22,13 @@ use Tests\TestCase;
 
 class BasicModuleTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        InventoryMovementsServiceProvider::enableModule();
+    }
+
     /** @test */
     public function testBasicFunctionality()
     {
@@ -97,5 +109,17 @@ class BasicModuleTest extends TestCase
         InventoryQuantityJob::dispatch();
 
         $this->assertTrue(true, 'We did not run into any errors');
+    }
+
+    /** @test */
+    public function testIfNoErrorsDuringEvents()
+    {
+        EveryMinuteEvent::dispatch();
+        EveryFiveMinutesEvent::dispatch();
+        EveryTenMinutesEvent::dispatch();
+        EveryHourEvent::dispatch();
+        EveryDayEvent::dispatch();
+
+        $this->assertTrue(true, 'Errors encountered while dispatching events');
     }
 }
