@@ -18,8 +18,6 @@ class QuantityBeforeBasicJob extends UniqueJob
 
             if ($maxRounds % 10 === 0 or ($minMovementId === null)) {
                 $minMovementId = data_get($this->getMin(), 'movement_id');
-                Log::debug('QuantityBeforeBasicJob: max rounds reached');
-                break;
             }
 
             Log::debug('QuantityBeforeBasicJob: rounds left ' . $maxRounds);
