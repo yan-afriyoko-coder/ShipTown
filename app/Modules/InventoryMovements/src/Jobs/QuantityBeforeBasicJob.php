@@ -26,7 +26,7 @@ class QuantityBeforeBasicJob extends UniqueJob
             Schema::dropIfExists('tempTable');
 
             DB::statement('
-                CRATE TEMPORARY TABLE tempTable AS
+                CREATE TEMPORARY TABLE tempTable AS
                     SELECT
                        inventory_movements.id as movement_id,
                        previous_movement.quantity_after as quantity_before_expected
@@ -50,7 +50,7 @@ class QuantityBeforeBasicJob extends UniqueJob
                 UPDATE inventory_movements
 
                 INNER JOIN tempTable
-                  ON tbl.movement_id = inventory_movements.id
+                  ON tempTable.movement_id = inventory_movements.id
 
                 SET inventory_movements.quantity_before = tempTable.quantity_before_expected,
                     inventory_movements.quantity_after = tempTable.quantity_before_expected + inventory_movements.quantity_delta,

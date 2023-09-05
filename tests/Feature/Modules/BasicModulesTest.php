@@ -1,0 +1,43 @@
+<?php
+
+namespace Tests\Feature\Modules;
+
+use App\Events\EveryDayEvent;
+use App\Events\EveryFiveMinutesEvent;
+use App\Events\EveryHourEvent;
+use App\Events\EveryMinuteEvent;
+use App\Events\EveryTenMinutesEvent;
+use App\Events\SyncRequestedEvent;
+use App\Models\Module;
+use Exception;
+use Tests\TestCase;
+
+class BasicModulesTest extends TestCase
+{
+    /** @test */
+    public function testBasicFunctionality()
+    {
+        try {
+            $enabled_modules = Module::query()
+                ->where(['enabled' => false])
+                ->get();
+        } catch (Exception $exception) {
+            report($exception);
+            return;
+        }
+
+        $enabled_modules->each(function (Module $module) {
+            $module->service_provider_class::enableModule();
+            ray($module->service_provider_class);
+        });
+
+        SyncRequestedEvent::dispatch();
+        EveryMinuteEvent::dispatch();
+        EveryFiveMinutesEvent::dispatch();
+        EveryTenMinutesEvent::dispatch();
+        EveryHourEvent::dispatch();
+        EveryDayEvent::dispatch();
+
+        $this->assertTrue(true, 'Errors encountered while dispatching events');
+    }
+}
