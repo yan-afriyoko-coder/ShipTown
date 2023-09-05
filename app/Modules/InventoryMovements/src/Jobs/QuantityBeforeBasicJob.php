@@ -53,9 +53,7 @@ class QuantityBeforeBasicJob extends UniqueJob
                     updated_at = NOW()
 
                 WHERE inventory_movements.type != "stocktake"
-            ', [
-                'minMovementId' => $minMovementId,
-            ]);
+            ', [$minMovementId]);
 
             Log::debug('QuantityBeforeBasicJob: records updated ' . $recordsUpdated);
             usleep(200000); // 0.2 sec
