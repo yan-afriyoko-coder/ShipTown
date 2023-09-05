@@ -46,9 +46,12 @@ class PublishInventoryWebhooksJob extends UniqueJob
             try {
                 PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->update(['reserved_at' => now()]);
 
-                $this->publishInventoryMessage($chunk);
+                $response = $this->publishInventoryMessage($chunk);
 
-                PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->update(['published_at' => now()]);
+                PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->update([
+                    'published_at' => now(),
+                    'sns_message_id' => $response->get('MessageId'),
+                ]);
             } catch (Exception $exception) {
                 PendingWebhook::query()
                     ->whereIn('id', $pendingWebhookIds)
@@ -61,7 +64,7 @@ class PublishInventoryWebhooksJob extends UniqueJob
         }
     }
 
-    private function publishInventoryMessage($chunk): void
+    private function publishInventoryMessage($chunk)
     {
         $ordersCollection = InventoryResource::collection(
             Inventory::query()
@@ -73,7 +76,7 @@ class PublishInventoryWebhooksJob extends UniqueJob
 
         $payload = collect(['Inventory' => $ordersCollection]);
 
-        SnsService::publishNew(
+        return SnsService::publishNew(
             $payload->toJson(),
             [
                 "warehouse_code" => [

@@ -7,6 +7,14 @@ use App\Events\EveryFiveMinutesEvent;
 use App\Events\EveryHourEvent;
 use App\Events\EveryMinuteEvent;
 use App\Events\EveryTenMinutesEvent;
+use App\Models\Inventory;
+use App\Models\OrderProduct;
+use App\Models\OrderProductShipment;
+use App\Models\Product;
+use App\Models\Warehouse;
+use App\Modules\Webhooks\src\Jobs\PublishOrderProductShipmentWebhooksJob;
+use App\Modules\Webhooks\src\Models\Webhook;
+use App\Modules\Webhooks\src\Services\WebhooksService;
 use App\Modules\Webhooks\src\WebhooksServiceProviderBase;
 use Tests\TestCase;
 
@@ -22,11 +30,45 @@ class BasicModuleTest extends TestCase
     /** @test */
     public function testBasicFunctionality()
     {
-        if (empty(env('SQS_QUEUE'))) {
+        if (empty(config('aws.credentials.secret'))) {
             $this->markTestSkipped('SQS_QUEUE is not set.');
         }
 
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $product = Product::factory()->create();
+        $warehouse = Warehouse::factory()->create();
+
+        $inventory = Inventory::query()->firstOrCreate([
+            'product_id' => $product->getKey(),
+            'warehouse_id' => $warehouse->getKey(),
+        ]);
+
+        /** @var OrderProduct $orderProduct */
+        $orderProduct = OrderProduct::factory()->create([
+            'product_id' => $product->getKey(),
+        ]);
+
+        $orderProductShipment = OrderProductShipment::create([
+            'order_id' => $orderProduct->order_id,
+            'order_product_id' => $orderProduct->getKey(),
+            'inventory_id' => $inventory->getKey(),
+            'warehouse_id' => $warehouse->getKey(),
+            'product_id' => $product->getKey(),
+            'quantity_shipped' => 10,
+        ]);
+
+        $this->assertDatabaseHas('modules_webhooks_pending_webhooks', [
+            'model_class' => OrderProductShipment::class,
+            'model_id' => $orderProductShipment->getKey(),
+        ]);
+
+        WebhooksService::dispatchJobs();
+
+        $webhooks = Webhook::query()->whereNull('sns_message_id')->get();
+
+        $this->assertEmpty($webhooks);
+//        $this->assertDatabaseHas('modules_webhooks_pending_webhooks', [
+//            'sns_message_id' => 'blue',
+//        ]);
     }
 
     /** @test */

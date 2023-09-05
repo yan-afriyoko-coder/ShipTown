@@ -82,7 +82,7 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
 
     public static function enabling(): bool
     {
-        if (empty(config('sns.topic.prefix'))) {
+        if (empty(config('aws.credentials.secret'))) {
             Log::warning('AWS SNS not configured. Please set the SNS_TOPIC_PREFIX environment variable.');
             return false;
         }
