@@ -8,6 +8,7 @@ use App\Models\InventoryMovement;
 use App\Models\Warehouse;
 use App\Modules\Webhooks\src\Models\PendingWebhook;
 use App\Modules\Webhooks\src\Services\SnsService;
+use Aws\Result;
 use Exception;
 
 /**
@@ -51,9 +52,12 @@ class PublishInventoryMovementWebhooksJob extends UniqueJob
             try {
                 PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->update(['reserved_at' => now()]);
 
-                $this->publishInventoryMovementMessage($chunk);
+                $response = $this->publishInventoryMovementMessage($chunk);
 
-                PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->update(['published_at' => now()]);
+                PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->update([
+                    'published_at' => now(),
+                    'sns_message_id' => $response->get('MessageId'),
+                ]);
             } catch (Exception $exception) {
                 PendingWebhook::query()
                     ->whereIn('id', $pendingWebhookIds)
@@ -66,10 +70,7 @@ class PublishInventoryMovementWebhooksJob extends UniqueJob
         }
     }
 
-    /**
-     * @param $chunk
-     */
-    private function publishInventoryMovementMessage($chunk): void
+    private function publishInventoryMovementMessage($chunk): Result
     {
         $inventoryMovementsCollection = InventoryMovementResource::collection(
             InventoryMovement::query()
@@ -81,7 +82,7 @@ class PublishInventoryMovementWebhooksJob extends UniqueJob
 
         $payload = collect(['InventoryMovements' => $inventoryMovementsCollection]);
 
-        SnsService::publishNew(
+        return SnsService::publishNew(
             $payload->toJson(),
             [
                 "warehouse_code" => [

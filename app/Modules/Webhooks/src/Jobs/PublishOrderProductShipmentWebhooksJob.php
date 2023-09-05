@@ -7,8 +7,11 @@ use App\Http\Resources\OrderProductShipmentResource;
 use App\Models\OrderProductShipment;
 use App\Models\Warehouse;
 use App\Modules\Webhooks\src\Models\PendingWebhook;
+use App\Modules\Webhooks\src\Models\Webhook;
 use App\Modules\Webhooks\src\Services\SnsService;
 use Exception;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class PublishOrdersWebhooksJob.
@@ -26,6 +29,8 @@ class PublishOrderProductShipmentWebhooksJob extends UniqueJob
 
     private function publishOrderProductShipmentsWebhooks(int $warehouse_id)
     {
+        Log::debug('Publishing OrderProductShipment webhooks for warehouse_id: ' . $warehouse_id);
+
         $query = PendingWebhook::query()
             ->selectRaw('modules_webhooks_pending_webhooks.*')
             ->leftJoin('orders_products_shipments as ops', 'ops.id', '=', 'modules_webhooks_pending_webhooks.model_id')
@@ -40,15 +45,20 @@ class PublishOrderProductShipmentWebhooksJob extends UniqueJob
 
         $chunk = $query->get();
 
+        ray($chunk, Webhook::query()->get()->toArray());
+
         while ($chunk->isNotEmpty()) {
             $pendingWebhookIds = $chunk->pluck('id');
 
             try {
                 PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->update(['reserved_at' => now()]);
 
-                $this->publishRecords($chunk);
+                $response = $this->publishRecords($chunk);
 
-                PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->update(['published_at' => now()]);
+                PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->update([
+                    'published_at' => now(),
+                    'sns_message_id' => $response->get('MessageId'),
+                ]);
             } catch (Exception $exception) {
                 PendingWebhook::query()
                     ->whereIn('id', $pendingWebhookIds)
@@ -61,11 +71,11 @@ class PublishOrderProductShipmentWebhooksJob extends UniqueJob
         }
     }
 
-    /**
-     * @param $chunk
-     */
-    private function publishRecords($chunk): void
+
+    private function publishRecords(Collection $chunk)
     {
+        Log::debug('Publishing OrderProductShipment webhooks for chunk: ' . $chunk->pluck('id')->toJson());
+
         $records = OrderProductShipmentResource::collection(
             OrderProductShipment::query()
                 ->whereIn('id', $chunk->pluck('model_id'))
@@ -76,7 +86,7 @@ class PublishOrderProductShipmentWebhooksJob extends UniqueJob
 
         $payload = collect(['OrderProductShipments' => $records]);
 
-        SnsService::publishNew(
+        return SnsService::publishNew(
             $payload->toJson(),
             [
                 "warehouse_code" => [

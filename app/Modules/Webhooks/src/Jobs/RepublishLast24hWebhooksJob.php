@@ -8,16 +8,16 @@ use App\Modules\Webhooks\src\Models\PendingWebhook;
 /**
  * Class PublishOrdersWebhooksJob.
  */
-class ClearOldWebhookRecordsJob extends UniqueJob
+class RepublishLast24hWebhooksJob extends UniqueJob
 {
     public function handle()
     {
         do {
-            $recordsUpdated = PendingWebhook::query()
-                ->where('created_at', '<', now()->subDays(7))
+            $recordsUpdated =  PendingWebhook::query()
                 ->whereNotNull('published_at')
+                ->where('created_at', '>', now()->subDay())
                 ->limit(1000)
-                ->forceDelete();
+                ->update(['published_at' => null, 'reserved_at' => null]);
             sleep(1);
         } while ($recordsUpdated > 0);
     }

@@ -10,6 +10,7 @@ use App\Events\OrderProductShipmentCreatedEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Guid\Guid;
 
 /**
@@ -52,7 +53,8 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
         ],
 
         EveryDayEvent::class => [
-            Listeners\DailyEventListener::class,
+            Listeners\RepublishLast24hWebhooksListener::class,
+            Listeners\ClearOldWebhooksListener::class,
         ],
 
         OrderProductShipmentCreatedEvent::class => [
@@ -80,6 +82,11 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
 
     public static function enabling(): bool
     {
+        if (empty(config('aws.credentials.secret'))) {
+            Log::warning('AWS SNS not configured. Please set the SNS_TOPIC_PREFIX environment variable.');
+            return false;
+        }
+
         $configuration = Services\SnsService::getConfiguration();
 
         if ($configuration->topic_arn === null) {
