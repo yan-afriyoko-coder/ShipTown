@@ -81,7 +81,7 @@ class PublishInventoryMovementWebhooksJob extends UniqueJob
 
         $payload = collect(['InventoryMovements' => $inventoryMovementsCollection]);
 
-        SnsService::publishNew(
+        $response = SnsService::publishNew(
             $payload->toJson(),
             [
                 "warehouse_code" => [
@@ -90,5 +90,7 @@ class PublishInventoryMovementWebhooksJob extends UniqueJob
                 ]
             ]
         );
+
+        dd($response);
     }
 }
