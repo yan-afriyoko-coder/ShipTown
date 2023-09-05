@@ -3,6 +3,7 @@
 namespace App\Modules\InventoryMovements\src\Listeners;
 
 use App\Modules\InventoryMovements\src\Jobs\PreviousMovementIdJob;
+use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeBasicJob;
 use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeJob;
 
 class SyncRequestedEventListener
@@ -11,6 +12,7 @@ class SyncRequestedEventListener
     {
         PreviousMovementIdJob::dispatch();
         QuantityBeforeJob::dispatch();
+        QuantityBeforeBasicJob::dispatch();
 //        QuantityDeltaJob::dispatch();
 //        QuantityAfterJob::dispatch();
 //        InventoryLastMovementIdJob::dispatch();

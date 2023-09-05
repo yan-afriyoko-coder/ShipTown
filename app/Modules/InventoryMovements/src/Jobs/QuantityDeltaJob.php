@@ -9,7 +9,12 @@ class QuantityDeltaJob extends UniqueJob
 {
     public function handle()
     {
+        $maxRounds = 500;
+        $minMovementId = null;
+
         do {
+            $maxRounds--;
+
             $recordsUpdated = DB::update('
                 WITH tbl AS (
                     SELECT inventory_movements.id
@@ -18,7 +23,7 @@ class QuantityDeltaJob extends UniqueJob
                         inventory_movements.type = "stocktake"
                         AND inventory_movements.quantity_delta != quantity_after - quantity_before
 
-                    LIMIT 10
+                    LIMIT 100
                 )
 
                 UPDATE inventory_movements
@@ -31,6 +36,6 @@ class QuantityDeltaJob extends UniqueJob
                 WHERE inventory_movements.type = "stocktake"
             ');
             sleep(1);
-        } while ($recordsUpdated > 0);
+        } while ($recordsUpdated > 0 && $maxRounds > 0);
     }
 }

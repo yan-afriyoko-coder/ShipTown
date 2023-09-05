@@ -62,7 +62,7 @@ class LastCountedAtJob extends UniqueJob
                     INNER JOIN inventory_movements
                       ON inventory_movements.inventory_id = inventory.id
                       AND inventory_movements.type = "stocktake"
-                      AND inventory_movements.created_at > IFNULL(inventory.last_counted_at, "2000-01-01 00:00:00")
+                      AND inventory_movements.created_at > IFNULL(inventory.last_counted_at, inventory.created_at)
 
                     LIMIT 1000
                 )
