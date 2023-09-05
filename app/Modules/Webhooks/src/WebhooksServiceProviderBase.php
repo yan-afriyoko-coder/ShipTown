@@ -54,6 +54,7 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
 
         EveryDayEvent::class => [
             Listeners\ClearOldWebhooksListener::class,
+            Listeners\RepublishLast24hWebhooksListener::class,
         ],
 
         OrderProductShipmentCreatedEvent::class => [
