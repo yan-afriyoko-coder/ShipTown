@@ -42,7 +42,8 @@ class PreviousMovementIdJob extends UniqueJob
                     tempTable.id = inventory_movements.id
                 SET
                     is_first_movement = ISNULL(tempTable.previous_movement_id),
-                    inventory_movements.previous_movement_id = tempTable.previous_movement_id
+                    inventory_movements.previous_movement_id = tempTable.previous_movement_id,
+                    inventory_movements.updated_at = NOW()
             ');
 
             Log::debug('PreviousMovementIdJob round finished', [

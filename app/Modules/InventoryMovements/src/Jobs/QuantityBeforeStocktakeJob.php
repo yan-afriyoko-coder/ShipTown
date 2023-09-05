@@ -47,7 +47,8 @@ class QuantityBeforeStocktakeJob extends UniqueJob
                   ON tempTable.movement_id = inventory_movements.id
 
                 SET inventory_movements.quantity_before = tempTable.quantity_before_expected,
-                  inventory_movements.quantity_delta = tempTable.quantity_delta_expected
+                    inventory_movements.quantity_delta = tempTable.quantity_delta_expected,
+                    inventory_movements.updated_at = NOW()
             ');
 
 

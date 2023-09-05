@@ -43,7 +43,8 @@ class QuantityBeforeBasicJob extends UniqueJob
                   ON tbl.movement_id = inventory_movements.id
 
                 SET inventory_movements.quantity_before = tbl.quantity_before_expected,
-                    inventory_movements.quantity_after = tbl.quantity_before_expected + inventory_movements.quantity_delta
+                    inventory_movements.quantity_after = tbl.quantity_before_expected + inventory_movements.quantity_delta,
+                    updated_at = NOW()
 
                 WHERE inventory_movements.type != "stocktake"
             ');
