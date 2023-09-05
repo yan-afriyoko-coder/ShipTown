@@ -30,7 +30,8 @@ class FirstMovementAtJob extends UniqueJob
                 INNER JOIN tempTable
                   ON tempTable.inventory_id = inventory.id
 
-                SET inventory.first_movement_at = (
+                SET inventory.updated_at = now(),
+                    inventory.first_movement_at = (
                         SELECT MIN(created_at)
                         FROM inventory_movements
                         WHERE inventory_id = inventory.id
