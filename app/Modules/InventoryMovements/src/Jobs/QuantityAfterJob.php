@@ -9,7 +9,12 @@ class QuantityAfterJob extends UniqueJob
 {
     public function handle()
     {
+        $maxRounds = 500;
+        $minMovementId = null;
+
         do {
+            $maxRounds--;
+
             $recordsUpdated = DB::update('
                 WITH tbl AS (
                     SELECT inventory_movements.id
@@ -31,6 +36,6 @@ class QuantityAfterJob extends UniqueJob
                 WHERE inventory_movements.type != "stocktake"
             ');
             sleep(1);
-        } while ($recordsUpdated > 0);
+        } while ($recordsUpdated > 0 && $maxRounds > 0);
     }
 }
