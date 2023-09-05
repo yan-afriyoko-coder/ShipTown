@@ -11,9 +11,16 @@ class QuantityBeforeBasicJob extends UniqueJob
     public function handle()
     {
         $maxRounds = 500;
+        $minMovementId = null;
 
         do {
             $maxRounds--;
+
+            if ($maxRounds % 10 === 0 or ($minMovementId === null)) {
+                $minMovementId = data_get($this->getMin(), 'movement_id');
+                Log::debug('QuantityBeforeBasicJob: max rounds reached');
+                break;
+            }
 
             Log::debug('QuantityBeforeBasicJob: rounds left ' . $maxRounds);
 
@@ -29,7 +36,8 @@ class QuantityBeforeBasicJob extends UniqueJob
                         ON previous_movement.id = inventory_movements.previous_movement_id
 
                     WHERE
-                        inventory_movements.type != "stocktake"
+                        inventory_movements.id >= ?
+                        AND inventory_movements.type != "stocktake"
                         AND inventory_movements.quantity_before != previous_movement.quantity_after
 
                     ORDER BY inventory_movements.id asc
@@ -47,10 +55,36 @@ class QuantityBeforeBasicJob extends UniqueJob
                     updated_at = NOW()
 
                 WHERE inventory_movements.type != "stocktake"
-            ');
+            ', [
+                'minMovementId' => $minMovementId,
+            ]);
 
             Log::debug('QuantityBeforeBasicJob: records updated ' . $recordsUpdated);
-            sleep(1);
+            usleep(200000); // 0.2 sec
         } while ($recordsUpdated > 0 && $maxRounds > 0);
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getMin(): mixed
+    {
+        return DB::select('
+            SELECT
+               inventory_movements.id as movement_id
+
+            FROM inventory_movements
+
+            INNER JOIN inventory_movements as previous_movement
+                ON previous_movement.id = inventory_movements.previous_movement_id
+
+            WHERE
+                inventory_movements.type != "stocktake"
+                AND inventory_movements.quantity_before != previous_movement.quantity_after
+
+            ORDER BY inventory_movements.id asc
+
+            LIMIT 1
+        ');
     }
 }

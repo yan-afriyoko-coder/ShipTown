@@ -32,7 +32,7 @@ class QuantityAfterJob extends UniqueJob
                   ON tbl.id = inventory_movements.id
 
                 SET inventory_movements.quantity_after = quantity_before + quantity_delta,
-                    updated_at = NOW()
+                    inventory_movements.updated_at = NOW()
 
                 WHERE inventory_movements.type != "stocktake"
             ');

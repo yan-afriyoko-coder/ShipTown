@@ -85,7 +85,7 @@ class QuantityBeforeJob extends UniqueJob
                 SET
                     inventory_movements.quantity_before = tempTable.quantity_before_expected,
                     inventory_movements.quantity_after = tempTable.quantity_after_expected,
-                    inventory.movements.updated_at = NOW()
+                    inventory_movements.updated_at = NOW()
 
                 WHERE inventory_movements.type != "stocktake";
             ');
