@@ -29,7 +29,8 @@ class QuantityBeforeBasicJob extends UniqueJob
                 CREATE TEMPORARY TABLE tempTable AS
                     SELECT
                        inventory_movements.id as movement_id,
-                       previous_movement.quantity_after as quantity_before_expected
+                       previous_movement.quantity_after as quantity_before_expected,
+                        inventory_movements.created_at
 
                     FROM inventory_movements
 
