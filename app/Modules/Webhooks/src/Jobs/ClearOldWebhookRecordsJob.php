@@ -16,7 +16,7 @@ class ClearOldWebhookRecordsJob extends UniqueJob
             $recordsUpdated = PendingWebhook::query()
                 ->where('created_at', '<', now()->subDays(7))
                 ->whereNotNull('published_at')
-                ->limit(1000)
+                ->limit(10000)
                 ->forceDelete();
             sleep(1);
         } while ($recordsUpdated > 0);
