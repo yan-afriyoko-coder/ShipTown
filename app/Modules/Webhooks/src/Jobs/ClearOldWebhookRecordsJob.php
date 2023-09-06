@@ -17,6 +17,10 @@ class ClearOldWebhookRecordsJob extends UniqueJob
             ->latest('id')
             ->first();
 
+        if ($lastToDelete === null) {
+            return;
+        }
+
         do {
             $recordsUpdated = PendingWebhook::query()
                 ->where('id', '<', $lastToDelete->getKey())
