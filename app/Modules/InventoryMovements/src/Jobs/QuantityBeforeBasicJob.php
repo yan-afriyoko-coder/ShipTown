@@ -20,7 +20,7 @@ class QuantityBeforeBasicJob extends UniqueJob
             Log::debug('QuantityBeforeBasicJob: rounds left ' . $maxRounds);
 
             if (($maxRounds % 10 === 0) or ($minMovementId === null)) {
-                $minMovementId = data_get($this->getMin(), 'movement_id');
+                $minMovementId = data_get($this->getMin($minMovementId), 'movement_id');
             }
 
             Schema::dropIfExists('tempTable');
@@ -44,7 +44,7 @@ class QuantityBeforeBasicJob extends UniqueJob
 
                     ORDER BY inventory_movements.id asc
 
-                    LIMIT 5
+                    LIMIT 5;
             ', [$minMovementId ?? 0]);
 
             $recordsUpdated = DB::update('
@@ -65,10 +65,7 @@ class QuantityBeforeBasicJob extends UniqueJob
         } while ($recordsUpdated > 0 && $maxRounds > 0);
     }
 
-    /**
-     * @return mixed
-     */
-    private function getMin(): mixed
+    private function getMin($minMovementId): array
     {
         return DB::select('
             SELECT
@@ -79,13 +76,13 @@ class QuantityBeforeBasicJob extends UniqueJob
             INNER JOIN inventory_movements as previous_movement
                 ON previous_movement.id = inventory_movements.previous_movement_id
 
-            WHERE
-                inventory_movements.type != "stocktake"
+            WHERE inventory_movements.id >= ?
                 AND inventory_movements.quantity_before != previous_movement.quantity_after
+                AND inventory_movements.type != "stocktake"
 
             ORDER BY inventory_movements.id asc
 
             LIMIT 1
-        ');
+        ', [$minMovementId ?? 0]);
     }
 }
