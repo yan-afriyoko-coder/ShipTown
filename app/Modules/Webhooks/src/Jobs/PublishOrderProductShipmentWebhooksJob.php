@@ -41,11 +41,9 @@ class PublishOrderProductShipmentWebhooksJob extends UniqueJob
                 'ops.warehouse_id' => $warehouse_id,
             ])
             ->orderBy('modules_webhooks_pending_webhooks.id')
-            ->limit(20);
+            ->limit(50);
 
         $chunk = $query->get();
-
-        ray($chunk, Webhook::query()->get()->toArray());
 
         while ($chunk->isNotEmpty()) {
             $pendingWebhookIds = $chunk->pluck('id');
