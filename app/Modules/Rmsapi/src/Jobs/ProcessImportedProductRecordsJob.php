@@ -58,7 +58,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUnique
 
     private function processImportedProducts(int $batch_size): void
     {
-        Log::debug('Processing imported products', ['batch_size' => $batch_size]);
+        Log::debug('ProcessImportedProductRecordsJob imported products', ['batch_size' => $batch_size]);
         $reservationTime = now();
 
         RmsapiProductImport::query()
@@ -68,7 +68,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUnique
             ->limit($batch_size)
             ->update(['reserved_at' => $reservationTime]);
 
-        Log::debug('Reserved product records', ['reservationTime' => $reservationTime]);
+        Log::debug('ProcessImportedProductRecordsJob Reserved product records', ['reservationTime' => $reservationTime]);
 
         $records = RmsapiProductImport::query()
             ->where(['reserved_at' => $reservationTime])
@@ -102,7 +102,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUnique
         $product = Product::query()->firstOrCreate(['sku' => $attributes['sku']], $attributes);
 
         if ($product->name !== $attributes['name']) {
-            Log::debug('RMSAPI updating product name', [
+            Log::debug('ProcessImportedProductRecordsJob updating product name', [
                 'sku' => $product->sku,
                 'old_name' => $product->name,
                 'new_name' => $attributes['name'],

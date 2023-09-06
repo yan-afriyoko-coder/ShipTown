@@ -51,7 +51,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
      */
     public function handle(): bool
     {
-        logger('RMSAPI Starting FetchUpdatedProductsJob', ['connection_id' => $this->rmsConnection->getKey()]);
+        logger('RMSAPI Starting ImportProductsJob', ['connection_id' => $this->rmsConnection->getKey()]);
 
         $per_page = 500;
         $roundsLeft = 1000 / $per_page;
@@ -70,7 +70,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
             } catch (GuzzleException $e) {
                 report($e);
 
-                Log::warning('RMSAPI Failed product fetch', [
+                Log::warning('RMSAPI ImportProductsJob Failed product fetch', [
                     'code' => $e->getCode(),
                     'message' => $e->getMessage(),
                 ]);
@@ -82,7 +82,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
                 $this->saveImportedProducts($response->getResult());
             }
 
-            Log::info('RMSAPI Downloaded products', [
+            Log::info('RMSAPI ImportProductsJob Downloaded products', [
                 'warehouse_code' => $this->rmsConnection->location_id,
                 'count'          => count($response->getResult()),
                 'left'           => $response->asArray()['total'],
