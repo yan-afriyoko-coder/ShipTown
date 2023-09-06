@@ -87,9 +87,14 @@ class AppServiceProvider extends ServiceProvider
         }
 
         $enabled_modules->each(function (Module $module) {
-            $this->app->singleton($module->service_provider_class, $module->service_provider_class);
-            App::register($module->service_provider_class);
-            $module->service_provider_class::loaded();
+            try {
+                $this->app->singleton($module->service_provider_class, $module->service_provider_class);
+                App::register($module->service_provider_class);
+                $module->service_provider_class::loaded();
+            } catch (Exception $exception) {
+                report($exception);
+                return;
+            }
         });
     }
 }
