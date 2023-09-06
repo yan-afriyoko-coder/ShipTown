@@ -128,16 +128,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.280.2",
+            "version": "3.281.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "d68b83b3bc39b70bf33e9b8b5166facbe3e4fe9b"
+                "reference": "e64af36b7951550ff3073cea260a641963ebcd8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d68b83b3bc39b70bf33e9b8b5166facbe3e4fe9b",
-                "reference": "d68b83b3bc39b70bf33e9b8b5166facbe3e4fe9b",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/e64af36b7951550ff3073cea260a641963ebcd8d",
+                "reference": "e64af36b7951550ff3073cea260a641963ebcd8d",
                 "shasum": ""
             },
             "require": {
@@ -217,9 +217,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.280.2"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.281.0"
             },
-            "time": "2023-09-01T18:06:10+00:00"
+            "time": "2023-09-05T18:07:25+00:00"
         },
         {
             "name": "aws/aws-sdk-php-laravel",
@@ -11689,16 +11689,16 @@
         },
         {
             "name": "laravel/dusk",
-            "version": "v7.9.4",
+            "version": "v7.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/dusk.git",
-                "reference": "acadeb75ca6a744bf40894cb785bc59d4026cf26"
+                "reference": "d9c722c46d5ec41998dbb8f4dc24c037ac5f244c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/dusk/zipball/acadeb75ca6a744bf40894cb785bc59d4026cf26",
-                "reference": "acadeb75ca6a744bf40894cb785bc59d4026cf26",
+                "url": "https://api.github.com/repos/laravel/dusk/zipball/d9c722c46d5ec41998dbb8f4dc24c037ac5f244c",
+                "reference": "d9c722c46d5ec41998dbb8f4dc24c037ac5f244c",
                 "shasum": ""
             },
             "require": {
@@ -11759,9 +11759,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/dusk/issues",
-                "source": "https://github.com/laravel/dusk/tree/v7.9.4"
+                "source": "https://github.com/laravel/dusk/tree/v7.10.0"
             },
-            "time": "2023-08-28T13:53:02+00:00"
+            "time": "2023-09-04T15:59:51+00:00"
         },
         {
             "name": "maximebf/debugbar",

@@ -9,6 +9,7 @@ use App\Events\EveryMinuteEvent;
 use App\Events\EveryTenMinutesEvent;
 use App\Events\SyncRequestedEvent;
 use App\Models\Module;
+use App\Modules\BaseModuleServiceProvider;
 use Exception;
 use Tests\TestCase;
 
@@ -27,8 +28,10 @@ class BasicModulesTest extends TestCase
         }
 
         $enabled_modules->each(function (Module $module) {
-            $module->service_provider_class::enableModule();
-            ray($module->service_provider_class);
+            /** @var BaseModuleServiceProvider $service_provider_class */
+            $service_provider_class = $module->service_provider_class;
+            $service_provider_class::enableModule();
+            ray($service_provider_class);
         });
 
         SyncRequestedEvent::dispatch();
