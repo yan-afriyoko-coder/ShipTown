@@ -2,6 +2,7 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
+use App\Abstracts\UniqueJob;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductAlias;
@@ -9,66 +10,51 @@ use App\Models\ProductPrice;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Exception;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUnique
+class ProcessImportedProductRecordsJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
-    public int $uniqueFor = 600;
-
-    public function uniqueId(): string
-    {
-        return implode('-', [get_class($this)]);
-    }
+    public int $uniqueFor = 60 * 5; // 5 minutes
 
     public function handle(): bool
     {
         $batch_size = 200;
-        $maxRunCount = 5;
+        $maxRunCount = 10;
+
+        Log::debug('ProcessImportedProductRecordsJob starting', ['batch_size' => $batch_size]);
 
         do {
             $this->processImportedProducts($batch_size);
 
-            $hasNoRecordsToProcess = ! RmsapiProductImport::query()
+            $hasRecordsToProcess = RmsapiProductImport::query()
                 ->whereNull('reserved_at')
                 ->whereNull('when_processed')
                 ->exists();
 
-            if ($hasNoRecordsToProcess) {
-                return true;
-            }
-
             $maxRunCount--;
-        } while ($maxRunCount > 0);
+        } while ($hasRecordsToProcess and $maxRunCount > 0);
 
+        Log::debug('ProcessImportedProductRecordsJob finished');
         return true;
     }
 
     private function processImportedProducts(int $batch_size): void
     {
-        Log::debug('ProcessImportedProductRecordsJob imported products', ['batch_size' => $batch_size]);
         $reservationTime = now();
 
-        RmsapiProductImport::query()
+        $updatedRecords = RmsapiProductImport::query()
             ->whereNull('reserved_at')
             ->whereNull('when_processed')
             ->orderByRaw('id ASC')
             ->limit($batch_size)
             ->update(['reserved_at' => $reservationTime]);
 
-        Log::debug('ProcessImportedProductRecordsJob Reserved product records', ['reservationTime' => $reservationTime]);
+        Log::debug('ProcessImportedProductRecordsJob Reserved product records', [
+            'reservationTime' => $reservationTime,
+            'updatedRecords' => $updatedRecords
+        ]);
 
         $records = RmsapiProductImport::query()
             ->where(['reserved_at' => $reservationTime])
