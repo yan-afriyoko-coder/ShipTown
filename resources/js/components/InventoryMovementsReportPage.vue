@@ -106,7 +106,7 @@
 
                 let params = this.$router.currentRoute.query;
                 params['include'] = 'product,inventory,user,product.tags';
-                params['sort'] = '-created_at';
+                params['sort'] = '-id';
                 params['page'] = page;
 
                 this.apiGetInventoryMovements(params)
