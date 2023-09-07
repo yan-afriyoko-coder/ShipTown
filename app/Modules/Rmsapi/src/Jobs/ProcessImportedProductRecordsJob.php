@@ -64,9 +64,7 @@ class ProcessImportedProductRecordsJob extends UniqueJob
 
         $records->each(function (RmsapiProductImport $productImport) {
             try {
-                DB::transaction(function () use ($productImport) {
-                    $this->import($productImport);
-                });
+                $this->import($productImport);
             } catch (Exception $e) {
                 report($e);
                 Log::emergency($e->getMessage(), $e->getTrace());
