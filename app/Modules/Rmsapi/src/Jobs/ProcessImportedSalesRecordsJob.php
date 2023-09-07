@@ -37,7 +37,7 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUnique
         do {
             $this->processImportedRecords($batch_size);
 
-            Log::info('RMSAPI Processed imported sales records', [
+            Log::info('RMSAPI ProcessImportedSalesRecordsJob Processed imported sales records', [
                 'count' => $batch_size,
             ]);
 

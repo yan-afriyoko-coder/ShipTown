@@ -65,7 +65,7 @@ class ImportShippingsJob implements ShouldQueue, ShouldBeUnique
 
             $records = $response->getResult();
 
-            Log::info('RMSAPI Downloaded shippings', [
+            Log::info('RMSAPI ImportShippingsJob Downloaded shippings', [
                 'warehouse_code' => $this->rmsapiConnection->location_id,
                 'count'          => count($response->getResult()),
                 'left'           => $response->asArray()['total'],
@@ -82,7 +82,7 @@ class ImportShippingsJob implements ShouldQueue, ShouldBeUnique
 
             $this->importShippingRecords($records);
         } catch (GuzzleException $e) {
-            Log::warning('RMSAPI Failed shippings fetch', [
+            Log::warning('RMSAPI ImportShippingsJob Failed shippings fetch', [
                 'code' => $e->getCode(),
                 'message' => $e->getMessage(),
             ]);

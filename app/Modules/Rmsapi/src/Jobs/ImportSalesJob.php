@@ -39,7 +39,7 @@ class ImportSalesJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): bool
     {
-        Log::debug('RMSAPI Starting FetchSalesJob', ['rmsapi_connection_id' => $this->rmsConnection->getKey()]);
+        Log::debug('RMSAPI Starting ImportSalesJob', ['rmsapi_connection_id' => $this->rmsConnection->getKey()]);
 
         $per_page = 100;
 
@@ -54,7 +54,7 @@ class ImportSalesJob implements ShouldQueue, ShouldBeUnique
         try {
             $response = RmsapiClient::GET($this->rmsConnection, 'api/transaction-entries', $params);
         } catch (GuzzleException $e) {
-            Log::warning('RMSAPI Failed sales fetch', [
+            Log::warning('RMSAPI ImportSalesJob Failed sales fetch', [
                 'code' => $e->getCode(),
                 'message' => $e->getMessage(),
             ]);
@@ -66,7 +66,7 @@ class ImportSalesJob implements ShouldQueue, ShouldBeUnique
             $this->saveImportedRecords($response->getResult());
         }
 
-        Log::info('RMSAPI Downloaded sales', [
+        Log::info('RMSAPI ImportSalesJob Downloaded sales', [
             'warehouse_code' => $this->rmsConnection->location_id,
             'count'          => count($response->getResult()),
             'left'           => $response->asArray()['total'],
