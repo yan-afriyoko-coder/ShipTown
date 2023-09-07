@@ -16,5 +16,22 @@ class FetchSqlForUpdatingRMSJob extends UniqueJob
             ORDER BY warehouse_code
             LIMIT 500
         ");
+
+        DB::statement("
+            SELECT DISTINCT CONCAT('UPDATE Item SET LastUpdated=getDate() WHERE ItemLookupCode=''',products.sku,''';')
+            FROM inventory
+
+            LEFT JOIN modules_rmsapi_products_imports
+             ON modules_rmsapi_products_imports.warehouse_id = inventory.warehouse_id
+             AND modules_rmsapi_products_imports.product_id = inventory.product_id
+
+            LEFT JOIN products
+              ON products.id = inventory.product_id
+
+            WHERE modules_rmsapi_products_imports.id is null
+            and inventory.quantity != 0
+
+            LIMIT 5000
+        ");
     }
 }
