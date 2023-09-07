@@ -18,7 +18,7 @@ class FetchSqlForUpdatingRMSJob extends UniqueJob
         ");
 
         DB::statement("
-            SELECT DISTINCT CONCAT('UPDATE Item SET LastUpdated=getDate() WHERE ItemLookupCode=''',products.sku,''';')
+            SELECT DISTINCT CONCAT('UPDATE Item SET LastUpdated=getDate() WHERE ItemLookupCode=''',products.sku,'''; --', inventory.warehouse_code)
             FROM inventory
 
             LEFT JOIN modules_rmsapi_products_imports
