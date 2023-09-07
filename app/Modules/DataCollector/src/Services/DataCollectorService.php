@@ -156,6 +156,7 @@ class DataCollectorService
                 /** @var InventoryMovement $inventoryMovement */
                 $inventoryMovement = InventoryMovement::query()->create([
                     'inventory_id' => $inventory->id,
+                    'type' => InventoryMovement::TYPE_STOCKTAKE,
                     'product_id' => $inventory->product_id,
                     'warehouse_id' => $inventory->warehouse_id,
                     'quantity_before' => $inventory->quantity,
