@@ -23,6 +23,7 @@ class CopyInventoryMovementsToNewTableJob implements ShouldQueue
         DB::statement('
             INSERT INTO inventory_movements_new (
                 id,
+                occurred_at,
                 inventory_id,
                 warehouse_code,
                 product_id,
@@ -41,6 +42,7 @@ class CopyInventoryMovementsToNewTableJob implements ShouldQueue
             )
             SELECT
                 inventory_movements.id,
+                inventory_movements.created_at as occurred_at,
                 inventory_movements.inventory_id,
                 warehouses.code,
                 inventory_movements.product_id,
