@@ -9,6 +9,7 @@ class ResyncStockJob extends UniqueJob
 {
     public function handle()
     {
+        // WARNING: Use with caution! It will override the inventory
         DB::statement('
             INSERT INTO inventory_movements (
                 type,
@@ -22,6 +23,7 @@ class ResyncStockJob extends UniqueJob
                 updated_at
             )
             SELECT
+                "RMSAPI quantities to be imported as stocktake" as whats_this,
                 "stocktake" as type,
                 inventory_id,
                 product_id,

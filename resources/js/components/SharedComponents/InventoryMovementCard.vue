@@ -17,7 +17,7 @@
                     </tr>
                     <tr>
                             <td>at:</td>
-                        <td class="pl-1">{{ record['created_at'] | moment('MMM D HH:mm') }}</td>
+                        <td class="pl-1">{{ record['created_at'] | moment('YYYY MMM D HH:mm') }}</td>
                     </tr>
                     <tr>
                         <td>type:</td>
