@@ -44,5 +44,27 @@ class FetchSqlForUpdatingRMSJob extends UniqueJob
 
             LIMIT 5000
         ");
+
+        DB::statement("
+        CREATE TEMPORARY TABLE tempTable AS
+        SELECT
+           (SELECT quantity FROM inventory_movements where inventory_movements.inventory_id = inventory.id AND inventory_movements.created_at < '2023-02-01' LIMIT 1) as quantity_at_end_of_period,
+           inventory.*
+
+        FROM inventory
+
+        WHERE inventory.first_movement_at < '2023-01-01'
+        AND inventory.last_movement_at > '2023-02-01'
+        AND IFNULL(inventory.last_counted_at, inventory.created_at) < '2022-12-25';
+
+        SELECT products.sku, tempTable.* FROM tempTable
+
+        LEFT JOIN products
+          ON products.id = tempTable.product_id
+
+        WHERE quantity_at_end_of_period != 0
+
+        LIMIT 5;
+        ");
     }
 }
