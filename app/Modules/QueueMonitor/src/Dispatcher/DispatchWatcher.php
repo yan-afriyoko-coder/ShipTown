@@ -2,12 +2,12 @@
 
 namespace App\Modules\QueueMonitor\src\Dispatcher;
 
+use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
 use Exception;
 use Illuminate\Bus\Dispatcher;
-use Illuminate\Support\Facades\DB;
-use Ramsey\Uuid\Guid\Guid;
+use Illuminate\Support\Facades\Log;
 
-class QueueMonitorDispatcher extends Dispatcher
+class DispatchWatcher extends Dispatcher
 {
     public function __construct($app, $dispatcher)
     {
@@ -17,11 +17,11 @@ class QueueMonitorDispatcher extends Dispatcher
     public function dispatchToQueue($command)
     {
         try {
-            DB::table('modules_queue_monitor_jobs')->insert([
-                'uuid' => null,
-                'job_class' => get_class($command),
-                'dispatched_at' => now(),
-            ]);
+            $jobName = get_class($command);
+
+            if (! in_array($jobName, QueueMonitorServiceProvider::$ignoredJobList)) {
+                Log::debug('Job dispatched', ['job' => $jobName]);
+            }
         } catch (Exception $e) {
             report($e);
         }

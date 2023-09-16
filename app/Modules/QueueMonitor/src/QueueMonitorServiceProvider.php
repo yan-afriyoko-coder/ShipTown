@@ -4,7 +4,7 @@ namespace App\Modules\QueueMonitor\src;
 
 use App\Events\EveryHourEvent;
 use App\Modules\BaseModuleServiceProvider;
-use App\Modules\QueueMonitor\src\Dispatcher\QueueMonitorDispatcher;
+use App\Modules\QueueMonitor\src\Dispatcher\DispatchWatcher;
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Queue\Events\JobProcessing;
@@ -34,6 +34,10 @@ class QueueMonitorServiceProvider extends BaseModuleServiceProvider
      */
     public static bool $autoEnable = false;
 
+    public static array $ignoredJobList = [
+        'Laravel\Telescope\Jobs\ProcessPendingUpdates',
+    ];
+
     /**
      * The event listener mappings for the application.
      *
@@ -47,17 +51,13 @@ class QueueMonitorServiceProvider extends BaseModuleServiceProvider
         JobProcessed::class => [
             Listeners\JobProcessedListener::class,
         ],
-
-        EveryHourEvent::class => [
-            Listeners\HourlyEventListener::class,
-        ],
     ];
 
 
     public static function loaded(): bool
     {
         app()->extend(Dispatcher::class, function ($dispatcher, $app) {
-            return new QueueMonitorDispatcher($app, $dispatcher);
+            return new DispatchWatcher($app, $dispatcher);
         });
 
         return parent::loaded();

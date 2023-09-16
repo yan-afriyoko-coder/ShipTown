@@ -2,11 +2,13 @@
 
 namespace Tests;
 
+use App;
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\Heartbeat;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
+use App\Models\InventoryTotal;
 use App\Models\Module;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -40,6 +42,8 @@ trait ResetsDatabase
     {
         parent::setUp();
 
+        ray()->showApp();
+
         ray()->clearAll();
         ray()->className($this)->blue();
 
@@ -47,8 +51,10 @@ trait ResetsDatabase
 
         Product::query()->forceDelete();
         Inventory::query()->forceDelete();
+        InventoryTotal::query()->forceDelete();
+        App\Modules\InventoryTotals\src\Models\Configuration::query()->forceDelete();
+        App\Modules\InventoryTotals\src\Models\InventoryTotalByWarehouseTag::query()->forceDelete();
         ProductAlias::query()->forceDelete();
-
         OrderProduct::query()->forceDelete();
         Order::query()->forceDelete();
         OrderStatus::query()->forceDelete();

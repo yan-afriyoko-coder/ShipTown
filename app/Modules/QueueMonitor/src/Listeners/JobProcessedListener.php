@@ -2,19 +2,20 @@
 
 namespace App\Modules\QueueMonitor\src\Listeners;
 
-use Exception;
-use Illuminate\Support\Facades\DB;
+use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
+use Illuminate\Queue\Events\JobProcessed;
+use Illuminate\Support\Facades\Log;
 
 class JobProcessedListener
 {
-    public function handle($event)
+    public function handle(JobProcessed $event)
     {
-        try {
-            DB::table('modules_queue_monitor_jobs')
-                ->where('uuid', $event->job->payload()['uuid'])
-                ->update(['processed_at' => now()]);
-        } catch (Exception $e) {
-            report($e);
+        $jobName = data_get($event->job->payload(), 'displayName');
+
+        if (in_array($jobName, QueueMonitorServiceProvider::$ignoredJobList)) {
+            return;
         }
+
+        Log::info('Job processed', ['job' => $jobName]);
     }
 }

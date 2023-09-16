@@ -3,8 +3,11 @@
 namespace App\Modules\InventoryTotals\src;
 
 use App\Events\EveryDayEvent;
+use App\Events\EveryTenMinutesEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\Product\ProductCreatedEvent;
+use App\Events\SyncRequestedEvent;
+use App\Events\Warehouse\WarehouseTagAttachedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
@@ -33,6 +36,14 @@ class InventoryTotalsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
+        SyncRequestedEvent::class => [
+            Listeners\SyncRequestedEventListener::class,
+        ],
+
+        EveryTenMinutesEvent::class => [
+            Listeners\EveryTenMinutesEventListener::class,
+        ],
+
         EveryDayEvent::class => [
             Listeners\DailyEventListener::class,
         ],
@@ -44,10 +55,9 @@ class InventoryTotalsServiceProvider extends BaseModuleServiceProvider
         InventoryUpdatedEvent::class => [
             Listeners\InventoryUpdatedEventListener::class,
         ],
-    ];
 
-    public static function disabling(): bool
-    {
-        return false;
-    }
+        WarehouseTagAttachedEvent::class => [
+            Listeners\WarehouseTagAttachedEventListener::class,
+        ],
+    ];
 }
