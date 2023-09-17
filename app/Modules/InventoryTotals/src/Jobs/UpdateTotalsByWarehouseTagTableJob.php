@@ -27,7 +27,9 @@ class UpdateTotalsByWarehouseTagTableJob extends UniqueJob
         DB::statement("
             CREATE TEMPORARY TABLE tempTable AS
                 SELECT
-                    inventory_totals_by_warehouse_tag.tag_id, inventory_totals_by_warehouse_tag.product_id, NOW() as calculated_at
+                    inventory_totals_by_warehouse_tag.tag_id,
+                    inventory_totals_by_warehouse_tag.product_id,
+                    NOW() as calculated_at
                 FROM inventory_totals_by_warehouse_tag
 
                 WHERE calculated_at IS NULL
@@ -42,7 +44,6 @@ class UpdateTotalsByWarehouseTagTableJob extends UniqueJob
                      tempTable.product_id as product_id,
                      GREATEST(0, FLOOR(SUM(inventory.quantity))) as quantity,
                      GREATEST(0, FLOOR(SUM(inventory.quantity_reserved))) as quantity_reserved,
-                     GREATEST(0, FLOOR(SUM(inventory.quantity - inventory.quantity_reserved))) as quantity_available,
                      GREATEST(0, FLOOR(SUM(inventory.quantity_incoming))) as quantity_incoming,
                      MAX(inventory.updated_at) as max_inventory_updated_at,
                      tempTable.calculated_at as calculated_at,
@@ -72,7 +73,6 @@ class UpdateTotalsByWarehouseTagTableJob extends UniqueJob
             SET
                 inventory_totals_by_warehouse_tag.quantity = tempInventoryTotalsByWarehouseTag.quantity,
                 inventory_totals_by_warehouse_tag.quantity_reserved = tempInventoryTotalsByWarehouseTag.quantity_reserved,
-                inventory_totals_by_warehouse_tag.quantity_available = tempInventoryTotalsByWarehouseTag.quantity_available,
                 inventory_totals_by_warehouse_tag.quantity_incoming = tempInventoryTotalsByWarehouseTag.quantity_incoming,
                 inventory_totals_by_warehouse_tag.max_inventory_updated_at = tempInventoryTotalsByWarehouseTag.max_inventory_updated_at,
                 inventory_totals_by_warehouse_tag.calculated_at = tempInventoryTotalsByWarehouseTag.calculated_at,

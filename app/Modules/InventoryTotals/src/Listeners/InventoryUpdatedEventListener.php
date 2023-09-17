@@ -33,7 +33,6 @@ class InventoryUpdatedEventListener
             ->update([
                 'quantity' => DB::raw("quantity + $quantityDelta"),
                 'quantity_reserved' => DB::raw("quantity_reserved + $quantityReservedDelta"),
-                'quantity_available' => DB::raw("(quantity + $quantityDelta) - (quantity_reserved + $quantityReservedDelta)"),
                 'quantity_incoming' => DB::raw("quantity_incoming + $quantityIncomingDelta"),
                 'max_inventory_updated_at' => $inventory->updated_at,
                 'updated_at' => now(),
@@ -52,7 +51,6 @@ class InventoryUpdatedEventListener
             ->update([
                 'quantity' => DB::raw("quantity + $quantityDelta"),
                 'quantity_reserved' => DB::raw("quantity_reserved + $quantityReservedDelta"),
-                'quantity_available' => DB::raw("(quantity + $quantityDelta) - (quantity_reserved + $quantityReservedDelta)"),
                 'quantity_incoming' => DB::raw("quantity_incoming + $quantityIncomingDelta"),
                 'max_inventory_updated_at' => $inventory->updated_at,
                 'updated_at' => now(),
