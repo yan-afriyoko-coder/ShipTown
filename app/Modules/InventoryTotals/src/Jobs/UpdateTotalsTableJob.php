@@ -41,7 +41,6 @@ class UpdateTotalsTableJob extends UniqueJob
                      tempTable.product_id as product_id,
                      GREATEST(0, FLOOR(SUM(inventory.quantity))) as quantity,
                      GREATEST(0, FLOOR(SUM(inventory.quantity_reserved))) as quantity_reserved,
-                     GREATEST(0, FLOOR(SUM(inventory.quantity_available))) as quantity_available,
                      GREATEST(0, FLOOR(SUM(inventory.quantity_incoming))) as quantity_incoming,
                      MAX(inventory.updated_at) as max_inventory_updated_at,
                      tempTable.calculated_at as calculated_at,
@@ -65,7 +64,6 @@ class UpdateTotalsTableJob extends UniqueJob
             SET
                 inventory_totals.quantity = tempInventoryTotals.quantity,
                 inventory_totals.quantity_reserved = tempInventoryTotals.quantity_reserved,
-                inventory_totals.quantity_available = tempInventoryTotals.quantity_available,
                 inventory_totals.quantity_incoming = tempInventoryTotals.quantity_incoming,
                 inventory_totals.max_inventory_updated_at = tempInventoryTotals.max_inventory_updated_at,
                 inventory_totals.calculated_at = tempInventoryTotals.calculated_at,
