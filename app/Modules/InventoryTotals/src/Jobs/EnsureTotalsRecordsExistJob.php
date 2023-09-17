@@ -39,7 +39,7 @@ class EnsureTotalsRecordsExistJob extends UniqueJob
                 'maxID' => $maxID,
             ]);
 
-            $this->config->update(['totals_max_inventory_id_checked' => $maxID]);
+            $this->config->update(['totals_max_product_id_checked' => $maxID]);
 
             usleep(100000); // 0.1 sec
         } while ($maxID <= $this->productsMaxId);
