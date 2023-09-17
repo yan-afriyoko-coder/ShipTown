@@ -23,8 +23,8 @@ class InventoryUpdatedEventListener
         Product::query()
             ->where(['id' => $event->inventory->product_id])
             ->update([
-                'quantity' => DB::raw('quantity + ' . $quantityDelta),
-                'quantity_reserved' => DB::raw('quantity_reserved + ' . $quantityReservedDelta),
+                'quantity' => DB::raw("quantity + $quantityDelta"),
+                'quantity_reserved' => DB::raw("quantity_reserved + $quantityReservedDelta"),
                 'updated_at' => now(),
             ]);
 
@@ -50,7 +50,7 @@ class InventoryUpdatedEventListener
             ->where('product_id', $inventory->product_id)
             ->whereIn('tag_id', $tags->pluck('tag_id'))
             ->update([
-                'quantity' => DB::raw("quantity + ' . $quantityDelta"),
+                'quantity' => DB::raw("quantity + $quantityDelta"),
                 'quantity_reserved' => DB::raw("quantity_reserved + $quantityReservedDelta"),
                 'quantity_available' => DB::raw("quantity + $quantityDelta - quantity_reserved + $quantityReservedDelta"),
                 'quantity_incoming' => DB::raw("quantity_incoming + $quantityIncomingDelta"),
