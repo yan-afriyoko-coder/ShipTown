@@ -54,7 +54,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
         logger('RMSAPI Starting ImportProductsJob', ['connection_id' => $this->rmsConnection->getKey()]);
 
         $per_page = 500;
-        $roundsLeft = 1000 / $per_page;
+        $roundsLeft = 20;
 
         do {
             $this->rmsConnection->refresh();
@@ -117,11 +117,25 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
                 'warehouse_id'          => $this->rmsConnection->warehouse_id,
                 'warehouse_code'        => $this->rmsConnection->location_id,
                 'batch_uuid'            => $this->batch_uuid,
-                'sku'                   => $product['item_code'],
-                'quantity_on_hand'      => $product['quantity_on_hand'],
-                'quantity_on_order'     => $product['quantity_on_order'],
-                'quantity_available'    => $product['quantity_available'],
-                'quantity_committed'    => $product['quantity_committed'],
+                'sku'                   => data_get($product, 'item_code', ''),
+                'quantity_on_hand'      => data_get($product, 'quantity_on_hand', 0),
+                'quantity_on_order'     => data_get($product, 'quantity_on_order', 0),
+                'quantity_available'    => data_get($product, 'quantity_available', 0),
+                'quantity_committed'    => data_get($product, 'quantity_committed', 0),
+                'reorder_point'         => data_get($product, 'reorder_point', 0),
+                'restock_level'         => data_get($product, 'restock_level', 0),
+                'price'                 => data_get($product, 'price', 0),
+                'cost'                  => data_get($product, 'cost', 0),
+                'sale_price'            => data_get($product, 'sale_price', 0),
+                'sale_price_start_date' => data_get($product, 'sale_price_start_date', '2000-01-01'),
+                'sale_price_end_date'   => data_get($product, 'sale_price_end_date', '2000-01-01'),
+                'is_web_item'           => data_get($product, 'is_web_item', false),
+                'department_name'       => data_get($product, 'department_name', ''),
+                'category_name'         => data_get($product, 'category_name', ''),
+                'supplier_name'         => data_get($product, 'supplier_name', ''),
+                'sub_description_1'     => data_get($product, 'sub_description_1', ''),
+                'sub_description_3'     => data_get($product, 'sub_description_3', ''),
+                'sub_description_2'     => data_get($product, 'sub_description_2', ''),
                 'raw_import'            => json_encode($product),
                 'created_at'            => $time,
                 'updated_at'            => $time,
