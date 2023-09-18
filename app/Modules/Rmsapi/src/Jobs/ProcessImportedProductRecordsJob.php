@@ -11,7 +11,6 @@ use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Exception;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ProcessImportedProductRecordsJob extends UniqueJob
