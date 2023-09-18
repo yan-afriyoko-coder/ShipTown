@@ -2,32 +2,17 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
+use App\Abstracts\UniqueJob;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
 use App\Services\InventoryService;
 use Exception;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUnique
+class ProcessImportedSalesRecordsJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
-    public int $uniqueFor = 600;
-
-    public function uniqueId(): string
-    {
-        return implode('-', [get_class($this)]);
-    }
+    public int $uniqueFor = 60 * 5; // 5 minutes
 
     public function handle()
     {
