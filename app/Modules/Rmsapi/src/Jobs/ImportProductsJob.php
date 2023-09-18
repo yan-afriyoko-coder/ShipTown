@@ -2,6 +2,7 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
+use App\Helpers\TemporaryTable;
 use App\Models\Heartbeat;
 use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
@@ -168,7 +169,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
                 `sub_description_2`     varchar(255) DEFAULT NULL,
                 `sub_description_3`     varchar(255) DEFAULT NULL,
                 `raw_import`            json DEFAULT NULL
-            )
+            ) COLLATE = utf8mb4_unicode_ci
         ");
         // we will use insert instead of create as this is way faster
         // method of inputting bulk of records to database
