@@ -122,6 +122,8 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
                 'quantity_on_order'     => data_get($product, 'quantity_on_order', 0),
                 'quantity_available'    => data_get($product, 'quantity_available', 0),
                 'quantity_committed'    => data_get($product, 'quantity_committed', 0),
+                'reorder_point'         => data_get($product, 'reorder_point', 0),
+                'restock_level'         => data_get($product, 'restock_level', 0),
                 'price'                 => data_get($product, 'price', 0),
                 'cost'                  => data_get($product, 'cost', 0),
                 'sale_price'            => data_get($product, 'sale_price', 0),
