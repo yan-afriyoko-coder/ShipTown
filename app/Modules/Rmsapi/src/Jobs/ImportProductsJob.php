@@ -2,11 +2,9 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
-use App\Helpers\TemporaryTable;
 use App\Models\Heartbeat;
 use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
-use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
@@ -17,7 +15,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Schema;
 use Ramsey\Uuid\Uuid;
 
 class ImportProductsJob implements ShouldQueue, ShouldBeUnique
@@ -141,6 +138,8 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
                 'raw_import'            => json_encode($product)
             ];
         });
+
+        DB::statement('DROP TEMPORARY TABLE IF EXISTS tempTable;');
 
         DB::statement("
             CREATE TEMPORARY TABLE tempTable
