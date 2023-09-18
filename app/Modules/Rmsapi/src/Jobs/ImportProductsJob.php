@@ -16,6 +16,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Ramsey\Uuid\Uuid;
 
 class ImportProductsJob implements ShouldQueue, ShouldBeUnique
@@ -136,16 +137,77 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
                 'sub_description_1'     => data_get($product, 'sub_description_1', ''),
                 'sub_description_3'     => data_get($product, 'sub_description_3', ''),
                 'sub_description_2'     => data_get($product, 'sub_description_2', ''),
-                'raw_import'            => json_encode($product),
-                'created_at'            => $time,
-                'updated_at'            => $time,
+                'raw_import'            => json_encode($product)
             ];
         });
 
+        DB::statement("
+            CREATE TEMPORARY TABLE tempTable
+            (
+                `connection_id`         bigint unsigned DEFAULT NULL,
+                `warehouse_id`          bigint unsigned DEFAULT NULL,
+                `warehouse_code`        varchar(5) DEFAULT NULL,
+                `batch_uuid`            char(36) DEFAULT NULL,
+                `sku`                   varchar(255) DEFAULT NULL,
+                `quantity_on_hand`      decimal(20, 2) DEFAULT NULL,
+                `quantity_on_order`     decimal(20, 2) DEFAULT NULL,
+                `quantity_available`    decimal(20, 2) DEFAULT NULL,
+                `quantity_committed`    decimal(20, 2) DEFAULT NULL,
+                `reorder_point`         decimal(20, 2)  DEFAULT NULL,
+                `restock_level`         decimal(20, 2)  DEFAULT NULL,
+                `price`                 decimal(20, 2)  DEFAULT NULL,
+                `cost`                  decimal(20, 2)  DEFAULT NULL,
+                `sale_price`            decimal(20, 2)  DEFAULT NULL,
+                `sale_price_start_date` timestamp DEFAULT NULL,
+                `sale_price_end_date`   timestamp DEFAULT NULL,
+                `is_web_item`           tinyint(1) DEFAULT NULL,
+                `department_name`       varchar(255) DEFAULT NULL,
+                `category_name`         varchar(255) DEFAULT NULL,
+                `supplier_name`         varchar(255) DEFAULT NULL,
+                `sub_description_1`     varchar(255) DEFAULT NULL,
+                `sub_description_2`     varchar(255) DEFAULT NULL,
+                `sub_description_3`     varchar(255) DEFAULT NULL,
+                `raw_import`            json DEFAULT NULL
+            )
+        ");
         // we will use insert instead of create as this is way faster
         // method of inputting bulk of records to database
         // this won't invoke any events
-        RmsapiProductImport::query()->insert($insertData->toArray());
+        DB::table('tempTable')->insert($insertData->toArray());
+
+        DB::statement("
+            UPDATE modules_rmsapi_products_imports
+            INNER JOIN tempTable
+                ON modules_rmsapi_products_imports.sku = tempTable.sku
+                AND modules_rmsapi_products_imports.connection_id = tempTable.connection_id
+            SET
+                modules_rmsapi_products_imports.when_processed = null,
+                modules_rmsapi_products_imports.reserved_at = null,
+                modules_rmsapi_products_imports.updated_at = now(),
+                modules_rmsapi_products_imports.batch_uuid = tempTable.batch_uuid,
+                modules_rmsapi_products_imports.connection_id = tempTable.connection_id,
+                modules_rmsapi_products_imports.warehouse_id = tempTable.warehouse_id,
+                modules_rmsapi_products_imports.warehouse_code = tempTable.warehouse_code,
+                modules_rmsapi_products_imports.reorder_point = tempTable.reorder_point,
+                modules_rmsapi_products_imports.restock_level = tempTable.restock_level,
+                modules_rmsapi_products_imports.price = tempTable.price,
+                modules_rmsapi_products_imports.cost = tempTable.cost,
+                modules_rmsapi_products_imports.sale_price = tempTable.sale_price,
+                modules_rmsapi_products_imports.sale_price_start_date = tempTable.sale_price_start_date,
+                modules_rmsapi_products_imports.sale_price_end_date = tempTable.sale_price_end_date,
+                modules_rmsapi_products_imports.quantity_on_hand = tempTable.quantity_on_hand,
+                modules_rmsapi_products_imports.quantity_committed = tempTable.quantity_committed,
+                modules_rmsapi_products_imports.quantity_available = tempTable.quantity_available,
+                modules_rmsapi_products_imports.quantity_on_order = tempTable.quantity_on_order,
+                modules_rmsapi_products_imports.is_web_item = tempTable.is_web_item,
+                modules_rmsapi_products_imports.department_name = tempTable.department_name,
+                modules_rmsapi_products_imports.category_name = tempTable.category_name,
+                modules_rmsapi_products_imports.sub_description_1 = tempTable.sub_description_1,
+                modules_rmsapi_products_imports.sub_description_2 = tempTable.sub_description_2,
+                modules_rmsapi_products_imports.sub_description_3 = tempTable.sub_description_3,
+                modules_rmsapi_products_imports.supplier_name = tempTable.supplier_name,
+                modules_rmsapi_products_imports.raw_import = tempTable.raw_import
+        ");
 
         $this->rmsConnection->update(['products_last_timestamp' => $productsCollection->last()['db_change_stamp']]);
 
