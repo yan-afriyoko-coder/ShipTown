@@ -54,7 +54,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
         logger('RMSAPI Starting ImportProductsJob', ['connection_id' => $this->rmsConnection->getKey()]);
 
         $per_page = 500;
-        $roundsLeft = 1000 / $per_page;
+        $roundsLeft = 20;
 
         do {
             $this->rmsConnection->refresh();
