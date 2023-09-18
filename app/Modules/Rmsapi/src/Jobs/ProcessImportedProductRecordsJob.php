@@ -20,9 +20,7 @@ class ProcessImportedProductRecordsJob extends UniqueJob
     public function handle(): bool
     {
         $batch_size = 200;
-        $maxRunCount = 10;
-
-        Log::debug('ProcessImportedProductRecordsJob starting', ['batch_size' => $batch_size]);
+        $maxRunCount = 20;
 
         do {
             $this->processImportedProducts($batch_size);
@@ -35,7 +33,6 @@ class ProcessImportedProductRecordsJob extends UniqueJob
             $maxRunCount--;
         } while ($hasRecordsToProcess and $maxRunCount > 0);
 
-        Log::debug('ProcessImportedProductRecordsJob finished');
         return true;
     }
 
@@ -50,9 +47,10 @@ class ProcessImportedProductRecordsJob extends UniqueJob
             ->limit($batch_size)
             ->update(['reserved_at' => $reservationTime]);
 
-        Log::debug('ProcessImportedProductRecordsJob Reserved product records', [
+        Log::debug('Job processing', [
+            'job' => self::class,
+            'updatedRecords' => $updatedRecords,
             'reservationTime' => $reservationTime,
-            'updatedRecords' => $updatedRecords
         ]);
 
         $records = RmsapiProductImport::query()
