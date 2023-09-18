@@ -179,7 +179,7 @@ class ProcessImportedProductRecordsJob extends UniqueJob
             or $productPrice->cost !== $importedProduct->raw_import['cost']
             or $productPrice->sale_price !== $importedProduct->raw_import['sale_price']
             or $productPrice->sale_price_start_date !== $importedProduct->raw_import['sale_price_start_date'] ?? '2000-01-01'
-            or $productPrice->sale_price_end_date !== $importedProduct->raw_import['sale_price_start_date'] ?? '2000-01-01'
+            or $productPrice->sale_price_end_date !== $importedProduct->raw_import['sale_price_end_date'] ?? '2000-01-01'
         ) {
             $productPrice->update([
                 'price'                 => $importedProduct->raw_import[$priceFieldName],
