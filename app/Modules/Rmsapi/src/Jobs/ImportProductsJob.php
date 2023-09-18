@@ -210,6 +210,68 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
                 modules_rmsapi_products_imports.raw_import = tempTable.raw_import
         ");
 
+        DB::statement("
+            INSERT INTO modules_rmsapi_products_imports (
+                when_processed, reserved_at, updated_at, created_at,
+                batch_uuid,
+                connection_id,
+                warehouse_id,
+                warehouse_code,
+                reorder_point,
+                restock_level,
+                price,
+                cost,
+                sale_price,
+                sale_price_start_date,
+                sale_price_end_date,
+                quantity_on_hand,
+                quantity_committed,
+                quantity_available,
+                quantity_on_order,
+                is_web_item,
+                department_name,
+                category_name,
+                sub_description_1,
+                sub_description_2,
+                sub_description_3,
+                supplier_name,
+                raw_import
+            )
+            SELECT
+                null as when_processed,  null as reserved_at, now() updated_at, now() as created_at,
+                tempTable.batch_uuid,
+                tempTable.connection_id,
+                tempTable.warehouse_id,
+                tempTable.warehouse_code,
+                tempTable.reorder_point,
+                tempTable.restock_level,
+                tempTable.price,
+                tempTable.cost,
+                tempTable.sale_price,
+                tempTable.sale_price_start_date,
+                tempTable.sale_price_end_date,
+                tempTable.quantity_on_hand,
+                tempTable.quantity_committed,
+                tempTable.quantity_available,
+                tempTable.quantity_on_order,
+                tempTable.is_web_item,
+                tempTable.department_name,
+                tempTable.category_name,
+                tempTable.sub_description_1,
+                tempTable.sub_description_2,
+                tempTable.sub_description_3,
+                tempTable.supplier_name,
+                tempTable.raw_import
+
+            FROM tempTable
+
+            LEFT JOIN modules_rmsapi_products_imports
+                ON modules_rmsapi_products_imports.sku = tempTable.sku
+                AND modules_rmsapi_products_imports.connection_id = tempTable.connection_id
+
+            WHERE modules_rmsapi_products_imports.id IS NULL
+        ");
+
         $this->rmsConnection->update(['products_last_timestamp' => $productsCollection->last()['db_change_stamp']]);
 
         retry(5, function () {
