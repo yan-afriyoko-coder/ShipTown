@@ -104,14 +104,16 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
                 $inventory,
                 $salesRecord->quantity,
                 $salesRecord->type,
-                $salesRecord->uuid
+                $salesRecord->uuid,
+                $salesRecord->transaction_time
             );
         } else {
             $inventoryMovement = InventoryService::adjustQuantity(
                 $inventory,
                 $salesRecord->quantity,
                 $salesRecord->type,
-                $salesRecord->uuid
+                $salesRecord->uuid,
+                $salesRecord->transaction_time
             );
         }
 
