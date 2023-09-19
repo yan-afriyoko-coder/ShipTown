@@ -11,12 +11,17 @@ class Heartbeat extends Model
 {
     protected $fillable = [
         'code',
+        'level',
         'error_message',
-        'expires_at'
+        'expires_at',
     ];
 
     protected $casts = [
         'expires_at' => 'datetime',
+    ];
+
+    protected $attributes = [
+        'level' => 'error',
     ];
 
     public function scopeExpired($query)
