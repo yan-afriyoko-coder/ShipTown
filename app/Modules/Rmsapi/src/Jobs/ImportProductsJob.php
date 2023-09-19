@@ -2,28 +2,18 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
+use App\Abstracts\UniqueJob;
 use App\Models\Heartbeat;
 use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
-class ImportProductsJob implements ShouldQueue, ShouldBeUnique
+class ImportProductsJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
     private RmsapiConnection $rmsConnection;
 
     public string $batch_uuid;
@@ -41,17 +31,8 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
         $this->batch_uuid = Uuid::uuid4()->toString();
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return boolean
-     *
-     * @throws Exception
-     */
     public function handle(): bool
     {
-        logger('RMSAPI Starting ImportProductsJob', ['connection_id' => $this->rmsConnection->getKey()]);
-
         $per_page = 500;
         $roundsLeft = 20;
 
@@ -82,7 +63,8 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
             }
 
             Log::info('Job processing', [
-                'job' => self::class,
+                'job'                   => self::class,
+                'connection_id'         => $this->rmsConnection->getKey(),
                 'warehouse_code'        => $this->rmsConnection->location_id,
                 'records_downloaded'    => count($response->getResult()),
                 'records_to_download'   => $response->asArray()['total'] - count($response->getResult()),
@@ -118,6 +100,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
                 'warehouse_code'        => $this->rmsConnection->location_id,
                 'batch_uuid'            => $this->batch_uuid,
                 'sku'                   => data_get($product, 'item_code'),
+                'name'                  => data_get($product, 'description'),
                 'rms_product_id'        => data_get($product, 'id'),
                 'quantity_on_hand'      => data_get($product, 'quantity_on_hand', 0),
                 'quantity_on_order'     => data_get($product, 'quantity_on_order', 0),
@@ -151,6 +134,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
                 `warehouse_code`        varchar(5) DEFAULT NULL,
                 `batch_uuid`            char(36) DEFAULT NULL,
                 `sku`                   varchar(255) DEFAULT NULL,
+                `name`                  varchar(255) DEFAULT NULL,
                 `rms_product_id`        bigint unsigned DEFAULT NULL,
                 `quantity_on_hand`      decimal(20, 2) DEFAULT NULL,
                 `quantity_on_order`     decimal(20, 2) DEFAULT NULL,
@@ -188,6 +172,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
                 modules_rmsapi_products_imports.reserved_at = null,
                 modules_rmsapi_products_imports.updated_at = now(),
                 modules_rmsapi_products_imports.sku = tempTable.sku,
+                modules_rmsapi_products_imports.name = tempTable.name,
                 modules_rmsapi_products_imports.batch_uuid = tempTable.batch_uuid,
                 modules_rmsapi_products_imports.connection_id = tempTable.connection_id,
                 modules_rmsapi_products_imports.warehouse_id = tempTable.warehouse_id,
@@ -215,8 +200,12 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
 
         DB::statement("
             INSERT INTO modules_rmsapi_products_imports (
-                processed_at, reserved_at, updated_at, created_at,
+                processed_at,
+                reserved_at,
+                updated_at,
+                created_at,
                 sku,
+                name,
                 rms_product_id,
                 batch_uuid,
                 connection_id,
@@ -243,8 +232,12 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
                 raw_import
             )
             SELECT
-                null as processed_at,  null as reserved_at, now() updated_at, now() as created_at,
+                null as processed_at,
+                null as reserved_at,
+                now() as updated_at,
+                now() as created_at,
                 tempTable.sku,
+                tempTable.name,
                 tempTable.rms_product_id,
                 tempTable.batch_uuid,
                 tempTable.connection_id,
@@ -281,16 +274,14 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
 
         $this->rmsConnection->update(['products_last_timestamp' => $productsCollection->last()['db_change_stamp']]);
 
-        retry(5, function () {
-            DB::statement('
-                UPDATE modules_rmsapi_products_imports
-                LEFT JOIN products_aliases
-                    ON modules_rmsapi_products_imports.sku = products_aliases.alias
+        DB::statement('
+            UPDATE modules_rmsapi_products_imports
+            LEFT JOIN products_aliases
+                ON modules_rmsapi_products_imports.sku = products_aliases.alias
 
-                SET modules_rmsapi_products_imports.product_id = products_aliases.product_id
+            SET modules_rmsapi_products_imports.product_id = products_aliases.product_id
 
-                WHERE modules_rmsapi_products_imports.product_id IS NULL
-            ');
-        }, 100);
+            WHERE modules_rmsapi_products_imports.product_id IS NULL
+        ');
     }
 }
