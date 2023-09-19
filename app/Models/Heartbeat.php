@@ -9,14 +9,23 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Heartbeat extends Model
 {
+    const LEVEL_ERROR = 'error';
+    const LEVEL_WARNING = 'warning';
+    const LEVEL_INFO = 'info';
+
     protected $fillable = [
         'code',
+        'level',
         'error_message',
-        'expires_at'
+        'expires_at',
     ];
 
     protected $casts = [
         'expires_at' => 'datetime',
+    ];
+
+    protected $attributes = [
+        'level' => 'error',
     ];
 
     public function scopeExpired($query)

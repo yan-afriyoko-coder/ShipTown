@@ -2,27 +2,17 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
+use App\Abstracts\UniqueJob;
 use App\Models\Heartbeat;
 use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class ImportSalesJob implements ShouldQueue, ShouldBeUnique
+class ImportSalesJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
     private RmsapiConnection $rmsConnection;
 
     public int $uniqueFor = 300;
@@ -39,8 +29,6 @@ class ImportSalesJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): bool
     {
-        Log::debug('RMSAPI Starting ImportSalesJob', ['rmsapi_connection_id' => $this->rmsConnection->getKey()]);
-
         $per_page = 100;
 
         $this->rmsConnection->refresh();
@@ -53,6 +41,26 @@ class ImportSalesJob implements ShouldQueue, ShouldBeUnique
 
         try {
             $response = RmsapiClient::GET($this->rmsConnection, 'api/transaction-entries', $params);
+
+            if ($response->getResult()) {
+                $this->saveImportedRecords($response->getResult());
+            }
+
+            Log::info('Job processing', [
+                'job'                  => self::class,
+                'warehouse_code'       => $this->rmsConnection->location_id,
+                'rmsapi_connection_id' => $this->rmsConnection->getKey(),
+                'records_downloaded'   => count($response->getResult()),
+                'records_to_download'  => $response->asArray()['total'] - count($response->getResult()),
+            ]);
+
+            Heartbeat::query()->updateOrCreate([
+                'code' => 'modules_rmsapi_successful_sales_fetch_warehouseId_'.$this->rmsConnection->location_id,
+            ], [
+                'level' => Heartbeat::LEVEL_ERROR,
+                'error_message' => 'RMSAPI Sales not synced for last hour WarehouseID: '.$this->rmsConnection->location_id,
+                'expires_at' => now()->addHour()
+            ]);
         } catch (GuzzleException $e) {
             Log::warning('RMSAPI ImportSalesJob Failed sales fetch', [
                 'code' => $e->getCode(),
@@ -61,23 +69,6 @@ class ImportSalesJob implements ShouldQueue, ShouldBeUnique
 
             return false;
         }
-
-        if ($response->getResult()) {
-            $this->saveImportedRecords($response->getResult());
-        }
-
-        Log::info('RMSAPI ImportSalesJob Downloaded sales', [
-            'warehouse_code' => $this->rmsConnection->location_id,
-            'count'          => count($response->getResult()),
-            'left'           => $response->asArray()['total'],
-        ]);
-
-        Heartbeat::query()->updateOrCreate([
-            'code' => 'modules_rmsapi_successful_sales_fetch_warehouseId_'.$this->rmsConnection->location_id,
-        ], [
-            'error_message' => 'RMSAPI Sales not synced for last hour WarehouseID: '.$this->rmsConnection->location_id,
-            'expires_at' => now()->addHour()
-        ]);
 
         return true;
     }
