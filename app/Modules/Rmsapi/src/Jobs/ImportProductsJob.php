@@ -186,6 +186,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
                 modules_rmsapi_products_imports.processed_at = null,
                 modules_rmsapi_products_imports.reserved_at = null,
                 modules_rmsapi_products_imports.updated_at = now(),
+                modules_rmsapi_products_imports.sku = tempTable.sku,
                 modules_rmsapi_products_imports.batch_uuid = tempTable.batch_uuid,
                 modules_rmsapi_products_imports.connection_id = tempTable.connection_id,
                 modules_rmsapi_products_imports.warehouse_id = tempTable.warehouse_id,
@@ -214,6 +215,8 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
         DB::statement("
             INSERT INTO modules_rmsapi_products_imports (
                 processed_at, reserved_at, updated_at, created_at,
+                sku,
+                rms_product_id,
                 batch_uuid,
                 connection_id,
                 warehouse_id,
@@ -240,6 +243,8 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
             )
             SELECT
                 null as processed_at,  null as reserved_at, now() updated_at, now() as created_at,
+                tempTable.sku,
+                tempTable.rms_product_id,
                 tempTable.batch_uuid,
                 tempTable.connection_id,
                 tempTable.warehouse_id,
@@ -267,7 +272,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
             FROM tempTable
 
             LEFT JOIN modules_rmsapi_products_imports
-                ON modules_rmsapi_products_imports.sku = tempTable.sku
+                ON modules_rmsapi_products_imports.rms_product_id = tempTable.rms_product_id
                 AND modules_rmsapi_products_imports.connection_id = tempTable.connection_id
 
             WHERE modules_rmsapi_products_imports.id IS NULL
