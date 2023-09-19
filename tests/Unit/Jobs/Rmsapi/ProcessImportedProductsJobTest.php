@@ -74,7 +74,7 @@ class ProcessImportedProductsJobTest extends TestCase
 
         $this->assertNotEmpty($product, 'Product does not exists');
 
-        $exists = RmsapiProductImport::query()->whereNull('when_processed')->exists();
+        $exists = RmsapiProductImport::query()->whereNull('processed_at')->exists();
         $this->assertFalse($exists, 'when_processed is not updated');
 
         $exists = RmsapiProductImport::query()->whereNull('sku')->exists();
