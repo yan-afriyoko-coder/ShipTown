@@ -81,10 +81,11 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
                 $this->saveImportedProducts($response->getResult());
             }
 
-            Log::info('RMSAPI ImportProductsJob Downloaded products', [
-                'warehouse_code' => $this->rmsConnection->location_id,
-                'count'          => count($response->getResult()),
-                'left'           => $response->asArray()['total'],
+            Log::info('Job processing', [
+                'job' => self::class,
+                'warehouse_code'        => $this->rmsConnection->location_id,
+                'records_downloaded'    => count($response->getResult()),
+                'records_to_download'   => $response->asArray()['total'] - count($response->getResult()),
             ]);
 
             $roundsLeft--;
