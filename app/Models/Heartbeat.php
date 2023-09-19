@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Heartbeat extends Model
 {
+    const LEVEL_ERROR = 'error';
+    const LEVEL_WARNING = 'warning';
+    const LEVEL_INFO = 'info';
+
     protected $fillable = [
         'code',
         'level',
