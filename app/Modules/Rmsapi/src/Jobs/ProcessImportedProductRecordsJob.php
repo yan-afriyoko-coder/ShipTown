@@ -27,7 +27,7 @@ class ProcessImportedProductRecordsJob extends UniqueJob
 
             $hasRecordsToProcess = RmsapiProductImport::query()
                 ->whereNull('reserved_at')
-                ->whereNull('when_processed')
+                ->whereNull('processed_at')
                 ->exists();
 
             $maxRunCount--;
@@ -42,7 +42,7 @@ class ProcessImportedProductRecordsJob extends UniqueJob
 
         $updatedRecords = RmsapiProductImport::query()
             ->whereNull('reserved_at')
-            ->whereNull('when_processed')
+            ->whereNull('processed_at')
             ->orderByRaw('id ASC')
             ->limit($batch_size)
             ->update(['reserved_at' => $reservationTime]);
@@ -55,7 +55,7 @@ class ProcessImportedProductRecordsJob extends UniqueJob
 
         $records = RmsapiProductImport::query()
             ->where(['reserved_at' => $reservationTime])
-            ->whereNull('when_processed')
+            ->whereNull('processed_at')
             ->orderBy('id')
             ->get();
 
@@ -100,7 +100,7 @@ class ProcessImportedProductRecordsJob extends UniqueJob
         $this->importPricing($importedProduct, $product);
 
         $importedProduct->update([
-            'when_processed' => now(),
+            'processed_at' => now(),
             'product_id'     => $product->id,
             'sku'            => $attributes['sku'],
         ]);

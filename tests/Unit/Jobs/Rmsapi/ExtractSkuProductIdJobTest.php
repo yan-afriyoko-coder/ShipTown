@@ -32,7 +32,7 @@ class ExtractSkuProductIdJobTest extends TestCase
         RmsapiProductImport::factory()->count(5)->create([
             'sku'            => null,
             'product_id'     => null,
-            'when_processed' => null,
+            'processed_at'   => null,
         ]);
 
         // do
@@ -43,7 +43,7 @@ class ExtractSkuProductIdJobTest extends TestCase
         // assert
         $this->assertFalse(
             RmsapiProductImport::query()
-                ->whereNotNull('when_processed')
+                ->whereNotNull('processed_at')
                 ->whereNull('sku')
                 ->exists(),
             'sku column is not populated'
@@ -51,7 +51,7 @@ class ExtractSkuProductIdJobTest extends TestCase
 
         $this->assertFalse(
             RmsapiProductImport::query()
-                ->whereNotNull('when_processed')
+                ->whereNotNull('processed_at')
                 ->whereNull('product_id')
                 ->exists(),
             'product_id column is not populated'

@@ -116,7 +116,8 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
                 'warehouse_id'          => $this->rmsConnection->warehouse_id,
                 'warehouse_code'        => $this->rmsConnection->location_id,
                 'batch_uuid'            => $this->batch_uuid,
-                'sku'                   => data_get($product, 'item_code', ''),
+                'sku'                   => data_get($product, 'item_code'),
+                'rms_product_id'        => data_get($product, 'id'),
                 'quantity_on_hand'      => data_get($product, 'quantity_on_hand', 0),
                 'quantity_on_order'     => data_get($product, 'quantity_on_order', 0),
                 'quantity_available'    => data_get($product, 'quantity_available', 0),
@@ -149,6 +150,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
                 `warehouse_code`        varchar(5) DEFAULT NULL,
                 `batch_uuid`            char(36) DEFAULT NULL,
                 `sku`                   varchar(255) DEFAULT NULL,
+                `rms_product_id`        bigint unsigned DEFAULT NULL,
                 `quantity_on_hand`      decimal(20, 2) DEFAULT NULL,
                 `quantity_on_order`     decimal(20, 2) DEFAULT NULL,
                 `quantity_available`    decimal(20, 2) DEFAULT NULL,
@@ -178,10 +180,10 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
         DB::statement("
             UPDATE modules_rmsapi_products_imports
             INNER JOIN tempTable
-                ON modules_rmsapi_products_imports.sku = tempTable.sku
+                ON modules_rmsapi_products_imports.rms_product_id = tempTable.rms_product_id
                 AND modules_rmsapi_products_imports.connection_id = tempTable.connection_id
             SET
-                modules_rmsapi_products_imports.when_processed = null,
+                modules_rmsapi_products_imports.processed_at = null,
                 modules_rmsapi_products_imports.reserved_at = null,
                 modules_rmsapi_products_imports.updated_at = now(),
                 modules_rmsapi_products_imports.batch_uuid = tempTable.batch_uuid,
@@ -211,7 +213,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
 
         DB::statement("
             INSERT INTO modules_rmsapi_products_imports (
-                when_processed, reserved_at, updated_at, created_at,
+                processed_at, reserved_at, updated_at, created_at,
                 batch_uuid,
                 connection_id,
                 warehouse_id,
@@ -237,7 +239,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
                 raw_import
             )
             SELECT
-                null as when_processed,  null as reserved_at, now() updated_at, now() as created_at,
+                null as processed_at,  null as reserved_at, now() updated_at, now() as created_at,
                 tempTable.batch_uuid,
                 tempTable.connection_id,
                 tempTable.warehouse_id,
