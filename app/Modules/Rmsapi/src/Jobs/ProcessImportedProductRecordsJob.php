@@ -20,7 +20,6 @@ class ProcessImportedProductRecordsJob extends UniqueJob
     public function handle(): bool
     {
         $batch_size = 200;
-        $maxRunCount = 20;
 
         do {
             $this->processImportedProducts($batch_size);
@@ -30,8 +29,8 @@ class ProcessImportedProductRecordsJob extends UniqueJob
                 ->whereNull('processed_at')
                 ->exists();
 
-            $maxRunCount--;
-        } while ($hasRecordsToProcess and $maxRunCount > 0);
+            usleep(200000); // 0.1 sec
+        } while ($hasRecordsToProcess);
 
         return true;
     }
