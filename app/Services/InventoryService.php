@@ -11,7 +11,7 @@ class InventoryService
 {
     public static function sellProduct(Inventory $inventory, float $quantityDelta, string $description, string $unique_reference_id = null, Carbon $occurred_at = null): InventoryMovement
     {
-        return DB::transaction(function () use ($inventory, $quantityDelta, $description, $unique_reference_id) {
+        return DB::transaction(function () use ($inventory, $quantityDelta, $description, $unique_reference_id, $occurred_at) {
             /** @var InventoryMovement $inventoryMovement */
             $inventoryMovement = InventoryMovement::query()->create([
                 'custom_unique_reference_id' => $unique_reference_id,
@@ -38,10 +38,11 @@ class InventoryService
 
     public static function adjustQuantity(Inventory $inventory, float $quantityDelta, string $description, string $unique_reference_id = null, Carbon $occurred_at = null): InventoryMovement
     {
-        return DB::transaction(function () use ($inventory, $quantityDelta, $description, $unique_reference_id) {
+        return DB::transaction(function () use ($inventory, $quantityDelta, $description, $unique_reference_id, $occurred_at) {
             /** @var InventoryMovement $inventoryMovement */
             $inventoryMovement = InventoryMovement::query()->create([
                 'custom_unique_reference_id' => $unique_reference_id,
+                'occurred_at' => $occurred_at ?? now(),
                 'type' => 'manual_adjustment',
                 'inventory_id' => $inventory->id,
                 'product_id' => $inventory->product_id,
@@ -64,10 +65,11 @@ class InventoryService
 
     public static function stocktake(Inventory $inventory, float $newQuantity, string $unique_reference_id = null, Carbon $occurred_at = null): InventoryMovement
     {
-        return DB::transaction(function () use ($inventory, $newQuantity, $unique_reference_id) {
+        return DB::transaction(function () use ($inventory, $newQuantity, $unique_reference_id, $occurred_at) {
             /** @var InventoryMovement $inventoryMovement */
             $inventoryMovement = InventoryMovement::query()->create([
                 'custom_unique_reference_id' => $unique_reference_id,
+                'occurred_at' => $occurred_at ?? now(),
                 'type' => 'stocktake',
                 'description' => 'stocktake',
                 'inventory_id' => $inventory->id,
