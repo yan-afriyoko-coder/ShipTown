@@ -50,7 +50,7 @@ class OrderResource extends JsonResource
             'age_in_days' => $this->age_in_days,
 
             'activities' => ActivityResource::collection($this->whenLoaded('activities')),
-            'shipping_address' => new JsonResource($this->whenLoaded('shippingAddress')),
+            'shipping_address' => OrderAddressResource::make($this->whenLoaded('shippingAddress')),
             'order_shipments' => new JsonResource($this->whenLoaded('orderShipments')),
             'order_products' => new JsonResource($this->whenLoaded('orderProducts')),
             'packer' => new UserResource($this->whenLoaded('packer')),
