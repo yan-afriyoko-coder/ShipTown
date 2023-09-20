@@ -79,7 +79,10 @@
         </b-modal>
 
         <b-modal id="filtersModal" ref="filtersModal" no-fade hide-footer hide-header
-                 @hidden="setFocusOnBarcodeInput(100)">
+                 @shown="setFocusElementById(100,'stocktake-input', true, true)"
+                 @hidden="modalHidden">
+                <stocktake-input></stocktake-input>
+                <hr>
                 <div class="form-group">
                     <label class="form-label">Status</label>
                     <select id="selectStatus" class="form-control" @change="changeStatus" v-model="order.status_code">
@@ -205,6 +208,11 @@
             },
 
             methods: {
+                modalHidden() {
+                    this.setFocusOnBarcodeInput(100);
+                    this.reloadData();
+                },
+
                 reloadData() {
                     this.loadOrder();
                     this.loadOrderProducts();
