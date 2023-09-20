@@ -2,6 +2,7 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
+use App\Abstracts\UniqueJob;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Models\Order;
@@ -16,27 +17,12 @@ use App\Modules\Rmsapi\src\Models\RmsapiShippingImports;
 use App\Services\InventoryService;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Ramsey\Uuid\Uuid;
 
-class ImportShippingsJob implements ShouldQueue, ShouldBeUnique
+class ImportShippingsJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
     private RmsapiConnection $rmsapiConnection;
-
-    private string $batch_uuid;
-    private OrderProduct $orderProduct;
 
     public int $uniqueFor = 300;
 
@@ -48,7 +34,6 @@ class ImportShippingsJob implements ShouldQueue, ShouldBeUnique
     public function __construct(int $rmsapiConnectionId)
     {
         $this->rmsapiConnection = RmsapiConnection::find($rmsapiConnectionId);
-        $this->batch_uuid = Uuid::uuid4()->toString();
     }
 
     public function handle(): bool
@@ -65,7 +50,8 @@ class ImportShippingsJob implements ShouldQueue, ShouldBeUnique
 
             $records = $response->getResult();
 
-            Log::info('RMSAPI ImportShippingsJob Downloaded shippings', [
+            Log::info('Job processing', [
+                'job'            => self::class,
                 'warehouse_code' => $this->rmsapiConnection->location_id,
                 'count'          => count($response->getResult()),
                 'left'           => $response->asArray()['total'],
