@@ -100,6 +100,7 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
             ->where('warehouse_id', $salesRecord->warehouse_id)
             ->first();
 
+        ray('$salesRecord->transaction_time', $salesRecord->transaction_time);
         if ($salesRecord->type === 'rms_sale') {
             $inventoryMovement = InventoryService::sellProduct(
                 $inventory,

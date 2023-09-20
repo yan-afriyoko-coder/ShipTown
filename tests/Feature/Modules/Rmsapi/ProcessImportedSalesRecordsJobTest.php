@@ -27,6 +27,8 @@ class ProcessImportedSalesRecordsJobTest extends TestCase
 
         ProcessImportedSalesRecordsJob::dispatchSync();
 
+        ray(InventoryMovement::query()->get()->toArray());
+
         // assert
         $product = Product::findBySKU($saleRecord->sku);
 
