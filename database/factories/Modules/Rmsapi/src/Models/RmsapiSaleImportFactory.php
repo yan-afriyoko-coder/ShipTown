@@ -5,6 +5,7 @@ namespace Database\Factories\Modules\Rmsapi\src\Models;
 use App\Models\Product;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RmsapiSaleImportFactory extends Factory
@@ -27,6 +28,7 @@ class RmsapiSaleImportFactory extends Factory
             'type' => 'rms_sale',
             'sku' => $product->sku,
             'quantity' => $this->faker->numberBetween(1, 100) * -1,
+            'transaction_time' => $this->faker->dateTime,
             'transaction_number' => $this->faker->numberBetween(100000, 200000),
             'transaction_entry_id' => $this->faker->numberBetween(700000, 900000),
             'comment' => ''

@@ -7,6 +7,7 @@ use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
 use App\Services\InventoryService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
@@ -99,13 +100,14 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
             ->where('warehouse_id', $salesRecord->warehouse_id)
             ->first();
 
+        ray('$salesRecord->transaction_time', $salesRecord->transaction_time);
         if ($salesRecord->type === 'rms_sale') {
             $inventoryMovement = InventoryService::sellProduct(
                 $inventory,
                 $salesRecord->quantity,
                 $salesRecord->type,
                 $salesRecord->uuid,
-                $salesRecord->transaction_time
+                Carbon::createFromTimeString($salesRecord->transaction_time)
             );
         } else {
             $inventoryMovement = InventoryService::adjustQuantity(
@@ -113,7 +115,7 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
                 $salesRecord->quantity,
                 $salesRecord->type,
                 $salesRecord->uuid,
-                $salesRecord->transaction_time
+                Carbon::createFromTimeString($salesRecord->transaction_time)
             );
         }
 
