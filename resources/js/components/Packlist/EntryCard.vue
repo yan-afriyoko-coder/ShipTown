@@ -27,14 +27,13 @@
                     <div>
                         shipped: <b>{{ dashIfZero(Number(entry['quantity_shipped'])) }}</b>
                     </div>
-                    <div>
-                        inventory: <b>{{ dashIfZero(Number(productInventory)) }}</b>
+                    <div v-bind:class="{ 'bg-warning': Number(entry['inventory_source_quantity']) <= 0 }">
+                        inventory: <b>{{ dashIfZero(Number(entry['inventory_source_quantity'])) }}</b>
                     </div>
                 </div>
                 <div class="col-3 text-center" v-bind:class="{ 'bg-warning': Number(entry['quantity_ordered']) !== 1 }">
                     <small>to ship</small>
                     <h3>{{ dashIfZero(Number(entry['quantity_to_ship'])) }}</h3>
-<!--                    <h3>{{ dashIfZero(Number(entry['quantity_ordered']) - Number(entry['quantity_shipped'])) }}</h3>-->
                 </div>
                 <div class="col-3 text-center">
                     <small>shelf</small>
@@ -53,12 +52,6 @@
             entry: Object,
         },
         computed: {
-            productInventory() {
-                if (this.entry['inventory_source_quantity']) {
-                  return this.entry['inventory_source_quantity'];
-                }
-                return this.entry['product'] ? this.entry['product']['quantity'] : 0;
-            },
             productSku() {
                return this.entry['product'] ? this.entry['product']['sku'] : '';
             },
