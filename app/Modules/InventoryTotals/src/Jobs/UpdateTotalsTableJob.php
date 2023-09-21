@@ -13,7 +13,7 @@ class UpdateTotalsTableJob extends UniqueJob
         do {
             $recordsUpdated = $this->recalculateTotals();
 
-            Log::debug('Processing job', ['job' => self::class, 'records_updated' => $recordsUpdated]);
+            Log::debug('Job processing', ['job' => self::class, 'records_updated' => $recordsUpdated]);
 
             usleep(100000); // 0.1 sec
         } while ($recordsUpdated > 0);
