@@ -9,7 +9,7 @@ use App\BaseModel;
  */
 class Configuration extends BaseModel
 {
-    protected $table = 'modules_inventory_movements_configuration';
+    protected $table = 'modules_inventory_movements_configurations';
 
     protected $fillable = [
         'quantity_before_job_last_movement_id_checked',
