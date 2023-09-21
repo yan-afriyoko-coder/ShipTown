@@ -3,6 +3,7 @@
 namespace App\Modules\InventoryMovements\src\Jobs;
 
 use App\Abstracts\UniqueJob;
+use App\Modules\InventoryMovements\src\Models\Configuration;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +13,12 @@ class QuantityBeforeJob extends UniqueJob
     public function handle()
     {
         $maxRounds = 500;
-        $minMovementId = null;
+
+        /** @var Configuration $configuration */
+        $configuration = Configuration::query()->firstOrCreate();
+
+        $minMovementId = $configuration->quantity_before_job_last_movement_id_checked;
+        $maxMovementId = DB::table('inventory_movements')->max('id') ?? 0;
 
         do {
             $maxRounds--;
@@ -22,6 +28,7 @@ class QuantityBeforeJob extends UniqueJob
             }
 
             if ($minMovementId === null) {
+                $configuration->update(['quantity_before_job_last_movement_id_checked' => $maxMovementId]);
                 return;
             }
 
