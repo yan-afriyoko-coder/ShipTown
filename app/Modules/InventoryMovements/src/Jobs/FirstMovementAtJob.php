@@ -4,6 +4,7 @@ namespace App\Modules\InventoryMovements\src\Jobs;
 
 use App\Abstracts\UniqueJob;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class FirstMovementAtJob extends UniqueJob
 {
@@ -15,13 +16,12 @@ class FirstMovementAtJob extends UniqueJob
             $recordsUpdated = DB::update('
                 WITH tempTable AS (
                     SELECT DISTINCT inventory.id as inventory_id
-                    FROM  inventory
+                    FROM inventory
 
-                    INNER JOIN inventory_movements
-                        ON inventory_movements.inventory_id = inventory.id
-                        AND inventory_movements.created_at < IFNULL(inventory.first_movement_at, now())
+                    WHERE
+                        inventory.last_movement_id IS NOT NULL
+                        AND inventory.first_movement_at IS NULL
 
-                    WHERE inventory.last_movement_id IS NOT NULL
                     LIMIT 500
                 )
 
@@ -38,7 +38,9 @@ class FirstMovementAtJob extends UniqueJob
                     )
             ');
             sleep(1);
+
             $maxRounds--;
+            Log::debug('Job processing', ['job' => self::class, 'records_updated' => $recordsUpdated]);
         } while ($recordsUpdated > 0 and $maxRounds > 0);
     }
 }
