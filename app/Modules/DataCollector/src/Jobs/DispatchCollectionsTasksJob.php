@@ -25,8 +25,6 @@ class DispatchCollectionsTasksJob implements ShouldQueue
 
     public function handle()
     {
-        Log::debug('EnsureCorrectlyArchived job started');
-
         DataCollection::withTrashed()
             ->whereNotNull('currently_running_task')
             ->whereDoesntHave('records', function ($query) {
@@ -57,7 +55,5 @@ class DispatchCollectionsTasksJob implements ShouldQueue
                     }
                 });
             });
-
-        Log::info('EnsureCorrectlyArchived job finished');
     }
 }
