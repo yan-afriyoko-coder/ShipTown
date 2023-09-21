@@ -2,7 +2,6 @@
 
 namespace App\Modules\InventoryMovements\src\Listeners;
 
-use App\Modules\InventoryMovements\src\Jobs\FirstMovementAtJob;
 use App\Modules\InventoryMovements\src\Jobs\PreviousMovementIdJob;
 use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeBasicJob;
 use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeJob;
@@ -16,6 +15,5 @@ class EveryTenMinutesEventListener
         QuantityBeforeJob::dispatch();
         PreviousMovementIdJob::dispatch();
         QuantityBeforeStocktakeJob::dispatch();
-        FirstMovementAtJob::dispatch();
     }
 }
