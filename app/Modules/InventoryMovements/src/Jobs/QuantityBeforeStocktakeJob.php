@@ -27,7 +27,10 @@ class QuantityBeforeStocktakeJob extends UniqueJob
 
                 Log::info('Job processing', [
                     'job' => self::class,
-                    'records_updated' => $recordsUpdated
+                    'records_updated' => $recordsUpdated,
+                    'min_movement_id' => $minMovementId,
+                    'max_movement_id' => $maxMovementId,
+                    'last_movement_id' => $lastMovementId,
                 ]);
             } while ($recordsUpdated > 0);
 
