@@ -30,7 +30,7 @@ class UpdateTotalsTableJob extends UniqueJob
                     inventory_totals.product_id, NOW() as calculated_at
                 FROM inventory_totals
 
-                WHERE calculated_at IS NULL
+                WHERE (calculated_at IS NULL OR calculated_at < max_inventory_updated_at)
 
                 LIMIT 500;
         ");
