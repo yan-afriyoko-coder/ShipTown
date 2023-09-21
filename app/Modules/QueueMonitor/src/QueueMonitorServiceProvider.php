@@ -6,6 +6,7 @@ use App\Events\EveryHourEvent;
 use App\Modules\BaseModuleServiceProvider;
 use App\Modules\QueueMonitor\src\Dispatcher\DispatchWatcher;
 use Illuminate\Bus\Dispatcher;
+use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Queue\Events\JobProcessing;
 
@@ -50,6 +51,10 @@ class QueueMonitorServiceProvider extends BaseModuleServiceProvider
 
         JobProcessed::class => [
             Listeners\JobProcessedListener::class,
+        ],
+
+        JobFailed::class => [
+            Listeners\JobFailedListener::class,
         ],
     ];
 

@@ -17,8 +17,6 @@ class QuantityBeforeJob extends UniqueJob
         do {
             $maxRounds--;
 
-            Log::debug('QuantityBeforeJob round starting', ['rounds_left' => $maxRounds]);
-
             if (($minMovementId === null) or ($maxRounds % 10 === 0)) {
                 $minMovementId = $this->getMinMovementId($minMovementId ?? 0);
             }
@@ -90,7 +88,10 @@ class QuantityBeforeJob extends UniqueJob
                 WHERE inventory_movements.type != "stocktake";
             ');
 
-            Log::debug('QuantityBeforeJob round finished', ['rounds_left' => $maxRounds, 'recordsUpdated' => $recordsUpdated]);
+            Log::info('Job processing', [
+                'job' => self::class,
+                'recordsUpdated' => $recordsUpdated
+            ]);
 
             usleep(400000); // 0.4 seconds
         } while ($recordsUpdated > 0 && $maxRounds > 0);
