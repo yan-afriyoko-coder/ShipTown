@@ -4,6 +4,7 @@ namespace App\Modules\QueueMonitor\src\Listeners;
 
 use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
 use Illuminate\Queue\Events\JobProcessed;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class JobProcessedListener
@@ -16,6 +17,10 @@ class JobProcessedListener
             return;
         }
 
-        Log::info('Job processed', ['job' => $jobName]);
+        $key = implode('-', ['job_start_time', $event->job->uuid()]);
+
+        $jobStartTime = Cache::get($key);
+
+        Log::info('Job processed', ['job' => $jobName, 'duration' => now()->diffInSeconds($jobStartTime)]);
     }
 }
