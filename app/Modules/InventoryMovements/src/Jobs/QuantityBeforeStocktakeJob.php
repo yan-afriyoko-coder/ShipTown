@@ -16,8 +16,6 @@ class QuantityBeforeStocktakeJob extends UniqueJob
         do {
             $maxRounds--;
 
-            Log::debug('QuantityBeforeStocktakeJob round starting', ['rounds_left' => $maxRounds]);
-
             Schema::dropIfExists('tempTable');
 
             DB::statement('
@@ -51,8 +49,10 @@ class QuantityBeforeStocktakeJob extends UniqueJob
                     inventory_movements.updated_at = NOW()
             ');
 
-
-            Log::debug('QuantityBeforeStocktakeJob round finished', ['rounds_left' => $maxRounds, 'recordsUpdated' => $recordsUpdated]);
+            Log::info('Job processing', [
+                'job' => self::class,
+                'recordsUpdated' => $recordsUpdated
+            ]);
 
             sleep(1);
         } while ($recordsUpdated > 0 && $maxRounds > 0);

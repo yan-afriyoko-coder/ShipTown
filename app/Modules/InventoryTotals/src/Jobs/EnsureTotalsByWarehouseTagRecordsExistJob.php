@@ -32,7 +32,7 @@ class EnsureTotalsByWarehouseTagRecordsExistJob extends UniqueJob
 
             $this->insertMissingRecords($minID, $maxID);
 
-            Log::debug('Processing job', [
+            Log::debug('Job processing', [
                 'job' => self::class,
                 'records created' => DB::table('tempTable')->count(),
                 'minID' => $minID,
