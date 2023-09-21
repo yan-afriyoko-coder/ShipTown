@@ -3,6 +3,7 @@
 namespace App\Modules\InventoryMovements\src\Jobs;
 
 use App\Abstracts\UniqueJob;
+use App\Models\InventoryMovement;
 use App\Modules\InventoryMovements\src\Models\Configuration;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -12,24 +13,37 @@ class QuantityBeforeJob extends UniqueJob
 {
     public function handle()
     {
-        $maxRounds = 500;
-
         /** @var Configuration $configuration */
         $configuration = Configuration::query()->firstOrCreate();
+        $lastMovementId = data_get(InventoryMovement::query()->latest('id')->first('id'), 'id', 0);
 
-        $minMovementId = data_get($configuration, 'quantity_before_job_last_movement_id_checked', 0);
-        $maxMovementId = DB::table('inventory_movements')->max('id') ?? 0;
+        $minMovementId = $configuration->quantity_before_job_last_movement_id_checked ?? 0;
 
         do {
-            $maxRounds--;
+            $maxMovementId = min($minMovementId + 10000, $lastMovementId);
 
-            if ($maxRounds % 10 === 0) {
-                $minMovementId = $this->getMinMovementId($minMovementId, $maxMovementId);
-            }
+            do {
+                $recordsUpdated = $this->getRecordsUpdated($minMovementId, $maxMovementId);
 
-            Schema::dropIfExists('tempTable');
+                Log::info('Job processing', [
+                    'job' => self::class,
+                    'records_updated' => $recordsUpdated
+                ]);
+            } while ($recordsUpdated > 0);
 
-            DB::statement('
+            $configuration->update(['quantity_before_job_last_movement_id_checked' => $maxMovementId]);
+
+            $minMovementId = $maxMovementId;
+
+            usleep(400000); // 0.4 seconds
+        } while ($minMovementId < $lastMovementId);
+    }
+
+    private function getRecordsUpdated(int $minMovementId, int $maxMovementId): int
+    {
+        Schema::dropIfExists('tempTable');
+
+        DB::statement('
                 CREATE TEMPORARY TABLE tempTable AS
                     SELECT
                         previous_movement.type as previous_movement_type,
@@ -69,13 +83,13 @@ class QuantityBeforeJob extends UniqueJob
                             WHERE inventory_movements.id BETWEEN ? AND ?
                             AND inventory_movements.type != "stocktake"
 
-                            ORDER BY inventory_movements.id asc
+                            ORDER BY inventory_movements.id
                             LIMIT 1
                         )
-                    ORDER BY inventory_movements.inventory_id asc, inventory_movements.id asc;
+                    ORDER BY inventory_movements.inventory_id, inventory_movements.id;
             ', [$minMovementId, $maxMovementId]);
 
-            $recordsUpdated = DB::update('
+        $recordsUpdated = DB::update('
                 UPDATE inventory_movements
 
                 INNER JOIN tempTable
@@ -89,47 +103,6 @@ class QuantityBeforeJob extends UniqueJob
 
                 WHERE inventory_movements.type != "stocktake";
             ');
-
-            Log::info('Job processing', [
-                'job' => self::class,
-                'recordsUpdated' => $recordsUpdated
-            ]);
-
-            if ($recordsUpdated === 0) {
-                $configuration->update(['quantity_before_job_last_movement_id_checked' => $maxMovementId]);
-                return;
-            }
-
-            usleep(400000); // 0.4 seconds
-        } while ($recordsUpdated > 0 && $maxRounds > 0);
-    }
-
-    private function getMinMovementId(int $minMovementId, int $maxMovementId): mixed
-    {
-        $firstIncorrectMovementRecord = DB::select('
-            SELECT
-                inventory_movements.created_at as created_at,
-                inventory_movements.id as movement_id,
-                inventory_movements.type as type,
-                inventory_movements.inventory_id as inventory_id,
-                previous_movement.quantity_after - inventory_movements.quantity_before as quantity_before_delta
-            FROM inventory_movements
-
-            INNER JOIN inventory as inventory
-                ON inventory.id = inventory_movements.inventory_id
-                AND inventory_movements.created_at >= IFNULL(inventory.last_counted_at, inventory.created_at)
-
-            INNER JOIN inventory_movements as previous_movement
-                 ON previous_movement.id = inventory_movements.previous_movement_id
-                 AND inventory_movements.quantity_before != previous_movement.quantity_after
-
-            WHERE inventory_movements.id BETWEEN ? AND ?
-            AND inventory_movements.type != "stocktake"
-
-            ORDER BY inventory_movements.id asc
-            LIMIT 1
-        ', [$minMovementId, $maxMovementId]);
-
-        return data_get($firstIncorrectMovementRecord, '0.movement_id');
+        return $recordsUpdated;
     }
 }

@@ -6,6 +6,8 @@ use App\BaseModel;
 
 /**
  * @property integer $quantity_before_job_last_movement_id_checked
+ * @property integer $quantity_before_basic_job_last_movement_id_checked
+ * @property integer $quantity_before_stocktake_job_last_movement_id_checked
  */
 class Configuration extends BaseModel
 {
@@ -13,9 +15,13 @@ class Configuration extends BaseModel
 
     protected $fillable = [
         'quantity_before_job_last_movement_id_checked',
+        'quantity_before_basic_job_last_movement_id_checked',
+        'quantity_before_stocktake_job_last_movement_id_checked',
     ];
 
     protected $casts = [
         'quantity_before_job_last_movement_id_checked' => 'integer',
+        'quantity_before_basic_job_last_movement_id_checked' => 'integer',
+        'quantity_before_stocktake_job_last_movement_id_checked' => 'integer',
     ];
 }
