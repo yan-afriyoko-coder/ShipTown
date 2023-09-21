@@ -27,11 +27,6 @@ class QuantityBeforeJob extends UniqueJob
                 $minMovementId = $this->getMinMovementId($minMovementId, $maxMovementId);
             }
 
-            if ($minMovementId === 0) {
-                $configuration->update(['quantity_before_job_last_movement_id_checked' => $maxMovementId]);
-                return;
-            }
-
             Schema::dropIfExists('tempTable');
 
             DB::statement('
@@ -99,6 +94,11 @@ class QuantityBeforeJob extends UniqueJob
                 'job' => self::class,
                 'recordsUpdated' => $recordsUpdated
             ]);
+
+            if ($recordsUpdated === 0) {
+                $configuration->update(['quantity_before_job_last_movement_id_checked' => $maxMovementId]);
+                return;
+            }
 
             usleep(400000); // 0.4 seconds
         } while ($recordsUpdated > 0 && $maxRounds > 0);

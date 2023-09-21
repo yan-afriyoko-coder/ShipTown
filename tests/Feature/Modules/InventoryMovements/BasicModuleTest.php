@@ -56,6 +56,7 @@ class BasicModuleTest extends TestCase
         ]);
 
         ray()->showQueries();
+
         QuantityBeforeJob::dispatch();
 
         $this->assertDatabaseHas('inventory_movements', [

@@ -6,9 +6,7 @@ use App;
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\Heartbeat;
-use App\Models\Inventory;
 use App\Models\InventoryMovement;
-use App\Models\InventoryTotal;
 use App\Models\Module;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -49,15 +47,17 @@ trait ResetsDatabase
 
         Activity::query()->forceDelete();
 
-        Product::query()->forceDelete();
-        Inventory::query()->forceDelete();
-        InventoryTotal::query()->forceDelete();
+        App\Models\Product::query()->forceDelete();
+        App\Models\Inventory::query()->forceDelete();
+
         App\Modules\InventoryTotals\src\Models\Configuration::query()->forceDelete();
+        App\Modules\InventoryTotals\src\Models\InventoryTotal::query()->forceDelete();
         App\Modules\InventoryTotals\src\Models\InventoryTotalByWarehouseTag::query()->forceDelete();
-        ProductAlias::query()->forceDelete();
-        OrderProduct::query()->forceDelete();
-        Order::query()->forceDelete();
-        OrderStatus::query()->forceDelete();
+        App\Modules\InventoryMovements\src\Models\Configuration::query()->forceDelete();
+        App\Models\ProductAlias::query()->forceDelete();
+        App\Models\OrderProduct::query()->forceDelete();
+        App\Models\Order::query()->forceDelete();
+        App\Models\OrderStatus::query()->forceDelete();
         Configuration::query()->forceDelete();
         Tag::query()->forceDelete();
         OrderProductTotal::query()->forceDelete();
@@ -75,8 +75,8 @@ trait ResetsDatabase
         Api2cartConnection::query()->forceDelete();
 
         RmsapiConnection::query()->forceDelete();
-        DataCollection::query()->forceDelete();
-        DataCollectionRecord::query()->forceDelete();
+        App\Models\DataCollection::query()->forceDelete();
+        App\Models\DataCollectionRecord::query()->forceDelete();
 
         MagentoProduct::query()->forceDelete();
         MagentoConnection::query()->forceDelete();
@@ -86,16 +86,16 @@ trait ResetsDatabase
         ModulesService::updateModulesTable();
 
         DB::table('modules_queue_monitor_jobs')->delete();
-        InventoryMovement::query()->forceDelete();
+        App\Models\InventoryMovement::query()->forceDelete();
         User::query()->forceDelete();
-        Warehouse::query()->forceDelete();
+        App\Models\Warehouse::query()->forceDelete();
         Session::query()->forceDelete();
 
         // now re-register all the roles and permissions (clears cache and reloads relations)
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
 
-        \App\Models\Configuration::query()->forceDelete();
-        \App\Models\Configuration::query()->updateOrCreate([], ['disable_2fa' => true]);
+        App\Models\Configuration::query()->forceDelete();
+        App\Models\Configuration::query()->updateOrCreate([], ['disable_2fa' => true]);
 
         InventoryReservationsServiceProvider::enableModule();
     }
