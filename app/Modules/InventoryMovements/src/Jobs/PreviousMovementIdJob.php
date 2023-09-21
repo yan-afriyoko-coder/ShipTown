@@ -14,8 +14,6 @@ class PreviousMovementIdJob extends UniqueJob
         $maxRounds = 100;
 
         do {
-            Log::debug('PreviousMovementIdJob', ['rounds_left' => $maxRounds]);
-
             Schema::dropIfExists('tempTable');
 
             DB::statement('
@@ -46,8 +44,8 @@ class PreviousMovementIdJob extends UniqueJob
                     inventory_movements.updated_at = NOW()
             ');
 
-            Log::debug('PreviousMovementIdJob round finished', [
-                'rounds_left' => $maxRounds,
+            Log::info('Job processing', [
+                'job' => self::class,
                 'recordsUpdated' => $recordsUpdated
             ]);
 

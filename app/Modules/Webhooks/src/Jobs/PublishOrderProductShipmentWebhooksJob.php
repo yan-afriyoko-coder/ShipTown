@@ -29,8 +29,6 @@ class PublishOrderProductShipmentWebhooksJob extends UniqueJob
 
     private function publishOrderProductShipmentsWebhooks(int $warehouse_id)
     {
-        Log::debug('Publishing OrderProductShipment webhooks for warehouse_id: ' . $warehouse_id);
-
         $query = PendingWebhook::query()
             ->selectRaw('modules_webhooks_pending_webhooks.*')
             ->leftJoin('orders_products_shipments as ops', 'ops.id', '=', 'modules_webhooks_pending_webhooks.model_id')
@@ -57,6 +55,15 @@ class PublishOrderProductShipmentWebhooksJob extends UniqueJob
                     'published_at' => now(),
                     'sns_message_id' => $response->get('MessageId'),
                 ]);
+
+                Log::info('Job processing', [
+                    'job' => self::class,
+                    'warehouse_id' => $warehouse_id,
+                    'records_created' => $chunk->count(),
+                    'sns_message_id' => $response->get('MessageId'),
+                    'minID' => $chunk->first()->getKey(),
+                    'maxID' => $chunk->last()->getKey(),
+                ]);
             } catch (Exception $exception) {
                 PendingWebhook::query()
                     ->whereIn('id', $pendingWebhookIds)
@@ -72,8 +79,6 @@ class PublishOrderProductShipmentWebhooksJob extends UniqueJob
 
     private function publishRecords(Collection $chunk)
     {
-        Log::debug('Publishing OrderProductShipment webhooks for chunk: ' . $chunk->pluck('id')->toJson());
-
         $records = OrderProductShipmentResource::collection(
             OrderProductShipment::query()
                 ->whereIn('id', $chunk->pluck('model_id'))
