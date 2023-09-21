@@ -32,7 +32,7 @@ class UpdateTotalsByWarehouseTagTableJob extends UniqueJob
                     NOW() as calculated_at
                 FROM inventory_totals_by_warehouse_tag
 
-                WHERE calculated_at IS NULL
+                WHERE (calculated_at IS NULL OR calculated_at < max_inventory_updated_at)
 
                 LIMIT 500;
         ");
