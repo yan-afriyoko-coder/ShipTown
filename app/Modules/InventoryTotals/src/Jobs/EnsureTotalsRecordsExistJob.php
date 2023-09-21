@@ -32,9 +32,9 @@ class EnsureTotalsRecordsExistJob extends UniqueJob
 
             $this->insertMissingRecords($minID, $maxID);
 
-            Log::debug('Processing job', [
+            Log::debug('Job processing', [
                 'job' => self::class,
-                'records created' => DB::table('tempTable')->count(),
+                'records_created' => DB::table('tempTable')->count(),
                 'minID' => $minID,
                 'maxID' => $maxID,
             ]);
@@ -43,12 +43,6 @@ class EnsureTotalsRecordsExistJob extends UniqueJob
 
             usleep(100000); // 0.1 sec
         } while ($maxID <= $this->productsMaxId);
-    }
-
-    public function fail($exception = null)
-    {
-        Log::error('Job failed', ['job' => self::class, 'error' => $exception->getMessage()]);
-        report($exception);
     }
 
     /**
