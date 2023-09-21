@@ -4,6 +4,7 @@ namespace App\Modules\InventoryMovements\src\Jobs;
 
 use App\Abstracts\UniqueJob;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class FirstMovementAtJob extends UniqueJob
 {
@@ -38,7 +39,9 @@ class FirstMovementAtJob extends UniqueJob
                     )
             ');
             sleep(1);
+
             $maxRounds--;
+            Log::debug('Job processing', ['job' => self::class, 'records_updated' => $recordsUpdated]);
         } while ($recordsUpdated > 0 and $maxRounds > 0);
     }
 }
