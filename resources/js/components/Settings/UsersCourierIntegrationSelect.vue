@@ -9,30 +9,26 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-responsive table-borderless">
-                    <tbody>
-                        <tr>
-                            <td>When last item scanned, Automatically Print:</td>
-                            <td class="text-right">
-                                <select class="form-control w-100" @change="updateUsersAddressLabelTemplate" v-model="selected_address_label_template">
-                                    <option value=""></option>
-                                    <template v-for="shipping_service in shipping_services">
-                                        <option :value="shipping_service.code" :key="shipping_service.id" >{{ shipping_service['code'] }}</option>
-                                    </template>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Ask to scan shipping number</td>
-                            <td class="text-right">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" @change="saveAskForShippingNumberValue" class="custom-control-input" id="swicth-scan-shipping-number" v-model="selected_ask_for_shipping_number">
-                                    <label class="custom-control-label" for="swicth-scan-shipping-number"></label>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-12 align-middle">If courier label is not specified on order, after last item is packed, automatically print this courier label</div>
+                    <div class="col-12 mt-1 text-right" style="width: 200px;">
+                        <select class="form-control" @change="updateUsersAddressLabelTemplate" v-model="selected_address_label_template">
+                            <option value=""></option>
+                            <template v-for="shipping_service in shipping_services">
+                                <option :value="shipping_service.code" :key="shipping_service.id" >{{ shipping_service['code'] }}</option>
+                            </template>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-10">Ask to scan shipping number</div>
+                    <div class="col-2 text-right">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" @change="saveAskForShippingNumberValue" class="custom-control-input" id="swicth-scan-shipping-number" v-model="selected_ask_for_shipping_number">
+                            <label class="custom-control-label" for="swicth-scan-shipping-number"></label>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
