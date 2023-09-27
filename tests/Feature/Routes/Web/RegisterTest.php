@@ -43,7 +43,7 @@ class RegisterTest extends TestCase
         if (User::query()->doesntExist()) {
             $response->assertOk();
         } else {
-            $response->assertNotFound();
+            $response->assertRedirect();
         }
     }
 
@@ -52,7 +52,7 @@ class RegisterTest extends TestCase
     {
         $this->actingAs($this->user, 'web')
             ->get($this->uri)
-            ->assertNotFound();
+            ->assertRedirect();
     }
 
     /** @test */
@@ -62,6 +62,6 @@ class RegisterTest extends TestCase
 
         $this->actingAs($this->user, 'web')
             ->get($this->uri)
-            ->assertNotFound();
+            ->assertRedirect();
     }
 }
