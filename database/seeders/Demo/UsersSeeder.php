@@ -18,22 +18,21 @@ class UsersSeeder extends Seeder
     {
         /** @var User $admin */
         $admin = User::query()->firstOrCreate([
-            'email' => 'admin@products.management',
+            'email' => 'demo-admin@ship.town',
         ], [
             'name' => 'Artur Hanusek',
             'warehouse_id' => Warehouse::firstOrCreate(['code' => 'DUB'], ['name' => 'Dublin'])->getKey(),
-            'password' => bcrypt('secret123'),
+            'password' => bcrypt('secret1144'),
         ]);
         $admin->assignRole(Role::findOrCreate('admin'));
 
-
         /** @var User $user */
         $user = User::query()->firstOrCreate([
-            'email' => 'user@products.management',
+            'email' => 'demo-user@ship.town',
         ], [
-            'name' => 'Johny Melabo',
-            'warehouse_id' => Warehouse::firstOrCreate(['code' => 'CRK'], ['name' => 'Cork'])->getKey(),
-            'password' => bcrypt('secret123'),
+            'name' => 'Joni Melabo',
+            'warehouse_id' => Warehouse::firstOrCreate(['code' => 'GAL'], ['name' => 'Galway'])->getKey(),
+            'password' => bcrypt('secret1144'),
         ]);
         $user->assignRole(Role::findOrCreate('user'));
     }
