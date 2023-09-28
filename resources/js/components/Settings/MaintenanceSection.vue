@@ -11,22 +11,22 @@
             </div>
 
             <div class="card-body">
-                <button :disabled="buttonDisabled['EveryDayJobs']" @click.prevent="runSchedule('EveryDayJobs')" class="btn btn-block btn-primary mb-2">
+                <button :disabled="buttonDisabled['EveryDay']" @click.prevent="runSchedule('EveryDay')" class="btn btn-block btn-primary mb-2">
                     Run Every Day Jobs
                 </button>
-                <button :disabled="buttonDisabled['EveryDayJobs']" @click.prevent="runSchedule('EveryHourJobs')" class="btn btn-block btn-primary mb-2">
+                <button :disabled="buttonDisabled['EveryHour']" @click.prevent="runSchedule('EveryHour')" class="btn btn-block btn-primary mb-2">
                     Run Every Hour Jobs
                 </button>
-                <button :disabled="buttonDisabled['EveryDayJobs']" @click.prevent="runSchedule('EveryTenMinutesJobs')" class="btn btn-block btn-primary mb-2">
+                <button :disabled="buttonDisabled['EveryTenMinutes']" @click.prevent="runSchedule('EveryTenMinutes')" class="btn btn-block btn-primary mb-2">
                     Run Every 10 Minutes Jobs
                 </button>
-                <button :disabled="buttonDisabled['EveryDayJobs']" @click.prevent="runSchedule('EveryFiveMinutesJobs')" class="btn btn-block btn-primary mb-2">
+                <button :disabled="buttonDisabled['EveryFiveMinutes']" @click.prevent="runSchedule('EveryFiveMinutes')" class="btn btn-block btn-primary mb-2">
                     Run Every 5 Minutes Jobs
                 </button>
-                <button :disabled="buttonDisabled['EveryDayJobs']" @click.prevent="runSchedule('EveryOneMinutes')" class="btn btn-block btn-primary mb-2">
+                <button :disabled="buttonDisabled['EveryOneMinute']" @click.prevent="runSchedule('EveryOneMinute')" class="btn btn-block btn-primary mb-2">
                     Run Every 1 Minute Jobs
                 </button>
-                <button :disabled="buttonDisabled['EveryDayJobs']" @click.prevent="runSchedule('ManualRequestJobs')" class="btn btn-block btn-primary mb-2">
+                <button :disabled="buttonDisabled['ManualRequest']" @click.prevent="runSchedule('ManualRequest')" class="btn btn-block btn-primary mb-2">
                     Run Manual Request Jobs
                 </button>
             </div>
