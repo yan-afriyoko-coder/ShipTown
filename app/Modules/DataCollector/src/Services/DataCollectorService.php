@@ -84,17 +84,14 @@ class DataCollectorService
 
     public static function transferScannedTo(DataCollection $sourceDataCollection, int $warehouse_id): DataCollection
     {
-        $destinationDataCollection = null;
+        $destinationDataCollection = $sourceDataCollection->destinationCollection;
 
         DB::transaction(function () use ($warehouse_id, $sourceDataCollection, &$destinationDataCollection) {
             // create collection
-
-            $destinationDataCollection = $sourceDataCollection->destinationCollection;
-
             if ($destinationDataCollection == null) {
                 $name = implode(' ', ['Transfer from', $sourceDataCollection->warehouse->code, '-', $sourceDataCollection->name]);
 
-                $destinationDataCollection = $sourceDataCollection->replicate(['destination_warehouse_id','currently_running_task','deleted_at']);
+                $destinationDataCollection = $sourceDataCollection->replicate(['destination_warehouse_id', 'currently_running_task', 'deleted_at']);
                 $destinationDataCollection->type = DataCollectionTransferIn::class;
                 $destinationDataCollection->warehouse_id = $warehouse_id;
                 $destinationDataCollection->name = $name;
@@ -108,28 +105,33 @@ class DataCollectorService
                 'type' => DataCollectionTransferOut::class,
                 'currently_running_task' => TransferOutJob::class,
             ]);
+
             $sourceDataCollection->delete();
-
-            $sourceDataCollection->records()
-                ->where('quantity_scanned', '!=', DB::raw(0))
-                ->get()
-                ->each(function (DataCollectionRecord $record) use ($destinationDataCollection) {
-                    $inventory = Inventory::query()->firstOrCreate([
-                        'warehouse_id' => $destinationDataCollection->warehouse_id,
-                        'product_id' => $record->product_id,
-                    ]);
-                    DataCollectionRecord::query()->create([
-                        'data_collection_id' => $destinationDataCollection->id,
-                        'inventory_id' => $inventory->id,
-                        'warehouse_id' => $inventory->warehouse_id,
-                        'product_id' => $inventory->product_id,
-                        'quantity_requested' => $record->quantity_scanned,
-                    ]);
-                });
-
-            TransferOutJob::dispatch($sourceDataCollection->getKey());
         });
 
+        $sourceDataCollection->records()
+            ->where('quantity_scanned', '!=', DB::raw(0))
+            ->get()
+            ->each(function (DataCollectionRecord $record) use ($destinationDataCollection) {
+                $inventory = Inventory::query()->firstOrCreate([
+                    'product_id' => $record->product_id,
+                    'warehouse_id' => $destinationDataCollection->warehouse_id,
+                ]);
+
+                $custom_uuid = implode('-', ['source_data_collections_records_id', $record->getKey()]);
+
+                DataCollectionRecord::query()->firstOrCreate([
+                    'custom_uuid' => $custom_uuid,
+                ], [
+                    'data_collection_id' => $destinationDataCollection->id,
+                    'inventory_id' => $inventory->id,
+                    'warehouse_id' => $inventory->warehouse_id,
+                    'product_id' => $inventory->product_id,
+                    'quantity_requested' => $record->quantity_scanned,
+                ]);
+            });
+
+        TransferOutJob::dispatch($sourceDataCollection->getKey());
 
         return $destinationDataCollection;
     }
