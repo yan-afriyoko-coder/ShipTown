@@ -22,7 +22,15 @@ Route::view('help', 'help');
 
 // you can register only first user then he should invite others
 try {
-    Auth::routes(['register' => !User::query()->exists()]);
+    $exists = User::query()->exists();
+
+    if (User::query()->exists()) {
+        Auth::routes(['register' => false]);
+        Route::redirect('register', 'login');
+        return;
+    }
+
+    Auth::routes(['register' => true]);
 } catch (\Exception $exception) {
     Auth::routes(['register' => false]);
 }

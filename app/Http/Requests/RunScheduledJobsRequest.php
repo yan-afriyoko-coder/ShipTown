@@ -14,7 +14,7 @@ class RunScheduledJobsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'schedule'  => 'sometimes|string|in:EveryMinute,EveryFiveMinutes,EveryTenMinutes,EveryDay,EveryWeek,EveryMonth,SyncRequest',
         ];
     }
 }

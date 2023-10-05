@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Http\Controllers\Api\RunScheduledJobsController;
 
+use App\Jobs\SyncRequestJob;
 use App\User;
+use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
@@ -14,7 +16,11 @@ class StoreTest extends TestCase
     {
         $user = User::factory()->create()->assignRole('admin');
 
-        $response = $this->actingAs($user, 'api')->postJson($this->uri, []);
+        Bus::fake([SyncRequestJob::class]);
+
+        $response = $this->actingAs($user, 'api')->postJson($this->uri, ['schedule' => 'SyncRequest']);
+
+        Bus::assertDispatched(SyncRequestJob::class);
 
         ray($response->json());
 

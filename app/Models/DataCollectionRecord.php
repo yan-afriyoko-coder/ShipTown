@@ -46,6 +46,7 @@ class DataCollectionRecord extends Model
         'quantity_requested',
         'quantity_requested',
         'quantity_scanned',
+        'custom_uuid',
     ];
 
     protected $casts = [

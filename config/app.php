@@ -4,6 +4,11 @@ use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\Route;
 
 return [
+    /*
+     *  Enables demo mode
+     *  This will display a demo message on login page containing the demo credentials
+     */
+    'demo_mode' => env('DEMO_MODE', false),
 
     /*
      * Prefix used for all SNS topics
