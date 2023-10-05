@@ -18,6 +18,7 @@ class FetchSqlForUpdatingRMSJob extends UniqueJob
               ON inventory.id = modules_rmsapi_products_quantity_comparison_view.inventory_id
 
             WHERE rms_quantity != pm_quantity
+             AND inventory.updated_at < DATE_SUB(now(), interval 2 day)
             ORDER BY inventory.warehouse_code, inventory.updated_at ASC
             LIMIT 500
         ");
