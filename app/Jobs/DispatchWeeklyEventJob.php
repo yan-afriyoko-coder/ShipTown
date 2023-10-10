@@ -16,7 +16,7 @@ class DispatchWeeklyEventJob extends UniqueJob
             'code' => self::class,
         ], [
             'error_message' => 'Weekly jobs heartbeat missed',
-            'expires_at' => now()->addDay()
+            'expires_at' => now()->addWeek()
         ]);
     }
 }
