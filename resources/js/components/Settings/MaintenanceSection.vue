@@ -23,10 +23,10 @@
                 <button :disabled="buttonDisabled['EveryFiveMinutes']" @click.prevent="runSchedule('EveryFiveMinutes')" class="btn btn-block btn-primary mb-2">
                     Run Every 5 Minutes Jobs
                 </button>
-                <button :disabled="buttonDisabled['EveryOneMinute']" @click.prevent="runSchedule('EveryOneMinute')" class="btn btn-block btn-primary mb-2">
+                <button :disabled="buttonDisabled['EveryMinute']" @click.prevent="runSchedule('EveryMinute')" class="btn btn-block btn-primary mb-2">
                     Run Every 1 Minute Jobs
                 </button>
-                <button :disabled="buttonDisabled['ManualRequest']" @click.prevent="runSchedule('ManualRequest')" class="btn btn-block btn-primary mb-2">
+                <button :disabled="buttonDisabled['SyncRequest']" @click.prevent="runSchedule('SyncRequest')" class="btn btn-block btn-primary mb-2">
                     Run Manual Request Jobs
                 </button>
             </div>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RunScheduledJobsRequest;
 use App\Jobs\DispatchEveryDayEventJob;
 use App\Jobs\DispatchEveryFiveMinutesEventJob;
+use App\Jobs\DispatchEveryHourEventJobs;
 use App\Jobs\DispatchEveryMinuteEventJob;
 use App\Jobs\DispatchEveryTenMinutesEventJob;
 use App\Jobs\DispatchMonthlyEventJob;
@@ -25,6 +26,9 @@ class RunScheduledJobsController extends Controller
                 break;
             case 'EveryTenMinutes':
                 DispatchEveryTenMinutesEventJob::dispatch();
+                break;
+            case 'EveryHour':
+                DispatchEveryHourEventJobs::dispatch();
                 break;
             case 'EveryDay':
                 DispatchEveryDayEventJob::dispatch();
