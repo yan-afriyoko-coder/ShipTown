@@ -7,7 +7,7 @@ use App\Models\OrderAddress;
 use App\Models\OrderProduct;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\AutomationsServiceProvider;
-use App\Modules\Automations\src\Conditions\Order\ShippingAddressCountryCodeEqualsCondition;
+use App\Modules\Automations\src\Conditions\Order\ShippingAddressCountryCodeInCondition;
 use App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition;
 use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
 use App\Modules\Automations\src\Jobs\RunEnabledAutomationsOnSpecificOrderJob;
@@ -17,7 +17,7 @@ use App\Modules\Automations\src\Models\Condition;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ShippingAddressCountryCodeConditionTest extends TestCase
+class ShippingAddressCountryCodeInConditionTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -39,7 +39,7 @@ class ShippingAddressCountryCodeConditionTest extends TestCase
         /** @var Condition $condition */
         Condition::create([
             'automation_id' => $automation->getKey(),
-            'condition_class' => ShippingAddressCountryCodeEqualsCondition::class,
+            'condition_class' => ShippingAddressCountryCodeInCondition::class,
             'condition_value' => 'PL'
         ]);
 
@@ -57,7 +57,6 @@ class ShippingAddressCountryCodeConditionTest extends TestCase
             'shipping_method_code' => 'international',
             'shipping_address_id' => $address->getKey()
         ]);
-
 
         OrderProduct::factory()->create(['order_id' => $order->getKey()]);
 
