@@ -36,8 +36,12 @@ return [
             'description' => 'Shipping Method Code in',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\ShippingAddressCountryCodeEqualsCondition::class,
-            'description' => 'Shipping Address Country Code equals',
+            'class' => \App\Modules\Automations\src\Conditions\Order\ShippingAddressCountryCodeInCondition::class,
+            'description' => 'Shipping Address Country Code in',
+        ],
+        [
+            'class' => \App\Modules\Automations\src\Conditions\Order\ShippingAddressCountryCodeNotInCondition::class,
+            'description' => 'Shipping Address Country Code NOT in',
         ],
         [
             'class' => \App\Modules\Automations\src\Conditions\Order\LabelTemplateInCondition::class,
