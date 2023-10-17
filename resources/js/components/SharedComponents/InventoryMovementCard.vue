@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <td>in stock:</td>
-                        <td class="pl-1">{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</td>
+                        <td class="pl-1">{{ dashIfZero(Number(record['inventory']['quantity'])) }}</td>
                     </tr>
                 </table>
             </div>
