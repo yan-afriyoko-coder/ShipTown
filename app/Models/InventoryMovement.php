@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string description
  * @property int user_id
  * @property int previous_movement_id
- * @property Carbon pccurred_at
+ * @property Carbon occurred_at
  * @property Carbon created_at
  * @property Carbon updated_at
  *
