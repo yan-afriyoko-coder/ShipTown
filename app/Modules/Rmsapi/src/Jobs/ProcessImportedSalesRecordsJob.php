@@ -107,7 +107,7 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
                 $salesRecord->quantity,
                 $salesRecord->type,
                 $salesRecord->uuid,
-                Carbon::createFromTimeString($salesRecord->transaction_time)
+                Carbon::createFromTimeString($salesRecord->transaction_time)->subHour()
             );
         } else {
             $inventoryMovement = InventoryService::adjustQuantity(
@@ -115,7 +115,7 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
                 $salesRecord->quantity,
                 $salesRecord->type,
                 $salesRecord->uuid,
-                Carbon::createFromTimeString($salesRecord->transaction_time)
+                Carbon::createFromTimeString($salesRecord->transaction_time)->subHour()
             );
         }
 

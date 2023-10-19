@@ -12,13 +12,14 @@ class FetchSqlForUpdatingRMSJob extends UniqueJob
         DB::statement("
             SELECT
                 modules_rmsapi_products_quantity_comparison_view.*, inventory.updated_at as inventory_last_updated_at, 'RMSAPI products out of sync' as whats_this
-                #CONCAT('UPDATE Item SET Quantity=', pm_quantity, ', LastUpdated=getDate() WHERE ItemLookupCode = ''', product_sku,'''; --', inventory.warehouse_code)
+                ##CONCAT('UPDATE Item SET Quantity=', pm_quantity, ', LastUpdated=getDate() WHERE ItemLookupCode = ''', product_sku,'''; --', inventory.warehouse_code)
             FROM `modules_rmsapi_products_quantity_comparison_view`
             LEFT JOIN inventory
               ON inventory.id = modules_rmsapi_products_quantity_comparison_view.inventory_id
 
-            WHERE rms_quantity != pm_quantity
-             AND inventory.updated_at < DATE_SUB(now(), interval 2 day)
+            WHERE
+                rms_quantity != pm_quantity
+                AND DATEDIFF(now(), modules_rmsapi_products_imports_updated_at) > 1
             ORDER BY inventory.warehouse_code, inventory.updated_at ASC
             LIMIT 500
         ");
