@@ -1,9 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -17,8 +15,8 @@ return new class extends Migration
 
         DB::statement('
             UPDATE inventory_movements
-            SET occurred_at = created_at
-            WHERE occurred_at IS NULL
+            SET occurred_at = date_sub(occurred_at, INTERVAL 1 HOUR)
+            WHERE occurred_at > created_at
         ');
     }
 };
