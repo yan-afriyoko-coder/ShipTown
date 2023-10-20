@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::table('inventory_movements', function (Blueprint $table) {
             $table->index('occurred_at');
-            $table->index('inventory_id, occurred_at');
+            $table->index(['inventory_id', 'occurred_at']);
         });
     }
 };
