@@ -40,7 +40,7 @@ class InventoryLastMovementIdJob extends UniqueJob
                 INNER JOIN tbl
                  ON tbl.inventory_id = inventory.id
                 INNER JOIN inventory_movements
-                 ON inventory_movements.occurred_at = tbl.last_movement_id
+                 ON inventory_movements.id = tbl.last_movement_id
                 SET
                     inventory.last_movement_id  = inventory_movements.id,
                     inventory.last_movement_at  = inventory_movements.occurred_at,
