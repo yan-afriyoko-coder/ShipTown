@@ -35,27 +35,27 @@ class NotInImportTableProductsSql extends UniqueJob
 
             LIMIT 500;
 
-## INSERT INTO inventory_movements (occurred_at, type, inventory_id, product_id, warehouse_id, quantity_after, created_at, updated_at, user_id, description)
-## SELECT
-##
-##  now() as occurred_at,
-##  'stocktake' as type,
-##  inventory.id as inventory_id,
-##  inventory.product_id,
-##  inventory.warehouse_id,
-##  0 as quantity_after,
-##  now() as created_at,
-##  now() as updated_at,
-##  1 as user_id,
-##  'clearing duplicated RMS products' as description
-##
-## FROM `products`
-##
-## INNER JOIN inventory
-##   ON inventory.product_id = products.id
-##   AND (inventory.quantity != 0 OR inventory.quantity_reserved != 0)
-##
-## WHERE `sku` LIKE 'sku_removed_%'
+INSERT INTO inventory_movements (occurred_at, type, inventory_id, product_id, warehouse_id, quantity_after, created_at, updated_at, user_id, description)
+SELECT
+
+ now() as occurred_at,
+ 'stocktake' as type,
+ inventory.id as inventory_id,
+ inventory.product_id,
+ inventory.warehouse_id,
+ 0 as quantity_after,
+ now() as created_at,
+ now() as updated_at,
+ 1 as user_id,
+ 'clearing duplicated RMS products' as description
+
+FROM `products`
+
+INNER JOIN inventory
+  ON inventory.product_id = products.id
+  AND (inventory.quantity != 0 OR inventory.quantity_reserved != 0)
+
+WHERE `sku` LIKE 'sku_removed_%'
 
 ## SELECT
 ## concat('UPDATE Item SET LastUpdated = getDate() WHERE id IN (SELECT ItemID FROM Alias WHERE Alias=''', products_aliases.alias, ''');') as RMS_SQL
