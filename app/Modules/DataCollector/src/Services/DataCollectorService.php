@@ -9,6 +9,7 @@ use App\Models\DataCollectionTransferIn;
 use App\Models\DataCollectionTransferOut;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
+use App\Models\Warehouse;
 use App\Modules\DataCollector\src\Jobs\TransferInJob;
 use App\Modules\DataCollector\src\Jobs\TransferOutJob;
 use App\Modules\DataCollector\src\Jobs\TransferToJob;
@@ -85,7 +86,10 @@ class DataCollectorService
     {
         $destinationDataCollection = $sourceDataCollection->destinationCollection;
 
-        DB::transaction(function () use ($warehouse_id, $sourceDataCollection, &$destinationDataCollection) {
+        /** @var Warehouse $destinationWarehouse */
+        $destinationWarehouse = Warehouse::findOrFail($warehouse_id);
+
+        DB::transaction(function () use ($warehouse_id, $sourceDataCollection, &$destinationDataCollection, $destinationWarehouse) {
             // create collection
             if ($destinationDataCollection == null) {
                 $name = implode(' ', ['Transfer from', $sourceDataCollection->warehouse->code, '-', $sourceDataCollection->name]);
@@ -100,7 +104,7 @@ class DataCollectorService
             }
 
             $sourceDataCollection->update([
-                'name' => implode(' ', ['Transfer To', $destinationDataCollection->warehouse->code, '-', $sourceDataCollection->name]),
+                'name' => implode(' ', ['Transfer To', $destinationWarehouse->code, '-', $sourceDataCollection->name]),
                 'type' => DataCollectionTransferOut::class,
                 'currently_running_task' => TransferOutJob::class,
             ]);
