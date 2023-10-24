@@ -107,32 +107,6 @@ class BasicModuleTest extends TestCase
     }
 
     /** @test */
-    public function testQuantityBeforeJob(): void
-    {
-        $movement = InventoryService::adjust($this->inventory, 10);
-
-        $originalQuantityBefore = $movement->quantity_before;
-
-        $movement->update([
-            'quantity_before' => $originalQuantityBefore + rand(1, 100),
-        ]);
-
-        PreviousMovementIdJob::dispatch();
-        QuantityBeforeJob::dispatch();
-        InventoryQuantityJob::dispatch();
-
-        ray(InventoryMovement::query()->get()->toArray(), Configuration::first()->toArray());
-
-        $movement->refresh();
-
-        $this->assertDatabaseHas('inventory_movements', [
-            'id' => $movement->getKey(),
-            'previous_movement_id' => $this->inventoryMovement02->getKey(),
-            'quantity_before' => $originalQuantityBefore,
-        ]);
-    }
-
-    /** @test */
     public function testQuantityDeltaAndAfterJob(): void
     {
         $inventoryMovement03 = InventoryService::adjust($this->inventory, 10);

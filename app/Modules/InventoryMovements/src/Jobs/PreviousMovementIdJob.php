@@ -61,7 +61,7 @@ class PreviousMovementIdJob extends UniqueJob
                 'recordsUpdated' => $recordsUpdated
             ]);
 
-            sleep(1);
+            usleep(400000); // 0.4 seconds
         } while ($recordsUpdated > 0 and $maxRounds-- > 0);
     }
 }

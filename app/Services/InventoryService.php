@@ -14,7 +14,7 @@ class InventoryService
         $movement->fill($attributes ?? []);
         $movement->save();
 
-        return $movement->refresh();
+        return $movement;
     }
 
     public static function stocktake(Inventory $inventory, float $newQuantity, array $attributes = null): InventoryMovement
@@ -28,7 +28,7 @@ class InventoryService
         $movement->fill($attributes ?? []);
         $movement->save();
 
-        return $movement->refresh();
+        return $movement;
     }
 
     public static function adjust(Inventory $inventory, float $quantityDelta, array $attributes = null): InventoryMovement
@@ -50,6 +50,6 @@ class InventoryService
         $inventoryMovement->fill($attributes ?? []);
         $inventoryMovement->save();
 
-        return $inventoryMovement;
+        return $inventoryMovement->refresh();
     }
 }
