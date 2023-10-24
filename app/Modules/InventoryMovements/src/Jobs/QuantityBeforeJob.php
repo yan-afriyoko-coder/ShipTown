@@ -23,7 +23,10 @@ class QuantityBeforeJob extends UniqueJob
             $maxMovementId = min($minMovementId + 10000, $lastMovementId);
 
             do {
+                $totalRecordsUpdated = 0;
+
                 $recordsUpdated = $this->updateRanges($minMovementId, $maxMovementId);
+                $totalRecordsUpdated += $recordsUpdated;
 
                 Log::info('Job processing', [
                     'job' => self::class,
@@ -34,6 +37,7 @@ class QuantityBeforeJob extends UniqueJob
                 ]);
 
                 $recordsUpdated = $this->basicWalktrough($minMovementId, $maxMovementId);
+                $totalRecordsUpdated += $recordsUpdated;
 
                 Log::info('Job processing', [
                     'job' => self::class,
@@ -44,6 +48,7 @@ class QuantityBeforeJob extends UniqueJob
                 ]);
 
                 $recordsUpdated = $this->updateStocktakes($minMovementId, $maxMovementId);
+                $totalRecordsUpdated += $recordsUpdated;
 
                 Log::info('Job processing', [
                     'job' => self::class,
@@ -52,7 +57,7 @@ class QuantityBeforeJob extends UniqueJob
                     'max_movement_id' => $maxMovementId,
                     'last_movement_id' => $lastMovementId,
                 ]);
-            } while ($recordsUpdated > 0);
+            } while ($totalRecordsUpdated > 0);
 
             $configuration->update(['quantity_before_job_last_movement_id_checked' => $maxMovementId]);
 
