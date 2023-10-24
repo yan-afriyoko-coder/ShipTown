@@ -123,6 +123,8 @@ class BasicModuleTest extends TestCase
 
         ray(InventoryMovement::query()->get()->toArray(), Configuration::first()->toArray());
 
+        $movement->refresh();
+
         $this->assertDatabaseHas('inventory_movements', [
             'id' => $movement->getKey(),
             'previous_movement_id' => $this->inventoryMovement02->getKey(),
