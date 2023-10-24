@@ -28,9 +28,7 @@ class PreviousMovementIdJob extends UniqueJob
                                LIMIT 1
                            ) as previous_movement_id
                     FROM inventory_movements
-                    WHERE
-                        inventory_movements.previous_movement_id IS NULL
-                        AND inventory_movements.is_first_movement IS NULL
+                    WHERE inventory_movements.is_first_movement IS NULL
                     LIMIT 500;
             ');
 
@@ -38,8 +36,15 @@ class PreviousMovementIdJob extends UniqueJob
                 UPDATE inventory_movements
                 INNER JOIN tempTable ON
                     tempTable.id = inventory_movements.id
+                INNER JOIN inventory_movements as previous_inventory_movement
+                    ON previous_inventory_movement.id = tempTable.previous_movement_id
+                INNER JOIN inventory
+                    ON inventory.id = inventory_movements.inventory_id
                 SET
                     is_first_movement = ISNULL(tempTable.previous_movement_id),
+                    inventory_movements.product_id = inventory.product_id,
+                    inventory_movements.warehouse_id = inventory.warehouse_id,
+                    inventory_movements.quantity_before = previous_inventory_movement.quantity_after,
                     inventory_movements.previous_movement_id = tempTable.previous_movement_id,
                     inventory_movements.updated_at = NOW()
             ');
