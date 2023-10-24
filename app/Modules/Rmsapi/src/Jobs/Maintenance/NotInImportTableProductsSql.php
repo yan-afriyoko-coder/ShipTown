@@ -56,6 +56,21 @@ class NotInImportTableProductsSql extends UniqueJob
 ##   AND (inventory.quantity != 0 OR inventory.quantity_reserved != 0)
 ##
 ## WHERE `sku` LIKE 'sku_removed_%'
+
+## SELECT
+## concat('UPDATE Item SET LastUpdated = getDate() WHERE id IN (SELECT ItemID FROM Alias WHERE Alias=''', products_aliases.alias, ''');') as RMS_SQL
+##
+## FROM `products`
+##
+## INNER JOIN products_aliases
+##   ON products_aliases.product_id = products.id
+##
+## WHERE `sku` LIKE 'sku_removed_%'
+
+##DELETE FROM products_aliases WHERE product_id IN (SELECT id
+##FROM `products`
+##
+##WHERE `sku` LIKE 'sku_removed_%')
         ");
     }
 }
