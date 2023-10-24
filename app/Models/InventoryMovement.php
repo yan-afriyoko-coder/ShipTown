@@ -58,6 +58,15 @@ class InventoryMovement extends BaseModel
         'previous_movement_id',
     ];
 
+    protected $casts = [
+        'occurred_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'quantity_delta' => 'float',
+        'quantity_before' => 'float',
+        'quantity_after' => 'float',
+    ];
+
     public function inventory(): BelongsTo
     {
         return $this->belongsTo(Inventory::class);
