@@ -4,6 +4,7 @@
 namespace App\Modules\StockControl\src\Listeners;
 
 use App\Events\OrderProductShipmentCreatedEvent;
+use App\Models\InventoryMovement;
 use App\Services\InventoryService;
 use Exception;
 
@@ -24,17 +25,21 @@ class OrderProductShipmentCreatedListener
             return true;
         }
 
+        $uuid = implode('_', ['order_product_shipment_id', $orderProductShipment->getKey(), 'shipped']);
+        $quantityDelta = $orderProductShipment->quantity_shipped * (-1);
 
-        InventoryService::sellProduct(
-            $orderProductShipment->inventory,
-            - $orderProductShipment->quantity_shipped,
-            'shipped',
-            implode('', [
-                'order_product_shipment_id_',
-                $orderProductShipment->getKey(),
-                '_shipped'
-            ])
-        );
+        InventoryMovement::query()->create([
+            'custom_unique_reference_id' => $uuid,
+            'occurred_at' => now(),
+            'type' => 'sale',
+            'inventory_id' => $orderProductShipment->inventory->id,
+            'product_id' => $orderProductShipment->inventory->product_id,
+            'warehouse_id' => $orderProductShipment->inventory->warehouse_id,
+            'quantity_before' => $orderProductShipment->inventory->quantity,
+            'quantity_delta' => $quantityDelta,
+            'quantity_after' => $orderProductShipment->inventory->quantity + $quantityDelta,
+            'description' => 'shipped',
+        ]);
 
         return true;
     }

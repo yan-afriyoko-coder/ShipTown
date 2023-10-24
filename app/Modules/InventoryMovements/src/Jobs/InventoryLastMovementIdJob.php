@@ -20,7 +20,6 @@ class InventoryLastMovementIdJob extends UniqueJob
                             SELECT ID
                             FROM inventory_movements
                             WHERE inventory_movements.inventory_id = inventory.id
-                            AND inventory_movements.occurred_at > inventory.last_movement_at
                             ORDER BY occurred_at DESC, id DESC
                             LIMIT 1
                         ) as last_movement_id

@@ -3,11 +3,13 @@
 namespace Tests\Feature\Modules\StockControl;
 
 use App\Models\Inventory;
+use App\Models\InventoryMovement;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderProductShipment;
 use App\Models\Product;
 use App\Models\Warehouse;
+use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
 use App\Modules\StockControl\src\StockControlServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -18,6 +20,8 @@ class BasicModuleTest extends TestCase
 
     public function test_if_decreases_quantity_when_product_shipped()
     {
+        InventoryMovementsServiceProvider::enableModule();
+
         /** @var Warehouse $warehouse */
         $warehouse = Warehouse::factory()->create();
 

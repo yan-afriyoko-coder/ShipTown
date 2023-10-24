@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Inventory;
+use App\Models\InventoryMovement;
 use App\Services\InventoryService;
 use Illuminate\Database\Seeder;
 
@@ -16,7 +17,24 @@ class SalesSeeder extends Seeder
     public function run()
     {
         for ($i=0; $i < 600; $i++) {
-            InventoryService::sellProduct(Inventory::query()->inRandomOrder()->first(), rand(-100, -1), '');
+            $inventory = Inventory::query()
+                ->where('quantity', '>', 0)
+                ->inRandomOrder()
+                ->first();
+
+            $quantityDelta = min(rand(1, 7), $inventory->quantity) * (-1);
+
+            InventoryMovement::query()->create([
+                'occurred_at' => now(),
+                'type' => 'sale',
+                'inventory_id' => $inventory->id,
+                'product_id' => $inventory->product_id,
+                'warehouse_id' => $inventory->warehouse_id,
+                'quantity_before' => $inventory->quantity,
+                'quantity_delta' => $quantityDelta,
+                'quantity_after' => $inventory->quantity + $quantityDelta,
+                'description' => 'sale',
+            ]);
         }
     }
 }

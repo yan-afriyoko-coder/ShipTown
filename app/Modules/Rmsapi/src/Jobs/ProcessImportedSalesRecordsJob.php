@@ -100,23 +100,19 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
             ->where('warehouse_id', $salesRecord->warehouse_id)
             ->first();
 
-        ray('$salesRecord->transaction_time', $salesRecord->transaction_time);
         if ($salesRecord->type === 'rms_sale') {
-            $inventoryMovement = InventoryService::sellProduct(
-                $inventory,
-                $salesRecord->quantity,
-                $salesRecord->type,
-                $salesRecord->uuid,
-                Carbon::createFromTimeString($salesRecord->transaction_time)->subHour()
-            );
+            $inventoryMovement = InventoryService::sell($inventory, $salesRecord->quantity, [
+                'custom_unique_reference_id' => $salesRecord->uuid,
+                'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time)->subHour(),
+                'description' => 'rms_sale',
+            ]);
         } else {
-            $inventoryMovement = InventoryService::adjustQuantity(
-                $inventory,
-                $salesRecord->quantity,
-                $salesRecord->type,
-                $salesRecord->uuid,
-                Carbon::createFromTimeString($salesRecord->transaction_time)->subHour()
-            );
+            $inventoryMovement = InventoryService::adjust($inventory, $salesRecord->quantity, [
+                'type' => $salesRecord->type,
+                'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time)->subHour(),
+                'description' => 'rmsapi_shipping_import',
+                'custom_unique_reference_id' => $salesRecord->uuid
+            ]);
         }
 
         $salesRecord->update([

@@ -216,27 +216,25 @@ class ImportShippingsJob extends UniqueJob
      */
     private function restockOriginForStockToBalance(OrderProduct $orderProduct): void
     {
-        $inventoryRecord = Inventory::query()->where([
+        $inventory = Inventory::query()->where([
             'product_id' => $orderProduct->product_id,
             'warehouse_code' => $this->rmsapiConnection->location_id,
         ])
         ->first();
 
-        $unique_reference_id = 'rmsapi_shipping_import-order_product_id-' . $orderProduct->getKey();
+        $custom_unique_reference_id = 'rmsapi_shipping_import-order_product_id-' . $orderProduct->getKey();
 
-        if (InventoryMovement::where(['custom_unique_reference_id' => $unique_reference_id])->exists()) {
+        if (InventoryMovement::where(['custom_unique_reference_id' => $custom_unique_reference_id])->exists()) {
             return;
         }
 
-        InventoryService::adjustQuantity(
-            $inventoryRecord,
-            $orderProduct->quantity_ordered,
-            'rmsapi_shipping_import',
-            $unique_reference_id
-        );
+        InventoryService::adjust($inventory, $orderProduct->quantity_ordered, [
+            'description' => 'rmsapi_shipping_import',
+            'custom_unique_reference_id' => $custom_unique_reference_id
+        ]);
 
-        $inventoryRecord->product->log('Imported RMS shipping, restocking', [
-            'warehouse_code' => $inventoryRecord->warehouse_code,
+        $inventory->product->log('Imported RMS shipping, restocking', [
+            'warehouse_code' => $inventory->warehouse_code,
             'quantity' => $orderProduct->quantity_ordered,
         ]);
     }

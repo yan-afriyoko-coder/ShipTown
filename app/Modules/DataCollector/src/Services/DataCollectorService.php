@@ -15,7 +15,6 @@ use App\Modules\DataCollector\src\Jobs\TransferToJob;
 use App\Services\InventoryService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class DataCollectorService
 {
@@ -155,8 +154,11 @@ class DataCollectorService
 
                 $quantityDelta = $record->quantity_scanned - $inventory->quantity;
 
-                /** @var InventoryMovement $inventoryMovement */
-                $inventoryMovement = InventoryMovement::query()->create([
+                $custom_uuid = implode('-', ['source_data_collections_records_id', $record->getKey()]);
+
+                InventoryMovement::query()->firstOrCreate([
+                    'custom_uuid' => $custom_uuid,
+                ], [
                     'inventory_id' => $inventory->id,
                     'type' => InventoryMovement::TYPE_STOCKTAKE,
                     'product_id' => $inventory->product_id,
@@ -166,13 +168,6 @@ class DataCollectorService
                     'quantity_after' => $inventory->quantity + $quantityDelta,
                     'description' => 'stocktake',
                     'user_id' => Auth::id(),
-                ]);
-
-                $inventory->update([
-                    'quantity' => $inventoryMovement->quantity_after,
-                    'last_movement_at' => $inventoryMovement->created_at,
-                    'last_movement_id' => $inventoryMovement->id,
-                    'last_counted_at' => now()
                 ]);
             });
     }
@@ -197,12 +192,11 @@ class DataCollectorService
                 'product_id' => $record->product_id
             ], []);
 
-             InventoryService::adjustQuantity(
-                 $inventory,
-                 $record->quantity_scanned,
-                 'data collection transfer in',
-                 $custom_unique_reference_id
-             );
+
+             InventoryService::adjust($inventory, $record->quantity_scanned, [
+                 'description' => 'data collection transfer in',
+                 'custom_unique_reference_id' => $custom_unique_reference_id
+             ]);
 
             $record->update([
                 'total_transferred_in' => $record->total_transferred_in + $record->quantity_scanned,
@@ -231,12 +225,10 @@ class DataCollectorService
                 $record->updated_at
             ]);
 
-            InventoryService::adjustQuantity(
-                $inventory,
-                $record->quantity_scanned * -1,
-                'data collection transfer out',
-                $custom_unique_reference_id
-            );
+            InventoryService::adjust($inventory, $record->quantity_scanned * -1, [
+                'description' => 'data collection transfer put',
+                'custom_unique_reference_id' => $custom_unique_reference_id
+            ]);
 
             $record->update([
                 'total_transferred_out' => $record->total_transferred_out + $record->quantity_scanned,

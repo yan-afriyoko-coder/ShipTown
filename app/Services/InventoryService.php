@@ -4,90 +4,52 @@ namespace App\Services;
 
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class InventoryService
 {
-    public static function sellProduct(Inventory $inventory, float $quantityDelta, string $description, string $unique_reference_id = null, Carbon $occurred_at = null): InventoryMovement
+    public static function sell(Inventory $inventory, float $quantityDelta, array $attributes = null): InventoryMovement
     {
-        return DB::transaction(function () use ($inventory, $quantityDelta, $description, $unique_reference_id, $occurred_at) {
-            /** @var InventoryMovement $inventoryMovement */
-            $inventoryMovement = InventoryMovement::query()->create([
-                'custom_unique_reference_id' => $unique_reference_id,
-                'occurred_at' => $occurred_at ?? now(),
-                'type' => 'sale',
-                'inventory_id' => $inventory->id,
-                'product_id' => $inventory->product_id,
-                'warehouse_id' => $inventory->warehouse_id,
-                'quantity_before' => $inventory->quantity,
-                'quantity_delta' => $quantityDelta,
-                'quantity_after' => $inventory->quantity + $quantityDelta,
-                'description' => $description,
-            ]);
+        $movement = InventoryService::adjust($inventory, $quantityDelta, ['type' => InventoryMovement::TYPE_SALE]);
 
-            $inventory->update([
-                'quantity' => $inventoryMovement->quantity_after,
-                'last_movement_at' => $inventoryMovement->created_at,
-                'last_movement_id' => $inventoryMovement->id,
-            ]);
+        $movement->fill($attributes ?? []);
+        $movement->save();
 
-            return $inventoryMovement;
-        });
+        return $movement;
     }
 
-    public static function adjustQuantity(Inventory $inventory, float $quantityDelta, string $description, string $unique_reference_id = null, Carbon $occurred_at = null): InventoryMovement
+    public static function stocktake(Inventory $inventory, float $newQuantity, array $attributes = null): InventoryMovement
     {
-        return DB::transaction(function () use ($inventory, $quantityDelta, $description, $unique_reference_id, $occurred_at) {
-            /** @var InventoryMovement $inventoryMovement */
-            $inventoryMovement = InventoryMovement::query()->create([
-                'custom_unique_reference_id' => $unique_reference_id,
-                'occurred_at' => $occurred_at ?? now(),
-                'type' => 'manual_adjustment',
-                'inventory_id' => $inventory->id,
-                'product_id' => $inventory->product_id,
-                'warehouse_id' => $inventory->warehouse_id,
-                'quantity_before' => $inventory->quantity,
-                'quantity_delta' => $quantityDelta,
-                'quantity_after' => $inventory->quantity + $quantityDelta,
-                'description' => $description,
-            ]);
+        $movement = InventoryService::adjust($inventory, $newQuantity - $inventory->quantity, [
+            'type' => InventoryMovement::TYPE_STOCKTAKE,
+            'quantity_after' => $newQuantity,
+            'description' => 'stocktake',
+        ]);
 
-            $inventory->update([
-                'quantity' => $inventoryMovement->quantity_after,
-                'last_movement_at' => $inventoryMovement->created_at,
-                'last_movement_id' => $inventoryMovement->id
-            ]);
+        $movement->fill($attributes ?? []);
+        $movement->save();
 
-            return $inventoryMovement;
-        });
+        return $movement;
     }
 
-    public static function stocktake(Inventory $inventory, float $newQuantity, string $unique_reference_id = null, Carbon $occurred_at = null): InventoryMovement
+    public static function adjust(Inventory $inventory, float $quantityDelta, array $attributes = null): InventoryMovement
     {
-        return DB::transaction(function () use ($inventory, $newQuantity, $unique_reference_id, $occurred_at) {
-            /** @var InventoryMovement $inventoryMovement */
-            $inventoryMovement = InventoryMovement::query()->create([
-                'custom_unique_reference_id' => $unique_reference_id,
-                'occurred_at' => $occurred_at ?? now(),
-                'type' => 'stocktake',
-                'description' => 'stocktake',
-                'inventory_id' => $inventory->id,
-                'product_id' => $inventory->product_id,
-                'warehouse_id' => $inventory->warehouse_id,
-                'quantity_before' => $inventory->quantity,
-                'quantity_delta' => $newQuantity - $inventory->quantity,
-                'quantity_after' => $newQuantity,
-            ]);
+        $inventoryRefreshed = $inventory->refresh();
 
-            $inventory->update([
-                'quantity' => $inventoryMovement->quantity_after,
-                'last_movement_at' => $inventoryMovement->created_at,
-                'last_movement_id' => $inventoryMovement->id,
-                'last_counted_at' => $inventoryMovement->created_at
-            ]);
+        $inventoryMovement = new InventoryMovement([
+            'occurred_at' => now(),
+            'type' => InventoryMovement::TYPE_ADJUSTMENT,
+            'inventory_id' => $inventoryRefreshed->id,
+            'product_id' => $inventoryRefreshed->product_id,
+            'warehouse_id' => $inventoryRefreshed->warehouse_id,
+            'quantity_before' => $inventoryRefreshed->quantity,
+            'quantity_delta' => $quantityDelta,
+            'quantity_after' => $inventoryRefreshed->quantity + $quantityDelta,
+            'description' => '',
+        ]);
 
-            return $inventoryMovement;
-        });
+        $inventoryMovement->fill($attributes ?? []);
+        $inventoryMovement->save();
+
+        return $inventoryMovement;
     }
 }

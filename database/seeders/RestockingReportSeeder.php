@@ -21,17 +21,13 @@ class RestockingReportSeeder extends Seeder
         $products = Product::factory()->count(10)->create();
 
         $products->each(function (Product $product) use ($source_warehouse) {
-            InventoryService::adjustQuantity(
-                $product->inventory($source_warehouse->code)->first(),
-                rand(30, 100),
-                'stocktake for Restocking report sample'
-            );
 
-//            InventoryService::adjustQuantity(
-//                $product->inventory($destination_warehouse->code)->first(),
-//                rand(-13, -3),
-//                'simulate stock sold, but not received yet'
-//            );
+            /** @var Inventory $inventory */
+            $inventory = $product->inventory($source_warehouse->code)->first();
+
+            InventoryService::adjust($inventory, rand(30, 100), [
+                'description' => 'stocktake for Restocking report sample'
+            ]);
         });
 
         $destination_warehouse = Warehouse::whereCode('DUB')->first()

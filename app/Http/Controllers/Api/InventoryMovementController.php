@@ -33,10 +33,10 @@ class InventoryMovementController extends Controller
             ])
             ->first();
 
-        $inventoryMovement = InventoryService::adjustQuantity(
+        $inventoryMovement = InventoryService::adjust(
             $inventory,
             data_get($request->validated(), 'quantity'),
-            data_get($request->validated(), 'description'),
+            ['description' => data_get($request->validated(), 'description')],
         );
 
         return InventoryMovementResource::collection([$inventoryMovement]);

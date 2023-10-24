@@ -15,22 +15,12 @@ class InventoryMovementCreatedEvent
 
     public InventoryMovement $inventoryMovement;
 
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
     public function __construct(InventoryMovement $inventoryMovement)
     {
         $this->inventoryMovement = $inventoryMovement;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return Channel
-     */
-    public function broadcastOn()
+    public function broadcastOn(): Channel|PrivateChannel
     {
         return new PrivateChannel('channel-name');
     }

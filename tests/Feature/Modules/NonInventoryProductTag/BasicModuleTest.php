@@ -57,8 +57,8 @@ class BasicModuleTest extends TestCase
         /** @var Inventory $product2Inventory */
         $product2Inventory = $product2->inventory($warehouse->code)->first();
 
-        InventoryService::adjustQuantity($inventory, 10, 'test');
-        InventoryService::adjustQuantity($product2Inventory, 10, 'test');
+        InventoryService::adjust($inventory, 10);
+        InventoryService::adjust($product2Inventory, 10);
 
         $product->attachTag('ARCADIA DEAL JAN 2023', 'rms_sub_description3');
 

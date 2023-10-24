@@ -30,13 +30,15 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property float       $quantity_required
  * @property float       $restock_level
  * @property float       $reorder_point
+ * @property int|null    $last_movement_id
+ * @property Carbon|null $first_movement_at
  * @property Carbon|null $last_movement_at
  * @property Carbon|null $first_received_at
  * @property Carbon|null $last_received_at
  * @property Carbon|null $first_sold_at
  * @property Carbon|null $last_sold_at
+ * @property Carbon|null $first_counted_at
  * @property Carbon|null $last_counted_at
- * @property int|null    $last_movement_id
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -94,6 +96,16 @@ class Inventory extends BaseModel
         'reorder_point',
         'last_counted_at',
         'last_movement_id',
+
+
+        'first_movement_at',
+        'last_movement_at',
+        'first_received_at',
+        'last_received_at',
+        'first_sold_at',
+        'last_sold_at',
+        'first_counted_at',
+        'last_counted_at',
     ];
 
     protected $attributes = [
@@ -112,7 +124,18 @@ class Inventory extends BaseModel
         'restock_level'      => 'float',
         'reorder_point'      => 'float',
         'quantity_required'  => 'float',
+        'occurred_at'        => 'datetime',
+        'first_movement_at'  => 'datetime',
+        'last_movement_at'   => 'datetime',
+        'first_received_at'  => 'datetime',
+        'last_received_at'   => 'datetime',
+        'first_sold_at'      => 'datetime',
+        'last_sold_at'       => 'datetime',
+        'first_counted_at'   => 'datetime',
         'last_counted_at'    => 'datetime',
+        'deleted_at'         => 'datetime',
+        'created_at'         => 'datetime',
+        'updated_at'         => 'datetime',
     ];
 
     /**
@@ -151,6 +174,14 @@ class Inventory extends BaseModel
             ->allowedIncludes([
                 'product'
             ]);
+    }
+
+    public static function find(int $product_id, int $warehouse_id): self
+    {
+        return static::query()
+            ->where('product_id', $product_id)
+            ->where('warehouse_id', $warehouse_id)
+            ->first();
     }
 
     public function scopeSkuOrAlias($query, string $value)

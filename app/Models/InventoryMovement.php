@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -23,23 +23,26 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string description
  * @property int user_id
  * @property int previous_movement_id
- * @property Carbon occurred_at
- * @property Carbon created_at
- * @property Carbon updated_at
+ * @property Carbon $occurred_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  *
  * @property Product $product
  * @property Warehouse $warehouse
+ * @property Inventory $inventory
+ *
  */
 class InventoryMovement extends BaseModel
 {
     use HasFactory;
 
+    const TYPE_ADJUSTMENT = 'adjustment';
     const TYPE_SALE = 'sale';
+    const TYPE_RETURN = 'return';
     const TYPE_STOCKTAKE = 'stocktake';
+    const TYPE_TRANSFER_IN = 'transfer_in';
+    const TYPE_TRANSFER_OUT = 'transfer_out';
 
-    /**
-     * @var string[]
-     */
     protected $fillable = [
         'occurred_at',
         'type',
@@ -55,39 +58,27 @@ class InventoryMovement extends BaseModel
         'previous_movement_id',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function inventory(): BelongsTo
     {
         return $this->belongsTo(Inventory::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function warehouse(): BelongsTo
     {
         return $this->belongsTo(Warehouse::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function alias()
+    public function alias(): HasMany
     {
         return $this->hasMany(ProductAlias::class, 'product_id', 'product_id');
     }

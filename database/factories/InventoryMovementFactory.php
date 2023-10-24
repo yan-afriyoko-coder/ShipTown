@@ -22,6 +22,7 @@ class InventoryMovementFactory extends Factory
         $quantity_delta = rand(1, 100);
 
         return [
+            'occurred_at'       => now(),
             'inventory_id'      => $inventory->getKey(),
             'type'              => $this->faker->word(),
             'quantity_delta'    => $quantity_delta,

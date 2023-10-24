@@ -106,17 +106,13 @@ class ProductService
                     ])
                     ->first();
 
-                InventoryService::adjustQuantity(
-                    $productToKeepInventory,
-                    $productToMergeInventory->quantity,
-                    'merging from "'.$productToMerge->sku.'"'
-                );
+                InventoryService::adjust($productToKeepInventory, $productToMergeInventory->quantity, [
+                    'description' => 'merging from "'.$productToMerge->sku.'"'
+                ]);
 
-                InventoryService::adjustQuantity(
-                    $productToMergeInventory,
-                    -$productToMergeInventory->quantity,
-                    'merging to "'.$productToKeep->sku.'"'
-                );
+                InventoryService::adjust($productToMergeInventory, -$productToMergeInventory->quantity, [
+                    'description' => 'merging to "'.$productToKeep->sku.'"'
+                ]);
 
                 $productToMergeInventory->update(['quantity_reserved' => 0]);
             });
