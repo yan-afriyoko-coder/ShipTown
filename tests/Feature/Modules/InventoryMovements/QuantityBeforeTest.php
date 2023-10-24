@@ -9,7 +9,6 @@ use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
 use App\Modules\InventoryMovements\src\Jobs\PreviousMovementIdJob;
 use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeJob;
-use App\Modules\InventoryMovements\src\Models\Configuration;
 use App\Services\InventoryService;
 use Tests\TestCase;
 

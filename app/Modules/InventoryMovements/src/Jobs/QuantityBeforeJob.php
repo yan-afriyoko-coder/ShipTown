@@ -15,7 +15,9 @@ class QuantityBeforeJob extends UniqueJob
     {
         /** @var Configuration $configuration */
         $configuration = Configuration::query()->firstOrCreate();
-        $lastMovementId = data_get(InventoryMovement::query()->orderByRaw('occurred_at DESC, id DESC')->first('id'), 'id', 0);
+        $lastMovementId = data_get(InventoryMovement::query()
+            ->whereRaw('occurred_at < (SELECT IFNULL(min(occurred_at), now()) FROM inventory_movements WHERE is_first_movement IS NULL)')
+            ->orderByRaw('occurred_at DESC, id DESC')->first('id'), 'id', 0);
 
         $minMovementId = $configuration->quantity_before_job_last_movement_id_checked ?? 0;
 
