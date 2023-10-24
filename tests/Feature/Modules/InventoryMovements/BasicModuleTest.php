@@ -17,7 +17,6 @@ use App\Modules\InventoryMovements\src\Jobs\InventoryLastMovementIdJob;
 use App\Modules\InventoryMovements\src\Jobs\InventoryQuantityJob;
 use App\Modules\InventoryMovements\src\Jobs\PreviousMovementIdJob;
 use App\Modules\InventoryMovements\src\Jobs\QuantityAfterJob;
-use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeBasicJob;
 use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeJob;
 use App\Modules\InventoryMovements\src\Jobs\QuantityDeltaJob;
 use App\Modules\InventoryMovements\src\Models\Configuration;
@@ -28,7 +27,6 @@ class BasicModuleTest extends TestCase
 {
     private InventoryMovement $inventoryMovement01;
     private InventoryMovement $inventoryMovement02;
-    private float $initialQuantity;
     private Inventory $inventory;
 
     protected function setUp(): void
@@ -42,8 +40,6 @@ class BasicModuleTest extends TestCase
         $warehouse = Warehouse::factory()->create();
 
         $this->inventory = Inventory::find($product->getKey(), $warehouse->getKey());
-
-        $this->initialQuantity = $this->inventory->quantity;
 
         $this->inventoryMovement01 = InventoryService::adjust($this->inventory, 20);
         $this->inventoryMovement02 = InventoryService::sell($this->inventory, -5);
@@ -123,7 +119,6 @@ class BasicModuleTest extends TestCase
 
         PreviousMovementIdJob::dispatch();
         QuantityBeforeJob::dispatch();
-        QuantityBeforeBasicJob::dispatch();
         InventoryQuantityJob::dispatch();
 
         ray(InventoryMovement::query()->get()->toArray(), Configuration::first()->toArray());
