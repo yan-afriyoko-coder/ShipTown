@@ -11,7 +11,9 @@ class NotInImportTableProductsSql extends UniqueJob
     {
         // WARNING: Use with caution! It will override the inventory
         DB::statement("
-            CREATE TEMPORARY TABLE aTemp_ProductsDuplicated AS
+            DROP TABLE IF EXISTS aTemp_ProductsDuplicated;
+
+            CREATE TABLE aTemp_ProductsDuplicated AS
                 SELECT products.id as product_id, products.sku, concat('UPDATE Item SET LastUpdated = getDate() WHERE ItemLookupCode=''', products.sku, '''') as RMS_SQL
                 FROM products
 
@@ -22,16 +24,38 @@ class NotInImportTableProductsSql extends UniqueJob
 
                 LIMIT 50000;
 
-                SELECT * FROM products
+            SELECT * FROM products
 
-                ##UPDATE products
+            ##UPDATE products
 
-                INNER JOIN aTemp_ProductsDuplicated
-                  ON aTemp_ProductsDuplicated.product_id = products.id
+            INNER JOIN aTemp_ProductsDuplicated
+              ON aTemp_ProductsDuplicated.product_id = products.id
 
-                ##SET products.sku = concat('sku_removed_','id_', products.id)
+            ##SET products.sku = concat('sku_removed_','id_', products.id)
 
-                LIMIT 500
+            LIMIT 500;
+
+## INSERT INTO inventory_movements (occurred_at, type, inventory_id, product_id, warehouse_id, quantity_after, created_at, updated_at, user_id, description)
+## SELECT
+##
+##  now() as occurred_at,
+##  'stocktake' as type,
+##  inventory.id as inventory_id,
+##  inventory.product_id,
+##  inventory.warehouse_id,
+##  0 as quantity_after,
+##  now() as created_at,
+##  now() as updated_at,
+##  1 as user_id,
+##  'clearing duplicated RMS products' as description
+##
+## FROM `products`
+##
+## INNER JOIN inventory
+##   ON inventory.product_id = products.id
+##   AND (inventory.quantity != 0 OR inventory.quantity_reserved != 0)
+##
+## WHERE `sku` LIKE 'sku_removed_%'
         ");
     }
 }
