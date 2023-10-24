@@ -11,6 +11,7 @@ use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Exception;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ProcessImportedProductRecordsJob extends UniqueJob
@@ -20,6 +21,16 @@ class ProcessImportedProductRecordsJob extends UniqueJob
     public function handle(): bool
     {
         $batch_size = 200;
+
+        DB::statement('
+            UPDATE modules_rmsapi_products_imports
+            LEFT JOIN products_aliases
+                ON modules_rmsapi_products_imports.sku = products_aliases.alias
+
+            SET modules_rmsapi_products_imports.product_id = products_aliases.product_id
+
+            WHERE modules_rmsapi_products_imports.product_id IS NULL
+        ');
 
         do {
             $this->processImportedProducts($batch_size);

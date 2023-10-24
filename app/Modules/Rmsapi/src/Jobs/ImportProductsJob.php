@@ -278,15 +278,5 @@ class ImportProductsJob extends UniqueJob
         ");
 
         $this->rmsConnection->update(['products_last_timestamp' => $productsCollection->last()['db_change_stamp']]);
-
-        DB::statement('
-            UPDATE modules_rmsapi_products_imports
-            LEFT JOIN products_aliases
-                ON modules_rmsapi_products_imports.sku = products_aliases.alias
-
-            SET modules_rmsapi_products_imports.product_id = products_aliases.product_id
-
-            WHERE modules_rmsapi_products_imports.product_id IS NULL
-        ');
     }
 }
