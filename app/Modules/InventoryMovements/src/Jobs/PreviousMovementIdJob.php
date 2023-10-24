@@ -41,7 +41,7 @@ class PreviousMovementIdJob extends UniqueJob
                 INNER JOIN inventory
                     ON inventory.id = inventory_movements.inventory_id
                 SET
-                    is_first_movement = ISNULL(tempTable.previous_movement_id),
+                    inventory_movements.is_first_movement = ISNULL(tempTable.previous_movement_id),
                     inventory_movements.product_id = inventory.product_id,
                     inventory_movements.warehouse_id = inventory.warehouse_id,
                     inventory_movements.quantity_before = previous_inventory_movement.quantity_after,
