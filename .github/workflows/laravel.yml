@@ -19,15 +19,15 @@ jobs:
           php-version: 8.1
       - name: Prepare The Environment
         run: cp .env.example .env
-      - name: Show mysql version 1
-        run: mysql --host 127.0.0.1 --port 3306 -uroot -proot -e "SELECT @@VERSION"
-      - name: Show mysql version 2
-        run: |
-          echo 'SELECT VERSION();' | bundle exec rails db -p
       - name: Create Database
         run: |
           sudo systemctl start mysql
           mysql --user="root" --password="root" -e "CREATE DATABASE products_management_phpunit character set UTF8mb4 collate utf8mb4_bin;"
+      - name: Show mysql version 1
+        run: mysql --user="root" --password="root" -e "SELECT @@VERSION"
+      - name: Show mysql version 2
+        run: |
+          echo 'SELECT VERSION();' | bundle exec rails db -p
       - name: Install Composer Dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
       - name: Generate Application Key
