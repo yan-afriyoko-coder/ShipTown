@@ -29,6 +29,40 @@ class QuantityBeforeTest extends TestCase
         $this->inventory = Inventory::find($product->getKey(), $warehouse->getKey());
     }
 
+    public function testIncorrectStockTakeQuantityBefore()
+    {
+        $inventoryMovement01 = InventoryService::adjust($this->inventory, 20);
+        $inventoryMovement02 = InventoryService::adjust($this->inventory, 10);
+        $stocktakeMovement = InventoryService::stocktake($this->inventory, 5);
+
+        PreviousMovementIdJob::dispatch();
+
+        $stocktakeMovement->update([
+            'quantity_before' => 0,
+        ]);
+
+        QuantityBeforeJob::dispatch();
+
+        ray(InventoryMovement::query()->get()->toArray());
+
+        $inventoryMovement01->refresh();
+        $inventoryMovement02->refresh();
+        $stocktakeMovement->refresh();
+
+        $this->assertEquals($inventoryMovement02->quantity_before, $inventoryMovement01->quantity_after);
+        $this->assertEquals($stocktakeMovement->quantity_before, $inventoryMovement02->quantity_after);
+
+        $this->assertDatabaseHas('inventory_movements', [
+            'id' => $inventoryMovement02->getKey(),
+            'quantity_before' => $inventoryMovement01->quantity_after,
+        ]);
+
+        $this->assertDatabaseHas('inventory_movements', [
+            'id' => $stocktakeMovement->getKey(),
+            'quantity_before' => $inventoryMovement02->quantity_after,
+        ]);
+    }
+
     public function testIncorrectQuantityBefore()
     {
         $inventoryMovement01 = InventoryService::adjust($this->inventory, 20);

@@ -9,7 +9,9 @@ class InventoryService
 {
     public static function sell(Inventory $inventory, float $quantityDelta, array $attributes = null): InventoryMovement
     {
-        $movement = InventoryService::adjust($inventory, $quantityDelta, ['type' => InventoryMovement::TYPE_SALE]);
+        $movement = InventoryService::adjust($inventory, $quantityDelta, [
+            'type' => InventoryMovement::TYPE_SALE
+        ]);
 
         $movement->fill($attributes ?? []);
         $movement->save();
@@ -19,8 +21,16 @@ class InventoryService
 
     public static function stocktake(Inventory $inventory, float $newQuantity, array $attributes = null): InventoryMovement
     {
-        $movement = InventoryService::adjust($inventory, $newQuantity - $inventory->quantity, [
+        $inventoryRefreshed = $inventory->refresh();
+
+        $movement = new InventoryMovement([
+            'occurred_at' => now(),
             'type' => InventoryMovement::TYPE_STOCKTAKE,
+            'inventory_id' => $inventoryRefreshed->id,
+            'product_id' => $inventoryRefreshed->product_id,
+            'warehouse_id' => $inventoryRefreshed->warehouse_id,
+            'quantity_before' => $inventoryRefreshed->quantity,
+            'quantity_delta' => $newQuantity - $inventoryRefreshed->quantity,
             'quantity_after' => $newQuantity,
             'description' => 'stocktake',
         ]);
