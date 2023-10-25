@@ -50,8 +50,8 @@ class InventoryMovement extends BaseModel
         'inventory_id',
         'product_id',
         'warehouse_id',
-        'quantity_delta',
         'quantity_before',
+        'quantity_delta',
         'quantity_after',
         'description',
         'user_id',
@@ -62,8 +62,8 @@ class InventoryMovement extends BaseModel
         'occurred_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
-        'quantity_delta' => 'float',
         'quantity_before' => 'float',
+        'quantity_delta' => 'float',
         'quantity_after' => 'float',
     ];
 
