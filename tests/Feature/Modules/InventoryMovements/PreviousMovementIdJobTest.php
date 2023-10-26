@@ -43,9 +43,9 @@ class PreviousMovementIdJobTest extends TestCase
 
         ray(InventoryMovement::query()->get()->toArray(), Configuration::query()->firstOrCreate([])->toArray());
 
-        $this->assertNotNull($inventoryMovement02->previous_movement_id, 'previous_movement_id should not be null');
-        $this->assertEquals($inventoryMovement01->getKey(), $inventoryMovement02->previous_movement_id, 'Not matching previous_movement_id');
-        $this->assertEquals($inventoryMovement02->getKey(), $inventoryMovement03->previous_movement_id, 'Not matching previous_movement_id');
+        $this->assertNotNull($inventoryMovement02->previous_movement_id, '$inventoryMovement02 previous_movement_id should not be null');
+        $this->assertEquals($inventoryMovement01->getKey(), $inventoryMovement02->previous_movement_id, '$inventoryMovement01 Not matching previous_movement_id');
+        $this->assertEquals($inventoryMovement02->getKey(), $inventoryMovement03->previous_movement_id, '$inventoryMovement02 Not matching previous_movement_id');
 
         $this->assertDatabaseHas('inventory_movements', [
             'id' => $inventoryMovement02->getKey(),
