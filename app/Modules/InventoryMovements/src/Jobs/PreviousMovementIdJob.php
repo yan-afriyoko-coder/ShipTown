@@ -26,8 +26,8 @@ class PreviousMovementIdJob extends UniqueJob
                                  AND previous_inventory_movement.occurred_at <= inventory_movements.occurred_at
                                  AND previous_inventory_movement.id != inventory_movements.id
                                  AND (
-                                      previous_inventory_movement.occurred_at = inventory_movements.occurred_at
-                                      AND previous_inventory_movement.id < inventory_movements.id
+                                      (previous_inventory_movement.occurred_at = inventory_movements.occurred_at AND previous_inventory_movement.id < inventory_movements.id)
+                                     OR (previous_inventory_movement.occurred_at < inventory_movements.occurred_at)
                                  )
                                ORDER BY
                                     previous_inventory_movement.occurred_at DESC,
