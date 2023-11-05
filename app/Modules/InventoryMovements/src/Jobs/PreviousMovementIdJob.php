@@ -39,6 +39,18 @@ class PreviousMovementIdJob extends UniqueJob
                     LIMIT 500;
             ');
 
+             DB::update('
+                UPDATE inventory_movements
+
+                INNER JOIN tempTable ON
+                    tempTable.id = inventory_movements.previous_movement_id
+
+                SET
+                    inventory_movements.is_first_movement = null,
+                    inventory_movements.previous_movement_id = null,
+                    inventory_movements.updated_at = NOW()
+            ');
+
             $recordsUpdated = DB::update('
                 UPDATE inventory_movements
                 INNER JOIN tempTable ON
