@@ -300,7 +300,7 @@
 
         methods: {
             movementsReportLink(warehouse_code) {
-              return '/reports/inventory-movements?filter%5Bcreated_at_between%5D=&filter%5Bwarehouse_code%5D=' + warehouse_code + '&search=' + this.product['sku']
+              return '/reports/inventory-movements?filter[created_at_between]=&filter[warehouse_code]=' + warehouse_code + '&filter[search]=' + this.product['sku']
             },
 
             soldLast7Days(warehouse_id) {
