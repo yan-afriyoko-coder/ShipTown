@@ -2,7 +2,7 @@
     <div>
         <div class="text-primary h5">{{ product ? product['name'] : '&nbsp;' }}</div>
         <div>
-            sku: <font-awesome-icon icon="copy" class="fa-xs btn-link" role="button" @click="copyToClipBoard((product ? product['sku'] : '') )"></font-awesome-icon><b> <a target="_blank" :href="'/products?hide_nav_bar=true&sku=' + (product ? product['sku'] : '') " class="font-weight-bold">{{ (product ? product['sku'] : '&nbsp;') }}</a></b><br>
+            sku: <font-awesome-icon icon="copy" class="fa-xs btn-link" role="button" @click="copyToClipBoard((product ? product['sku'] : '') )"></font-awesome-icon><b>&nbsp;<a :href="'/products?sku=' + (product ? product['sku'] : '') " class="font-weight-bold">{{ (product ? product['sku'] : '&nbsp;') }}</a></b><br>
             <span @click="copyToClipBoard((product ? product['id'] : ''))" class="small text-secondary">
                 id: {{ product ? product['id'] : '' }}
             </span>
