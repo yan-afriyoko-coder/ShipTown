@@ -16,7 +16,7 @@ class DispatchMonthlyEventJob extends UniqueJob
             'code' => self::class,
         ], [
             'error_message' => 'Monthly event heartbeat missed',
-            'expires_at' => now()->addDay()
+            'expires_at' => now()->addMonth()->addDay(),
         ]);
     }
 }

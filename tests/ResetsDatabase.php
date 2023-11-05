@@ -3,25 +3,18 @@
 namespace Tests;
 
 use App;
-use App\Models\DataCollection;
-use App\Models\DataCollectionRecord;
 use App\Models\Heartbeat;
 use App\Models\InventoryMovement;
 use App\Models\Module;
-use App\Models\Order;
-use App\Models\OrderProduct;
 use App\Models\OrderProductTotal;
-use App\Models\OrderStatus;
-use App\Models\Product;
-use App\Models\ProductAlias;
 use App\Models\Session;
-use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
 use App\Modules\DpdIreland\src\Models\DpdIreland;
+use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
 use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsServiceProvider;
 use App\Modules\InventoryReservations\src\Models\Configuration;
 use App\Modules\MagentoApi\src\Models\MagentoConnection;
@@ -98,5 +91,6 @@ trait ResetsDatabase
         App\Models\Configuration::query()->updateOrCreate([], ['disable_2fa' => true]);
 
         InventoryReservationsServiceProvider::enableModule();
+        InventoryMovementsServiceProvider::enableModule();
     }
 }

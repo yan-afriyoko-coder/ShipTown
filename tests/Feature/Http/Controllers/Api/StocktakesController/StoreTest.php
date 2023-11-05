@@ -5,7 +5,6 @@ namespace Tests\Feature\Http\Controllers\Api\StocktakesController;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StoreTest extends TestCase

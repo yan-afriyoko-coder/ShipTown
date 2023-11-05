@@ -9,7 +9,7 @@
                     This is a demo site with public access<br>
                 </div>
                 <div class="alert alert-danger">
-                    Please do no use real data here as it will be deleted without notice or exposed to others<br>
+                    Please do no use real data here as it will be deleted without notice or might be exposed to others<br>
                 </div>
             @endif
             <div class="card">

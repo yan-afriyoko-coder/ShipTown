@@ -24,7 +24,7 @@
                                <tbody>
                                    <template v-for="inventory in product.inventory" >
                                       <tr class="" v-bind:class="{ 'table-active': currentUser()['warehouse'] && inventory['warehouse_code'] === currentUser()['warehouse']['code']}">
-                                          <td class="text-left">{{ inventory['warehouse_code'] }}</td>
+                                          <td class="text-left"><a class="text-primary" :href=" movementsReportLink(inventory['warehouse_code']) ">{{ inventory['warehouse_code'] }}</a></td>
                                           <td class="text-left">{{ inventory['shelf_location'] }}</td>
                                           <td>{{ toNumberOrDash(inventory['quantity_available'])}}</td>
                                           <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity_reserved'])}}</td>
@@ -299,6 +299,10 @@
         },
 
         methods: {
+            movementsReportLink(warehouse_code) {
+              return '/reports/inventory-movements?filter%5Bcreated_at_between%5D=&filter%5Bwarehouse_code%5D=' + warehouse_code + '&search=' + this.product['sku']
+            },
+
             soldLast7Days(warehouse_id) {
               const soldLast7DaysArray = this.product['inventoryMovementsStatistics'][warehouse_id];
 

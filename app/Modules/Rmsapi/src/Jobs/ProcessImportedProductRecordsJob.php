@@ -11,6 +11,7 @@ use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Exception;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ProcessImportedProductRecordsJob extends UniqueJob
@@ -20,6 +21,16 @@ class ProcessImportedProductRecordsJob extends UniqueJob
     public function handle(): bool
     {
         $batch_size = 200;
+
+        DB::statement('
+            UPDATE modules_rmsapi_products_imports
+            LEFT JOIN products_aliases
+                ON modules_rmsapi_products_imports.sku = products_aliases.alias
+
+            SET modules_rmsapi_products_imports.product_id = products_aliases.product_id
+
+            WHERE modules_rmsapi_products_imports.product_id IS NULL
+        ');
 
         do {
             $this->processImportedProducts($batch_size);
@@ -68,26 +79,29 @@ class ProcessImportedProductRecordsJob extends UniqueJob
         });
     }
 
-    /**
-     * @param RmsapiProductImport $importedProduct
-     */
     private function import(RmsapiProductImport $importedProduct): void
     {
-        $attributes = [
-            'sku'  => $importedProduct->raw_import['item_code'],
-            'name' => $importedProduct->raw_import['description'],
-        ];
+        $product = Product::query()->firstOrCreate(['id' => $importedProduct->product_id], [
+            'sku'  => $importedProduct->sku,
+            'name' => $importedProduct->name,
+        ]);
 
-        /** @var Product $product */
-        $product = Product::query()->firstOrCreate(['sku' => $attributes['sku']], $attributes);
+        if ($product->sku !== $importedProduct->sku) {
+            Log::debug('ProcessImportedProductRecordsJob updating product sku', [
+                'sku' => $product->sku,
+                'old_sku' => $product->sku,
+                'new_sku' => $importedProduct->sku,
+            ]);
+            $product->update(['sku' => $importedProduct->sku]);
+        }
 
-        if ($product->name !== $attributes['name']) {
+        if ($product->name !== $importedProduct->name) {
             Log::debug('ProcessImportedProductRecordsJob updating product name', [
                 'sku' => $product->sku,
                 'old_name' => $product->name,
-                'new_name' => $attributes['name'],
+                'new_name' => $importedProduct->name,
             ]);
-            $product->update(['name' => $attributes['name']]);
+            $product->update(['name' => $importedProduct->name]);
         }
 
         $this->attachTags($importedProduct, $product);
@@ -101,7 +115,7 @@ class ProcessImportedProductRecordsJob extends UniqueJob
         $importedProduct->update([
             'processed_at' => now(),
             'product_id'     => $product->id,
-            'sku'            => $attributes['sku'],
+            'sku'            => $importedProduct->sku,
         ]);
     }
 

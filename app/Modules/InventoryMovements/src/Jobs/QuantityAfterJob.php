@@ -36,7 +36,8 @@ class QuantityAfterJob extends UniqueJob
 
                 WHERE inventory_movements.type != "stocktake"
             ');
-            sleep(1);
+
+            usleep(400000); // 0.4 seconds
         } while ($recordsUpdated > 0 && $maxRounds > 0);
     }
 }

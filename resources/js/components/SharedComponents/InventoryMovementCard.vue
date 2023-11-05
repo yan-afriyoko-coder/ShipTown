@@ -5,7 +5,7 @@
         </div>
 
         <div class="row col-sm-12 col-lg-8 text-right mt-1">
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-6">
                 <table class="table-borderless small text-left text-nowrap">
                     <tr>
                         <td>unique id:</td>
@@ -17,7 +17,7 @@
                     </tr>
                     <tr>
                             <td>at:</td>
-                        <td class="pl-1">{{ record['created_at'] | moment('YYYY MMM D HH:mm') }}</td>
+                        <td class="pl-1">{{ record['occurred_at'] | moment('YYYY MMM D H:mm') }}</td>
                     </tr>
                     <tr>
                         <td>type:</td>
@@ -37,7 +37,8 @@
                     </tr>
                 </table>
             </div>
-            <div class="col-12 col-md-9 text-right align-text-top h-100">
+            <div class="col-12 col-md-6 text-right align-text-top h-100">
+                <text-card label="warehouse" :text="record['inventory']['warehouse_code']" class="fa-pull-left"></text-card>
                 <number-card label="before" :number="record['quantity_before']"></number-card>
                 <number-card label="change" :number="record['quantity_delta']"></number-card>
                 <number-card label="after" :number="record['quantity_after']"></number-card>

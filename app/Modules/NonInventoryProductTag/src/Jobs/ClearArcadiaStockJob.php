@@ -44,11 +44,9 @@ class ClearArcadiaStockJob extends UniqueJob
     {
         $inventory->refresh();
         if ($inventory->quantity != 0) {
-            InventoryService::adjustQuantity(
-                $inventory,
-                -$inventory->quantity,
-                'non_inventory_product_adjustment'
-            );
+            InventoryService::adjust($inventory, $inventory->quantity * (-1), [
+                'description' => 'non_inventory_product_adjustment',
+            ]);
         }
     }
 }

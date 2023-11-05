@@ -2,6 +2,7 @@
 
 namespace App\Modules\Rmsapi\src\Models;
 
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,7 +19,9 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $reserved_at
  * @property Carbon|null $when_processed
  * @property int|null    $product_id
+ * @property int|null    $rms_product_id
  * @property string|null $sku
+ * @property string|null $name
  * @property array       $raw_import
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -91,5 +94,10 @@ class RmsapiProductImport extends Model
     public function rmsapiConnection(): BelongsTo
     {
         return $this->belongsTo(RmsapiConnection::class, 'connection_id', 'id');
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 }

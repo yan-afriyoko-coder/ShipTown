@@ -91,7 +91,7 @@
                 this.setUrlParameter('filter[description]', '');
                 this.setUrlParameter('per_page', 20);
                 this.setUrlParameter('search', search);
-                this.setUrlParameter('sort', '-created_at');
+                this.setUrlParameter('sort', '-occurred_at,-id');
                 this.reloadProducts();
             },
 
@@ -106,7 +106,7 @@
 
                 let params = this.$router.currentRoute.query;
                 params['include'] = 'product,inventory,user,product.tags';
-                params['sort'] = '-id';
+                params['sort'] = '-occurred_at,-id';
                 params['page'] = page;
 
                 this.apiGetInventoryMovements(params)

@@ -6,48 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StocktakesStoreRequest;
 use App\Http\Resources\InventoryMovementResource;
 use App\Models\Inventory;
-use App\Models\InventoryMovement;
 use App\Services\InventoryService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class StocktakesController extends Controller
 {
     public function store(StocktakesStoreRequest $request): AnonymousResourceCollection
     {
-        $inventoryMovement = null;
+        $inventory = Inventory::find($request->get('product_id'), $request->get('warehouse_id'));
 
-        DB::transaction(function () use ($request, &$inventoryMovement) {
-            /** @var Inventory $inventory */
-            $inventory = Inventory::where([
-                    'product_id' => $request->get('product_id'),
-                    'warehouse_id' => $request->get('warehouse_id'),
-                ])
-                ->first();
-
-            $quantityDelta = $request->get('new_quantity') - $inventory->quantity;
-
-            /** @var InventoryMovement $inventoryMovement */
-            $inventoryMovement = InventoryMovement::query()->create([
-                'type' => 'stocktake',
-                'inventory_id' => $inventory->id,
-                'product_id' => $inventory->product_id,
-                'warehouse_id' => $inventory->warehouse_id,
-                'quantity_before' => $inventory->quantity,
-                'quantity_delta' => $quantityDelta,
-                'quantity_after' => $inventory->quantity + $quantityDelta,
-                'description' => 'stocktake',
-                'user_id' => Auth::id(),
-            ]);
-
-            $inventory->update([
-                'quantity' => $inventoryMovement->quantity_after,
-                'last_movement_at' => $inventoryMovement->created_at,
-                'last_movement_id' => $inventoryMovement->id,
-                'last_counted_at' => now()
-            ]);
-        });
+        $inventoryMovement = InventoryService::stocktake($inventory, $request->get('new_quantity'), [
+            'description' => 'stocktake',
+            'user_id' => Auth::id(),
+        ]);
 
         return InventoryMovementResource::collection([$inventoryMovement]);
     }

@@ -28,7 +28,7 @@ class InventoryMovementWebhookTest extends TestCase
             'warehouse_id' => Warehouse::first()->getKey(),
         ])->first();
 
-        InventoryService::adjustQuantity($inventory, 1, 'test');
+        InventoryService::adjust($inventory, 1);
 
         Bus::assertDispatchedAfterResponse(PublishInventoryMovementWebhooksJob::class);
     }

@@ -32,7 +32,7 @@ class TransfersFromWarehouseSeeder extends Seeder
                     ]);
 
                 DataCollectionRecord::factory()
-                    ->count(3)
+                    ->count(10)
                     ->create([
                         'data_collection_id' => $dataCollection->getKey(),
                     ]);

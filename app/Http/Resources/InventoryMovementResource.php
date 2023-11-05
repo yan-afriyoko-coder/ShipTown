@@ -14,12 +14,13 @@ class InventoryMovementResource extends JsonResource
     {
         return [
             "id"                         => $this->id,
+            "occurred_at"                => $this->occurred_at,
             "custom_unique_reference_id" => $this->custom_unique_reference_id,
             "inventory_id"               => $this->inventory_id,
             "product_id"                 => $this->product_id,
             "warehouse_id"               => $this->warehouse_id,
-            "quantity_delta"             => $this->quantity_delta,
             "quantity_before"            => $this->quantity_before,
+            "quantity_delta"             => $this->quantity_delta,
             "quantity_after"             => $this->quantity_after,
             "description"                => $this->description,
             "user_id"                    => $this->user_id,

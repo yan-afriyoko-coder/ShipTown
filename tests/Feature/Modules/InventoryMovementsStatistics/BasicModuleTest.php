@@ -31,6 +31,7 @@ class BasicModuleTest extends TestCase
 
         Carbon::setTestNow(now()->subDays(30));
         InventoryMovement::query()->create([
+            'occurred_at' => now(),
             'custom_unique_reference_id' => 'test',
             'type' => 'sale',
             'inventory_id' => $inventory->id,
@@ -81,7 +82,7 @@ class BasicModuleTest extends TestCase
         $inventory = Inventory::first();
 
         $quantitySold = rand(1, 100);
-        InventoryService::sellProduct($inventory, $quantitySold, 'test');
+        InventoryService::sell($inventory, $quantitySold);
 
         /** @var InventoryMovementsStatistic $inventoryMovementStatistic */
         $inventoryMovementStatistic = InventoryMovementsStatistic::query()
@@ -112,6 +113,7 @@ class BasicModuleTest extends TestCase
         $randomQuantity = rand(1, 100);
 
         InventoryMovement::query()->create([
+            'occurred_at' => now(),
             'custom_unique_reference_id' => 'test',
             'type' => 'sale',
             'inventory_id' => $inventory->id,

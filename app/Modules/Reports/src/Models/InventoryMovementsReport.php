@@ -2,12 +2,8 @@
 
 namespace App\Modules\Reports\src\Models;
 
-use App\Models\Inventory;
 use App\Models\InventoryMovement;
-use App\Models\Product;
 use App\Models\Warehouse;
-use App\User;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class InventoryMovementsReport extends Report
@@ -31,6 +27,7 @@ class InventoryMovementsReport extends Report
         $this->fields = [
             'id'                            => 'inventory_movements.id',
             'custom_unique_reference_id'    => 'inventory_movements.custom_unique_reference_id',
+            'occurred_at'                   => 'inventory_movements.occurred_at',
             'created_at'                    => 'inventory_movements.created_at',
             'quantity_delta'                => 'inventory_movements.quantity_delta',
             'quantity_before'               => 'inventory_movements.quantity_before',
@@ -43,6 +40,10 @@ class InventoryMovementsReport extends Report
         ];
 
         $this->casts = [
+            'id'                => 'integer',
+            'user_id'           => 'integer',
+            'product_id'        => 'integer',
+            'occurred_at'       => 'datetime',
             'created_at'        => 'datetime',
             'quantity_delta'    => 'float',
             'quantity_before'   => 'float',
@@ -80,24 +81,4 @@ class InventoryMovementsReport extends Report
             })
         );
     }
-
-//    public function user(): BelongsTo
-//    {
-//        return $this->belongsTo(User::class);
-//    }
-//
-//    public function product(): BelongsTo
-//    {
-//        return $this->belongsTo(Product::class);
-//    }
-//
-//    public function inventory(): BelongsTo
-//    {
-//        return $this->belongsTo(Inventory::class);
-//    }
-//
-//    public function warehouse(): BelongsTo
-//    {
-//        return $this->belongsTo(Warehouse::class);
-//    }
 }

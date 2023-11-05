@@ -16,27 +16,35 @@ class InventoryLastMovementIdJob extends UniqueJob
                 WITH tbl AS (
                     SELECT
                         inventory.id as inventory_id,
-                        max(inventory_movements.id) as last_movement_id
+                        (
+                            SELECT ID
+                            FROM inventory_movements
+                            WHERE inventory_movements.inventory_id = inventory.id
+                            ORDER BY occurred_at DESC, id DESC
+                            LIMIT 1
+                        ) as last_movement_id
+
 
                     FROM inventory
                     INNER JOIN inventory_movements
                       ON inventory_movements.inventory_id = inventory.id
-                      AND inventory_movements.id > IFNULL(inventory.last_movement_id, 0)
+                      AND inventory_movements.occurred_at > IFNULL(inventory.last_movement_at, "2000-01-01 00:00:00")
 
                     GROUP BY inventory.id
 
                     LIMIT 50000
                 )
+
                 UPDATE inventory
                 INNER JOIN tbl
                  ON tbl.inventory_id = inventory.id
                 INNER JOIN inventory_movements
                  ON inventory_movements.id = tbl.last_movement_id
                 SET
-                    inventory.quantity = inventory_movements.quantity_after,
-                    inventory.last_movement_id = tbl.last_movement_id,
-                    inventory.last_movement_at = inventory_movements.created_at,
-                    inventory.updated_at = now();
+                    inventory.last_movement_id  = inventory_movements.id,
+                    inventory.last_movement_at  = inventory_movements.occurred_at,
+                    inventory.quantity          = inventory_movements.quantity_after,
+                    inventory.updated_at        = now();
             ');
             sleep(1);
             $maxRounds--;

@@ -46,9 +46,9 @@ class TotalsByWarehouseTagTest extends TestCase
             'warehouse_id' => $warehouse3_noTag->getKey()
         ])->first();
 
-        InventoryService::adjustQuantity($inventory1_withTag, 10, 'test');
-        InventoryService::adjustQuantity($inventory2_withTag, 5, 'test');
-        InventoryService::adjustQuantity($inventory3_noTag, 3, 'test');
+        InventoryService::adjust($inventory1_withTag, 10);
+        InventoryService::adjust($inventory2_withTag, 5);
+        InventoryService::adjust($inventory3_noTag, 3);
 
         InventoryTotalByWarehouseTag::query()->update([
             'quantity' => 0,
@@ -121,9 +121,9 @@ class TotalsByWarehouseTagTest extends TestCase
                 'warehouse_id' => $warehouse3_noTag->getKey()
             ])->first();
 
-        InventoryService::adjustQuantity($inventory1_withTag, 10, 'test');
-        InventoryService::adjustQuantity($inventory2_withTag, 5, 'test');
-        InventoryService::adjustQuantity($inventory3_noTag, 3, 'test');
+        InventoryService::adjust($inventory1_withTag, 10);
+        InventoryService::adjust($inventory2_withTag, 5);
+        InventoryService::adjust($inventory3_noTag, 3);
 
         ray('inventory_totals_by_warehouse_tag', InventoryTotalByWarehouseTag::query()->first()->toArray());
 

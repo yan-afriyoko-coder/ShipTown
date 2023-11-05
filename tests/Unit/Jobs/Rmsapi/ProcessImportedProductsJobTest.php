@@ -22,11 +22,8 @@ class ProcessImportedProductsJobTest extends TestCase
         $raw_import['is_web_item'] = 1;
         $importData->update(['raw_import' => $raw_import]);
 
-        // do
-        foreach (RmsapiConnection::all() as $rmsapiConnection) {
-            $job = new ProcessImportedProductRecordsJob($rmsapiConnection->id);
-            $job->handle();
-        }
+        $job = new ProcessImportedProductRecordsJob();
+        $job->handle();
 
         // assert
         $this->assertEquals(
