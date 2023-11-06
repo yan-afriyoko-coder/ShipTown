@@ -3,7 +3,7 @@
         <div class="col-lg-6">
             <div class="text-primary h5">{{ entry['name_ordered'] }}</div>
             <div>
-                sku ordered: <b>{{ entry['sku_ordered'] }}</b>
+                sku ordered: <b :class="entry['product_id'] ? '' : 'bg-warning'">{{ entry['sku_ordered'] }}</b>
             </div>
             <div>
                 product: <b><a target="_blank" :href="productUrl">{{ productSku }}</a></b>
