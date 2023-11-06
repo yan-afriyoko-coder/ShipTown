@@ -110,7 +110,7 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
             $inventoryMovement = InventoryService::adjust($inventory, $salesRecord->quantity, [
                 'type' => $salesRecord->type,
                 'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time)->subHour(),
-                'description' => 'rmsapi_shipping_import',
+                'description' => 'rmsapi_inventory_movement',
                 'custom_unique_reference_id' => $salesRecord->uuid
             ]);
         }
