@@ -31,6 +31,8 @@ class QuantityBeforeTest extends TestCase
 
     public function testIncorrectStockTakeQuantityBefore()
     {
+        ray()->showQueries();
+
         $inventoryMovement01 = InventoryService::adjust($this->inventory, 20);
         $inventoryMovement02 = InventoryService::adjust($this->inventory, 10);
         $stocktakeMovement = InventoryService::stocktake($this->inventory, 5);
