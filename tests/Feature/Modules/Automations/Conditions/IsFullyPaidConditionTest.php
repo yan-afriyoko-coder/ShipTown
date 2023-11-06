@@ -15,33 +15,39 @@ class IsFullyPaidConditionTest extends TestCase
     {
         parent::setUp();
 
-        // order1 is fully paid
+        // scenario 1: order1 is fully paid
         /** @var Order $order1 */
         $order1 = Order::factory()->create();
         OrderProduct::factory()->create(['order_id' => $order1->getKey()]);
         $order1->update(['total_paid' => $order1->orderProductsTotals->total_price]);
 
-        // order2 is partially paid (shipping not paid)
+        // scenario 2: order2 is partially paid (shipping not paid)
         /** @var Order $order2 */
         $order2 = Order::factory()->create();
         OrderProduct::factory()->create(['order_id' => $order2->getKey()]);
         $order2->update(['total_shipping' => 10, 'total_paid' => $order2->orderProductsTotals->total_price]);
 
-        // order3 is not paid at all
+        // scenario 3: order3 is not paid at all
         /** @var Order $order3 */
         $order3 = Order::factory()->create();
         OrderProduct::factory()->create(['order_id' => $order3->getKey()]);
 
-        // order4 is not paid but also has 0 total, should be considered as NOT PAID
+        // scenario 4: order4 is not paid but also has 0 total, should be considered as NOT PAID
         /** @var Order $order4 */
         $order4 = Order::factory()->create();
         OrderProduct::factory()->create(['order_id' => $order4->getKey(), 'price' => 0]);
 
-        // order5 is paid but 0 total, it should be considered as PAID
+        // scenario 5: order5 is paid but 0 total, it should be considered as PAID
         /** @var Order $order3 */
         $order5 = Order::factory()->create();
         OrderProduct::factory()->create(['order_id' => $order5->getKey(), 'price' => 0]);
         $order5->update(['total_paid' => 100]);
+
+        // scenario 6: order6 is paid with voucher, it should be considered as PAID
+        /** @var Order $order6 */
+        $order6 = Order::factory()->create();
+        OrderProduct::factory()->create(['order_id' => $order6->getKey()]);
+        $order1->update(['total_discounts' => $order1->orderProductsTotals->total_price]);
     }
 
     public function test_paid_orders_query()
@@ -53,7 +59,7 @@ class IsFullyPaidConditionTest extends TestCase
         ray($query->get()->toArray());
         ray($query->toSql());
 
-        $this->assertEquals(2, $query->count());
+        $this->assertEquals(3, $query->count(), 'Incorrect number of orders is coming up as paid');
     }
 
     public function test_unpaid_orders_query()
@@ -68,6 +74,6 @@ class IsFullyPaidConditionTest extends TestCase
 
         ray($query->toSql());
 
-        $this->assertEquals(3, $query->count());
+        $this->assertEquals(3, $query->count(), 'Incorrect number of orders is coming up as unpaid');
     }
 }
