@@ -31,6 +31,8 @@ class DatabaseSeeder extends Seeder
 
             Demo\PaidOrdersSeeder::class,
             Demo\TestOrdersSeeder::class,
+            Demo\OrderProductNotExistsSeeder::class,
+
             Demo\ProductsTagsSeeder::class,
             ProductPriceSeeder::class,
 

@@ -15,8 +15,13 @@ class QuantityBeforeJob extends UniqueJob
     {
         /** @var Configuration $configuration */
         $configuration = Configuration::query()->firstOrCreate();
+
+        $minNullId  = InventoryMovement::query()->whereNull('is_first_movement')->min('id');
+
         $lastMovementId = data_get(InventoryMovement::query()
-            ->whereRaw('occurred_at < (SELECT IFNULL(min(occurred_at), now()) FROM inventory_movements WHERE is_first_movement IS NULL)')
+            ->when($minNullId, function ($query) use ($minNullId) {
+                $query->where('id', '<', $minNullId);
+            })
             ->orderByRaw('occurred_at DESC, id DESC')->first('id'), 'id', 0);
 
         $minMovementId = $configuration->quantity_before_job_last_movement_id_checked ?? 0;
@@ -26,39 +31,9 @@ class QuantityBeforeJob extends UniqueJob
 
             do {
                 $totalRecordsUpdated = 0;
-
-                $recordsUpdated = $this->updateRanges($minMovementId, $maxMovementId);
-                $totalRecordsUpdated += $recordsUpdated;
-
-                Log::info('Job processing', [
-                    'job' => self::class,
-                    'records_updated' => $recordsUpdated,
-                    'min_movement_id' => $minMovementId,
-                    'max_movement_id' => $maxMovementId,
-                    'last_movement_id' => $lastMovementId,
-                ]);
-
-                $recordsUpdated = $this->basicWalktrough($minMovementId, $maxMovementId);
-                $totalRecordsUpdated += $recordsUpdated;
-
-                Log::info('Job processing', [
-                    'job' => self::class,
-                    'records_updated' => $recordsUpdated,
-                    'min_movement_id' => $minMovementId,
-                    'max_movement_id' => $maxMovementId,
-                    'last_movement_id' => $lastMovementId,
-                ]);
-
-                $recordsUpdated = $this->updateStocktakes($minMovementId, $maxMovementId);
-                $totalRecordsUpdated += $recordsUpdated;
-
-                Log::info('Job processing', [
-                    'job' => self::class,
-                    'records_updated' => $recordsUpdated,
-                    'min_movement_id' => $minMovementId,
-                    'max_movement_id' => $maxMovementId,
-                    'last_movement_id' => $lastMovementId,
-                ]);
+                $totalRecordsUpdated += $this->updateRanges($minMovementId, $maxMovementId);
+                $totalRecordsUpdated += $this->basicWalktrough($minMovementId, $maxMovementId);
+                $totalRecordsUpdated += $this->updateStocktakes($minMovementId, $maxMovementId);
             } while ($totalRecordsUpdated > 0);
 
             $configuration->update(['quantity_before_job_last_movement_id_checked' => $maxMovementId]);
@@ -119,7 +94,7 @@ class QuantityBeforeJob extends UniqueJob
                     ORDER BY inventory_movements.inventory_id, inventory_movements.id;
             ', [$minMovementId, $maxMovementId]);
 
-        return DB::update('
+        $recordsUpdated = DB::update('
                 UPDATE inventory_movements
 
                 INNER JOIN tempTable
@@ -133,6 +108,15 @@ class QuantityBeforeJob extends UniqueJob
 
                 WHERE inventory_movements.type != "stocktake";
             ');
+
+        Log::info('Job processing', [
+            'job' => self::class,
+            'records_updated' => $recordsUpdated,
+            'min_movement_id' => $minMovementId,
+            'max_movement_id' => $maxMovementId,
+        ]);
+
+        return $recordsUpdated;
     }
 
     private function basicWalktrough(int $minMovementId, int $maxMovementId): int
@@ -161,7 +145,7 @@ class QuantityBeforeJob extends UniqueJob
                     LIMIT 5;
             ', [$minMovementId, $maxMovementId]);
 
-        return DB::update('
+        $recordsUpdated = DB::update('
                 UPDATE inventory_movements
 
                 INNER JOIN tempTable
@@ -173,6 +157,15 @@ class QuantityBeforeJob extends UniqueJob
 
                 WHERE inventory_movements.type != "stocktake"
             ');
+
+        Log::info('Job processing', [
+            'job' => self::class,
+            'records_updated' => $recordsUpdated,
+            'min_movement_id' => $minMovementId,
+            'max_movement_id' => $maxMovementId,
+        ]);
+
+        return $recordsUpdated;
     }
 
     private function updateStocktakes(int $minMovementId, int $maxMovementId): int
@@ -201,7 +194,7 @@ class QuantityBeforeJob extends UniqueJob
                     LIMIT 1000;
             ', [$minMovementId, $maxMovementId]);
 
-        return DB::update('
+        $recordsUpdated = DB::update('
                 UPDATE inventory_movements
                 INNER JOIN tempTable
                   ON tempTable.movement_id = inventory_movements.id
@@ -212,5 +205,14 @@ class QuantityBeforeJob extends UniqueJob
 
                 WHERE inventory_movements.type = "stocktake"
             ');
+
+        Log::info('Job processing', [
+            'job' => self::class,
+            'records_updated' => $recordsUpdated,
+            'min_movement_id' => $minMovementId,
+            'max_movement_id' => $maxMovementId,
+        ]);
+
+        return $recordsUpdated;
     }
 }

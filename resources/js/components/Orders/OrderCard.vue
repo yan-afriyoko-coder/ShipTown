@@ -156,10 +156,7 @@
                                         <div class="row text-left mb-2">
                                             <div class="col-12">
                                                 <small>{{ order_product['name_ordered'] }} &nbsp;</small>
-                                                <div class="small"><a target="_blank"
-                                                                      :href="getProductLink(order_product)">{{
-                                                        order_product['sku_ordered']
-                                                    }}</a>&nbsp;
+                                                <div class="small"><a v-if="order_product['product_id']" target="_blank" :href="getProductLink(order_product)">{{order_product['sku_ordered'] }}</a><div v-if="order_product['product_id'] === null" class="bg-warning">{{order_product['sku_ordered'] }}</div>&nbsp;
                                                 </div>
                                             </div>
                                             <div class="col">
