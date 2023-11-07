@@ -65,7 +65,7 @@ class OrderTotalsService
         Order::query()
             ->where(['id' => $order_id])
             ->update([
-                'product_line_count' => data_get($record, 'count', 0),
+                'product_line_count' => data_get($record, 'count_expected', 0),
                 'total_products'     => data_get($record, 'total_price_expected', 0),
                 'updated_at'         => now()
             ]);

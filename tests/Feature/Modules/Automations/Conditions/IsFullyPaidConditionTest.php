@@ -14,7 +14,6 @@ class IsFullyPaidConditionTest extends TestCase
     {
         parent::setUp();
 
-
         // scenario 2: order2 is partially paid (shipping not paid)
         /** @var Order $order2 */
         $order2 = Order::factory()->create();
@@ -25,17 +24,48 @@ class IsFullyPaidConditionTest extends TestCase
         /** @var Order $order3 */
         $order3 = Order::factory()->create();
         OrderProduct::factory()->create(['order_id' => $order3->getKey()]);
+    }
+
+    public function test_order_0_total_0_paid()
+    {
+        Order::query()->forceDelete();
 
         // scenario 4: order4 is not paid but also has 0 total, should be considered as NOT PAID
         /** @var Order $order4 */
         $order4 = Order::factory()->create();
         OrderProduct::factory()->create(['order_id' => $order4->getKey(), 'price' => 0]);
 
-        // scenario 5: order5 is paid but 0 total, it should be considered as PAID
+        $query = Order::query();
+
+        IsFullyPaidCondition::addQueryScope($query, 'true');
+
+        ray(Order::all()->toArray());
+        ray(OrderProduct::all()->toArray());
+        ray(OrderProductTotal::all()->toArray());
+
+        ray($query->toSql());
+
+        $this->assertCount(1, $query->get(), 'Order has not been returned as unpaid');
+    }
+
+    public function test_order_0_total_but_paid()
+    {
+        Order::query()->forceDelete();
+
+        // scenario 5: order is paid but 0 total, it should be considered as PAID
         /** @var Order $order3 */
-        $order5 = Order::factory()->create();
-        OrderProduct::factory()->create(['order_id' => $order5->getKey(), 'price' => 0]);
-        $order5->update(['total_paid' => 100]);
+        $order = Order::factory()->create();
+        OrderProduct::factory()->create(['order_id' => $order->getKey(), 'price' => 0]);
+        $order->update(['total_paid' => 100]);
+
+        $query = Order::query();
+
+        IsFullyPaidCondition::addQueryScope($query, 'true');
+
+        ray($order->toArray());
+        ray($query->get()->toArray());
+
+        $this->assertEquals(1, $query->count(), 'Order has not been returned as paid');
     }
 
     public function test_order_fully_paid()
