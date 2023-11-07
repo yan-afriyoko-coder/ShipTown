@@ -42,12 +42,24 @@ class IsFullyPaidConditionTest extends TestCase
         $order5 = Order::factory()->create();
         OrderProduct::factory()->create(['order_id' => $order5->getKey(), 'price' => 0]);
         $order5->update(['total_paid' => 100]);
+    }
 
-        // scenario 6: order6 is paid with voucher, it should be considered as PAID
+    public function test_order_paid_with_discounts()
+    {
+        $query = Order::query();
+
+        IsFullyPaidCondition::addQueryScope($query, 'true');
+
         /** @var Order $order6 */
         $order6 = Order::factory()->create();
         OrderProduct::factory()->create(['order_id' => $order6->getKey()]);
-        $order1->update(['total_discounts' => $order1->orderProductsTotals->total_price]);
+
+        $order6->update(['total_discounts' => $order6->orderProductsTotals->total_price]);
+
+        ray($query->toSql());
+        ray($query->get()->toArray());
+
+        $this->assertEquals(3, $query->count(), 'Incorrect number of orders is coming up as paid');
     }
 
     public function test_paid_orders_query()
