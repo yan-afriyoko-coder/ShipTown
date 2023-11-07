@@ -89,7 +89,7 @@ class SplitOrderService
         $this->newOrder = Order::query()
             ->where(['order_number' => $newOrderNumber])
             ->firstOr(function () use ($newOrderNumber) {
-                return $this->originalOrder->replicate(['is_fully_paid']);
+                return $this->originalOrder->replicate(['is_fully_paid', 'total_outstanding', 'total_order']);
             });
 
         $this->newOrder->status_code = $this->newOrderStatus;
@@ -112,6 +112,7 @@ class SplitOrderService
                 ->withProperties(['order_number' => $this->newOrder->order_number])
                 ->log('split to order');
         } catch (Exception $exception) {
+            report($exception);
             $this->newOrder = Order::whereOrderNumber($newOrderNumber)->first();
         }
 
