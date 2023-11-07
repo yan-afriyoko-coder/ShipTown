@@ -322,7 +322,6 @@ return new class extends Migration
 
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('shipping_address_id')->nullable();
             $table->string('order_number')->unique();
             $table->string('status_code')->default('');
             $table->string('label_template')->default('');
@@ -332,19 +331,20 @@ return new class extends Migration
             $table->boolean('is_fully_paid')
                 ->storedAs('total_paid >= total - total_discounts')
                 ->comment('total_paid >= total - total_discounts');
+            $table->integer('product_line_count')->default(0);
+            $table->decimal('total', 10)->default(0);
             $table->decimal('total_products')->default(0);
             $table->decimal('total_shipping')->default(0);
-            $table->decimal('total', 10)->default(0);
-            $table->decimal('total_paid')->default(0);
             $table->decimal('total_discounts', 10)->default(0);
+            $table->decimal('total_paid')->default(0);
+            $table->foreignId('shipping_address_id')->nullable();
             $table->string('shipping_method_code')->default('')->nullable(true);
             $table->string('shipping_method_name')->default('')->nullable(true);
+            $table->foreignId('packer_user_id')->nullable();
             $table->timestamp('order_placed_at')->useCurrent()->nullable();
-            $table->timestamp('order_closed_at')->nullable();
-            $table->integer('product_line_count')->default(0);
             $table->timestamp('picked_at')->nullable();
             $table->timestamp('packed_at')->nullable();
-            $table->foreignId('packer_user_id')->nullable();
+            $table->timestamp('order_closed_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

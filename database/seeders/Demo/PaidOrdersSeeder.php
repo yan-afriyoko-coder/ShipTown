@@ -35,14 +35,14 @@ class PaidOrdersSeeder extends Seeder
             });
 
         Order::factory()
-            ->count(10)
+            ->count(3)
             ->create(['status_code' => 'paid'])
             ->each(function (Order $order) {
                 OrderProduct::factory()->count(3)->create(['order_id' => $order->getKey()]);
             });
 
         Order::factory()
-            ->count(10)
+            ->count(2)
             ->create(['status_code' => 'paid'])
             ->each(function (Order $order) {
                 OrderProduct::factory()->count(4)->create(['order_id' => $order->getKey()]);

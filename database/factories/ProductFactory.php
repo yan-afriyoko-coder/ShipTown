@@ -26,13 +26,14 @@ class ProductFactory extends Factory
         .' '.$this->faker->randomElement($productNameBricks['product']);
 
         return [
-            'sku'                   => (string) $this->faker->unique()->randomNumber(6),
+            'sku'                   => (string) $this->faker->unique()->randomNumber(8),
             'name'                  => $randomProductName,
-            'price'                 => $this->faker->randomFloat(2, 0, 1000),
-            'sale_price'            => $this->faker->randomFloat(2, 0, 1000),
+            'price'                 => $this->faker->randomFloat(2, 0.01, 110),
+            'sale_price'            => $this->faker->randomFloat(2, 0.01, 110),
             'sale_price_start_date' => $this->faker->dateTimeBetween('-1 year', '+5 months'),
             'sale_price_end_date'   => $this->faker->dateTimeBetween('-1 month', '+1 year'),
             'commodity_code'        => $this->faker->randomElement(['6109100010', '6110309100', '6115210000']),
         ];
     }
 }
+

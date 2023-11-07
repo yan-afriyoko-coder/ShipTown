@@ -19,7 +19,7 @@ class TestOrdersSeeder extends Seeder
         $product1 = Product::query()->firstOrCreate(['sku' => '45'], ['name' => 'Test Product - 45']);
         $product2 = Product::query()->firstOrCreate(['sku' => '44'], ['name' => 'Test Product - 44']);
 
-        $order = Order::factory()->create(['order_number' => 'test order - packsheet', 'status_code' => 'paid']);
+        $order = Order::factory()->create(['order_number' => 'T100001 - Packsheet', 'status_code' => 'paid']);
 
         OrderProduct::factory()->create([
             'order_id' => $order->getKey(),

@@ -184,6 +184,8 @@ class Order extends BaseModel
         'total_shipping'    => 'float',
         'total_paid'        => 'float',
         'total_discounts'   => 'float',
+        'total_order'       => 'float',
+        'total_outstanding' => 'float',
     ];
 
     // we use attributes to set default values
