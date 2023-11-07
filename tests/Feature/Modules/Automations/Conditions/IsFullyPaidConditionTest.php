@@ -6,7 +6,6 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderProductTotal;
 use App\Modules\Automations\src\Conditions\Order\IsFullyPaidCondition;
-use App\Modules\Automations\src\Conditions\Order\IsFullyPickedCondition;
 use Tests\TestCase;
 
 class IsFullyPaidConditionTest extends TestCase
@@ -15,11 +14,6 @@ class IsFullyPaidConditionTest extends TestCase
     {
         parent::setUp();
 
-        // scenario 1: order1 is fully paid
-        /** @var Order $order1 */
-        $order1 = Order::factory()->create();
-        OrderProduct::factory()->create(['order_id' => $order1->getKey()]);
-        $order1->update(['total_paid' => $order1->orderProductsTotals->total_price]);
 
         // scenario 2: order2 is partially paid (shipping not paid)
         /** @var Order $order2 */
@@ -42,6 +36,26 @@ class IsFullyPaidConditionTest extends TestCase
         $order5 = Order::factory()->create();
         OrderProduct::factory()->create(['order_id' => $order5->getKey(), 'price' => 0]);
         $order5->update(['total_paid' => 100]);
+    }
+
+    public function test_order_fully_paid()
+    {
+        Order::query()->forceDelete();
+
+        /** @var Order $order */
+        $order = Order::factory()->create();
+        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
+        $order = $order->refresh();
+        $order->update(['total_paid' => $order->total_order]);
+
+        $query = Order::query();
+
+        IsFullyPaidCondition::addQueryScope($query, 'true');
+
+        ray($order->toArray());
+        ray($query->get()->toArray());
+
+        $this->assertEquals(1, $query->count(), 'Order has not been returned as paid');
     }
 
     public function test_order_paid_with_discounts()

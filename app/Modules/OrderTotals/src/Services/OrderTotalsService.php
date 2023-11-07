@@ -3,6 +3,7 @@
 namespace App\Modules\OrderTotals\src\Services;
 
 use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Models\OrderProductTotal;
 use App\Modules\OrderTotals\src\Jobs\EnsureAllRecordsExistsJob;
 use App\Modules\OrderTotals\src\Jobs\EnsureCorrectTotalsJob;

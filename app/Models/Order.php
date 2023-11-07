@@ -41,11 +41,14 @@ use Spatie\Tags\Tag;
  * @property int|null         $shipping_address_id
  *
  * @property int              product_line_count
+ * @property float            $total
  * @property float            $total_products
  * @property float            $total_shipping
- * @property float            $total
  * @property float            $total_discounts
+ * @property float            $total_order
  * @property float            $total_paid
+ * @property float            $total_outstanding
+ *
  * @property float            $total_quantity_ordered
  * @property float            $total_quantity_to_ship
  *
