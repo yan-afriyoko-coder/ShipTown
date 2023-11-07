@@ -10,20 +10,48 @@ use Tests\TestCase;
 
 class IsFullyPaidConditionTest extends TestCase
 {
-    protected function setUp(): void
+    public function test_partially_paid()
     {
-        parent::setUp();
+        Order::query()->forceDelete();
 
-        // scenario 2: order2 is partially paid (shipping not paid)
-        /** @var Order $order2 */
-        $order2 = Order::factory()->create();
-        OrderProduct::factory()->create(['order_id' => $order2->getKey()]);
-        $order2->update(['total_shipping' => 10, 'total_paid' => $order2->orderProductsTotals->total_price]);
+        /** @var Order $order */
+        $order = Order::factory()->create(['total_shipping' => 10]);
+        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
 
-        // scenario 3: order3 is not paid at all
+        Order::query()->where(['id' => $order->getKey()])->update(['total_paid' => $order->total_order / 2]);
+
+        $query = Order::query();
+
+        IsFullyPaidCondition::addQueryScope($query, 'false');
+
+        ray(Order::all()->toArray());
+        ray(OrderProduct::all()->toArray());
+        ray(OrderProductTotal::all()->toArray());
+
+        ray($query->toSql());
+
+        $this->assertCount(1, $query->get(), 'Order has not been returned as unpaid');
+    }
+
+    public function test_order_not_paid()
+    {
+        Order::query()->forceDelete();
+
         /** @var Order $order3 */
         $order3 = Order::factory()->create();
         OrderProduct::factory()->create(['order_id' => $order3->getKey()]);
+
+        $query = Order::query();
+
+        IsFullyPaidCondition::addQueryScope($query, 'false');
+
+        ray(Order::all()->toArray());
+        ray(OrderProduct::all()->toArray());
+        ray(OrderProductTotal::all()->toArray());
+
+        ray($query->toSql());
+
+        $this->assertCount(1, $query->get(), 'Order has not been returned as unpaid');
     }
 
     public function test_order_0_total_0_paid()
@@ -45,7 +73,7 @@ class IsFullyPaidConditionTest extends TestCase
 
         ray($query->toSql());
 
-        $this->assertCount(1, $query->get(), 'Order has not been returned as unpaid');
+        $this->assertCount(1, $query->get(), 'Order has not been returned as paid');
     }
 
     public function test_order_0_total_but_paid()

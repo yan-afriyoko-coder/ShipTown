@@ -161,10 +161,6 @@ class Order extends BaseModel
         'total_paid',
     ];
 
-    protected $guarded = [
-        'total_outstanding'
-    ];
-
     /**
      * @var array|string[]
      */
