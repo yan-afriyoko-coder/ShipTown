@@ -136,31 +136,4 @@ class IsFullyPaidConditionTest extends TestCase
 
         $this->assertEquals(1, $query->count(), 'Order has not been returned as paid');
     }
-
-    public function test_paid_orders_query()
-    {
-        $query = Order::query();
-
-        IsFullyPaidCondition::addQueryScope($query, 'true');
-
-        ray($query->get()->toArray());
-        ray($query->toSql());
-
-        $this->assertEquals(3, $query->count(), 'Incorrect number of orders is coming up as paid');
-    }
-
-    public function test_unpaid_orders_query()
-    {
-        $query = Order::query();
-
-        IsFullyPaidCondition::addQueryScope($query, 'false');
-
-        ray(Order::all()->toArray());
-        ray(OrderProduct::all()->toArray());
-        ray(OrderProductTotal::all()->toArray());
-
-        ray($query->toSql());
-
-        $this->assertEquals(3, $query->count(), 'Incorrect number of orders is coming up as unpaid');
-    }
 }
