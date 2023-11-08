@@ -2,6 +2,8 @@
 
 namespace App\Modules\OrderTotals\src\Services;
 
+use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Models\OrderProductTotal;
 use App\Modules\OrderTotals\src\Jobs\EnsureAllRecordsExistsJob;
 use App\Modules\OrderTotals\src\Jobs\EnsureCorrectTotalsJob;
@@ -57,6 +59,15 @@ class OrderTotalsService
             'max_updated_at'            => data_get($record, 'max_updated_at_expected', now())
         ];
 
-        OrderProductTotal::query()->updateOrCreate(['order_id' => $order_id], $data);
+        OrderProductTotal::query()
+            ->updateOrCreate(['order_id' => $order_id], $data);
+
+        Order::query()
+            ->where(['id' => $order_id])
+            ->update([
+                'product_line_count' => data_get($record, 'count_expected', 0),
+                'total_products'     => data_get($record, 'total_price_expected'),
+                'updated_at'         => now()
+            ]);
     }
 }

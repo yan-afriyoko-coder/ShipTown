@@ -19,20 +19,20 @@ class ProductsSeeder extends Seeder
     {
         Product::factory()->count(50)->create();
 
-        Product::query()->updateOrCreate(['sku' => '41', 'name' => 'Tennis Balls 6pk'], []);
-        Product::query()->updateOrCreate(['sku' => '42', 'name' => 'White Tennis Shirt L'], []);
-        Product::query()->updateOrCreate(['sku' => '43', 'name' => 'Equipment Trolley Black'], []);
-        Product::query()->updateOrCreate(['sku' => '44', 'name' => 'Tennis Racket EVO PRO'], []);
-        Product::query()->updateOrCreate(['sku' => '45', 'name' => 'Test Product - 45'], []);
-        Product::query()->updateOrCreate(['sku' => '57', 'name' => 'Test Product - 57'], []);
+        Product::factory()->create(['sku' => '41', 'name' => 'Tennis Balls 6pk']);
+        Product::factory()->create(['sku' => '42', 'name' => 'White Tennis Shirt L']);
+        Product::factory()->create(['sku' => '43', 'name' => 'Equipment Trolley Black']);
+        Product::factory()->create(['sku' => '44', 'name' => 'Tennis Racket EVO PRO']);
+        Product::factory()->create(['sku' => '45', 'name' => 'Test Product - 45']);
+        Product::factory()->create(['sku' => '57', 'name' => 'Test Product - 57']);
 
         PricingService::updateProductPrice('41', 29);
 
-        Product::query()->updateOrCreate(['sku' => '3001', 'name' => 'Test Product - 3001'], []);
-        Product::query()->updateOrCreate(['sku' => '3002', 'name' => 'Test Product - 3002'], []);
-        Product::query()->updateOrCreate(['sku' => '3003', 'name' => 'Test Product - 3003'], []);
-        Product::query()->updateOrCreate(['sku' => '3004', 'name' => 'Test Product - 3004'], []);
-        Product::query()->updateOrCreate(['sku' => '3005', 'name' => 'Test Product - 3005'], []);
+        Product::factory()->create(['sku' => '3001', 'name' => 'Test Product - 3001']);
+        Product::factory()->create(['sku' => '3002', 'name' => 'Test Product - 3002']);
+        Product::factory()->create(['sku' => '3003', 'name' => 'Test Product - 3003']);
+        Product::factory()->create(['sku' => '3004', 'name' => 'Test Product - 3004']);
+        Product::factory()->create(['sku' => '3005', 'name' => 'Test Product - 3005']);
     }
 
     private function createSkuWithAliases(array $skuList): void

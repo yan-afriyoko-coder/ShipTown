@@ -6,64 +6,20 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderProductTotal;
 use App\Modules\Automations\src\Conditions\Order\IsFullyPaidCondition;
-use App\Modules\Automations\src\Conditions\Order\IsFullyPickedCondition;
 use Tests\TestCase;
 
 class IsFullyPaidConditionTest extends TestCase
 {
-    protected function setUp(): void
+    public function test_partially_paid()
     {
-        parent::setUp();
+        Order::query()->forceDelete();
 
-        // scenario 1: order1 is fully paid
-        /** @var Order $order1 */
-        $order1 = Order::factory()->create();
-        OrderProduct::factory()->create(['order_id' => $order1->getKey()]);
-        $order1->update(['total_paid' => $order1->orderProductsTotals->total_price]);
+        /** @var Order $order */
+        $order = Order::factory()->create(['total_shipping' => 10]);
+        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
 
-        // scenario 2: order2 is partially paid (shipping not paid)
-        /** @var Order $order2 */
-        $order2 = Order::factory()->create();
-        OrderProduct::factory()->create(['order_id' => $order2->getKey()]);
-        $order2->update(['total_shipping' => 10, 'total_paid' => $order2->orderProductsTotals->total_price]);
+        Order::query()->where(['id' => $order->getKey()])->update(['total_paid' => $order->total_order / 2]);
 
-        // scenario 3: order3 is not paid at all
-        /** @var Order $order3 */
-        $order3 = Order::factory()->create();
-        OrderProduct::factory()->create(['order_id' => $order3->getKey()]);
-
-        // scenario 4: order4 is not paid but also has 0 total, should be considered as NOT PAID
-        /** @var Order $order4 */
-        $order4 = Order::factory()->create();
-        OrderProduct::factory()->create(['order_id' => $order4->getKey(), 'price' => 0]);
-
-        // scenario 5: order5 is paid but 0 total, it should be considered as PAID
-        /** @var Order $order3 */
-        $order5 = Order::factory()->create();
-        OrderProduct::factory()->create(['order_id' => $order5->getKey(), 'price' => 0]);
-        $order5->update(['total_paid' => 100]);
-
-        // scenario 6: order6 is paid with voucher, it should be considered as PAID
-        /** @var Order $order6 */
-        $order6 = Order::factory()->create();
-        OrderProduct::factory()->create(['order_id' => $order6->getKey()]);
-        $order1->update(['total_discounts' => $order1->orderProductsTotals->total_price]);
-    }
-
-    public function test_paid_orders_query()
-    {
-        $query = Order::query();
-
-        IsFullyPaidCondition::addQueryScope($query, 'true');
-
-        ray($query->get()->toArray());
-        ray($query->toSql());
-
-        $this->assertEquals(3, $query->count(), 'Incorrect number of orders is coming up as paid');
-    }
-
-    public function test_unpaid_orders_query()
-    {
         $query = Order::query();
 
         IsFullyPaidCondition::addQueryScope($query, 'false');
@@ -74,6 +30,111 @@ class IsFullyPaidConditionTest extends TestCase
 
         ray($query->toSql());
 
-        $this->assertEquals(3, $query->count(), 'Incorrect number of orders is coming up as unpaid');
+        $this->assertCount(1, $query->get(), 'Order has not been returned as unpaid');
+    }
+
+    public function test_order_not_paid()
+    {
+        Order::query()->forceDelete();
+
+        /** @var Order $order3 */
+        $order3 = Order::factory()->create();
+        OrderProduct::factory()->create(['order_id' => $order3->getKey()]);
+
+        $query = Order::query();
+
+        IsFullyPaidCondition::addQueryScope($query, 'false');
+
+        ray(Order::all()->toArray());
+        ray(OrderProduct::all()->toArray());
+        ray(OrderProductTotal::all()->toArray());
+
+        ray($query->toSql());
+
+        $this->assertCount(1, $query->get(), 'Order has not been returned as unpaid');
+    }
+
+    public function test_order_0_total_0_paid()
+    {
+        Order::query()->forceDelete();
+
+        // scenario 4: order4 is not paid but also has 0 total, should be considered as NOT PAID
+        /** @var Order $order4 */
+        $order4 = Order::factory()->create(['total_shipping' => 0]);
+        OrderProduct::factory()->create(['order_id' => $order4->getKey(), 'price' => 0]);
+
+        $query = Order::query();
+
+        IsFullyPaidCondition::addQueryScope($query, 'true');
+
+        ray(Order::all()->toArray());
+        ray(OrderProduct::all()->toArray());
+        ray(OrderProductTotal::all()->toArray());
+
+        ray($query->toSql());
+
+        $this->assertCount(1, $query->get(), 'Order has not been returned as paid');
+    }
+
+    public function test_order_0_total_but_paid()
+    {
+        Order::query()->forceDelete();
+
+        // scenario 5: order is paid but 0 total, it should be considered as PAID
+        /** @var Order $order3 */
+        $order = Order::factory()->create();
+        OrderProduct::factory()->create(['order_id' => $order->getKey(), 'price' => 0]);
+        $order->update(['total_paid' => 100]);
+
+        $query = Order::query();
+
+        IsFullyPaidCondition::addQueryScope($query, 'true');
+
+        ray($order->toArray());
+        ray($query->get()->toArray());
+
+        $this->assertEquals(1, $query->count(), 'Order has not been returned as paid');
+    }
+
+    public function test_order_fully_paid()
+    {
+        Order::query()->forceDelete();
+
+        /** @var Order $order */
+        $order = Order::factory()->create();
+        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
+        $order = $order->refresh();
+        $order->update(['total_paid' => $order->total_order]);
+
+        $query = Order::query();
+
+        IsFullyPaidCondition::addQueryScope($query, 'true');
+
+        ray($order->toArray());
+        ray($query->get()->toArray());
+
+        $this->assertEquals(1, $query->count(), 'Order has not been returned as paid');
+    }
+
+    public function test_order_paid_with_discounts()
+    {
+        Order::query()->forceDelete();
+
+        /** @var Order $order */
+        $order = Order::factory()->create();
+        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
+        $order->refresh();
+
+        $query = Order::query();
+
+        IsFullyPaidCondition::addQueryScope($query, 'true');
+
+        Order::query()->where(['id' => $order->getKey()])->update(['total_discounts' => $order->total_products + $order->total_shipping]);
+
+        ray($order->refresh()->toArray());
+        ray($query->toSql());
+        ray($query->get()->toArray());
+
+        $this->assertEquals(1, $query->count(), 'Order has not been returned as paid');
     }
 }

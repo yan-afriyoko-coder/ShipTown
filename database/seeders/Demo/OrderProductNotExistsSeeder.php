@@ -5,7 +5,6 @@ namespace Database\Seeders\Demo;
 use App\Models\Order;
 use App\Models\OrderComment;
 use App\Models\OrderProduct;
-use App\Services\OrderService;
 use Illuminate\Database\Seeder;
 
 class OrderProductNotExistsSeeder extends Seeder
