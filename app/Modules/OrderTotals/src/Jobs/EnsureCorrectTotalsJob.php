@@ -72,14 +72,14 @@ class EnsureCorrectTotalsJob extends UniqueJob
 
             INNER JOIN tempTable AS recalculations
                 ON recalculations.order_id = orders.id
-                AND recaltculations.total_price_expected != orders.total_order
+                AND recalculations.total_price_expected != orders.total_products
 
             SET
-                orders_products_totals.total_order              = recalculations.total_price_expected,
-                orders_products_totals.updated_at               = now()
+                orders.total_products = recalculations.total_price_expected,
+                orders.updated_at  = now()
 
             WHERE
-                recaltculations.total_price_expected != orders.total_order
+                recalculations.total_price_expected != orders.total_products
         ');
     }
 }
