@@ -60,7 +60,7 @@ class IsFullyPaidConditionTest extends TestCase
 
         // scenario 4: order4 is not paid but also has 0 total, should be considered as NOT PAID
         /** @var Order $order4 */
-        $order4 = Order::factory()->create();
+        $order4 = Order::factory()->create(['total_shipping' => 0]);
         OrderProduct::factory()->create(['order_id' => $order4->getKey(), 'price' => 0]);
 
         $query = Order::query();
@@ -120,15 +120,16 @@ class IsFullyPaidConditionTest extends TestCase
     {
         Order::query()->forceDelete();
 
+        /** @var Order $order */
+        $order = Order::factory()->create();
+        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
+        $order->refresh();
+
         $query = Order::query();
 
         IsFullyPaidCondition::addQueryScope($query, 'true');
 
-        /** @var Order $order */
-        $order = Order::factory()->create();
-        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
-
-        $order->update(['total_discounts' => $order->orderProductsTotals->total_price]);
+        Order::query()->where(['id' => $order->getKey()])->update(['total_discounts' => $order->total_products + $order->total_shipping]);
 
         ray($order->refresh()->toArray());
         ray($query->toSql());
