@@ -21,10 +21,12 @@ class PaidOrdersSeeder extends Seeder
     public function run()
     {
         Order::factory()
-            ->count(10)
+            ->count(1)
             ->create(['status_code' => 'paid'])
             ->each(function (Order $order) {
                 OrderProduct::factory()->count(1)->create(['order_id' => $order->getKey()]);
+                $order = $order->refresh();
+                Order::query()->where(['id' => $order->getKey()])->update(['total_paid' => $order->total_order]);
             });
 
         Order::factory()
@@ -32,6 +34,8 @@ class PaidOrdersSeeder extends Seeder
             ->create(['status_code' => 'paid'])
             ->each(function (Order $order) {
                 OrderProduct::factory()->count(2)->create(['order_id' => $order->getKey()]);
+                $order = $order->refresh();
+                Order::query()->where(['id' => $order->getKey()])->update(['total_paid' => $order->total_order]);
             });
 
         Order::factory()
@@ -39,6 +43,8 @@ class PaidOrdersSeeder extends Seeder
             ->create(['status_code' => 'paid'])
             ->each(function (Order $order) {
                 OrderProduct::factory()->count(3)->create(['order_id' => $order->getKey()]);
+                $order = $order->refresh();
+                Order::query()->where(['id' => $order->getKey()])->update(['total_paid' => $order->total_order]);
             });
 
         Order::factory()
@@ -46,12 +52,8 @@ class PaidOrdersSeeder extends Seeder
             ->create(['status_code' => 'paid'])
             ->each(function (Order $order) {
                 OrderProduct::factory()->count(4)->create(['order_id' => $order->getKey()]);
-            });
-
-        Order::query()->get()
-            ->each(function (Order $order) {
-                $order->total_paid = $order->total;
-                $order->save();
+                $order = $order->refresh();
+                Order::query()->where(['id' => $order->getKey()])->update(['total_paid' => $order->total_order]);
             });
     }
 }

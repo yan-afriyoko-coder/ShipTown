@@ -66,5 +66,20 @@ class EnsureCorrectTotalsJob extends UniqueJob
                 OR orders_products_totals.total_price              != recalculations.total_price_expected
                 OR orders_products_totals.max_updated_at           != recalculations.max_updated_at_expected
         ');
+
+        DB::update('
+            UPDATE orders
+
+            INNER JOIN tempTable AS recalculations
+                ON recalculations.order_id = orders.id
+                AND recaltculations.total_price_expected != orders.total_order
+
+            SET
+                orders_products_totals.total_order              = recalculations.total_price_expected,
+                orders_products_totals.updated_at               = now()
+
+            WHERE
+                recaltculations.total_price_expected != orders.total_order
+        ');
     }
 }
