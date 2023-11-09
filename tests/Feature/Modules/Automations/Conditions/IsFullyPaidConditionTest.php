@@ -108,7 +108,7 @@ class IsFullyPaidConditionTest extends TestCase
 
         $query = Order::query();
 
-        IsFullyPaidCondition::addQueryScope($query, 'true');
+        IsFullyPaidCondition::addQueryScope($query, 'True');
 
         ray($order->toArray());
         ray($query->get()->toArray());
