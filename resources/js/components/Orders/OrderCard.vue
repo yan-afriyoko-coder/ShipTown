@@ -297,43 +297,61 @@
                                 <div class="container" v-if="currentTab === 'orderDetails'">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <table class="table-borderless table-hover border-0">
+                                            <table class="table-borderless table-hover border-0 w-100">
                                                 <tr>
-                                                    <td> placed at:</td>
-                                                    <td><b> {{ order['order_placed_at'] | moment('MMM DD H:mm') }} </b>
+                                                    <td> status code:</td>
+                                                    <td class="text-right">
+                                                        <select id="selectStatus" class="form-control" @change="changeStatus" v-model="order.status_code">
+                                                            <option v-for="orderStatus in order_statuses" :value="orderStatus.code" :key="orderStatus.id">{{ orderStatus.code }}</option>
+                                                        </select>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td> shipping method:</td>
-                                                    <td><b> {{ order['shipping_method_code'] }} </b></td>
+                                                    <td class="text-right"><b> {{ order['shipping_method_code'] }} </b></td>
                                                 </tr>
                                                 <tr>
                                                     <td> label template:</td>
                                                     <td><b> {{ order['label_template'] }} </b></td>
                                                 </tr>
+
+
                                                 <tr>
-                                                    <td> total products:</td>
-                                                    <td><b> {{
-                                                            toNumberOrDash(order['order_products_totals']['total_price'])
-                                                        }} </b></td>
+                                                    <td class="pt-2"> total products:</td>
+                                                    <td class="text-right"><b> {{toNumberOrDash(order['total_products'])}} </b></td>
                                                 </tr>
                                                 <tr>
                                                     <td> total shipping:</td>
-                                                    <td><b> {{ toNumberOrDash(order['total_shipping']) }} </b></td>
-                                                </tr>
-                                                <tr>
-                                                    <td> total:</td>
-                                                    <td><b> {{
-                                                            toNumberOrDash(order['order_products_totals']['total_price'] + order['total_shipping'])
-                                                        }} </b></td>
+                                                    <td class="text-right"><b> {{ toNumberOrDash(order['total_shipping']) }} </b></td>
                                                 </tr>
                                                 <tr>
                                                     <td> total discounts:</td>
-                                                    <td><b> {{ toNumberOrDash(order['total_discounts']) }} </b></td>
+                                                    <td class="text-right"><b> {{ toNumberOrDash(order['total_discounts']) }} </b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td> total order:</td>
+                                                    <td class="text-right"><b> {{toNumberOrDash(order['total_order'])}} </b></td>
                                                 </tr>
                                                 <tr>
                                                     <td> total paid:</td>
-                                                    <td><b> {{ toNumberOrDash(order['total_paid']) }} </b></td>
+                                                    <td class="text-right"><b> {{ toNumberOrDash(order['total_paid']) }} </b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td> total outstanding:</td>
+                                                    <td class="text-right"><b> {{ toNumberOrDash(order['total_outstanding']) }} </b></td>
+                                                </tr>
+
+
+                                                <tr>
+                                                    <td class="pt-2"> packed by:</td>
+                                                    <td class="text-right"><b> {{ order['packer'] ? order['packer']['name'] : '&nbsp' }} </b></td>
+                                                </tr>
+
+
+                                                <tr>
+                                                    <td class="pt-2"> placed at:</td>
+                                                    <td class="text-right"><b> {{ order['order_placed_at'] | moment('MMM DD H:mm') }} </b>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td> picked at:</td>
@@ -344,19 +362,11 @@
                                                     <td><b> {{ (order['packed_at']) | moment('MMM DD H:mm') }} </b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td> packed by:</td>
-                                                    <td><b> {{
-                                                            order['packer'] ? order['packer']['name'] : '&nbsp'
-                                                        }} </b></td>
-                                                </tr>
-                                                <tr>
                                                     <td> closed at:</td>
-                                                    <td><b> {{
-                                                            (order['order_closed_at']) | moment('MMM DD H:mm')
-                                                        }} </b></td>
+                                                    <td class="text-right"><b> {{ (order['order_closed_at']) | moment('MMM DD H:mm') }} </b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>.</td>
+                                                    <td>&nbsp;</td>
                                                     <td></td>
                                                 </tr>
                                                 <tr>
@@ -382,7 +392,7 @@
                                                     </tr>
                                                 </template>
                                             </table>
-                                            <div>.</div>
+                                            <div>&nbsp;</div>
                                         </div>
                                     </div>
                                 </div>
@@ -444,6 +454,7 @@ export default {
             order_comments: null,
             order_activities: null,
             order_shipments: null,
+            order_statuses: null,
         }
     },
 
@@ -469,6 +480,29 @@ export default {
     },
 
     methods: {
+        changeStatus() {
+            this.apiUpdateOrder(this.order['id'], {'status_code': this.order.status_code})
+                .catch(() => {
+                    this.apiActivitiesPost({
+                        'subject_type': 'order',
+                        'subject_id': this.order.id,
+                        'description': 'Error when changing status'
+                    });
+                    this.notifyError('Error occurred when changing status');
+                });
+        },
+
+        loadOrderStatuses(){
+            this.apiGetOrderStatus({
+                'filter[hidden]': 0,
+                'per_page': 999,
+                'sort': 'code'
+            })
+                .then(({ data }) => {
+                    this.order_statuses = data.data;
+                })
+        },
+
         formatPrice: function (price) {
             if (price === 0) {
                 return '-';
@@ -501,6 +535,7 @@ export default {
             this.loadOrderProducts()
             this.loadOrderActivities();
             this.loadOrderShipments();
+            this.loadOrderStatuses();
 
             this.orderDetailsVisible = true;
         },
