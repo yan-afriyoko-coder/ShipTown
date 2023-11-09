@@ -299,7 +299,7 @@
                                         <div class="col-md-6">
                                             <table class="table-borderless table-hover border-0 w-100">
                                                 <tr>
-                                                    <td> status code:</td>
+                                                    <td class="text-nowrap"> status code:</td>
                                                     <td class="text-right">
                                                         <select id="selectStatus" class="form-control" @change="changeStatus" v-model="order.status_code">
                                                             <option v-for="orderStatus in order_statuses" :value="orderStatus.code" :key="orderStatus.id">{{ orderStatus.code }}</option>
@@ -307,43 +307,43 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td> shipping method:</td>
+                                                    <td class="text-nowrap"> shipping method:</td>
                                                     <td class="text-right"><b> {{ order['shipping_method_code'] }} </b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td> label template:</td>
-                                                    <td><b> {{ order['label_template'] }} </b></td>
+                                                    <td class="text-nowrap"> label template:</td>
+                                                    <td class="text-right"><b> {{ order['label_template'] }} </b></td>
                                                 </tr>
 
 
                                                 <tr>
-                                                    <td class="pt-2"> total products:</td>
+                                                    <td class="text-nowrap pt-2"> total products:</td>
                                                     <td class="text-right"><b> {{toNumberOrDash(order['total_products'])}} </b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td> total shipping:</td>
+                                                    <td class="text-nowrap"> total shipping:</td>
                                                     <td class="text-right"><b> {{ toNumberOrDash(order['total_shipping']) }} </b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td> total discounts:</td>
+                                                    <td class="text-nowrap"> total discounts:</td>
                                                     <td class="text-right"><b> {{ toNumberOrDash(order['total_discounts']) }} </b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td> total order:</td>
+                                                    <td class="text-nowrap"> total order:</td>
                                                     <td class="text-right"><b> {{toNumberOrDash(order['total_order'])}} </b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td> total paid:</td>
+                                                    <td class="text-nowrap"> total paid:</td>
                                                     <td class="text-right"><b> {{ toNumberOrDash(order['total_paid']) }} </b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td> total outstanding:</td>
+                                                    <td class="text-nowrap"> total outstanding:</td>
                                                     <td class="text-right"><b> {{ toNumberOrDash(order['total_outstanding']) }} </b></td>
                                                 </tr>
 
 
                                                 <tr>
-                                                    <td class="pt-2"> packed by:</td>
+                                                    <td class="text-nowrap pt-2"> packed by:</td>
                                                     <td class="text-right"><b> {{ order['packer'] ? order['packer']['name'] : '&nbsp' }} </b></td>
                                                 </tr>
 
@@ -355,15 +355,15 @@
                                                 </tr>
                                                 <tr>
                                                     <td> picked at:</td>
-                                                    <td><b> {{ order['picked_at'] | moment('MMM DD H:mm') }} </b></td>
+                                                    <td class="text-right"><b> {{ order['picked_at'] | moment('MMM DD H:mm') }} </b></td>
                                                 </tr>
                                                 <tr>
                                                     <td> packed at:</td>
-                                                    <td><b> {{ (order['packed_at']) | moment('MMM DD H:mm') }} </b></td>
+                                                    <td class="text-right"><b> {{ (order['packed_at']) | moment('MMM DD H:mm') }} </b></td>
                                                 </tr>
                                                 <tr>
                                                     <td> closed at:</td>
-                                                    <td class="text-right"><b> {{ (order['order_closed_at']) | moment('MMM DD H:mm') }} </b></td>
+                                                    <td class="text-right" class="text-right"><b> {{ (order['order_closed_at']) | moment('MMM DD H:mm') }} </b></td>
                                                 </tr>
                                                 <tr>
                                                     <td>&nbsp;</td>
