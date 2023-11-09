@@ -36,6 +36,7 @@ use Spatie\Tags\Tag;
  *
  * @property bool             $is_active
  * @property bool             is_on_hold
+ * @property bool             $is_fully_paid
  *
  * @property int|null         $packer_user_id
  * @property int|null         $shipping_address_id
