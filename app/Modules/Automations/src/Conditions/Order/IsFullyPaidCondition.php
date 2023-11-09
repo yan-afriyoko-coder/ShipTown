@@ -15,6 +15,6 @@ class IsFullyPaidCondition extends BaseOrderConditionAbstract
 
         $expectedBoolValue = filter_var($expected_value, FILTER_VALIDATE_BOOL);
 
-        return $query->where(['is_fully_paid' => $expectedBoolValue]);
+        return $query->where(['is_fully_paid' => $expectedBoolValue])->where('product_line_count', '>', 0);
     }
 }
