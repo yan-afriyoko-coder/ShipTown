@@ -14,8 +14,14 @@
                 </div>
                 <div class="col-lg-6 text-right small">
                     <number-card :number="order['age_in_days']" label="age"/>
-                    <div class="d-none d-md-inline-block">
-                        <number-card :number="order['order_products_totals']['total_price']" label="total" ></number-card>
+                    <div class="d-none d-md-inline-block p-1" v-bind:class="{ 'bg-warning': order['total_paid'] < 0.01 }">
+                        <div class="text-center w-100 text-secondary small">
+                            <small>total paid</small>
+                        </div>
+                        <span class="pr-0 mr-2 h5 w-100">{{
+                                Math.floor(order['total_paid']) }}<span class="" style="font-size: 8pt"><template
+                                v-if="(order['total_paid']) % 1 === 0"> .00</template><template
+                                v-if="(order['total_paid']) % 1 > 0"> .{{ Math.floor((order['total_paid']) % 1 * 100) }} </template></span></span>
                     </div>
                     <number-card :number="order['order_products_totals']['count']" label="lines"/>
                     <number-card :number="order['order_products_totals']['quantity_ordered']" label="ordered"/>
