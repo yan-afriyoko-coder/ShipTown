@@ -10,6 +10,27 @@ use Tests\TestCase;
 
 class IsFullyPaidConditionTest extends TestCase
 {
+    public function test_if_order_without_products_is_considered_unpaid()
+    {
+        Order::query()->forceDelete();
+
+        /** @var Order $order */
+        $order = Order::factory()->create(['total_shipping' => 10]);
+        $order->refresh();
+
+        Order::query()->where(['id' => $order->getKey()])->update(['total_paid' => $order->total_order]);
+
+        $query = Order::query();
+        IsFullyPaidCondition::addQueryScope($query, 'True');
+        $this->assertCount(0, $query->get(), 'Order should be considered as not paid');
+
+        ray(Order::all()->toArray());
+        ray(OrderProduct::all()->toArray());
+        ray(OrderProductTotal::all()->toArray());
+        ray($query->toSql(), $query->getBindings());
+        ray($query->get()->toArray());
+    }
+
     public function test_partially_paid()
     {
         Order::query()->forceDelete();
@@ -27,7 +48,6 @@ class IsFullyPaidConditionTest extends TestCase
         ray(Order::all()->toArray());
         ray(OrderProduct::all()->toArray());
         ray(OrderProductTotal::all()->toArray());
-
         ray($query->toSql());
 
         $this->assertCount(1, $query->get(), 'Order has not been returned as unpaid');

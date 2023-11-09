@@ -42,17 +42,14 @@
                                     <div class="col">
                                         <number-card label="lines" :number="order['order_products_totals']['count']"></number-card>
                                     </div>
-                                    <div class="col d-none d-md-block text-right align-text-top">
+                                    <div class="col d-none d-md-block text-right align-text-top" v-bind:class="{ 'bg-warning': order['total_paid'] < 0.01 }">
                                         <div class="text-center w-100 text-secondary">
-                                            <small>total</small>
+                                            <small>total paid</small>
                                         </div>
-                                        <span class="pr-0 mr-2 h5">{{
-                                                Math.floor(order['order_products_totals']['total_price'] + order['total_shipping'])
-                                            }}<span class="" style="font-size: 8pt"><template
-                                                v-if="(order['order_products_totals']['total_price'] + order['total_shipping']) % 1 === 0"> .00</template><template
-                                                v-if="(order['order_products_totals']['total_price'] + order['total_shipping']) % 1 > 0"> .{{
-                                                    Math.floor((order['order_products_totals']['total_price'] + order['total_shipping']) % 1 * 100)
-                                                }} </template></span></span>
+                                        <span class="pr-0 mr-2 h5 w-100">{{
+                                                Math.floor(order['total_paid']) }}<span class="" style="font-size: 8pt"><template
+                                                v-if="(order['total_paid']) % 1 === 0"> .00</template><template
+                                                v-if="(order['total_paid']) % 1 > 0"> .{{ Math.floor((order['total_paid']) % 1 * 100) }} </template></span></span>
                                     </div>
                                     <div class="col d-none d-sm-block">
                                         <number-card label="ordered" :number="order['order_products_totals']['quantity_ordered']"></number-card>
@@ -363,7 +360,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td> closed at:</td>
-                                                    <td class="text-right" class="text-right"><b> {{ (order['order_closed_at']) | moment('MMM DD H:mm') }} </b></td>
+                                                    <td class="text-right"><b> {{ (order['order_closed_at']) | moment('MMM DD H:mm') }} </b></td>
                                                 </tr>
                                                 <tr>
                                                     <td>&nbsp;</td>
