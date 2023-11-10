@@ -22,6 +22,9 @@ class OrderObserver
         if ($order->isAttributeChanged('is_active')) {
             $order->order_closed_at = $order->is_active ? null : now();
 
+            // we want to mark all products as shipped when order is closed
+            // this is because have created shipment
+            // before packing last few products
             /** @var OrderShipment $last_shipment */
             $last_shipment = OrderShipment::query()->where(['order_id' => $order->getKey()])->latest()->first();
 
