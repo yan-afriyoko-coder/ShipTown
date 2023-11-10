@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  *
  * @property int id
+ * @property Carbon $occurred_at
+ * @property int $sequence_number
  * @property string $type
  * @property string $custom_unique_reference_id
  * @property int inventory_id
@@ -23,7 +25,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string description
  * @property int user_id
  * @property int previous_movement_id
- * @property Carbon $occurred_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
