@@ -41,9 +41,6 @@ class OrderObserver
 
     public function saving(Order $order)
     {
-        $order->total_products = $order->orderTotals ? $order->orderTotals->total_ordered : 0;
-        $order->total = $order->total_products + $order->total_shipping;
-
         if ($order->isAttributeChanged('is_active')) {
             $order->order_closed_at = $order->is_active ? null : now();
 

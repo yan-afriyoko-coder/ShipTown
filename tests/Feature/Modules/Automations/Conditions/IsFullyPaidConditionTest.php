@@ -15,10 +15,10 @@ class IsFullyPaidConditionTest extends TestCase
         Order::query()->forceDelete();
 
         /** @var Order $order */
-        $order = Order::factory()->create(['total_shipping' => 10]);
+        $order = Order::factory()->create(['total_shipping' => 10, 'total_paid' => 20]);
         $order->refresh();
 
-        Order::query()->where(['id' => $order->getKey()])->update(['total_paid' => $order->total_order]);
+        ray($order->toArray());
 
         $query = Order::query();
         IsFullyPaidCondition::addQueryScope($query, 'True');
