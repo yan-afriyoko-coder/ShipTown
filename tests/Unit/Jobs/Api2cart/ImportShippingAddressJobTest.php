@@ -11,17 +11,13 @@ use Tests\TestCase;
 
 class ImportShippingAddressJobTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
     public function testExample()
     {
         Order::query()->forceDelete();
         OrderAddress::query()->forceDelete();
         Api2cartOrderImports::query()->forceDelete();
 
+        /** @var Api2cartOrderImports $import */
         $import = Api2cartOrderImports::factory()->create();
         $import = $import->refresh();
 

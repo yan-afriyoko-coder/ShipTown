@@ -73,14 +73,14 @@ class OrderService
      */
     public static function updateOrCreate(array $orderAttributes): Order
     {
-        $order = Order::whereOrderNumber($orderAttributes['order_number'])->firstOrNew();
-        $order->fill($orderAttributes);
-        $order->is_editing = true;
-        $order->save();
+        $attributes = $orderAttributes;
+        $attributes['is_editing'] = true;
 
-        self::updateOrCreateShippingAddress($order, $orderAttributes['shipping_address']);
+        $order = Order::updateOrCreate(['order_number' => $attributes['order_number']], $attributes);
 
-        $order = self::syncOrderProducts($orderAttributes['order_products'], $order);
+        self::updateOrCreateShippingAddress($order, $attributes['shipping_address']);
+
+        $order = self::syncOrderProducts($attributes['order_products'], $order);
 
         OrderCreatedEvent::dispatch($order);
 
