@@ -140,11 +140,7 @@ class Api2cartOrderImports extends BaseModel
                 'sku_ordered' => $rawOrderProduct['model'],
                 'name_ordered' => $rawOrderProduct['name'],
                 'quantity_ordered' => $rawOrderProduct['quantity'],
-
-                // to take any discounts into consideration,
-                // we recalculate unit price based on lines total_price
-                // total_price has discounts already taken off
-                'price' => $rawOrderProduct['total_price'] / $rawOrderProduct['quantity'],
+                'price' => $rawOrderProduct['price'],
             ];
         }
 
