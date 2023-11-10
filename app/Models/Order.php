@@ -169,7 +169,6 @@ class Order extends BaseModel
         'is_on_hold'        => 'boolean',
         'is_editing'        => 'boolean',
         'is_fully_paid'     => 'boolean',
-        'total'             => 'float',
         'total_products'    => 'float',
         'total_shipping'    => 'float',
         'total_paid'        => 'float',
