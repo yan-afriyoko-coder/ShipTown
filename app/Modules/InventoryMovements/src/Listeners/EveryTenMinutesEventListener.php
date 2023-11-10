@@ -6,6 +6,7 @@ use App\Modules\InventoryMovements\src\Jobs\InventoryLastMovementIdJob;
 use App\Modules\InventoryMovements\src\Jobs\InventoryQuantityJob;
 use App\Modules\InventoryMovements\src\Jobs\PreviousMovementIdJob;
 use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeJob;
+use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 
 class EveryTenMinutesEventListener
 {
@@ -15,5 +16,6 @@ class EveryTenMinutesEventListener
         PreviousMovementIdJob::dispatch();
         InventoryQuantityJob::dispatch();
         InventoryLastMovementIdJob::dispatch();
+        SequenceNumberJob::dispatch();
     }
 }
