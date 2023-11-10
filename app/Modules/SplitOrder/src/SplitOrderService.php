@@ -6,6 +6,8 @@ use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Warehouse;
+use App\Modules\OrderTotals\src\Services\OrderTotalsService;
+use App\Services\OrderService;
 use Exception;
 
 /**
@@ -70,9 +72,7 @@ class SplitOrderService
                 return true;
             });
 
-        if ($this->newOrder) {
-            $this->newOrder->unlockFromEditing();
-        }
+        $this->newOrder?->unlockFromEditing();
     }
 
     /**
@@ -90,7 +90,7 @@ class SplitOrderService
         $this->newOrder = Order::query()
             ->where(['order_number' => $newOrderNumber])
             ->firstOr(function () use ($newOrderNumber) {
-                return $this->originalOrder->replicate(['is_fully_paid', 'total_outstanding', 'total_order']);
+                return $this->originalOrder->replicate(['total_paid', 'is_fully_paid', 'total_outstanding', 'total_order']);
             });
 
         $this->newOrder->custom_unique_reference_id = null;
