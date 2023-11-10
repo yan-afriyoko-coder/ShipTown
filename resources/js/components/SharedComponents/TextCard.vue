@@ -1,7 +1,7 @@
 <template>
     <div class="text-center border-0 d-inline-block p-0 m-0" style="min-width: 70px">
             <div class="small text-secondary">
-                <small class="text-secondary small">{{ this.label }}</small>
+                <small class="small text-secondary">{{ this.label }}</small>
             </div>
             <h4>{{ this.text || '&nbsp;'}}</h4>
     </div>

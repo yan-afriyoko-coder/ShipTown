@@ -43,7 +43,7 @@
                                         <number-card label="lines" :number="order['order_products_totals']['count']"></number-card>
                                     </div>
                                     <div class="col d-none d-md-block text-right align-text-top" v-bind:class="{ 'bg-warning': order['total_paid'] < 0.01 }">
-                                        <div class="text-center w-100 text-secondary">
+                                        <div class="text-center w-100 text-secondary small">
                                             <small>total paid</small>
                                         </div>
                                         <span class="pr-0 mr-2 h5 w-100">{{
@@ -168,8 +168,8 @@
                                                                      :number="order_product['quantity_split']"></number-card>
                                                     </div>
                                                     <div class="col d-none d-md-block text-right">
-                                                        <div class="text-center w-100">
-                                                            <small>unit price</small>
+                                                        <div class="text-center w-100 text-secondary small">
+                                                            <small class="small text-secondary">unit price</small>
                                                         </div>
                                                         <span class="pr-0 mr-2 h4">{{
                                                                 Math.floor(order_product['price'])
