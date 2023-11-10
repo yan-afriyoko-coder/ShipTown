@@ -10,33 +10,11 @@ use App\Models\OrderStatus;
 
 class OrderObserver
 {
-    /**
-     * @param Order $order
-     */
     public function creating(Order $order)
     {
         if ($order->status_code != '') {
-            OrderStatus::query()->firstOrCreate([
-                'code' => $order->status_code
-            ], [
-                'name' => $order->status_code
-            ]);
+            OrderStatus::query()->firstOrCreate(['code' => $order->status_code], ['name' => $order->status_code]);
         }
-    }
-
-    /**
-     * Handle the order "created" event.
-     *
-     * @param Order $order
-     *
-     * @return void
-     */
-    public function created(Order $order)
-    {
-        // we will not dispatch CreatedEvent here
-        // please use OrderService method
-        // CreatedEvent should be dispatched
-        // after created OrderProducts etc
     }
 
     public function saving(Order $order)
@@ -55,25 +33,23 @@ class OrderObserver
         }
     }
 
-    /**
-     * @param Order $order
-     */
     public function updating(Order $order)
     {
-        if ($order->isAttributeNotChanged('status_code')) {
-            return;
+        if ($order->isAttributeChanged('status_code')) {
+            OrderStatus::query()->firstOrCreate(['code' => $order->status_code], ['name' => $order->status_code]);
         }
-
-        OrderStatus::firstOrCreate(['code' => $order->status_code], ['name' => $order->status_code]);
     }
 
-    /**
-     * Handle the order "updated" event.
-     *
-     * @param Order $order
-     *
-     * @return void
-     */
+    public function created(Order $order)
+    {
+        // we will not dispatch CreatedEvent here
+        // please use OrderService method
+        // CreatedEvent should be dispatched
+        // after created OrderProducts etc
+
+        // OrderCreatedEvent::dispatch();
+    }
+
     public function updated(Order $order)
     {
         OrderUpdatedEvent::dispatch($order);
