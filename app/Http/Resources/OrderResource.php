@@ -27,7 +27,6 @@ class OrderResource extends JsonResource
             'is_active' => $this->is_active,
             'is_editing' => $this->is_editing,
             'is_fully_paid' => $this->is_fully_paid,
-            'total' => $this->total,
             'total_products' => $this->total_products,
             'total_shipping' => $this->total_shipping,
             'total_discounts' => $this->total_discounts,

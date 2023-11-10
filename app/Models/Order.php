@@ -26,6 +26,7 @@ use Spatie\Tags\Tag;
  * App\Models\Order.
  *
  * @property int              $id
+ * @property string|null      $custom_unique_reference_id
  * @property string           $order_number
  * @property string           $status_code
  * @property string           $label_template
@@ -137,7 +138,6 @@ class Order extends BaseModel
         'is_editing',
         'is_active',
         'is_packed',
-        'total',
         'total_products',
         'total_shipping',
         'total_discounts',
@@ -169,7 +169,6 @@ class Order extends BaseModel
         'is_on_hold'        => 'boolean',
         'is_editing'        => 'boolean',
         'is_fully_paid'     => 'boolean',
-        'total'             => 'float',
         'total_products'    => 'float',
         'total_shipping'    => 'float',
         'total_paid'        => 'float',
@@ -249,16 +248,6 @@ class Order extends BaseModel
     public function getPreviousOrderStatus(): OrderStatus
     {
         return OrderStatus::whereCode($this->getOriginal('status_code'))->first();
-    }
-
-    public function isOpen(): bool
-    {
-        return $this->order_closed_at === null;
-    }
-
-    public function isClosed(): bool
-    {
-        return $this->order_closed_at !== null;
     }
 
     /**
@@ -369,22 +358,6 @@ class Order extends BaseModel
         return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {
             $join->on('orders.id', '=', 'inventory_source.order_id');
         });
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIsPaidAttribute(): bool
-    {
-        return ($this->total_paid > 0) && ($this->total_paid >= $this->total);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIsNotPaidAttribute(): bool
-    {
-        return !$this->isPaid;
     }
 
     /**

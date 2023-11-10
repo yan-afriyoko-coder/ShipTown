@@ -32,7 +32,7 @@ class OrderFactory extends Factory
 
         $newOrder = [
             'order_number'         => (string) (10000000 + $this->faker->unique()->randomNumber(7)),
-            'total'                => $this->faker->randomNumber(2),
+            'total_products'       => $this->faker->randomNumber(2),
             'total_shipping'       => $this->faker->randomElement([5, 10, 15, 20]),
             'shipping_address_id'  => $shippingAddress->getKey(),
             'shipping_method_code' => $this->faker->randomElement(['next_day', 'store_pickup', 'express']),
