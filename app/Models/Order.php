@@ -26,6 +26,7 @@ use Spatie\Tags\Tag;
  * App\Models\Order.
  *
  * @property int              $id
+ * @property string|null      $custom_unique_reference_id
  * @property string           $order_number
  * @property string           $status_code
  * @property string           $label_template

@@ -86,12 +86,14 @@ class SplitOrderService
 
         $newOrderNumber = $this->originalOrder->order_number . '-PARTIAL-' . $this->warehouse->code;
 
+        /** @var Order newOrder */
         $this->newOrder = Order::query()
             ->where(['order_number' => $newOrderNumber])
             ->firstOr(function () use ($newOrderNumber) {
                 return $this->originalOrder->replicate(['is_fully_paid', 'total_outstanding', 'total_order']);
             });
 
+        $this->newOrder->custom_unique_reference_id = null;
         $this->newOrder->status_code = $this->newOrderStatus;
         $this->newOrder->is_editing = true;
         $this->newOrder->order_number = $newOrderNumber;
