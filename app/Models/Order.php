@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
@@ -11,6 +10,7 @@ use Barryvdh\LaravelIdeHelper\Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -25,8 +25,6 @@ use Spatie\Tags\Tag;
 /**
  * App\Models\Order.
  *
- * @property array            $raw_import
- *
  * @property int              $id
  * @property string           $order_number
  * @property string           $status_code
@@ -34,14 +32,15 @@ use Spatie\Tags\Tag;
  * @property string           $shipping_method_code
  * @property string           $shipping_method_name
  *
+ * @property bool             $is_editing
  * @property bool             $is_active
- * @property bool             is_on_hold
+ * @property bool             $is_on_hold
  * @property bool             $is_fully_paid
  *
  * @property int|null         $packer_user_id
  * @property int|null         $shipping_address_id
  *
- * @property int              product_line_count
+ * @property int              $product_line_count
  * @property float            $total
  * @property float            $total_products
  * @property float            $total_shipping
@@ -68,21 +67,20 @@ use Spatie\Tags\Tag;
  * @property-read boolean     $isPaid
  * @property-read boolean     $isNotPaid
  *
- * @property-read OrderProductTotal orderProductsTotals
- * @property-read OrderStatus $order_status
- * @property-read User|null   $packer
- * @property-read Collection|OrderComment[] $orderComments
- * @property-read int|null $order_comments_count
- * @property-read Collection|OrderProduct[] $orderProducts
- * @property-read int|null $order_products_count
- * @property-read HasMany $orderShipments
- * @property-read int|null $order_shipments_count
- * @property-read Collection|Activity[] $activities
- * @property-read int|null $activities_count
- * @property-read Collection|Packlist[] $packlist
- * @property-read int|null $packlist_count
+ * @property-read int $age_in_days
  *
- * @property-read OrderAddress|null $shippingAddress
+ * @property OrderStatus $orderStatus
+ * @property OrderStatus $order_status
+ * @property-read OrderAddress|null          $shippingAddress
+ * @property-read OrderProductTotal          $orderProductsTotals
+ * @property-read User|null                  $packer
+ *
+ * @property-read Collection|Tag[]           $tags
+ * @property-read Collection|OrderComment[]  $orderComments
+ * @property-read Collection|OrderProduct[]  $orderProducts
+ * @property-read Collection|OrderShipment[] $orderShipments
+ * @property-read Collection|Activity[]      $activities
+ * @property-read Collection|Packlist[]      $packlist
  *
  * @method static Builder|Order addInventorySource($inventory_location_id)
  * @method static Builder|Order hasPacker($expected)
@@ -112,12 +110,6 @@ use Spatie\Tags\Tag;
  * @method static Builder|Order whereTotalPaid($value)
  * @method static Builder|Order whereTotalQuantityOrdered($value)
  * @method static Builder|Order whereUpdatedAt($value)
- *
- * @property-read int $age_in_days
- * @property OrderStatus orderStatus
- * @property Collection|Tag[] $tags
- * @property-read int|null $tags_count
- * @property bool is_editing
  *
  * @method static Builder|Order hasTags($tags)
  * @method static Builder|Order whereIsActive()
@@ -172,13 +164,10 @@ class Order extends BaseModel
     ];
 
     protected $casts = [
-        'picked_at' => 'datetime',
-        'packed_at' => 'datetime',
-        'order_placed_at' => 'datetime',
-        'order_closed_at' => 'datetime',
         'is_active'         => 'boolean',
         'is_on_hold'        => 'boolean',
         'is_editing'        => 'boolean',
+        'is_fully_paid'     => 'boolean',
         'total'             => 'float',
         'total_products'    => 'float',
         'total_shipping'    => 'float',
@@ -186,10 +175,14 @@ class Order extends BaseModel
         'total_discounts'   => 'float',
         'total_order'       => 'float',
         'total_outstanding' => 'float',
+        'order_placed_at'   => 'datetime',
+        'picked_at'         => 'datetime',
+        'packed_at'         => 'datetime',
+        'order_closed_at'   => 'datetime',
     ];
 
     // we use attributes to set default values
-    // we wont use database default values
+    // we will not use db default values
     // as this is then not populated
     // correctly to events
     protected $attributes = [
