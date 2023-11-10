@@ -10,33 +10,11 @@ use App\Models\OrderStatus;
 
 class OrderObserver
 {
-    /**
-     * @param Order $order
-     */
     public function creating(Order $order)
     {
         if ($order->status_code != '') {
-            OrderStatus::query()->firstOrCreate([
-                'code' => $order->status_code
-            ], [
-                'name' => $order->status_code
-            ]);
+            OrderStatus::query()->firstOrCreate(['code' => $order->status_code], ['name' => $order->status_code]);
         }
-    }
-
-    /**
-     * Handle the order "created" event.
-     *
-     * @param Order $order
-     *
-     * @return void
-     */
-    public function created(Order $order)
-    {
-        // we will not dispatch CreatedEvent here
-        // please use OrderService method
-        // CreatedEvent should be dispatched
-        // after created OrderProducts etc
     }
 
     public function saving(Order $order)
@@ -44,6 +22,9 @@ class OrderObserver
         if ($order->isAttributeChanged('is_active')) {
             $order->order_closed_at = $order->is_active ? null : now();
 
+            // we want to mark all products as shipped when order is closed
+            // this is because have created shipment
+            // before packing last few products
             /** @var OrderShipment $last_shipment */
             $last_shipment = OrderShipment::query()->where(['order_id' => $order->getKey()])->latest()->first();
 
@@ -55,25 +36,23 @@ class OrderObserver
         }
     }
 
-    /**
-     * @param Order $order
-     */
     public function updating(Order $order)
     {
-        if ($order->isAttributeNotChanged('status_code')) {
-            return;
+        if ($order->isAttributeChanged('status_code')) {
+            OrderStatus::query()->firstOrCreate(['code' => $order->status_code], ['name' => $order->status_code]);
         }
-
-        OrderStatus::firstOrCreate(['code' => $order->status_code], ['name' => $order->status_code]);
     }
 
-    /**
-     * Handle the order "updated" event.
-     *
-     * @param Order $order
-     *
-     * @return void
-     */
+    public function created(Order $order)
+    {
+        // we will not dispatch CreatedEvent here
+        // please use OrderService method
+        // CreatedEvent should be dispatched
+        // after created OrderProducts etc
+
+        // OrderCreatedEvent::dispatch();
+    }
+
     public function updated(Order $order)
     {
         OrderUpdatedEvent::dispatch($order);

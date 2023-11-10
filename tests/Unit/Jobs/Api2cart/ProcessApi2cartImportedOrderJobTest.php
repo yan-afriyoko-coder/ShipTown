@@ -6,7 +6,6 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Modules\Api2cart\src\Jobs\ProcessImportedOrdersJob;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
-use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class ProcessApi2cartImportedOrderJobTest extends TestCase
@@ -22,12 +21,14 @@ class ProcessApi2cartImportedOrderJobTest extends TestCase
         OrderProduct::query()->forceDelete();
         Api2cartOrderImports::query()->forceDelete();
 
+        /** @var Api2cartOrderImports $importedOrder */
         $importedOrder = Api2cartOrderImports::factory()->create();
 
         // act
         ProcessImportedOrdersJob::dispatch($importedOrder);
 
         // test
+        /** @var Order $order */
         $order = Order::query()->first();
         $importedOrder = $importedOrder->refresh();
 
