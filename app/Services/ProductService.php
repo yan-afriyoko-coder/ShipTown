@@ -6,6 +6,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductAlias;
 use Barryvdh\LaravelIdeHelper\Alias;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -13,8 +14,9 @@ use Illuminate\Support\Facades\Log;
  */
 class ProductService
 {
-    public static function find(string $skuOrAlias)
+    public static function find(string $skuOrAlias): Product|null
     {
+        /** @var Product $product */
         $product = Product::findBySKU($skuOrAlias);
 
         if ($product) {
@@ -24,8 +26,9 @@ class ProductService
         return self::findByAlias($skuOrAlias);
     }
 
-    public static function findByAlias(string $alias)
+    public static function findByAlias(string $alias): Product|null
     {
+        /** @var ProductAlias $productAlias */
         $productAlias = ProductAlias::query()->where(['alias' => $alias])->with('product')->first();
 
         if ($productAlias) {

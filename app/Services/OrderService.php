@@ -12,34 +12,16 @@ use App\Modules\InventoryReservations\src\Models\Configuration;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use phpseclib\Math\BigInteger;
 
 class OrderService
 {
-    /**
-     * @param Order  $order
-     * @param string $from_status_code
-     * @param bool   $condition
-     * @param string $to_status_code
-     *
-     * @return Order
-     */
-    public static function changeStatusIf(Order $order, string $from_status_code, bool $condition, string $to_status_code): Order
-    {
-        if ($order->isStatusCode($from_status_code) && $condition) {
-            $order->status_code = $to_status_code;
-        }
-
-        return $order;
-    }
-
     /**
      * @param Order $order
      * @param $sourceLocationId
      *
      * @return bool
      */
-    public static function canNotFulfill(Order $order, $sourceLocationId = null)
+    public static function canNotFulfill(Order $order, $sourceLocationId = null): bool
     {
         return !self::canFulfill($order, $sourceLocationId);
     }
@@ -63,21 +45,16 @@ class OrderService
         return true;
     }
 
-    /**
-     * @param $order_number
-     * @param $template_name
-     *
-     * @return string
-     */
-    public static function getOrderPdf(string $order_number, $template_name)
+    public static function getOrderPdf(string $order_number, string $template_name): string
     {
+        /** @var Order $order */
         $order = Order::query()
             ->where(['order_number' => $order_number])
             ->with('shippingAddress')
             ->firstOrFail();
 
         if (!$order->shipping_address_id) {
-            ImportShippingAddressJob::v($order->id);
+            ImportShippingAddressJob::dispatchSync($order->id);
             $order = $order->refresh();
         }
 
@@ -94,7 +71,7 @@ class OrderService
      *
      * @return Order
      */
-    public static function updateOrCreate(array $orderAttributes)
+    public static function updateOrCreate(array $orderAttributes): Order
     {
         $order = Order::whereOrderNumber($orderAttributes['order_number'])->firstOrNew();
         $order->fill($orderAttributes);
@@ -113,12 +90,6 @@ class OrderService
         return $order;
     }
 
-    /**
-     * @param array $shippingAddressAttributes
-     * @param $order
-     *
-     * @return Order
-     */
     public static function updateOrCreateShippingAddress(Order $order, array $shippingAddressAttributes): Order
     {
         $shipping_address = OrderAddress::query()->findOrNew($order->shipping_address_id ?: 0);
@@ -134,7 +105,7 @@ class OrderService
     /**
      * @param array $orderProductAttributes
      *
-     * @return BigInteger|null
+     * @return null
      */
     private static function getProductId(array $orderProductAttributes)
     {
@@ -165,7 +136,7 @@ class OrderService
         $orderProductIdsToKeep = [];
 
         foreach ($order_products as $orderProductAttributes) {
-            $orderProduct = OrderProduct::where(['order_id' => $order->getKey()])
+            $orderProduct = OrderProduct::query()->where(['order_id' => $order->getKey()])
                 ->whereNotIn('id', $orderProductIdsToKeep)
                 ->updateOrCreate(
                     // attributes
@@ -187,7 +158,8 @@ class OrderService
             $orderProductIdsToKeep[] = $orderProduct->getKey();
         }
 
-        OrderProduct::where(['order_id' => $order->id])
+        OrderProduct::query()
+            ->where(['order_id' => $order->id])
             ->whereNotIn('id', $orderProductIdsToKeep)
             ->delete();
 
@@ -234,8 +206,12 @@ class OrderService
             return true;
         }
 
-        $inventoryReservationsWarehouseId = Configuration::first()->warehouse_id;
-        $query = Inventory::where('product_id', $product_id)
+        /** @var Configuration $baseModel */
+        $baseModel = Configuration::first();
+
+        $inventoryReservationsWarehouseId = $baseModel->warehouse_id;
+        $query = Inventory::query()
+            ->where('product_id', $product_id)
             ->where('warehouse_id', '!=', $inventoryReservationsWarehouseId);
 
         if ($sourceLocationId) {
