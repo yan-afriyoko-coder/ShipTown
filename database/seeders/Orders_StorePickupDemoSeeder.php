@@ -30,7 +30,7 @@ class Orders_StorePickupDemoSeeder extends Seeder
             ->create(['status_code' => 'store_pickup', 'shipping_method_code' => 'store_pickup']);
 
         Order::all()->each(function (Order $order) {
-            $order->total_paid = $order->total;
+            $order->total_paid = $order->total_order;
             $order->save();
         });
     }

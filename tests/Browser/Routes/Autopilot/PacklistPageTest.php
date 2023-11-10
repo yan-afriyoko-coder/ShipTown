@@ -51,7 +51,7 @@ class PacklistPageTest extends DuskTestCase
             ]);
 
         $order->refresh();
-        $order->update(['total_paid' => $order->total]);
+        $order->update(['total_paid' => $order->total_order]);
 
 
         $this->browse(function (Browser $browser) use ($user, $order) {

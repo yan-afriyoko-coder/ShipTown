@@ -30,7 +30,7 @@ class Orders_PackingWebDemoSeeder extends Seeder
             ->create(['status_code' => 'packing_web']);
 
         Order::all()->each(function (Order $order) {
-            $order->total_paid = $order->total;
+            $order->total_paid = $order->total_order;
             $order->save();
         });
     }

@@ -250,16 +250,6 @@ class Order extends BaseModel
         return OrderStatus::whereCode($this->getOriginal('status_code'))->first();
     }
 
-    public function isOpen(): bool
-    {
-        return $this->order_closed_at === null;
-    }
-
-    public function isClosed(): bool
-    {
-        return $this->order_closed_at !== null;
-    }
-
     /**
      * @param $query
      * @param $text
@@ -368,22 +358,6 @@ class Order extends BaseModel
         return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {
             $join->on('orders.id', '=', 'inventory_source.order_id');
         });
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIsPaidAttribute(): bool
-    {
-        return ($this->total_paid > 0) && ($this->total_paid >= $this->total);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIsNotPaidAttribute(): bool
-    {
-        return !$this->isPaid;
     }
 
     /**
