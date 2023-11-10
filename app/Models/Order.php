@@ -138,7 +138,6 @@ class Order extends BaseModel
         'is_editing',
         'is_active',
         'is_packed',
-        'total',
         'total_products',
         'total_shipping',
         'total_discounts',
