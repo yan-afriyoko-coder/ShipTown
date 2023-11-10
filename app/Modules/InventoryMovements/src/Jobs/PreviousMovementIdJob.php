@@ -43,7 +43,7 @@ class PreviousMovementIdJob extends UniqueJob
                 UPDATE inventory_movements
 
                 INNER JOIN tempTable ON
-                    tempTable.id = inventory_movements.previous_movement_id
+                    tempTable.previous_movement_id = inventory_movements.previous_movement_id
 
                 SET
                     inventory_movements.is_first_movement = null,
