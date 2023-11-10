@@ -314,7 +314,12 @@
 
 
                                                 <tr>
-                                                    <td class="text-nowrap pt-2"> total products:</td>
+                                                    <td class="text-nowrap pt-2"> product lines:</td>
+                                                    <td class="text-right"><b> {{toNumberOrDash(order['product_line_count'])}} </b></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="text-nowrap"> total products:</td>
                                                     <td class="text-right"><b> {{toNumberOrDash(order['total_products'])}} </b></td>
                                                 </tr>
                                                 <tr>
