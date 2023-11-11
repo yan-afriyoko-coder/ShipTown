@@ -46,6 +46,7 @@ class InventoryMovement extends BaseModel
 
     protected $fillable = [
         'occurred_at',
+        'sequence_number',
         'type',
         'custom_unique_reference_id',
         'inventory_id',

@@ -26,6 +26,7 @@ class InventoryMovementsReport extends Report
 
         $this->fields = [
             'id'                            => 'inventory_movements.id',
+            'sequence_number'               => 'inventory_movements.sequence_number',
             'custom_unique_reference_id'    => 'inventory_movements.custom_unique_reference_id',
             'occurred_at'                   => 'inventory_movements.occurred_at',
             'created_at'                    => 'inventory_movements.created_at',
@@ -43,6 +44,7 @@ class InventoryMovementsReport extends Report
             'id'                => 'integer',
             'user_id'           => 'integer',
             'product_id'        => 'integer',
+            'sequence_number'   => 'integer',
             'occurred_at'       => 'datetime',
             'created_at'        => 'datetime',
             'quantity_delta'    => 'float',
