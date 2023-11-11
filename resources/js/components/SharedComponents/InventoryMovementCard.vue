@@ -12,11 +12,15 @@
                         <td class="pl-1">{{ record['custom_unique_reference_id'] }}</td>
                     </tr>
                     <tr>
-                            <td>movement id:</td>
+                        <td>movement id:</td>
                         <td class="pl-1">{{ record['id'] }}</td>
                     </tr>
                     <tr>
-                            <td>at:</td>
+                        <td>sequence number:</td>
+                        <td class="pl-1">{{ record['sequence_number'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>at:</td>
                         <td class="pl-1">{{ record['occurred_at'] | moment('YYYY MMM D H:mm') }}</td>
                     </tr>
                     <tr>
