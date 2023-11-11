@@ -32,7 +32,7 @@ class SequenceNumberJob extends UniqueJob
                 INNER JOIN tempTable
                     ON inventory_movements.id = tempTable.movement_id
                 SET
-                    inventory_movements.sequence_number = tempTable.sequence_number + ISNULL(tempTable.max_sequence_number);
+                    inventory_movements.sequence_number = tempTable.sequence_number + IFNULL(tempTable.max_sequence_number, 0);
             ');
 
             Log::info('Job processing', [
