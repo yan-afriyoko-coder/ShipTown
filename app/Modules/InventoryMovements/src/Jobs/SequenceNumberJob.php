@@ -20,16 +20,11 @@ class SequenceNumberJob extends UniqueJob
                 CREATE TEMPORARY TABLE tempTable AS
                     SELECT
                        inventory_movements.inventory_id,
+                       (SELECT MAX(sequence_number) FROM inventory_movements as im_table WHERE im_table.inventory_id = inventory_movements.inventory_id) as max_sequence_number,
                        row_number() over (partition by inventory_id order by occurred_at asc, id asc) as sequence_number,
                        inventory_movements.id as movement_id
                     FROM inventory_movements
-                       WHERE
-                        inventory_id IN (SELECT * FROM (
-                            SELECT DISTINCT inventory_id
-                            FROM inventory_movements
-                            WHERE sequence_number IS NULL
-                            LIMIT 100
-                        ) as tbl);
+                    WHERE sequence_number IS NULL;
             ');
 
             $recordsUpdated = DB::update('
@@ -37,7 +32,7 @@ class SequenceNumberJob extends UniqueJob
                 INNER JOIN tempTable
                     ON inventory_movements.id = tempTable.movement_id
                 SET
-                    inventory_movements.sequence_number = tempTable.sequence_number;
+                    inventory_movements.sequence_number = tempTable.sequence_number + ISNULL(tempTable.max_sequence_number);
             ');
 
             Log::info('Job processing', [
