@@ -137,7 +137,7 @@ class QuantityBeforeJob extends UniqueJob
                         AND previous_movement.sequence_number = inventory_movements.sequence_number
 
                     WHERE
-                        inventory_movements.id BETWEEN 0 AND 99999999
+                        inventory_movements.id BETWEEN ? AND ?
                         AND inventory_movements.type != "stocktake"
                         AND inventory_movements.quantity_before != previous_movement.quantity_after
 
