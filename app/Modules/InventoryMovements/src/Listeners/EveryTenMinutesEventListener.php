@@ -12,10 +12,10 @@ class EveryTenMinutesEventListener
 {
     public function handle()
     {
-        QuantityBeforeJob::dispatch();
-        PreviousMovementIdJob::dispatch();
-        InventoryQuantityJob::dispatch();
+//        QuantityBeforeJob::dispatch();
+//        PreviousMovementIdJob::dispatch();
         InventoryLastMovementIdJob::dispatch();
+        InventoryQuantityJob::dispatch();
         SequenceNumberJob::dispatch();
     }
 }
