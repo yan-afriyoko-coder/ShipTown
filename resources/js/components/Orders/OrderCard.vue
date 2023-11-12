@@ -115,14 +115,14 @@
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link p-0 pl-1 pr-1" data-toggle="tab" href="#"
-                                               @click.prevent="currentTab = 'shippingAddress'">
-                                                Address
+                                               @click.prevent="currentTab = 'orderDetails'">
+                                                Details
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link p-0 pl-1 pr-1" data-toggle="tab" href="#"
-                                               @click.prevent="currentTab = 'orderDetails'">
-                                                Details
+                                               @click.prevent="currentTab = 'shippingAddress'">
+                                                Address
                                             </a>
                                         </li>
                                         <li class="nav-item">

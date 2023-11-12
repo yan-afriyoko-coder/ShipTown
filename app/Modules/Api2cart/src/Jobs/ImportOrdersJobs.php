@@ -2,6 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Jobs;
 
+use App\Abstracts\UniqueJob;
 use App\Models\Heartbeat;
 use App\Modules\Api2cart\src\Api\Orders;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
@@ -9,50 +10,26 @@ use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
-class ImportOrdersJobs implements ShouldQueue
+class ImportOrdersJobs extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
-    /**
-     * @var bool
-     */
     public bool $finishedSuccessfully;
 
-    /**
-     * @var Api2cartConnection
-     */
     private Api2cartConnection $api2cartConnection;
 
-    /**
-     * Create a new job instance.
-     *
-     * @param Api2cartConnection $api2cartConnection
-     */
     public function __construct(Api2cartConnection $api2cartConnection)
     {
         $this->api2cartConnection = $api2cartConnection;
         $this->finishedSuccessfully = false;
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     * @throws GuzzleException
-     *
-     * @throws Exception
-     */
+    public function uniqueId(): string
+    {
+        return implode('-', [parent::uniqueId(), $this->api2cartConnection->id]);
+    }
+
     public function handle()
     {
         $this->importOrders($this->api2cartConnection);
@@ -124,8 +101,11 @@ class ImportOrdersJobs implements ShouldQueue
     private function saveOrders(Api2cartConnection $api2cartConnection, array $ordersCollection): void
     {
         foreach ($ordersCollection as $order) {
-            Api2cartOrderImports::query()->create([
+            Api2cartOrderImports::query()->updateOrCreate([
                 'connection_id' => $api2cartConnection->getKey(),
+                'api2cart_order_id' => data_get($order, 'id'),
+                'when_processed' => null,
+            ], [
                 'raw_import' => $order,
             ]);
 

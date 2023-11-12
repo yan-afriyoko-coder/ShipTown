@@ -2,29 +2,12 @@
 
 namespace App\Modules\Api2cart\src\Jobs;
 
+use App\Abstracts\UniqueJob;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use App\Services\OrderService;
-use Exception;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
-class ProcessImportedOrdersJob implements ShouldQueue
+class ProcessImportedOrdersJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
-    /**
-     * Execute the job.
-     *
-     * @throws Exception
-     *
-     * @return void
-     */
     public function handle()
     {
         Api2cartOrderImports::query()
@@ -37,9 +20,6 @@ class ProcessImportedOrdersJob implements ShouldQueue
             });
     }
 
-    /**
-     * @throws Exception
-     */
     private function processOrder(Api2cartOrderImports $orderImport): void
     {
         $data = $orderImport->raw_import;
