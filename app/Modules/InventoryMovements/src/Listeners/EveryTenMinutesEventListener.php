@@ -14,8 +14,8 @@ class EveryTenMinutesEventListener
     {
 //        QuantityBeforeJob::dispatch();
 //        PreviousMovementIdJob::dispatch();
-        InventoryLastMovementIdJob::dispatch();
-        InventoryQuantityJob::dispatch();
-        SequenceNumberJob::dispatch();
+//        InventoryLastMovementIdJob::dispatch();
+//        InventoryQuantityJob::dispatch();
+//        SequenceNumberJob::dispatch();
     }
 }
