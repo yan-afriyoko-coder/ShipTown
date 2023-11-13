@@ -87,10 +87,21 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
             ->where('custom_unique_reference_id', $salesRecord->uuid)
             ->first();
 
+        $types = [
+            'rms_sale' => 'sale',
+            'rms_stocktake' => 'stocktake',
+        ];
+
         if ($inventoryMovement) {
             $salesRecord->update([
                 'inventory_movement_id' => $inventoryMovement->getKey(),
                 'processed_at' => now()
+            ]);
+
+            $inventoryMovement->update([
+                'type' => data_get($types, $salesRecord->type, $salesRecord->type),
+                'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time)->subHour(),
+                'description' => $salesRecord->type,
             ]);
             return;
         }
@@ -105,6 +116,12 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
                 'custom_unique_reference_id' => $salesRecord->uuid,
                 'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time)->subHour(),
                 'description' => 'rms_sale',
+            ]);
+        } else if ($salesRecord->type === 'rms_stocktake') {
+            $inventoryMovement = InventoryService::stocktake($inventory, $salesRecord->quantity, [
+                'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time)->subHour(),
+                'description' => 'rms_stocktake',
+                'custom_unique_reference_id' => $salesRecord->uuid
             ]);
         } else {
             $inventoryMovement = InventoryService::adjust($inventory, $salesRecord->quantity, [
