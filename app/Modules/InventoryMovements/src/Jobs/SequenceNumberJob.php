@@ -55,7 +55,7 @@ class SequenceNumberJob extends UniqueJob
                 UPDATE inventory
 
                 SET
-                    inventory.last_sequence_number = (SELECT MAX(sequence_number) FROM inventory_movements WHERE inventory_id = inventory.id AND sequence_number > IFNULL(inventory.last_sequence_number, 0))
+                    inventory.last_sequence_number = (SELECT MAX(sequence_number) FROM inventory_movements WHERE inventory_id = inventory.id)
 
                 WHERE inventory.id IN (SELECT inventory_id FROM tempTable);
             ');
