@@ -13,21 +13,11 @@ class SequenceNumberJob extends UniqueJob
     {
         $maxRounds = 1000;
 
+        $this->ensureSequenceNumberAreNull();
+
         do {
             Schema::dropIfExists('tempTable');
 
-            DB::update('
-                UPDATE `inventory_movements`
-
-                INNER JOIN inventory_movements as a
-                 ON a.inventory_id = inventory_movements.inventory_id
-                 AND a.sequence_number IS NULL
-                 AND a.occurred_at <= inventory_movements.occurred_at
-
-                SET inventory_movements.sequence_number = NULL
-
-                WHERE inventory_movements.sequence_number IS NOT NULL
-            ');
             DB::statement('
                 CREATE TEMPORARY TABLE tempTable AS
                 SELECT
@@ -93,5 +83,38 @@ class SequenceNumberJob extends UniqueJob
 
             usleep(200000); // 0.2 seconds
         } while ($recordsUpdated > 0 and $maxRounds-- > 0);
+    }
+
+    private function ensureSequenceNumberAreNull(): void
+    {
+        do {
+            Schema::dropIfExists('tempTable');
+
+            DB::statement('
+                CREATE TEMPORARY TABLE tempTable AS
+                SELECT future_movements.*
+
+                FROM inventory_movements
+
+                INNER JOIN inventory_movements as future_movements
+                    ON future_movements.sequence_number IS NOT NULL
+                    AND future_movements.inventory_id = inventory_movements.inventory_id
+                    AND future_movements.occurred_at >= inventory_movements.occurred_at
+
+                WHERE inventory_movements.sequence_number IS NOT NULL
+
+                LIMIT 1000;
+            ');
+
+            DB::update('
+                UPDATE `inventory_movements`
+
+                INNER JOIN tempTable ON tempTable.id = inventory_movements.id
+
+                SET inventory_movements.sequence_number = NULL;
+            ');
+
+            usleep(200000); // 0.2 seconds
+        } while (DB::table('tempTable')->count() > 0);
     }
 }
