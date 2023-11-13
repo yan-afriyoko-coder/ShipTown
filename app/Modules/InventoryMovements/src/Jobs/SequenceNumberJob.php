@@ -101,7 +101,7 @@ class SequenceNumberJob extends UniqueJob
                     AND future_movements.inventory_id = inventory_movements.inventory_id
                     AND future_movements.occurred_at >= inventory_movements.occurred_at
 
-                WHERE inventory_movements.sequence_number IS NOT NULL
+                WHERE inventory_movements.sequence_number IS NULL
 
                 LIMIT 1000;
             ');
