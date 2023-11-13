@@ -16,6 +16,18 @@ class SequenceNumberJob extends UniqueJob
         do {
             Schema::dropIfExists('tempTable');
 
+            DB::update('
+                UPDATE `inventory_movements`
+
+                INNER JOIN inventory_movements as a
+                 ON a.inventory_id = inventory_movements.inventory_id
+                 AND a.sequence_number IS NULL
+                 AND a.occurred_at <= inventory_movements.occurred_at
+
+                SET inventory_movements.sequence_number = NULL
+
+                WHERE inventory_movements.sequence_number IS NOT NULL
+            ');
             DB::statement('
                 CREATE TEMPORARY TABLE tempTable AS
                 SELECT
