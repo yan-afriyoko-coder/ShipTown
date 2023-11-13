@@ -26,10 +26,9 @@ class InventoryMovementsReport extends Report
 
         $this->fields = [
             'id'                            => 'inventory_movements.id',
+            'type'                          => 'inventory_movements.type',
             'sequence_number'               => 'inventory_movements.sequence_number',
-            'custom_unique_reference_id'    => 'inventory_movements.custom_unique_reference_id',
             'occurred_at'                   => 'inventory_movements.occurred_at',
-            'created_at'                    => 'inventory_movements.created_at',
             'quantity_delta'                => 'inventory_movements.quantity_delta',
             'quantity_before'               => 'inventory_movements.quantity_before',
             'quantity_after'                => 'inventory_movements.quantity_after',
@@ -38,6 +37,9 @@ class InventoryMovementsReport extends Report
             'inventory_id'                  => 'inventory_movements.inventory_id',
             'warehouse_id'                  => 'inventory_movements.warehouse_id',
             'description'                   => 'inventory_movements.description',
+            'updated_at'                    => 'inventory_movements.updated_at',
+            'created_at'                    => 'inventory_movements.created_at',
+            'custom_unique_reference_id'    => 'inventory_movements.custom_unique_reference_id',
         ];
 
         $this->casts = [

@@ -22,11 +22,7 @@
         </div>
 
         <template v-for="record in records">
-            <swiping-card :disable-swipe-right="true" :disable-swipe-left="true"  :key="record.id">
-                <template v-slot:content>
                     <inventory-movement-card :record="record" />
-                </template>
-            </swiping-card>
         </template>
 
         <template  v-if="isLoading === false && records !== null && records.length === 0" >
