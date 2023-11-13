@@ -17,7 +17,7 @@
                 REPORTS > INVENTORY MOVEMENTS
             </div>
             <div class="col-12 col-md-6 col-lg-6 text-nowrap">
-                <date-selector-widget :dates="{'url_param_name': 'filter[created_at_between]'}"></date-selector-widget>
+                <date-selector-widget :dates="{'url_param_name': 'filter[occurred_at_between]'}"></date-selector-widget>
             </div>
         </div>
 
@@ -64,6 +64,7 @@
 
         data: function() {
             return {
+                per_page: 10,
                 pagesLoaded: 0,
                 reachedEnd: false,
 
@@ -83,7 +84,7 @@
 
         methods: {
             findText(search) {
-                this.setUrlParameter('filter[created_at_between]', '');
+                this.setUrlParameter('filter[occurred_at_between]', '');
                 this.setUrlParameter('filter[description]', '');
                 this.setUrlParameter('per_page', 20);
                 this.setUrlParameter('search', search);
@@ -100,10 +101,16 @@
             loadRecords: function(page = 1) {
                 this.showLoading();
 
+                if ((this.perPage < 100) && (this.pagesLoaded % 2 === 0)) {
+                    this.perPage = this.perPage * 2;
+                    this.pagesLoaded = this.pagesLoaded / 2;
+                }
+
                 let params = this.$router.currentRoute.query;
                 params['include'] = 'product,inventory,user,product.tags';
                 params['sort'] = '-occurred_at,-id';
                 params['page'] = page;
+                params['per_page'] = this.perPage;
 
                 this.apiGetInventoryMovements(params)
                     .then(({data}) => {
