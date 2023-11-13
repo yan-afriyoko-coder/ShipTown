@@ -56,7 +56,7 @@
                return this.entry['product'] ? this.entry['product']['sku'] : '';
             },
             productUrl() {
-                return '/products?sku=' + this.productSku;
+                return '/products?search=' + this.productSku;
             }
         },
         methods: {
