@@ -25,6 +25,7 @@ class SequenceNumberJob extends UniqueJob
                     occurred_at
                 FROM inventory_movements
                 WHERE sequence_number IS NULL
+                ORDER BY occurred_at
                 LIMIT 10;
             ');
 
@@ -54,8 +55,6 @@ class SequenceNumberJob extends UniqueJob
                     WHERE inventory_id IN (SELECT inventory_id FROM inventoryIdsToProcess)
                     AND sequence_number IS NULL
                     AND occurred_at >= ?
-                    order by occurred_at, id
-                    LIMIT 1000
                 ) tempTable2;
             ', [$minOccurred]);
 
