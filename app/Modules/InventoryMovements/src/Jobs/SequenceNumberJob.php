@@ -4,6 +4,7 @@ namespace App\Modules\InventoryMovements\src\Jobs;
 
 use App\Abstracts\UniqueJob;
 use App\Models\InventoryMovement;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -14,6 +15,7 @@ class SequenceNumberJob extends UniqueJob
     {
         do {
             $minOccurred = InventoryMovement::whereNull('sequence_number')->min('occurred_at');
+            $maxOccurred = Carbon::parse($minOccurred)->addDays(10);
 
             Schema::dropIfExists('inventoryIdsToProcess');
 
@@ -55,8 +57,9 @@ class SequenceNumberJob extends UniqueJob
                     WHERE inventory_id IN (SELECT inventory_id FROM inventoryIdsToProcess)
                     AND sequence_number IS NULL
                     AND occurred_at >= ?
+                    AND occurred_at <= ?
                 ) tempTable2;
-            ', [$minOccurred]);
+            ', [$minOccurred, $maxOccurred]);
 
             $recordsUpdated = DB::update('
                 UPDATE inventory_movements
