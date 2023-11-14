@@ -13,7 +13,7 @@ class SequenceNumberJob extends UniqueJob
     {
         $maxRounds = 1000;
 
-        $this->ensureSequenceNumberAreNull();
+//        $this->ensureSequenceNumberAreNull();
 
         do {
             Schema::dropIfExists('tempTable');
