@@ -63,7 +63,7 @@ class ResyncStockJob extends UniqueJob
             SET
                 inventory.quantity = inventory_movements.quantity_after,
                 inventory.last_movement_id = tbl.last_movement_id,
-                inventory.last_movement_at = inventory_movements.created_at,
+                inventory.last_movement_at = inventory_movements.occurred_at,
                 inventory.updated_at = now();
         ');
     }
