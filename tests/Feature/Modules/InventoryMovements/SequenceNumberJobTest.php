@@ -4,12 +4,9 @@ namespace Tests\Feature\Modules\InventoryMovements;
 
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
-use App\Models\Product;
-use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
 use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 use App\Services\InventoryService;
-use Database\Factories\InventoryFactory;
 use Tests\TestCase;
 
 class SequenceNumberJobTest extends TestCase
@@ -30,6 +27,9 @@ class SequenceNumberJobTest extends TestCase
         $inventoryMovement02 = InventoryService::sell($inventory, -5);
         $inventoryMovement03 = InventoryService::stocktake($inventory, 7);
 
+        ray(InventoryMovement::query()->get()->toArray());
+
+        ray()->showQueries();
         SequenceNumberJob::dispatch();
 
         $inventoryMovement04 = InventoryService::sell($inventory, -7);
