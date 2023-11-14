@@ -22,16 +22,41 @@ class SequenceNumberJob extends UniqueJob
                 CREATE TEMPORARY TABLE tempTable AS
                 SELECT
                     id as movement_id,
+                    tempTable2.occurred_at,
                     tempTable2.inventory_id,
                     (SELECT sequence_number FROM inventory_movements as im_table WHERE im_table.inventory_id = tempTable2.inventory_id AND im_table.sequence_number IS NOT NULL ORDER BY im_table.sequence_number DESC LIMIT 1) as max_sequence_number,
                     row_number() over (partition by inventory_id order by occurred_at) as sequence_number,
                     (sum(quantity_delta) over (partition by inventory_id order by occurred_at asc, id asc)) as quantity_delta_sum
                 FROM (
                     SELECT inventory_movements.*
-                    FROM inventory_movements
-                    WHERE sequence_number IS NULL
+
+                    FROM (
+                        SELECT inventory_id,
+                        (SELECT MIN(occurred_at) as min_occurred_at FROM inventory_movements as a where a.inventory_id = inventory_movements.inventory_id) as min_occurred_at,
+                        (SELECT IFNULL(MIN(occurred_at), now()) FROM inventory_movements as a where a.inventory_id = inventory_movements.inventory_id AND type="stocktake" AND a.occurred_at >= inventory_movements.occurred_at) as max_occurred_at
+
+                        FROM inventory_movements
+
+                        WHERE sequence_number IS NULL ORDER BY ID DESC
+                        LIMIT 1
+                    ) tbl
+
+                    INNER JOIN inventory_movements
+                    ON inventory_movements.inventory_id = tbl.inventory_id
+                    AND inventory_movements.occurred_at BETWEEN tbl.min_occurred_at AND max_occurred_at
+
                     LIMIT 1000
                 ) tempTable2;
+            ');
+
+            DB::update('
+                UPDATE inventory_movements
+                INNER JOIN tempTable
+                 ON tempTable.inventory_id = inventory_movements.inventory_id
+                 AND inventory_movements.occurred_at >= tempTable.occurred_at
+                SET inventory_movements.sequence_number = null
+
+                WHERE inventory_movements.sequence_number IS NOT NULL;
             ');
 
             $recordsUpdated = DB::update('
