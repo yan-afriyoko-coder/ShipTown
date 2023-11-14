@@ -30,10 +30,6 @@ class SequenceNumberJob extends UniqueJob
                     SELECT inventory_movements.*
                     FROM inventory_movements
                     WHERE sequence_number IS NULL
-
-                    AND inventory_movements.inventory_id IN (SELECT inventory_id FROM (SELECT inventory_movements.inventory_id
-                    FROM inventory_movements
-                    WHERE sequence_number IS NULL ORDER BY inventory_movements.occurred_at DESC LIMIT 500) as t)
                     LIMIT 500
                 ) tempTable2;
             ');
