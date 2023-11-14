@@ -29,6 +29,7 @@ class SequenceNumberJobTest extends TestCase
 
         ray(InventoryMovement::query()->get()->toArray());
 
+        ray()->showQueries();
         SequenceNumberJob::dispatch();
 
         $inventoryMovement04 = InventoryService::sell($inventory, -7);
