@@ -30,7 +30,7 @@ class SequenceNumberJob extends UniqueJob
                     SELECT inventory_movements.*
                     FROM inventory_movements
                     WHERE sequence_number IS NULL
-                    LIMIT 500
+                    LIMIT 1000
                 ) tempTable2;
             ');
 
