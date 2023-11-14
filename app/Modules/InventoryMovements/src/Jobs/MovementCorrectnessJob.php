@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
-class SequenceNumberJob extends UniqueJob
+class MovementCorrectnessJob extends UniqueJob
 {
     public function handle()
     {
