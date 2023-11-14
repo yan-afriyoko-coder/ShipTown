@@ -12,8 +12,6 @@ class SequenceNumberJob extends UniqueJob
 {
     public function handle()
     {
-        $maxRounds = 1000;
-
         do {
             $minOccurred = InventoryMovement::whereNull('sequence_number')->min('occurred_at');
 
@@ -108,8 +106,8 @@ class SequenceNumberJob extends UniqueJob
                 'recordsUpdated' => $recordsUpdated
             ]);
 
-            usleep(200000); // 0.2 seconds
-        } while ($recordsUpdated > 0 and $maxRounds-- > 0);
+            usleep(100000); // 0.2 seconds
+        } while ($recordsUpdated > 0);
     }
 
     private function ensureSequenceNumberAreNull(): void
