@@ -3,6 +3,7 @@
 namespace App\Modules\InventoryMovements\src\Jobs;
 
 use App\Abstracts\UniqueJob;
+use App\Models\InventoryMovement;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -14,23 +15,19 @@ class SequenceNumberJob extends UniqueJob
         $maxRounds = 1000;
 
         do {
+            $minOccurred = InventoryMovement::whereNull('sequence_number')->min('occurred_at');
+
             Schema::dropIfExists('inventoryIdsToProcess');
 
             DB::statement('
                 CREATE TEMPORARY TABLE inventoryIdsToProcess AS
                 SELECT
                     id as movement_id,
-                    tempTable2.inventory_id,
-                    tempTable2.occurred_at,
-                    (SELECT sequence_number FROM inventory_movements as im_table WHERE im_table.inventory_id = tempTable2.inventory_id AND im_table.sequence_number IS NOT NULL ORDER BY im_table.sequence_number DESC LIMIT 1) as max_sequence_number,
-                    row_number() over (partition by inventory_id order by occurred_at, id) as sequence_number,
-                    (sum(quantity_delta) over (partition by inventory_id order by occurred_at, id)) as quantity_delta_sum
-                FROM (
-                    SELECT inventory_movements.*
-                    FROM inventory_movements
-                    WHERE sequence_number IS NULL
-                    LIMIT 10
-                ) tempTable2;
+                    inventory_id,
+                    occurred_at
+                FROM inventory_movements
+                WHERE sequence_number IS NULL
+                LIMIT 10;
             ');
 
             DB::update('
@@ -38,6 +35,8 @@ class SequenceNumberJob extends UniqueJob
                 INNER JOIN inventoryIdsToProcess
                   ON inventory_movements.inventory_id = inventoryIdsToProcess.inventory_id
                   AND inventory_movements.occurred_at > inventoryIdsToProcess.occurred_at
+                  AND inventory_movements.sequence_number IS NOT NULL
+
                 SET inventory_movements.sequence_number = null;
             ');
 
@@ -56,9 +55,11 @@ class SequenceNumberJob extends UniqueJob
                     FROM inventory_movements
                     WHERE inventory_id IN (SELECT inventory_id FROM inventoryIdsToProcess)
                     AND sequence_number IS NULL
+                    AND occurred_at >= ?
+                    order by occurred_at, id
                     LIMIT 1000
                 ) tempTable2;
-            ');
+            ', [$minOccurred]);
 
             $recordsUpdated = DB::update('
                 UPDATE inventory_movements
