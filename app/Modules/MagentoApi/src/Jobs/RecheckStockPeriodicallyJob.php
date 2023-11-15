@@ -15,6 +15,13 @@ class RecheckStockPeriodicallyJob extends UniqueJob
         DB::update('
             UPDATE modules_magento2api_products
             SET stock_items_fetched_at = null
+            WHERE quantity > 0
+              AND stock_items_fetched_at < DATE_SUB(now(), INTERVAL 7 DAY)
+        ');
+
+        DB::update('
+            UPDATE modules_magento2api_products
+            SET stock_items_fetched_at = null
             WHERE
                 stock_items_fetched_at IS NOT NULL
                 AND product_id IN (
