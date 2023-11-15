@@ -36,8 +36,7 @@ class ResyncStockJob extends UniqueJob
                 now() updated_at
 
             FROM modules_rmsapi_products_quantity_comparison_view
-            WHERE quantity_delta != 0
-            AND DATEDIFF(now(), modules_rmsapi_products_imports_updated_at) > 1;
+            WHERE quantity_delta != 0;
 
 
             WITH tbl AS (
