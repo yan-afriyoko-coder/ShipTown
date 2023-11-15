@@ -36,8 +36,7 @@ class ResyncStockJob extends UniqueJob
                 now() updated_at
 
             FROM modules_rmsapi_products_quantity_comparison_view
-            WHERE quantity_delta != 0
-            AND DATEDIFF(now(), modules_rmsapi_products_imports_updated_at) > 1;
+            WHERE quantity_delta != 0;
 
 
             WITH tbl AS (
@@ -63,7 +62,7 @@ class ResyncStockJob extends UniqueJob
             SET
                 inventory.quantity = inventory_movements.quantity_after,
                 inventory.last_movement_id = tbl.last_movement_id,
-                inventory.last_movement_at = inventory_movements.created_at,
+                inventory.last_movement_at = inventory_movements.occurred_at,
                 inventory.updated_at = now();
         ');
     }
