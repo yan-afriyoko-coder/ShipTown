@@ -81,10 +81,18 @@ class ProcessImportedProductRecordsJob extends UniqueJob
 
     private function import(RmsapiProductImport $importedProduct): void
     {
-        $product = Product::query()->firstOrCreate(['id' => $importedProduct->product_id], [
-            'sku'  => $importedProduct->sku,
-            'name' => $importedProduct->name,
-        ]);
+        $product = null;
+
+        if ($importedProduct->product_id) {
+            $product = Product::findOrFail($importedProduct->product_id);
+        }
+
+        if ($product === null) {
+            $product = Product::query()->firstOrCreate(['sku' => $importedProduct->sku], [
+                'sku'  => $importedProduct->sku,
+                'name' => $importedProduct->name,
+            ]);
+        }
 
         if ($product->sku !== $importedProduct->sku) {
             Log::debug('ProcessImportedProductRecordsJob updating product sku', [
