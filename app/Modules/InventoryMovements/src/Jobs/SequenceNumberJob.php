@@ -93,13 +93,29 @@ class SequenceNumberJob extends UniqueJob
             DB::update('
                 UPDATE inventory
 
-                INNER JOIN inventory_movements
-                    ON inventory_movements.inventory_id = inventory.id
-                    AND inventory_movements.sequence_number = inventory.last_sequence_number
+                #     INNER JOIN inventory_movements
+                #     ON inventory_movements.inventory_id = inventory.id
+                #         AND (
+                #                (IFNULL(inventory.last_movement_at,  "2000-01-01") < inventory_movements.occurred_at)
+                #                OR (IFNULL(inventory.last_counted_at,   "2000-01-01") < inventory_movements.occurred_at AND inventory_movements.type = "stocktake")
+                #                OR (IFNULL(inventory.last_sold_at,      "2000-01-01") < inventory_movements.occurred_at AND inventory_movements.type = "sale")
+                #                OR (IFNULL(inventory.last_received_at,  "2000-01-01") < inventory_movements.occurred_at AND quantity_delta > 0)
+                #                OR (IFNULL(inventory.first_movement_at, "2000-01-01") > inventory_movements.occurred_at)
+                #                OR (IFNULL(inventory.first_counted_at,  "2000-01-01") > inventory_movements.occurred_at AND inventory_movements.type = "stocktake")
+                #                OR (IFNULL(inventory.first_sold_at,     "2000-01-01") > inventory_movements.occurred_at AND inventory_movements.type = "sale")
+                #                OR (IFNULL(inventory.first_received_at, "2000-01-01") > inventory_movements.occurred_at AND quantity_delta > 0)
+                #            )
 
-                SET inventory.last_movement_id = inventory_movements.id,
-                    inventory.last_movement_at = inventory_movements.occurred_at,
-                    inventory.quantity = inventory_movements.quantity_after
+
+                SET
+                    inventory.quantity =          (SELECT quantity_after FROM inventory_movements WHERE inventory_id = inventory.id ORDER BY occurred_at DESC LIMIT 1),
+                    inventory.last_movement_id =  (SELECT id FROM inventory_movements WHERE inventory_id = inventory.id ORDER BY occurred_at DESC LIMIT 1),
+                    inventory.first_movement_at = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id),
+                    inventory.last_movement_at =  (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id),
+                    inventory.first_counted_at =  (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "stocktake"),
+                    inventory.last_counted_at =   (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "stocktake"),
+                    inventory.first_received_at = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0),
+                    inventory.last_received_at =  (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0)
 
                 WHERE inventory.id IN (SELECT inventory_id FROM tempTable);
             ');
