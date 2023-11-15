@@ -63,12 +63,13 @@ class SequenceNumberJob extends UniqueJob
 
             $recordsUpdated = DB::update('
                 UPDATE inventory_movements
-                    INNER JOIN tempTable
+
+                INNER JOIN tempTable
                     ON inventory_movements.id = tempTable.movement_id
 
-                    LEFT JOIN inventory_movements as last_sequenced_movement
+                LEFT JOIN inventory_movements as last_sequenced_movement
                     ON last_sequenced_movement.inventory_id = inventory_movements.inventory_id
-                        AND last_sequenced_movement.sequence_number = max_sequence_number
+                    AND last_sequenced_movement.sequence_number = max_sequence_number
 
                 SET
                     inventory_movements.sequence_number = tempTable.sequence_number + IFNULL(tempTable.max_sequence_number, 0),
@@ -92,9 +93,9 @@ class SequenceNumberJob extends UniqueJob
             DB::update('
                 UPDATE inventory
 
-                    INNER JOIN inventory_movements
+                INNER JOIN inventory_movements
                     ON inventory_movements.inventory_id = inventory.id
-                        AND inventory_movements.sequence_number = inventory.last_sequence_number
+                    AND inventory_movements.sequence_number = inventory.last_sequence_number
 
                 SET inventory.last_movement_id = inventory_movements.id,
                     inventory.last_movement_at = inventory_movements.occurred_at,
@@ -103,45 +104,48 @@ class SequenceNumberJob extends UniqueJob
                 WHERE inventory.id IN (SELECT inventory_id FROM tempTable);
             ');
 
+            Schema::dropIfExists('incorrectMovementsTable');
+
+            DB::statement('
+                CREATE TEMPORARY TABLE incorrectMovementsTable AS
+                SELECT inventory_movements.*
+                FROM inventory_movements
+
+                INNER JOIN inventory_movements as previous_movement
+                    ON inventory_movements.inventory_id = previous_movement.inventory_id
+                    AND inventory_movements.sequence_number - 1 = previous_movement.sequence_number
+                    AND (
+                           inventory_movements.quantity_before != previous_movement.quantity_after
+                           OR inventory_movements.occurred_at < previous_movement.occurred_at
+                       )
+
+                WHERE inventory_movements.occurred_at BETWEEN ? AND ?
+            ', [$minOccurred, $maxOccurred]);
+
+            DB::update('
+                UPDATE inventory_movements
+                INNER JOIN incorrectMovementsTable
+                ON incorrectMovementsTable.id = inventory_movements.id
+                SET inventory_movements.sequence_number = null;
+            ');
+
+            DB::update('
+                UPDATE inventory_movements
+
+                SET inventory_movements.quantity_delta = quantity_after - quantity_before,
+                    inventory_movements.updated_at = NOW()
+
+                WHERE inventory_movements.type = "stocktake"
+                AND inventory_movements.quantity_delta != quantity_after - quantity_before
+            ');
+
+
             Log::info('Job processing', [
                 'job' => self::class,
                 'recordsUpdated' => $recordsUpdated
             ]);
 
-            usleep(100000); // 0.2 seconds
+            usleep(100000); // 0.1 seconds
         } while ($recordsUpdated > 0);
-    }
-
-    private function ensureSequenceNumberAreNull(): void
-    {
-        do {
-            Schema::dropIfExists('tempTable');
-
-            DB::statement('
-                CREATE TEMPORARY TABLE tempTable AS
-                SELECT future_movements.*
-
-                FROM inventory_movements
-
-                INNER JOIN inventory_movements as future_movements
-                    ON future_movements.sequence_number IS NOT NULL
-                    AND future_movements.inventory_id = inventory_movements.inventory_id
-                    AND future_movements.occurred_at >= inventory_movements.occurred_at
-
-                WHERE inventory_movements.sequence_number IS NULL
-
-                LIMIT 1000;
-            ');
-
-            DB::update('
-                UPDATE `inventory_movements`
-
-                INNER JOIN tempTable ON tempTable.id = inventory_movements.id
-
-                SET inventory_movements.sequence_number = NULL;
-            ');
-
-            usleep(200000); // 0.2 seconds
-        } while (DB::table('tempTable')->count() > 0);
     }
 }
