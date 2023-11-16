@@ -3,11 +3,19 @@
 namespace App\Modules\InventoryMovements\src\Jobs;
 
 use App\Abstracts\UniqueJob;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class QuantityAfterCheckJob extends UniqueJob
 {
+    private Carbon $date;
+
+    public function __construct($date = null)
+    {
+        $this->date = $date ?? Carbon::now();
+    }
+
     public function handle()
     {
         $maxRounds = 500;
@@ -25,8 +33,8 @@ class QuantityAfterCheckJob extends UniqueJob
                 WHERE
                     inventory_movements.type != "stocktake"
                     AND inventory_movements.quantity_after != quantity_before + quantity_delta
-                    AND inventory_movements.occurred_at BETWEEN DATE_SUB(now(), INTERVAL 1 DAY) AND now();
-            ');
+                    AND inventory_movements.occurred_at BETWEEN ? AND ?;
+            ', [$this->date->toDateTimeLocalString(), $this->date->addDay()->toDateTimeLocalString()]);
 
             Log::info('Job processing', [
                 'job' => self::class,

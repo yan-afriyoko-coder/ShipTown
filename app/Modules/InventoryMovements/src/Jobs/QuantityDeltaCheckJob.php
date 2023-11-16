@@ -3,11 +3,19 @@
 namespace App\Modules\InventoryMovements\src\Jobs;
 
 use App\Abstracts\UniqueJob;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class QuantityDeltaCheckJob extends UniqueJob
 {
+    private Carbon $date;
+
+    public function __construct($date = null)
+    {
+        $this->date = $date ?? Carbon::now();
+    }
+
     public function handle()
     {
         $maxRounds = 500;
@@ -21,11 +29,11 @@ class QuantityDeltaCheckJob extends UniqueJob
                 SET inventory_movements.quantity_delta = quantity_after - quantity_before,
                     inventory_movements.updated_at = NOW()
 
-                WHERE inventory_movements.occurred_at BETWEEN DATE_SUB(now(), INTERVAL 1 DAY) AND now()
+                WHERE inventory_movements.type = "stocktake"
+                    AND inventory_movements.occurred_at BETWEEN ? AND ?
                     AND inventory_movements.sequence_number IS NOT NULL
-                    AND inventory_movements.type = "stocktake"
                     AND inventory_movements.quantity_delta != quantity_after - quantity_before;
-            ');
+            ', [$this->date->toDateTimeLocalString(), $this->date->addDay()->toDateTimeLocalString()]);
 
             Log::info('Job processing', [
                 'job' => self::class,
