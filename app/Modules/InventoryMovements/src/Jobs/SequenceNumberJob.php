@@ -85,9 +85,9 @@ class SequenceNumberJob extends UniqueJob
                 UPDATE inventory
 
                 SET
-                    inventory.last_sequence_number = (SELECT MAX(sequence_number) FROM inventory_movements WHERE inventory_id = inventory.id)
+                    inventory.last_sequence_number = (SELECT sequence_number FROM inventory_movements WHERE inventory_id = inventory.id AND sequence_number IS NOT NULL ORDER BY sequence_number DESC LIMIT 1),
 
-                WHERE inventory.id IN (SELECT inventory_id FROM tempTable);
+                WHERE inventory.id IN (SELECT DISTINCT inventory_id FROM tempTable);
             ');
 
             DB::update('
