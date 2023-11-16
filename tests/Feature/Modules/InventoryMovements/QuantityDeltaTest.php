@@ -7,9 +7,6 @@ use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
-use App\Modules\InventoryMovements\src\Jobs\PreviousMovementIdJob;
-use App\Modules\InventoryMovements\src\Jobs\QuantityAfterJob;
-use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeJob;
 use App\Modules\InventoryMovements\src\Jobs\QuantityDeltaJob;
 use App\Services\InventoryService;
 use Tests\TestCase;
@@ -37,8 +34,6 @@ class QuantityDeltaTest extends TestCase
         $inventoryMovement02 = InventoryService::sell($this->inventory, -5);
         $stocktakeMovement = InventoryService::stocktake($this->inventory, 7);
 
-        PreviousMovementIdJob::dispatch();
-
         $inventoryMovement01->update(['quantity_delta' => $inventoryMovement01->quantity_delta + 10]);
         $inventoryMovement02->update(['quantity_delta' => $inventoryMovement02->quantity_delta + 10]);
         $stocktakeMovement->update(['quantity_delta' => $stocktakeMovement->quantity_delta + 10]);
@@ -61,8 +56,6 @@ class QuantityDeltaTest extends TestCase
         $inventoryMovement01 = InventoryService::adjust($this->inventory, 20);
         $inventoryMovement02 = InventoryService::sell($this->inventory, -5);
         $inventoryMovement03 = InventoryService::stocktake($this->inventory, 7);
-
-        PreviousMovementIdJob::dispatch();
 
         $inventoryMovement01->refresh();
         $inventoryMovement02->refresh();

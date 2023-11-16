@@ -7,7 +7,6 @@ use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
-use App\Modules\InventoryMovements\src\Jobs\PreviousMovementIdJob;
 use App\Modules\InventoryMovements\src\Models\Configuration;
 use App\Services\InventoryService;
 use Tests\TestCase;
@@ -34,8 +33,6 @@ class PreviousMovementIdJobTest extends TestCase
         $inventoryMovement01 = InventoryService::adjust($this->inventory, 20);
         $inventoryMovement02 = InventoryService::sell($this->inventory, -5);
         $inventoryMovement03 = InventoryService::adjust($this->inventory, 7);
-
-        PreviousMovementIdJob::dispatch();
 
         $inventoryMovement01->refresh();
         $inventoryMovement02->refresh();

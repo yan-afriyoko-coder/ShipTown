@@ -13,13 +13,11 @@ use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
-use App\Modules\InventoryMovements\src\Jobs\InventoryLastMovementIdJob;
 use App\Modules\InventoryMovements\src\Jobs\InventoryQuantityJob;
-use App\Modules\InventoryMovements\src\Jobs\PreviousMovementIdJob;
 use App\Modules\InventoryMovements\src\Jobs\QuantityAfterJob;
 use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeJob;
 use App\Modules\InventoryMovements\src\Jobs\QuantityDeltaJob;
-use App\Modules\InventoryMovements\src\Models\Configuration;
+use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 use App\Services\InventoryService;
 use Tests\TestCase;
 
@@ -44,9 +42,7 @@ class BasicModuleTest extends TestCase
         $this->inventoryMovement01 = InventoryService::adjust($this->inventory, 20);
         $this->inventoryMovement02 = InventoryService::sell($this->inventory, -5);
 
-        PreviousMovementIdJob::dispatch();
-        InventoryLastMovementIdJob::dispatch();
-        InventoryQuantityJob::dispatch();
+        SequenceNumberJob::dispatch();
     }
 
     /** @test */
@@ -68,11 +64,9 @@ class BasicModuleTest extends TestCase
     /** @test */
     public function testEmptyDatabaseRun()
     {
-        PreviousMovementIdJob::dispatch();
         QuantityBeforeJob::dispatch();
         QuantityDeltaJob::dispatch();
         QuantityAfterJob::dispatch();
-        InventoryLastMovementIdJob::dispatch();
         InventoryQuantityJob::dispatch();
 
         $this->assertTrue(true, 'We did not run into any errors');
@@ -97,8 +91,6 @@ class BasicModuleTest extends TestCase
         $this->inventoryMovement02->update([
             'quantity_before' => 100,
         ]);
-
-        PreviousMovementIdJob::dispatch();
 
         $this->assertDatabaseHas('inventory_movements', [
             'id' => $this->inventoryMovement02->getKey(),
@@ -130,8 +122,6 @@ class BasicModuleTest extends TestCase
             'last_movement_at' => null,
             'quantity' => 0,
         ]);
-
-        InventoryLastMovementIdJob::dispatch();
 
         $this->assertDatabaseHas('inventory', [
             'id' => $this->inventory->id,

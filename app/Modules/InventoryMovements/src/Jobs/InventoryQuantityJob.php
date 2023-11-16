@@ -4,30 +4,38 @@ namespace App\Modules\InventoryMovements\src\Jobs;
 
 use App\Abstracts\UniqueJob;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class InventoryQuantityJob extends UniqueJob
 {
     public function handle()
     {
-        $maxRounds = 10;
+        $maxRounds = 500;
 
         do {
             $recordsUpdated = DB::update('
-                    UPDATE inventory
+                UPDATE inventory_movements
+                INNER JOIN inventory
+                    ON inventory_movements.inventory_id = inventory.id
+                    AND inventory_movements.sequence_number = inventory.last_sequence_number
 
-                    INNER JOIN inventory_movements
-                        ON inventory_movements.id = inventory.last_movement_id
-                        AND (
-                            inventory_movements.quantity_after != inventory.quantity
-                            OR inventory_movements.created_at != inventory.last_movement_at
-                        )
+                SET sequence_number = null
 
-                    SET
-                          inventory.quantity = inventory_movements.quantity_after
-                        , inventory.last_movement_at = inventory_movements.created_at
-                        , inventory.updated_at = now()
+                WHERE inventory_movements.occurred_at BETWEEN DATE_SUB(now(), INTERVAL 1 DAY) AND now()
+                    AND inventory_movements.sequence_number IS NOT NULL
+                    AND (
+                           inventory.quantity != inventory_movements.quantity_after
+                        OR inventory.last_movement_id != inventory_movements.id
+                        OR inventory.last_movement_at != inventory_movements.occurred_at
+                    )
             ');
-            sleep(1);
+
+            Log::info('Job processing', [
+                'job' => self::class,
+                'recordsUpdated' => $recordsUpdated
+            ]);
+
+            usleep(100000); // 0.1 seconds
             $maxRounds--;
         } while ($recordsUpdated > 0 and $maxRounds > 0);
     }
