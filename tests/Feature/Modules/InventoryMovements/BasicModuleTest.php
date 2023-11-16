@@ -141,6 +141,9 @@ class BasicModuleTest extends TestCase
             'quantity' => 0,
         ]);
 
+        InventoryQuantityJob::dispatch();
+        SequenceNumberJob::dispatch();
+
         $this->assertDatabaseHas('inventory', [
             'id' => $this->inventory->id,
             'last_movement_id' => $this->inventoryMovement02->id,
