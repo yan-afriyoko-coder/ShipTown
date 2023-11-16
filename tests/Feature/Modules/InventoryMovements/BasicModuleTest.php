@@ -96,9 +96,21 @@ class BasicModuleTest extends TestCase
             'quantity_before' => 100,
         ]);
 
+        QuantityBeforeJob::dispatch();
+
+        SequenceNumberJob::dispatch();
+
+        $this->inventoryMovement01->refresh();
+        $this->inventoryMovement02->refresh();
+
+        $this->assertDatabaseHas('inventory_movements', [
+            'id' => $this->inventoryMovement01->getKey(),
+            'sequence_number' => 1,
+        ]);
+
         $this->assertDatabaseHas('inventory_movements', [
             'id' => $this->inventoryMovement02->getKey(),
-            'previous_movement_id' => $this->inventoryMovement01->getKey(),
+            'sequence_number' => 2,
         ]);
     }
 
@@ -109,9 +121,11 @@ class BasicModuleTest extends TestCase
         QuantityDeltaJob::dispatch();
         QuantityAfterJob::dispatch();
 
+        SequenceNumberJob::dispatch();
+
         $this->assertDatabaseHas('inventory_movements', [
             'id' => $this->inventoryMovement02->getKey(),
-            'previous_movement_id' => $this->inventoryMovement01->getKey(),
+            'sequence_number' => 2,
             'quantity_before' => 20,
             'quantity_delta' => -5,
             'quantity_after' => 15,
