@@ -6,7 +6,7 @@ use App\Abstracts\UniqueJob;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class QuantityBeforeJob extends UniqueJob
+class QuantityBeforeCheckJob extends UniqueJob
 {
     public function handle()
     {

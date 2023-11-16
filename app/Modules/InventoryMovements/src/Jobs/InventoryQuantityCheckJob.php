@@ -3,11 +3,19 @@
 namespace App\Modules\InventoryMovements\src\Jobs;
 
 use App\Abstracts\UniqueJob;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class InventoryQuantityJob extends UniqueJob
+class InventoryQuantityCheckJob extends UniqueJob
 {
+    private Carbon $date;
+
+    public function __construct($date = null)
+    {
+        $this->date = $date ?? Carbon::now();
+    }
+
     public function handle()
     {
         $maxRounds = 500;
@@ -21,14 +29,14 @@ class InventoryQuantityJob extends UniqueJob
 
                 SET sequence_number = null
 
-                WHERE inventory_movements.occurred_at BETWEEN DATE_SUB(now(), INTERVAL 1 DAY) AND now()
+                WHERE inventory_movements.occurred_at BETWEEN ? AND ?
                     AND inventory_movements.sequence_number IS NOT NULL
                     AND (
                            inventory.quantity != inventory_movements.quantity_after
                         OR inventory.last_movement_id != inventory_movements.id
                         OR inventory.last_movement_at != inventory_movements.occurred_at
                     )
-            ');
+            ', [$this->date->toDateTimeLocalString(), $this->date->addDay()->toDateTimeLocalString()]);
 
             Log::info('Job processing', [
                 'job' => self::class,

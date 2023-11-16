@@ -6,7 +6,7 @@ use App\Abstracts\UniqueJob;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class QuantityDeltaJob extends UniqueJob
+class QuantityAfterCheckJob extends UniqueJob
 {
     public function handle()
     {
@@ -18,13 +18,14 @@ class QuantityDeltaJob extends UniqueJob
             $recordsUpdated = DB::update('
                 UPDATE inventory_movements
 
-                SET inventory_movements.quantity_delta = quantity_after - quantity_before,
+                SET
+                    inventory_movements.quantity_after = quantity_before + quantity_delta,
                     inventory_movements.updated_at = NOW()
 
-                WHERE inventory_movements.occurred_at BETWEEN DATE_SUB(now(), INTERVAL 1 DAY) AND now()
-                    AND inventory_movements.sequence_number IS NOT NULL
-                    AND inventory_movements.type = "stocktake"
-                    AND inventory_movements.quantity_delta != quantity_after - quantity_before;
+                WHERE
+                    inventory_movements.type != "stocktake"
+                    AND inventory_movements.quantity_after != quantity_before + quantity_delta
+                    AND inventory_movements.occurred_at BETWEEN DATE_SUB(now(), INTERVAL 1 DAY) AND now();
             ');
 
             Log::info('Job processing', [

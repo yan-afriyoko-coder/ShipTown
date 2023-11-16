@@ -13,10 +13,10 @@ use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
-use App\Modules\InventoryMovements\src\Jobs\InventoryQuantityJob;
-use App\Modules\InventoryMovements\src\Jobs\QuantityAfterJob;
-use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeJob;
-use App\Modules\InventoryMovements\src\Jobs\QuantityDeltaJob;
+use App\Modules\InventoryMovements\src\Jobs\InventoryQuantityCheckJob;
+use App\Modules\InventoryMovements\src\Jobs\QuantityAfterCheckJob;
+use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeCheckJob;
+use App\Modules\InventoryMovements\src\Jobs\QuantityDeltaCheckJob;
 use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 use App\Services\InventoryService;
 use Tests\TestCase;
@@ -52,7 +52,7 @@ class BasicModuleTest extends TestCase
             'quantity' => $this->inventory->quantity + rand(1, 100),
         ]);
 
-        InventoryQuantityJob::dispatch();
+        InventoryQuantityCheckJob::dispatch();
 
         SequenceNumberJob::dispatch();
 
@@ -68,10 +68,10 @@ class BasicModuleTest extends TestCase
     /** @test */
     public function testEmptyDatabaseRun()
     {
-        QuantityBeforeJob::dispatch();
-        QuantityDeltaJob::dispatch();
-        QuantityAfterJob::dispatch();
-        InventoryQuantityJob::dispatch();
+        QuantityBeforeCheckJob::dispatch();
+        QuantityDeltaCheckJob::dispatch();
+        QuantityAfterCheckJob::dispatch();
+        InventoryQuantityCheckJob::dispatch();
 
         $this->assertTrue(true, 'We did not run into any errors');
     }
@@ -96,7 +96,7 @@ class BasicModuleTest extends TestCase
             'quantity_before' => 100,
         ]);
 
-        QuantityBeforeJob::dispatch();
+        QuantityBeforeCheckJob::dispatch();
 
         SequenceNumberJob::dispatch();
 
@@ -118,8 +118,8 @@ class BasicModuleTest extends TestCase
     public function testQuantityDeltaAndAfterJob(): void
     {
         $inventoryMovement03 = InventoryService::adjust($this->inventory, 10);
-        QuantityDeltaJob::dispatch();
-        QuantityAfterJob::dispatch();
+        QuantityDeltaCheckJob::dispatch();
+        QuantityAfterCheckJob::dispatch();
 
         SequenceNumberJob::dispatch();
 
@@ -141,7 +141,7 @@ class BasicModuleTest extends TestCase
             'quantity' => 0,
         ]);
 
-        InventoryQuantityJob::dispatch();
+        InventoryQuantityCheckJob::dispatch();
         SequenceNumberJob::dispatch();
 
         $this->assertDatabaseHas('inventory', [

@@ -7,7 +7,7 @@ use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
-use App\Modules\InventoryMovements\src\Jobs\QuantityDeltaJob;
+use App\Modules\InventoryMovements\src\Jobs\QuantityDeltaCheckJob;
 use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 use App\Services\InventoryService;
 use Tests\TestCase;
@@ -39,7 +39,7 @@ class QuantityDeltaTest extends TestCase
         $inventoryMovement02->update(['quantity_delta' => $inventoryMovement02->quantity_delta + 10]);
         $stocktakeMovement->update(['quantity_delta' => $stocktakeMovement->quantity_delta + 10]);
 
-        QuantityDeltaJob::dispatch();
+        QuantityDeltaCheckJob::dispatch();
         SequenceNumberJob::dispatch();
 
         $inventoryMovement01->refresh();

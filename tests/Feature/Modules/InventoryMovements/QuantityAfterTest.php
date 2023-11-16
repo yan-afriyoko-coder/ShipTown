@@ -7,7 +7,7 @@ use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
-use App\Modules\InventoryMovements\src\Jobs\QuantityAfterJob;
+use App\Modules\InventoryMovements\src\Jobs\QuantityAfterCheckJob;
 use App\Services\InventoryService;
 use Tests\TestCase;
 
@@ -43,7 +43,7 @@ class QuantityAfterTest extends TestCase
 
         ray(InventoryMovement::query()->get()->toArray());
 
-        QuantityAfterJob::dispatch();
+        QuantityAfterCheckJob::dispatch();
 
         $inventoryMovement01->refresh();
         $inventoryMovement02->refresh();
@@ -66,7 +66,7 @@ class QuantityAfterTest extends TestCase
 
         ray(InventoryMovement::query()->get()->toArray());
 
-        QuantityAfterJob::dispatch();
+        QuantityAfterCheckJob::dispatch();
 
         $inventoryMovement01->refresh();
         $inventoryMovement02->refresh();

@@ -7,7 +7,7 @@ use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
-use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeJob;
+use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeCheckJob;
 use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 use App\Services\InventoryService;
 use Tests\TestCase;
@@ -41,7 +41,7 @@ class QuantityBeforeTest extends TestCase
             'quantity_before' => 0,
         ]);
 
-        QuantityBeforeJob::dispatch();
+        QuantityBeforeCheckJob::dispatch();
 
         SequenceNumberJob::dispatch();
 
@@ -75,7 +75,7 @@ class QuantityBeforeTest extends TestCase
             'quantity_before' => 0,
         ]);
 
-        QuantityBeforeJob::dispatch();
+        QuantityBeforeCheckJob::dispatch();
         SequenceNumberJob::dispatch();
 
         $inventoryMovement01->refresh();
