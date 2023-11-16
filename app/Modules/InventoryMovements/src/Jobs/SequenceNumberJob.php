@@ -108,8 +108,8 @@ class SequenceNumberJob extends UniqueJob
 
 
                 SET
-                    inventory.quantity =          (SELECT quantity_after FROM inventory_movements WHERE inventory_id = inventory.id ORDER BY occurred_at DESC LIMIT 1),
-                    inventory.last_movement_id =  (SELECT id FROM inventory_movements WHERE inventory_id = inventory.id ORDER BY occurred_at DESC LIMIT 1),
+                    inventory.quantity =          (SELECT quantity_after FROM inventory_movements WHERE inventory_id = inventory.id ORDER BY sequence_number DESC LIMIT 1),
+                    inventory.last_movement_id =  (SELECT id FROM inventory_movements WHERE inventory_id = inventory.id ORDER BY sequence_number DESC LIMIT 1),
                     inventory.first_movement_at = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id),
                     inventory.last_movement_at =  (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id),
                     inventory.first_counted_at =  (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "stocktake"),
