@@ -136,6 +136,7 @@ class SequenceNumberJob extends UniqueJob
                        )
 
                 WHERE inventory_movements.occurred_at BETWEEN ? AND ?
+                AND inventory_movements.inventory_id IN (SELECT DISTINCT inventory_id FROM tempTable)
             ', [$minOccurred, $maxOccurred]);
 
             DB::update('
