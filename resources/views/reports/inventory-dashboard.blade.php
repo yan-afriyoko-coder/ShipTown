@@ -86,7 +86,7 @@
 
                             <div class="row">
                                 <div class="col">
-                                    @widget('ReportWidget', [
+                                    @asyncWidget('ReportWidget', [
                                         'report' => 'App\Modules\StocktakeSuggestions\src\Reports\StocktakeSuggestionsTotalsReport',
                                         'view' => 'reports.StocktakeSuggestionsReport',
                                         'sort' => 'warehouse_code',
