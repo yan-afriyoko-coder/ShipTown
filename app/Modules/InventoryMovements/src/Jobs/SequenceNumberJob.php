@@ -14,7 +14,7 @@ class SequenceNumberJob extends UniqueJob
     public function handle()
     {
         do {
-            $minOccurred = InventoryMovement::whereNull('sequence_number')->min('occurred_at');
+            $minOccurred = InventoryMovement::query()->whereNull('sequence_number')->min('occurred_at');
             $maxOccurred = Carbon::parse($minOccurred)->addDay();
 
             Schema::dropIfExists('inventoryIdsToProcess');
