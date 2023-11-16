@@ -54,6 +54,10 @@ class BasicModuleTest extends TestCase
 
         InventoryQuantityJob::dispatch();
 
+        SequenceNumberJob::dispatch();
+
+        ray(InventoryMovement::query()->get()->toArray());
+
         $this->assertDatabaseHas('inventory', [
             'id' => $this->inventory->getKey(),
             'last_movement_id' => $this->inventoryMovement02->getKey(),
