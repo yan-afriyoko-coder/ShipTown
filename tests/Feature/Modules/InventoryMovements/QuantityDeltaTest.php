@@ -48,8 +48,8 @@ class QuantityDeltaTest extends TestCase
 
         ray(InventoryMovement::query()->get()->toArray());
 
-        $this->assertNotEquals($inventoryMovement01->quantity_delta, $inventoryMovement01->quantity_after - $inventoryMovement01->quantity_before, 'Movement01');
-        $this->assertNotEquals($inventoryMovement02->quantity_delta, $inventoryMovement02->quantity_after - $inventoryMovement02->quantity_before, 'Movement02');
+        $this->assertEquals($inventoryMovement01->quantity_delta, $inventoryMovement01->quantity_after - $inventoryMovement01->quantity_before, 'Movement01');
+        $this->assertEquals($inventoryMovement02->quantity_delta, $inventoryMovement02->quantity_after - $inventoryMovement02->quantity_before, 'Movement02');
         $this->assertEquals($stocktakeMovement->quantity_delta, $stocktakeMovement->quantity_after - $stocktakeMovement->quantity_before, 'Movement03');
     }
 
