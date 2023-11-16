@@ -17,7 +17,7 @@
                 <div @click="toggleDetails" >last sold at: <strong>{{ formatDateTime(record['inventory']['last_sold_at']) }}</strong></div>
                 <div>
                     <div @click="toggleDetails" class="d-inline">last movement at:</div>
-                    <strong @click="showInventoryMovementModal(record['product_sku'])" class="text-primary cursor-pointer">{{ formatDateTime(record['inventory']['last_movement_at']) }}</strong>
+                    <strong @click="showInventoryMovementModal(record['product_sku'], record['inventory']['warehouse_code'])" class="text-primary cursor-pointer">{{ formatDateTime(record['inventory']['last_movement_at']) }}</strong>
                 </div>
 
                 <template v-if="expanded">
@@ -95,8 +95,8 @@ export default {
             this.expanded = !this.expanded;
           },
 
-          showInventoryMovementModal(product_sku) {
-            this.$emit('showModalMovement', product_sku);
+          showInventoryMovementModal(product_sku, warehouse_code) {
+            this.$emit('showModalMovement', product_sku, warehouse_code);
           }
       },
   }

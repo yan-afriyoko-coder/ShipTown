@@ -51,7 +51,7 @@
             </swiping-card>
         </template>
 
-        <modal-inventory-movement :product_sku="showMovementSku" />
+        <modal-inventory-movement :product_sku="showMovementSku" :warehouse_code="warehouse_code"/>
 
         <div class="row col" ref="loadingContainerOverride" style="height: 32px"></div>
 
@@ -85,6 +85,7 @@
                 recentStocktakes: [],
                 stocktakeSuggestions: null,
                 showMovementSku: null,
+                warehouse_code: null,
             };
         },
 
@@ -104,8 +105,9 @@
         },
 
         methods: {
-            showModalMovement(product_sku) {
+            showModalMovement(product_sku, warehouse_code) {
                 this.showMovementSku = product_sku;
+                this.warehouse_code = warehouse_code;
                 this.$bvModal.show('show-inventory-movements');
             },
 

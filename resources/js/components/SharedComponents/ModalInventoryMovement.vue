@@ -1,17 +1,12 @@
 <template>
-    <b-modal id="show-inventory-movements" size="lg" scrollable no-fade hide-header>
-
-        <div class="d-flex justify-content-between mb-2">
-            <h6>Inventory Movements</h6>
-            <a v-if="hasNextPage" :href="productItemMovementLink">See more</a>
-        </div>
+    <b-modal body-class="ml-0 mr-0 pl-1 pr-1" id="show-inventory-movements" size="xl" scrollable no-fade>
+        <template #modal-header>
+            <span>Inventory Movements</span>
+            <a :href="productItemMovementLink" class="fa-pull-right">See all</a>
+        </template>
 
         <template v-for="record in records">
-            <swiping-card :disable-swipe-right="true" :disable-swipe-left="true"  :key="record.id">
-                <template v-slot:content>
-                    <inventory-movement-card :record="record" />
-                </template>
-            </swiping-card>
+            <inventory-movement-card :record="record" />
         </template>
 
         <div class="d-flex align-items-center justify-content-center" style="height:100px" v-if="!isLoading && !records.length">
@@ -56,6 +51,10 @@ export default {
         product_sku: {
             default: null,
             type: String
+        },
+        warehouse_code: {
+            default: null,
+            type: String
         }
     },
 
@@ -74,7 +73,7 @@ export default {
 
     computed: {
         productItemMovementLink() {
-            return '/reports/inventory-movements?hide_nav_bar=true&filter[search]=' + this.product_sku;
+            return '/reports/inventory-movements?hide_nav_bar=true&filter[search]=' + this.product_sku + '&filter[warehouse_code]=' + this.warehouse_code;
         },
     },
 
@@ -85,15 +84,16 @@ export default {
 
             let params = {
                 filter: null,
-                include: 'product,inventory,user,product.tags',
+                include: 'product,inventory,user',
                 sort: '-sequence_number,-occurred_at',
                 page,
                 per_page: 10
             };
 
             if (this.currentUser()['warehouse']) {
-                params["filter[warehouse_code]"] = this.currentUser()['warehouse']['code'];
+                params["filter[warehouse_code]"] = this.warehouse_code;
             }
+
             params["filter[search]"] = this.product_sku
 
             this.apiGetInventoryMovements(params)
