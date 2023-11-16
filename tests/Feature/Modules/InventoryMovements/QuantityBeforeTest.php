@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
 use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeJob;
+use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 use App\Services\InventoryService;
 use Tests\TestCase;
 
@@ -42,6 +43,8 @@ class QuantityBeforeTest extends TestCase
 
         QuantityBeforeJob::dispatch();
 
+        SequenceNumberJob::dispatch();
+
         ray(InventoryMovement::query()->get()->toArray());
 
         $inventoryMovement01->refresh();
@@ -73,6 +76,7 @@ class QuantityBeforeTest extends TestCase
         ]);
 
         QuantityBeforeJob::dispatch();
+        SequenceNumberJob::dispatch();
 
         $inventoryMovement01->refresh();
         $inventoryMovement02->refresh();
@@ -99,6 +103,8 @@ class QuantityBeforeTest extends TestCase
         $inventoryMovement01 = InventoryService::adjust($this->inventory, 20);
         $inventoryMovement02 = InventoryService::sell($this->inventory, -5);
         $inventoryMovement03 = InventoryService::adjust($this->inventory, 7);
+
+        SequenceNumberJob::dispatch();
 
         $inventoryMovement01->refresh();
         $inventoryMovement02->refresh();
