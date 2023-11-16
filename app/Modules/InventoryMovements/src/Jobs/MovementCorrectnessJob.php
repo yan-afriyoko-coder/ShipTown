@@ -3,7 +3,6 @@
 namespace App\Modules\InventoryMovements\src\Jobs;
 
 use App\Abstracts\UniqueJob;
-use App\Models\InventoryMovement;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -22,13 +21,13 @@ class MovementCorrectnessJob extends UniqueJob
 
                 INNER JOIN inventory_movements as previous_movement
                     ON inventory_movements.inventory_id = previous_movement.inventory_id
-                    AND inventory_movements.sequence_number = previous_movement.sequence_number + 1
+                    AND inventory_movements.sequence_number - 1 = previous_movement.sequence_number
                     AND (
                      inventory_movements.quantity_before != previous_movement.quantity_after
                      OR inventory_movements.occurred_at < previous_movement.occurred_at
                 )
 
-                LIMIT 10
+                WHERE inventory_movements.occurred_at BETWEEN DATE_SUB(now(), INTERVAL 1 DAY) AND now();
             ');
 
             $recordsUpdated =  DB::update('
