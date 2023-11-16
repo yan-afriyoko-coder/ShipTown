@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Events\SyncRequestedEvent;
 use App\Modules\InventoryMovementsStatistics\src\InventoryMovementsStatisticsServiceProvider;
 use App\Modules\InventoryTotals\src\InventoryTotalsServiceProvider;
 use App\Modules\Maintenance\src\Jobs\CopyInventoryMovementsToNewTableJob;
@@ -68,5 +69,7 @@ class DatabaseSeeder extends Seeder
 
 //        RunHourlyJobs::dispatchSync();
         CopyInventoryMovementsToNewTableJob::dispatch();
+
+        SyncRequestedEvent::dispatch();
     }
 }

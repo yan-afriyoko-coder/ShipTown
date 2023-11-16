@@ -84,15 +84,6 @@ class SequenceNumberJob extends UniqueJob
             DB::update('
                 UPDATE inventory
 
-                SET
-                    inventory.last_sequence_number = (SELECT sequence_number FROM inventory_movements WHERE inventory_id = inventory.id AND sequence_number IS NOT NULL ORDER BY sequence_number DESC LIMIT 1)
-
-                WHERE inventory.id IN (SELECT DISTINCT inventory_id FROM tempTable);
-            ');
-
-            DB::update('
-                UPDATE inventory
-
                 #     INNER JOIN inventory_movements
                 #     ON inventory_movements.inventory_id = inventory.id
                 #         AND (
@@ -108,14 +99,15 @@ class SequenceNumberJob extends UniqueJob
 
 
                 SET
-                    inventory.quantity =          (SELECT quantity_after FROM inventory_movements WHERE inventory_id = inventory.id ORDER BY sequence_number DESC LIMIT 1),
-                    inventory.last_movement_id =  (SELECT id FROM inventory_movements WHERE inventory_id = inventory.id ORDER BY sequence_number DESC LIMIT 1),
-                    inventory.first_movement_at = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id),
-                    inventory.last_movement_at =  (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id),
-                    inventory.first_counted_at =  (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "stocktake"),
-                    inventory.last_counted_at =   (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "stocktake"),
-                    inventory.first_received_at = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0),
-                    inventory.last_received_at =  (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0)
+                    inventory.last_sequence_number  = (SELECT sequence_number FROM inventory_movements WHERE inventory_id = inventory.id AND sequence_number IS NOT NULL ORDER BY occurred_at DESC, sequence_number DESC LIMIT 1),
+                    inventory.quantity              = (SELECT quantity_after FROM inventory_movements WHERE inventory_id = inventory.id ORDER BY occurred_at DESC, sequence_number DESC LIMIT 1),
+                    inventory.last_movement_id      = (SELECT id FROM inventory_movements WHERE inventory_id = inventory.id ORDER BY occurred_at DESC, sequence_number DESC LIMIT 1),
+                    inventory.first_movement_at     = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id),
+                    inventory.last_movement_at      = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id),
+                    inventory.first_counted_at      = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "stocktake"),
+                    inventory.last_counted_at       = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "stocktake"),
+                    inventory.first_received_at     = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0),
+                    inventory.last_received_at      = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0)
 
                 WHERE inventory.id IN (SELECT DISTINCT inventory_id FROM tempTable);
             ');
