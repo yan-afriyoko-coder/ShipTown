@@ -28,7 +28,7 @@ class SequenceNumberJob extends UniqueJob
                 FROM inventory_movements
                 WHERE sequence_number IS NULL
                 ORDER BY occurred_at
-                LIMIT 50;
+                LIMIT 100;
             ');
 
             DB::update('
@@ -153,7 +153,8 @@ class SequenceNumberJob extends UniqueJob
 
                 WHERE inventory_movements.type = "stocktake"
                 AND inventory_movements.quantity_delta != quantity_after - quantity_before
-            ');
+                AND inventory_movements.occurred_at BETWEEN ? AND ?
+            ', [$minOccurred, $maxOccurred]);
 
 
             Log::info('Job processing', [
