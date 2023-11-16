@@ -117,7 +117,7 @@ class SequenceNumberJob extends UniqueJob
                     inventory.first_received_at = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0),
                     inventory.last_received_at =  (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0)
 
-                WHERE inventory.id IN (SELECT inventory_id FROM tempTable);
+                WHERE inventory.id IN (SELECT DISTINCT inventory_id FROM tempTable);
             ');
 
             Schema::dropIfExists('incorrectMovementsTable');
@@ -154,6 +154,7 @@ class SequenceNumberJob extends UniqueJob
                 WHERE inventory_movements.type = "stocktake"
                 AND inventory_movements.quantity_delta != quantity_after - quantity_before
                 AND inventory_movements.occurred_at BETWEEN ? AND ?
+                AND inventory_movements.inventory_id IN (SELECT DISTINCT inventory_id FROM tempTable)
             ', [$minOccurred, $maxOccurred]);
 
 
