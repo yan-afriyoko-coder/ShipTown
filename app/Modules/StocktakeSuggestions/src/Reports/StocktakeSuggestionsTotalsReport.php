@@ -3,6 +3,7 @@
 namespace App\Modules\StocktakeSuggestions\src\Reports;
 
 use App\Models\StocktakeSuggestion;
+use App\Models\Warehouse;
 use App\Modules\Reports\src\Models\Report;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -15,16 +16,13 @@ class StocktakeSuggestionsTotalsReport extends Report
 
         $this->report_name = 'Stocktakes Suggestions';
 
-        $this->baseQuery = StocktakeSuggestion::query()
-            ->leftJoin('inventory', 'inventory_id', '=', 'inventory.id')
-            ->rightJoin('warehouses', 'inventory.warehouse_id', '=', 'warehouses.id')
-            ->groupBy('stocktake_suggestions.warehouse_id');
+        $this->baseQuery = Warehouse::query();
 
         $this->defaultSort = 'warehouse_code';
 
         $this->fields = [
-            'warehouse_code'      => DB::raw('max(warehouses.code)'),
-            'count'               => DB::raw('count(DISTINCT inventory.id)'),
+            'warehouse_code'      => DB::raw('warehouses.code'),
+            'count'               => DB::raw('SELECT count(DISTINCT inventory_id) FROM stocktake_suggestions WHERE stocktake_suggestions.warehouse_id = warehouses.id'),
         ];
 
         $this->casts = [
