@@ -28,7 +28,7 @@ class SequenceNumberJob extends UniqueJob
                 FROM inventory_movements
                 WHERE sequence_number IS NULL
                 ORDER BY occurred_at
-                LIMIT 50;
+                LIMIT 100;
             ');
 
             DB::update('
