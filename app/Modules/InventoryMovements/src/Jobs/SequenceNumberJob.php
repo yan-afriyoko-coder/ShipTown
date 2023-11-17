@@ -109,21 +109,8 @@ class SequenceNumberJob extends UniqueJob
             DB::update('
                 UPDATE inventory
 
-                #     INNER JOIN inventory_movements
-                #     ON inventory_movements.inventory_id = inventory.id
-                #         AND (
-                #                (IFNULL(inventory.last_movement_at,  "2000-01-01") < inventory_movements.occurred_at)
-                #                OR (IFNULL(inventory.last_counted_at,   "2000-01-01") < inventory_movements.occurred_at AND inventory_movements.type = "stocktake")
-                #                OR (IFNULL(inventory.last_sold_at,      "2000-01-01") < inventory_movements.occurred_at AND inventory_movements.type = "sale")
-                #                OR (IFNULL(inventory.last_received_at,  "2000-01-01") < inventory_movements.occurred_at AND quantity_delta > 0)
-                #                OR (IFNULL(inventory.first_movement_at, "2000-01-01") > inventory_movements.occurred_at)
-                #                OR (IFNULL(inventory.first_counted_at,  "2000-01-01") > inventory_movements.occurred_at AND inventory_movements.type = "stocktake")
-                #                OR (IFNULL(inventory.first_sold_at,     "2000-01-01") > inventory_movements.occurred_at AND inventory_movements.type = "sale")
-                #                OR (IFNULL(inventory.first_received_at, "2000-01-01") > inventory_movements.occurred_at AND quantity_delta > 0)
-                #            )
-
-
                 SET
+                    inventory.recount_required      = 0,
                     inventory.last_sequence_number  = (SELECT sequence_number FROM inventory_movements WHERE inventory_id = inventory.id AND sequence_number IS NOT NULL ORDER BY occurred_at DESC, sequence_number DESC LIMIT 1),
                     inventory.quantity              = (SELECT quantity_after FROM inventory_movements WHERE inventory_id = inventory.id ORDER BY occurred_at DESC, sequence_number DESC LIMIT 1),
                     inventory.last_movement_id      = (SELECT id FROM inventory_movements WHERE inventory_id = inventory.id ORDER BY occurred_at DESC, sequence_number DESC LIMIT 1),
