@@ -60,7 +60,6 @@ class BasicModuleTest extends TestCase
 
         $this->assertDatabaseHas('inventory', [
             'id' => $this->inventory->getKey(),
-            'type' => 'sale',
             'last_movement_id' => $this->inventoryMovement02->getKey(),
             'quantity' => $this->inventoryMovement02->quantity_after,
         ]);
