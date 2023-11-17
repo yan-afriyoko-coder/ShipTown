@@ -7,10 +7,8 @@ use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
-use App\Modules\InventoryMovements\src\Jobs\PreviousMovementIdJob;
-use App\Modules\InventoryMovements\src\Jobs\QuantityAfterJob;
-use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeJob;
-use App\Modules\InventoryMovements\src\Jobs\QuantityDeltaJob;
+use App\Modules\InventoryMovements\src\Jobs\QuantityDeltaCheckJob;
+use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 use App\Services\InventoryService;
 use Tests\TestCase;
 
@@ -37,13 +35,12 @@ class QuantityDeltaTest extends TestCase
         $inventoryMovement02 = InventoryService::sell($this->inventory, -5);
         $stocktakeMovement = InventoryService::stocktake($this->inventory, 7);
 
-        PreviousMovementIdJob::dispatch();
-
         $inventoryMovement01->update(['quantity_delta' => $inventoryMovement01->quantity_delta + 10]);
         $inventoryMovement02->update(['quantity_delta' => $inventoryMovement02->quantity_delta + 10]);
         $stocktakeMovement->update(['quantity_delta' => $stocktakeMovement->quantity_delta + 10]);
 
-        QuantityDeltaJob::dispatch();
+        QuantityDeltaCheckJob::dispatch();
+        SequenceNumberJob::dispatch();
 
         $inventoryMovement01->refresh();
         $inventoryMovement02->refresh();
@@ -51,8 +48,8 @@ class QuantityDeltaTest extends TestCase
 
         ray(InventoryMovement::query()->get()->toArray());
 
-        $this->assertNotEquals($inventoryMovement01->quantity_delta, $inventoryMovement01->quantity_after - $inventoryMovement01->quantity_before, 'Movement01');
-        $this->assertNotEquals($inventoryMovement02->quantity_delta, $inventoryMovement02->quantity_after - $inventoryMovement02->quantity_before, 'Movement02');
+        $this->assertEquals($inventoryMovement01->quantity_delta, $inventoryMovement01->quantity_after - $inventoryMovement01->quantity_before, 'Movement01');
+        $this->assertEquals($inventoryMovement02->quantity_delta, $inventoryMovement02->quantity_after - $inventoryMovement02->quantity_before, 'Movement02');
         $this->assertEquals($stocktakeMovement->quantity_delta, $stocktakeMovement->quantity_after - $stocktakeMovement->quantity_before, 'Movement03');
     }
 
@@ -62,7 +59,7 @@ class QuantityDeltaTest extends TestCase
         $inventoryMovement02 = InventoryService::sell($this->inventory, -5);
         $inventoryMovement03 = InventoryService::stocktake($this->inventory, 7);
 
-        PreviousMovementIdJob::dispatch();
+        SequenceNumberJob::dispatch();
 
         $inventoryMovement01->refresh();
         $inventoryMovement02->refresh();

@@ -14,8 +14,8 @@ class SequenceNumberJob extends UniqueJob
     public function handle()
     {
         do {
-            $minOccurred = InventoryMovement::whereNull('sequence_number')->min('occurred_at');
-            $maxOccurred = Carbon::parse($minOccurred)->addDay(2);
+            $minOccurred = InventoryMovement::query()->whereNull('sequence_number')->min('occurred_at');
+            $maxOccurred = Carbon::parse($minOccurred)->addDay();
 
             Schema::dropIfExists('inventoryIdsToProcess');
 
@@ -52,7 +52,16 @@ class SequenceNumberJob extends UniqueJob
                     row_number() over (partition by inventory_id order by occurred_at, id) as sequence_number,
                     (sum(quantity_delta) over (partition by inventory_id order by occurred_at, id)) as quantity_delta_sum
                 FROM (
-                    SELECT inventory_movements.*
+                    SELECT inventory_movements.id,
+                            inventory_movements.inventory_id,
+                            inventory_movements.occurred_at,
+                            inventory_movements.type,
+                            IF(inventory_movements.type != "stocktake", inventory_movements.quantity_delta, 0) as quantity_delta,
+                            inventory_movements.quantity_after,
+                            inventory_movements.quantity_before,
+                            inventory_movements.sequence_number,
+                            inventory_movements.created_at,
+                            inventory_movements.updated_at
                     FROM inventory_movements
                     WHERE inventory_id IN (SELECT inventory_id FROM inventoryIdsToProcess)
                     AND sequence_number IS NULL
@@ -73,13 +82,29 @@ class SequenceNumberJob extends UniqueJob
 
                 SET
                     inventory_movements.sequence_number = tempTable.sequence_number + IFNULL(tempTable.max_sequence_number, 0),
-                    inventory_movements.quantity_before = IFNULL(last_sequenced_movement.quantity_after, 0) + quantity_delta_sum - inventory_movements.quantity_delta,
+                    inventory_movements.quantity_before = CASE
+                        WHEN inventory_movements.type = "stocktake"
+                        THEN IFNULL(last_sequenced_movement.quantity_after, 0) + quantity_delta_sum
+                        ELSE IFNULL(last_sequenced_movement.quantity_after, 0) + quantity_delta_sum - inventory_movements.quantity_delta
+                    END,
                     inventory_movements.quantity_after = CASE
                         WHEN inventory_movements.type = "stocktake"
                         THEN inventory_movements.quantity_after
                         ELSE IFNULL(last_sequenced_movement.quantity_after, 0) + quantity_delta_sum
                     END;
             ');
+
+            DB::update('
+                UPDATE inventory_movements
+
+                SET inventory_movements.quantity_delta = quantity_after - quantity_before,
+                    inventory_movements.updated_at = NOW()
+
+                WHERE inventory_movements.type = "stocktake"
+                AND inventory_movements.quantity_delta != quantity_after - quantity_before
+                AND inventory_movements.occurred_at BETWEEN ? AND ?
+                AND inventory_movements.inventory_id IN (SELECT DISTINCT inventory_id FROM tempTable)
+            ', [$minOccurred, $maxOccurred]);
 
             DB::update('
                 UPDATE inventory
@@ -106,6 +131,8 @@ class SequenceNumberJob extends UniqueJob
                     inventory.last_movement_at      = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id),
                     inventory.first_counted_at      = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "stocktake"),
                     inventory.last_counted_at       = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "stocktake"),
+                    inventory.first_sold_at         = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "sale"),
+                    inventory.last_sold_at          = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "sale"),
                     inventory.first_received_at     = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0),
                     inventory.last_received_at      = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0)
 
@@ -137,18 +164,6 @@ class SequenceNumberJob extends UniqueJob
                 ON incorrectMovementsTable.id = inventory_movements.id
                 SET inventory_movements.sequence_number = null;
             ');
-
-            DB::update('
-                UPDATE inventory_movements
-
-                SET inventory_movements.quantity_delta = quantity_after - quantity_before,
-                    inventory_movements.updated_at = NOW()
-
-                WHERE inventory_movements.type = "stocktake"
-                AND inventory_movements.quantity_delta != quantity_after - quantity_before
-                AND inventory_movements.occurred_at BETWEEN ? AND ?
-                AND inventory_movements.inventory_id IN (SELECT DISTINCT inventory_id FROM tempTable)
-            ', [$minOccurred, $maxOccurred]);
 
 
             Log::info('Job processing', [

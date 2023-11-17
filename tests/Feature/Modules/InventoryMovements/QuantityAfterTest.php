@@ -7,9 +7,7 @@ use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
-use App\Modules\InventoryMovements\src\Jobs\PreviousMovementIdJob;
-use App\Modules\InventoryMovements\src\Jobs\QuantityAfterJob;
-use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeJob;
+use App\Modules\InventoryMovements\src\Jobs\QuantityAfterCheckJob;
 use App\Services\InventoryService;
 use Tests\TestCase;
 
@@ -36,8 +34,6 @@ class QuantityAfterTest extends TestCase
         $inventoryMovement02 = InventoryService::sell($this->inventory, -5);
         $stocktakeMovement = InventoryService::stocktake($this->inventory, 7);
 
-        PreviousMovementIdJob::dispatch();
-
         $quantityAfterOriginal = $stocktakeMovement->quantity_after;
 
 
@@ -47,7 +43,7 @@ class QuantityAfterTest extends TestCase
 
         ray(InventoryMovement::query()->get()->toArray());
 
-        QuantityAfterJob::dispatch();
+        QuantityAfterCheckJob::dispatch();
 
         $inventoryMovement01->refresh();
         $inventoryMovement02->refresh();
@@ -64,15 +60,13 @@ class QuantityAfterTest extends TestCase
         $inventoryMovement02 = InventoryService::sell($this->inventory, -5);
         $inventoryMovement03 = InventoryService::stocktake($this->inventory, 7);
 
-        PreviousMovementIdJob::dispatch();
-
         $inventoryMovement02->update([
             'quantity_after' => $inventoryMovement02->quantity_after + 1,
         ]);
 
         ray(InventoryMovement::query()->get()->toArray());
 
-        QuantityAfterJob::dispatch();
+        QuantityAfterCheckJob::dispatch();
 
         $inventoryMovement01->refresh();
         $inventoryMovement02->refresh();
@@ -88,8 +82,6 @@ class QuantityAfterTest extends TestCase
         $inventoryMovement01 = InventoryService::adjust($this->inventory, 20);
         $inventoryMovement02 = InventoryService::sell($this->inventory, -5);
         $inventoryMovement03 = InventoryService::stocktake($this->inventory, 7);
-
-        PreviousMovementIdJob::dispatch();
 
         $inventoryMovement01->refresh();
         $inventoryMovement02->refresh();

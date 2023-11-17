@@ -8,8 +8,6 @@ use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
 use App\Modules\InventoryMovements\src\Jobs\InventoryLastMovementIdJob;
-use App\Modules\InventoryMovements\src\Jobs\PreviousMovementIdJob;
-use App\Services\InventoryService;
 use Tests\TestCase;
 
 class InventoryDatesUpdatesTest extends TestCase
@@ -30,14 +28,6 @@ class InventoryDatesUpdatesTest extends TestCase
         $warehouse = Warehouse::factory()->create();
 
         $this->inventory = Inventory::find($product->getKey(), $warehouse->getKey());
-
-//        $this->initialQuantity = $this->inventory->quantity;
-
-//        $this->inventoryMovement01 = InventoryService::adjustQuantity($this->inventory, 20, '');
-//        $this->inventoryMovement02 = InventoryService::sellProduct($this->inventory, -5, '');
-
-        PreviousMovementIdJob::dispatch();
-        InventoryLastMovementIdJob::dispatch();
     }
 
     /** @test */

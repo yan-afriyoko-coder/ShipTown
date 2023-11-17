@@ -13,13 +13,11 @@ use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
-use App\Modules\InventoryMovements\src\Jobs\InventoryLastMovementIdJob;
-use App\Modules\InventoryMovements\src\Jobs\InventoryQuantityJob;
-use App\Modules\InventoryMovements\src\Jobs\PreviousMovementIdJob;
-use App\Modules\InventoryMovements\src\Jobs\QuantityAfterJob;
-use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeJob;
-use App\Modules\InventoryMovements\src\Jobs\QuantityDeltaJob;
-use App\Modules\InventoryMovements\src\Models\Configuration;
+use App\Modules\InventoryMovements\src\Jobs\InventoryQuantityCheckJob;
+use App\Modules\InventoryMovements\src\Jobs\QuantityAfterCheckJob;
+use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeCheckJob;
+use App\Modules\InventoryMovements\src\Jobs\QuantityDeltaCheckJob;
+use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 use App\Services\InventoryService;
 use Tests\TestCase;
 
@@ -44,9 +42,7 @@ class BasicModuleTest extends TestCase
         $this->inventoryMovement01 = InventoryService::adjust($this->inventory, 20);
         $this->inventoryMovement02 = InventoryService::sell($this->inventory, -5);
 
-        PreviousMovementIdJob::dispatch();
-        InventoryLastMovementIdJob::dispatch();
-        InventoryQuantityJob::dispatch();
+        SequenceNumberJob::dispatch();
     }
 
     /** @test */
@@ -56,7 +52,11 @@ class BasicModuleTest extends TestCase
             'quantity' => $this->inventory->quantity + rand(1, 100),
         ]);
 
-        InventoryQuantityJob::dispatch();
+        InventoryQuantityCheckJob::dispatch();
+
+        SequenceNumberJob::dispatch();
+
+        ray(InventoryMovement::query()->get()->toArray());
 
         $this->assertDatabaseHas('inventory', [
             'id' => $this->inventory->getKey(),
@@ -68,12 +68,10 @@ class BasicModuleTest extends TestCase
     /** @test */
     public function testEmptyDatabaseRun()
     {
-        PreviousMovementIdJob::dispatch();
-        QuantityBeforeJob::dispatch();
-        QuantityDeltaJob::dispatch();
-        QuantityAfterJob::dispatch();
-        InventoryLastMovementIdJob::dispatch();
-        InventoryQuantityJob::dispatch();
+        QuantityBeforeCheckJob::dispatch();
+        QuantityDeltaCheckJob::dispatch();
+        QuantityAfterCheckJob::dispatch();
+        InventoryQuantityCheckJob::dispatch();
 
         $this->assertTrue(true, 'We did not run into any errors');
     }
@@ -98,11 +96,21 @@ class BasicModuleTest extends TestCase
             'quantity_before' => 100,
         ]);
 
-        PreviousMovementIdJob::dispatch();
+        QuantityBeforeCheckJob::dispatch();
+
+        SequenceNumberJob::dispatch();
+
+        $this->inventoryMovement01->refresh();
+        $this->inventoryMovement02->refresh();
+
+        $this->assertDatabaseHas('inventory_movements', [
+            'id' => $this->inventoryMovement01->getKey(),
+            'sequence_number' => 1,
+        ]);
 
         $this->assertDatabaseHas('inventory_movements', [
             'id' => $this->inventoryMovement02->getKey(),
-            'previous_movement_id' => $this->inventoryMovement01->getKey(),
+            'sequence_number' => 2,
         ]);
     }
 
@@ -110,12 +118,14 @@ class BasicModuleTest extends TestCase
     public function testQuantityDeltaAndAfterJob(): void
     {
         $inventoryMovement03 = InventoryService::adjust($this->inventory, 10);
-        QuantityDeltaJob::dispatch();
-        QuantityAfterJob::dispatch();
+        QuantityDeltaCheckJob::dispatch();
+        QuantityAfterCheckJob::dispatch();
+
+        SequenceNumberJob::dispatch();
 
         $this->assertDatabaseHas('inventory_movements', [
             'id' => $this->inventoryMovement02->getKey(),
-            'previous_movement_id' => $this->inventoryMovement01->getKey(),
+            'sequence_number' => 2,
             'quantity_before' => 20,
             'quantity_delta' => -5,
             'quantity_after' => 15,
@@ -131,7 +141,8 @@ class BasicModuleTest extends TestCase
             'quantity' => 0,
         ]);
 
-        InventoryLastMovementIdJob::dispatch();
+        InventoryQuantityCheckJob::dispatch();
+        SequenceNumberJob::dispatch();
 
         $this->assertDatabaseHas('inventory', [
             'id' => $this->inventory->id,

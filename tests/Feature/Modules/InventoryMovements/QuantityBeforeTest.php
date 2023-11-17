@@ -7,8 +7,8 @@ use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
-use App\Modules\InventoryMovements\src\Jobs\PreviousMovementIdJob;
-use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeJob;
+use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeCheckJob;
+use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 use App\Services\InventoryService;
 use Tests\TestCase;
 
@@ -37,13 +37,13 @@ class QuantityBeforeTest extends TestCase
         $inventoryMovement02 = InventoryService::adjust($this->inventory, 10);
         $stocktakeMovement = InventoryService::stocktake($this->inventory, 5);
 
-        PreviousMovementIdJob::dispatch();
-
         $stocktakeMovement->update([
             'quantity_before' => 0,
         ]);
 
-        QuantityBeforeJob::dispatch();
+        QuantityBeforeCheckJob::dispatch();
+
+        SequenceNumberJob::dispatch();
 
         ray(InventoryMovement::query()->get()->toArray());
 
@@ -71,13 +71,12 @@ class QuantityBeforeTest extends TestCase
         $inventoryMovement02 = InventoryService::sell($this->inventory, -5);
         $inventoryMovement03 = InventoryService::adjust($this->inventory, -7);
 
-        PreviousMovementIdJob::dispatch();
-
         $inventoryMovement02->update([
             'quantity_before' => 0,
         ]);
 
-        QuantityBeforeJob::dispatch();
+        QuantityBeforeCheckJob::dispatch();
+        SequenceNumberJob::dispatch();
 
         $inventoryMovement01->refresh();
         $inventoryMovement02->refresh();
@@ -105,7 +104,7 @@ class QuantityBeforeTest extends TestCase
         $inventoryMovement02 = InventoryService::sell($this->inventory, -5);
         $inventoryMovement03 = InventoryService::adjust($this->inventory, 7);
 
-        PreviousMovementIdJob::dispatch();
+        SequenceNumberJob::dispatch();
 
         $inventoryMovement01->refresh();
         $inventoryMovement02->refresh();
