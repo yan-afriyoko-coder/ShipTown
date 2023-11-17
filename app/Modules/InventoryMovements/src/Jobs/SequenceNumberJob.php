@@ -50,7 +50,7 @@ class SequenceNumberJob extends UniqueJob
                     tempTable2.inventory_id,
                     (SELECT sequence_number FROM inventory_movements as im_table WHERE im_table.inventory_id = tempTable2.inventory_id AND im_table.sequence_number IS NOT NULL ORDER BY im_table.sequence_number DESC LIMIT 1) as max_sequence_number,
                     row_number() over (partition by inventory_id order by occurred_at, id) as sequence_number,
-                    (sum(quantity_delta) over (partition by inventory_id order by occurred_at, id)) as quantity_delta_sum
+                    (sum(CASE WHEN type = "stocktake" THEN 0 ELSE quantity_delta END) over (partition by inventory_id order by occurred_at, id)) as quantity_delta_sum
                 FROM (
                     SELECT inventory_movements.*
                     FROM inventory_movements
