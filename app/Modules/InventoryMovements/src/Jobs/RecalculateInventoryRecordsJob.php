@@ -26,7 +26,8 @@ class RecalculateInventoryRecordsJob extends UniqueJob
                     inventory.first_sold_at         = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "sale"),
                     inventory.last_sold_at          = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "sale"),
                     inventory.first_received_at     = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0),
-                    inventory.last_received_at      = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0)
+                    inventory.last_received_at      = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0),
+                    inventory.updated_at            = now()
 
                 WHERE inventory.id IN (SELECT id FROM (SELECT id FROM inventory WHERE inventory.recount_required = 1 LIMIT 100) as tbl);
             ');
