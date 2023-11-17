@@ -50,9 +50,18 @@ class SequenceNumberJob extends UniqueJob
                     tempTable2.inventory_id,
                     (SELECT sequence_number FROM inventory_movements as im_table WHERE im_table.inventory_id = tempTable2.inventory_id AND im_table.sequence_number IS NOT NULL ORDER BY im_table.sequence_number DESC LIMIT 1) as max_sequence_number,
                     row_number() over (partition by inventory_id order by occurred_at, id) as sequence_number,
-                    (sum(CASE WHEN type = "stocktake" THEN 0 ELSE quantity_delta END) over (partition by inventory_id order by occurred_at, id)) as quantity_delta_sum
+                    (sum(quantity_delta) over (partition by inventory_id order by occurred_at, id)) as quantity_delta_sum
                 FROM (
-                    SELECT inventory_movements.*
+                    SELECT inventory_movements.id,
+                            inventory_movements.inventory_id,
+                            inventory_movements.occurred_at,
+                            inventory_movements.type,
+                            IF(inventory_movements.type != "stocktake", inventory_movements.quantity_delta, 0) as quantity_delta,
+                            inventory_movements.quantity_after,
+                            inventory_movements.quantity_before,
+                            inventory_movements.sequence_number,
+                            inventory_movements.created_at,
+                            inventory_movements.updated_at
                     FROM inventory_movements
                     WHERE inventory_id IN (SELECT inventory_id FROM inventoryIdsToProcess)
                     AND sequence_number IS NULL
@@ -73,13 +82,29 @@ class SequenceNumberJob extends UniqueJob
 
                 SET
                     inventory_movements.sequence_number = tempTable.sequence_number + IFNULL(tempTable.max_sequence_number, 0),
-                    inventory_movements.quantity_before = IFNULL(last_sequenced_movement.quantity_after, 0) + quantity_delta_sum - inventory_movements.quantity_delta,
+                    inventory_movements.quantity_before = CASE
+                        WHEN inventory_movements.type = "stocktake"
+                        THEN IFNULL(last_sequenced_movement.quantity_after, 0) + quantity_delta_sum
+                        ELSE IFNULL(last_sequenced_movement.quantity_after, 0) + quantity_delta_sum - inventory_movements.quantity_delta
+                    END,
                     inventory_movements.quantity_after = CASE
                         WHEN inventory_movements.type = "stocktake"
                         THEN inventory_movements.quantity_after
                         ELSE IFNULL(last_sequenced_movement.quantity_after, 0) + quantity_delta_sum
                     END;
             ');
+
+            DB::update('
+                UPDATE inventory_movements
+
+                SET inventory_movements.quantity_delta = quantity_after - quantity_before,
+                    inventory_movements.updated_at = NOW()
+
+                WHERE inventory_movements.type = "stocktake"
+                AND inventory_movements.quantity_delta != quantity_after - quantity_before
+                AND inventory_movements.occurred_at BETWEEN ? AND ?
+                AND inventory_movements.inventory_id IN (SELECT DISTINCT inventory_id FROM tempTable)
+            ', [$minOccurred, $maxOccurred]);
 
             DB::update('
                 UPDATE inventory
@@ -139,18 +164,6 @@ class SequenceNumberJob extends UniqueJob
                 ON incorrectMovementsTable.id = inventory_movements.id
                 SET inventory_movements.sequence_number = null;
             ');
-
-            DB::update('
-                UPDATE inventory_movements
-
-                SET inventory_movements.quantity_delta = quantity_after - quantity_before,
-                    inventory_movements.updated_at = NOW()
-
-                WHERE inventory_movements.type = "stocktake"
-                AND inventory_movements.quantity_delta != quantity_after - quantity_before
-                AND inventory_movements.occurred_at BETWEEN ? AND ?
-                AND inventory_movements.inventory_id IN (SELECT DISTINCT inventory_id FROM tempTable)
-            ', [$minOccurred, $maxOccurred]);
 
 
             Log::info('Job processing', [
