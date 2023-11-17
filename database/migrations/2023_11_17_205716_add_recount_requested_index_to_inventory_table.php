@@ -11,9 +11,9 @@ return new class extends Migration
         Schema::dropColumns('inventory', ['recount_requested']);
 
         Schema::table('inventory', function (Blueprint $table) {
-            $table->boolean('recount_requested')->default(false)->after('shelve_location');
+            $table->boolean('recount_required')->default(false)->after('shelve_location');
 
-            $table->index('recount_requested');
+            $table->index('recount_required');
         });
     }
 };
