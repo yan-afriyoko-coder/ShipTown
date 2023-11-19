@@ -293,7 +293,7 @@
 
                                 <div class="container" v-if="currentTab === 'orderDetails'">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col">
                                             <table class="table-borderless table-hover border-0 w-100">
                                                 <tr>
                                                     <td class="text-nowrap"> status code:</td>
@@ -315,7 +315,7 @@
 
                                                 <tr>
                                                     <td class="text-nowrap pt-2"> product lines:</td>
-                                                    <td class="text-right"><b> {{toNumberOrDash(order['product_line_count'])}} </b></td>
+                                                    <td class="text-right"><b> {{ toNumberOrDash(order['product_line_count']) }} </b></td>
                                                 </tr>
 
                                                 <tr>

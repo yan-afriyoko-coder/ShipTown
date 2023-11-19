@@ -32,13 +32,24 @@ export default {
                 tmpTextField.remove()
             },
 
-            toNumberOrDash(value) {
+            toNumberOrDash(value, decimals = null) {
                 if (isNaN(value)) {
                     return '-';
                 }
                 if (value === null) {
                     return '-';
                 }
+
+                const numberValue = Number(value);
+
+                if (numberValue === 0) {
+                    return '-';
+                }
+
+                if (decimals || numberValue % 1 !== 0) {
+                    return numberValue.toFixed(decimals);
+                }
+
                 return this.dashIfZero(Number(value)).toLocaleString().replace(',', ' ');
             },
 
