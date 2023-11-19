@@ -17,7 +17,7 @@
 {{--                            <div class="">@widget('DateSelectorWidget', ['url_param_name' => 'filter[date_between]'])</div>--}}
 {{--                        </div>--}}
 {{--                    </div>--}}
-                    <table class="table-hover w-100">
+                    <table class="table-hover w-100 small table-responsive text-nowrap">
                         <thead>
                         <tr>
                             @foreach($fields as $field)
