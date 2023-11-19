@@ -11,26 +11,27 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  *
- * @property int id
- * @property Carbon $occurred_at
- * @property int $sequence_number
- * @property string $type
- * @property string $custom_unique_reference_id
- * @property int inventory_id
- * @property int product_id
- * @property int warehouse_id
- * @property float quantity_delta
- * @property float quantity_before
- * @property float quantity_after
+ * @property int    id
+ * @property string warehouse_code
+ * @property Carbon occurred_at
+ * @property int    sequence_number
+ * @property string type
+ * @property string custom_unique_reference_id
+ * @property int    inventory_id
+ * @property int    product_id
+ * @property int    warehouse_id
+ * @property float  quantity_delta
+ * @property float  quantity_before
+ * @property float  quantity_after
  * @property string description
- * @property int user_id
- * @property int previous_movement_id
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property int    user_id
+ * @property int    previous_movement_id
+ * @property Carbon created_at
+ * @property Carbon updated_at
  *
- * @property Product $product
- * @property Warehouse $warehouse
- * @property Inventory $inventory
+ * @property Product   product
+ * @property Warehouse warehouse
+ * @property Inventory inventory
  *
  */
 class InventoryMovement extends BaseModel
@@ -45,6 +46,7 @@ class InventoryMovement extends BaseModel
     const TYPE_TRANSFER_OUT = 'transfer_out';
 
     protected $fillable = [
+        'warehouse_code',
         'occurred_at',
         'sequence_number',
         'type',

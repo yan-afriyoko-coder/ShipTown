@@ -24,6 +24,7 @@ class InventoryService
         $inventoryRefreshed = $inventory->refresh();
 
         $movement = new InventoryMovement([
+            'warehouse_code' => $inventoryRefreshed->warehouse_code,
             'occurred_at' => now(),
             'type' => InventoryMovement::TYPE_STOCKTAKE,
             'inventory_id' => $inventoryRefreshed->id,
@@ -46,6 +47,7 @@ class InventoryService
         $inventoryRefreshed = $inventory->refresh();
 
         $inventoryMovement = new InventoryMovement([
+            'warehouse_code' => $inventoryRefreshed->warehouse_code,
             'occurred_at' => now(),
             'type' => InventoryMovement::TYPE_ADJUSTMENT,
             'inventory_id' => $inventoryRefreshed->id,
