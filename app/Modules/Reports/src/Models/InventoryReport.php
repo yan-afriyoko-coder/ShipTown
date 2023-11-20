@@ -29,17 +29,10 @@ class InventoryReport extends Report
             'quantity_required',
             'reorder_point',
             'restock_level',
-            'last_sequence_number',
-            'first_movement_at',
             'last_movement_at',
-            'first_received_at',
             'last_received_at',
-            'first_sold_at',
             'last_sold_at',
-            'first_counted_at',
             'last_counted_at',
-            'created_at',
-            'updated_at',
         ]);
 
         $this->fields = [
