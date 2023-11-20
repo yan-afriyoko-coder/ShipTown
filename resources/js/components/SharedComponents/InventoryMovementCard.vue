@@ -16,7 +16,7 @@
                     <td @click="toggleDetails()">type:</td>
                     <td class="pl-1"><a href="" @click="setUrlParameter('filter[type]', record['type'] )">{{ record['type'] }}</a></td>
                   </tr>
-                  <tr>
+                  <tr>ų
                     <td @click="toggleDetails()">description:</td>
                     <td class="pl-1"><a href="" @click="setUrlParameter('filter[description]', record['description'] )">{{ record['description'] }}</a></td>
                   </tr>

@@ -66,6 +66,7 @@ class PublishInventoryMovementWebhooksJob extends UniqueJob
                 throw $exception;
             }
 
+            usleep(200000); // 200ms
             $chunk = $query->get();
         }
     }

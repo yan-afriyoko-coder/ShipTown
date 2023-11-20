@@ -2,34 +2,16 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
+use App\Abstracts\UniqueJob;
 use App\Modules\Rmsapi\src\Api\Client;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
-class PushInventoryToRMSJob implements ShouldQueue, ShouldBeUnique
+class PushInventoryToRMSJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
     public string $batch_uuid;
-
-    public int $uniqueFor = 300;
-
-    public function uniqueId(): string
-    {
-        return implode('-', [get_class($this)]);
-    }
 
     public function __construct()
     {

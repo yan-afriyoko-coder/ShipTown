@@ -2,45 +2,12 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
+use App\Abstracts\UniqueJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
-use Exception;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Ramsey\Uuid\Uuid;
 
-class ImportAllJob implements ShouldQueue, ShouldBeUnique
+class ImportAllJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
-    public string $batch_uuid;
-
-    public int $uniqueFor = 300;
-
-    public function uniqueId(): string
-    {
-        return implode('-', [get_class($this)]);
-    }
-
-    public function __construct()
-    {
-        $this->batch_uuid = Uuid::uuid4()->toString();
-    }
-
-    /**
-     * Execute the job.
-     *
-     * @return boolean
-     *
-     * @throws Exception
-     */
     public function handle(): bool
     {
         foreach (RmsapiConnection::all() as $rmsapiConnection) {
