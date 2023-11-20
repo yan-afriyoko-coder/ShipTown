@@ -18,7 +18,8 @@ class RepublishLast24hWebhooksJob extends UniqueJob
                 ->where('created_at', '>', now()->subDay())
                 ->limit(1000)
                 ->update(['published_at' => null, 'reserved_at' => null]);
-            sleep(1);
+
+            usleep(200000); // 200ms
         } while ($recordsUpdated > 0);
     }
 }

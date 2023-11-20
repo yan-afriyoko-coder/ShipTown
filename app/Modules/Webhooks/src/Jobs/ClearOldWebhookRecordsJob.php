@@ -27,7 +27,8 @@ class ClearOldWebhookRecordsJob extends UniqueJob
                 ->whereNotNull('published_at')
                 ->limit(50000)
                 ->forceDelete();
-            sleep(1);
+
+            usleep(200000); // 200ms
         } while ($recordsUpdated > 0);
     }
 }
