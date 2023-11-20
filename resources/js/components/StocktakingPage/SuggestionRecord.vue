@@ -4,17 +4,11 @@
             <div class="col-sm-12 col-md-5">
                 <product-info-card :product= "record['product']"></product-info-card>
             </div>
-
-            <div class="col-sm-12 col-md-3 text-left small mt-2 mb-1">
-                <div class="row">
-                    <div class="col">
-                        {{ record['suggestion_details'] }}
-                    </div>
-                </div>
-                <div @click="toggleDetails"  :class="{ 'bg-warning':  Number(record['inventory']['quantity_available']) < 0}">in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
-                <div @click="toggleDetails" >price: <strong>{{ Number(productPrice) }}</strong></div>
-                <div @click="toggleDetails" >last counted at: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
-                <div @click="toggleDetails" >last sold at: <strong>{{ formatDateTime(record['inventory']['last_sold_at']) }}</strong></div>
+            <div class="col-sm-12 col-md-3 text-left small text-nowrap">
+                <div class="small" @click="toggleDetails" :class="{ 'bg-warning':  Number(record['inventory']['quantity_available']) < 0}">in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
+                <div class="small" @click="toggleDetails" >price: <b>{{ Number(productPrice) }}</b></div>
+                <div class="small" @click="toggleDetails" >last counted at: <b>{{ formatDateTime(record['inventory']['last_counted_at']) }}</b></div>
+                <div class="small" @click="toggleDetails" >last sold at: <strong>{{ formatDateTime(record['inventory']['last_sold_at']) }}</strong></div>
                 <div>
                     <div @click="toggleDetails" class="d-inline">last movement at:</div>
                     <strong @click="showInventoryMovementModal(record['product_sku'], record['inventory']['warehouse_code'])" class="text-primary cursor-pointer">{{ formatDateTime(record['inventory']['last_movement_at']) }}</strong>
@@ -32,12 +26,17 @@
             <div @click="toggleDetails" class="col-sm-12 col-md-4 text-right">
                 <div class="row">
                     <div class="col">
-                        <text-card label="location" :text="record['inventory']['warehouse_code']"></text-card>
+                        <text-card class="fa-pull-left" label="location" :text="record['inventory']['warehouse_code']"></text-card>
                         <number-card label="points" :number="record['points']"></number-card>
                         <text-card label="shelf" :text="record['inventory']['shelve_location']"></text-card>
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col text-left small">
+                        {{ record['suggestion_details'] }}
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col text-center">
                         <font-awesome-icon v-if="!expanded" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
