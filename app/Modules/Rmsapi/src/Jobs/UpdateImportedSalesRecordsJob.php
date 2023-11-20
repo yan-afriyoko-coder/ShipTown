@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class UpdateImportedSalesRecordsJob extends UniqueJob
 {
-    public int $uniqueFor = 60 * 5; // 5 minutes
-
     public function handle(): bool
     {
         $this->updateWarehouseIds();

@@ -4,6 +4,7 @@ namespace App\Modules\Rmsapi\src;
 
 use App\Events\EveryDayEvent;
 use App\Events\EveryFiveMinutesEvent;
+use App\Events\EveryMinuteEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 use App\Modules\Rmsapi\src\Jobs\CleanupImportTablesJob;
@@ -42,6 +43,10 @@ class RmsapiModuleServiceProvider extends BaseModuleServiceProvider
     protected $listen = [
         SyncRequestedEvent::class => [
             Listeners\SyncRequestedEventListener::class,
+        ],
+
+        EveryMinuteEvent::class => [
+            Listeners\EveryMinuteEventListener::class,
         ],
 
         EveryFiveMinutesEvent::class => [

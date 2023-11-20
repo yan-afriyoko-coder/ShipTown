@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Log;
 
 class ProcessImportedSalesRecordsJob extends UniqueJob
 {
-    public int $uniqueFor = 60 * 5; // 5 minutes
-
     public function handle()
     {
         $batch_size = 50;
