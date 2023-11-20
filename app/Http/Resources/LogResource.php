@@ -4,7 +4,11 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
+use Spatie\Activitylog\Models\Activity;
 
+/**
+ * @mixin Activity
+ */
 class LogResource extends JsonResource
 {
     public function toArray($request): array
@@ -31,11 +35,15 @@ class LogResource extends JsonResource
         $result = [];
 
         if (Arr::has($this->properties, ['old'])) {
-            $array_keys = array_keys($this->properties['attributes']);
+            if (! Arr::has($this->properties, ['attributes'])) {
+                $result = $this->properties['old'];
+            } else {
+                $array_keys = array_keys($this->properties['attributes']);
 
-            foreach ($array_keys as $key) {
-                if ($this->properties['attributes'][$key] !== $this->properties['old'][$key]) {
-                    $result[$key] = $this->properties['attributes'][$key];
+                foreach ($array_keys as $key) {
+                    if ($this->properties['attributes'][$key] !== $this->properties['old'][$key]) {
+                        $result[$key] = $this->properties['attributes'][$key];
+                    }
                 }
             }
         }

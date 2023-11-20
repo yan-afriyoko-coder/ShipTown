@@ -17,11 +17,11 @@
 {{--                            <div class="">@widget('DateSelectorWidget', ['url_param_name' => 'filter[date_between]'])</div>--}}
 {{--                        </div>--}}
 {{--                    </div>--}}
-                    <table class="table-hover w-100 small table-responsive text-nowrap">
+                    <table class="table-hover w-100 text-left small table-responsive text-nowrap">
                         <thead>
                         <tr>
                             @foreach($fields as $field)
-                                <th>{{ __($field) }}</th>
+                                <th class="small pr-3">{{ __($field) }}</th>
                             @endforeach
                         </tr>
                         </thead>
@@ -29,7 +29,7 @@
                         @foreach ($data as $record)
                             <tr class="table-hover">
                                 @foreach($fields as $field)
-                                    <td>{{ data_get($record, $field) }}</td>
+                                    <td class="pr-3">{{ data_get($record, $field) }}</td>
                                 @endforeach
                             </tr>
                         @endforeach

@@ -401,15 +401,15 @@
 
                                 <template v-if="currentTab === 'orderActivities'">
                                     <div class="row small" v-for="activity in order_activities" :key="activity.id">
-                                    <span :title="formatDateTime(activity['created_at'], 'YYYY-MM-DD H:mm:ss')">
-                                        {{ formatDateTime(activity['created_at'], 'MMM DD H:mm') }}:
-                                    </span>
+                                        <span :title="formatDateTime(activity['created_at'], 'YYYY-MM-DD H:mm:ss')">
+                                            {{ formatDateTime(activity['created_at'], 'MMM DD H:mm') }}:
+                                        </span>
                                         <span class="flex-nowrap ml-1">
-                                        {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}
-                                    </span>
+                                            {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}
+                                        </span>
                                         <span class="flex-nowrap ml-1">
-                                        {{ activity['description'] }}
-                                    </span>
+                                            {{ activity['description'] }}
+                                        </span>
                                         <div class="col-12 pl-3 text-nowrap"
                                              v-for="(value, name) in activity['properties']['attributes'] ? activity['properties']['attributes'] : activity['properties']">
                                             {{ name }} = {{ value }}
