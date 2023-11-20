@@ -87,7 +87,7 @@ export default {
                 include: 'product,inventory,user',
                 sort: '-sequence_number,-occurred_at',
                 page,
-                per_page: 10
+                per_page: 50
             };
 
             if (this.currentUser()['warehouse']) {
