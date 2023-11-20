@@ -14,6 +14,16 @@
             </div>
         </template>
 
+
+        <div class="row pl-0 p-0">
+            <div class="col-12 col-md-6 col-lg-6 text-nowrap text-left align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
+                REPORTS > ATIVITY LOG
+            </div>
+            <div class="col-12 col-md-6 col-lg-6 text-nowrap">
+                <date-selector-widget :dates="{'url_param_name': 'filter[created_at_between]'}"></date-selector-widget>
+            </div>
+        </div>
+
         <template  v-if="activityLog.length === 0 && !isLoading" >
             <div class="row mt-3">
                 <div class="col">
@@ -24,10 +34,10 @@
             </div>
         </template>
 
-        <table v-if="activityLog.length > 0">
+        <table v-if="activityLog.length > 0" class="small table-responsive text-nowrap">
             <template v-for="activity in activityLog">
                 <tr>
-                    <td class="pr-2">{{ activity['created_at'] }}</td>
+                    <td class="pr-2">{{ activity['created_at'] | moment('YYYY MMM D H:mm:ss') }}</td>
                     <td class="pr-2">{{ activity['causer_id'] ? activity['causer']['name'] : 'AutoPilot' }}</td>
                     <td class="pr-2">{{ activity['description'] }}</td>
                     <td class="pr-2">{{ activity['subject_type'] }}</td>

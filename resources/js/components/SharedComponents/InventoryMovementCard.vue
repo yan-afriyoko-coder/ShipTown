@@ -10,7 +10,7 @@
                 <table class="table-borderless small text-left text-nowrap">
                   <tr>
                     <td @click="toggleDetails()" style="min-width: 120px">occurred at:</td>
-                    <td class="pl-1">{{ record['occurred_at'] | moment('YYYY MMM D H:mm') }}</td>
+                    <td class="pl-1">{{ record['occurred_at'] | moment('YYYY MMM D H:mm:ss') }}</td>
                   </tr>
                   <tr>
                     <td @click="toggleDetails()">type:</td>

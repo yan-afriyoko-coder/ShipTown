@@ -3,26 +3,23 @@
 </template>
 
 <script>
+    import helpers from "../../mixins/helpers";
+
     export default {
+        mixins: [helpers],
         name: "NumberCard",
 
         props: {
             label: null,
             number: null,
         },
-
         computed: {
             labelFormatted() {
                 return this.label || '';
             },
-            numberFormatted() {
-                return this.dashIfZero(Number(this.number || 0));
-            },
-        },
 
-        methods: {
-            dashIfZero(value) {
-                return value === 0 ? '-' : value;
+            numberFormatted() {
+                return this.toNumberOrDash(Number(this.number || 0));
             },
         },
     }

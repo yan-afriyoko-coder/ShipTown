@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ActivityIndexRequest;
 use App\Http\Requests\Api\ActivityStoreRequest;
 use App\Http\Resources\LogResource;
+use App\Http\Resources\ProductResource;
+use App\Models\Product;
 use App\Modules\Reports\src\Models\ActivityReport;
 use App\User;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -18,7 +20,7 @@ class ActivityController extends Controller
     {
         $report = new ActivityReport();
 
-        return LogResource::collection($this->getPaginatedResult($report->queryBuilder()));
+        return LogResource::collection($report->queryBuilder()->simplePaginate());
     }
 
     public function store(ActivityStoreRequest $request): JsonResource

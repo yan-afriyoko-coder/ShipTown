@@ -14,6 +14,7 @@ class InventoryMovementResource extends JsonResource
     {
         return [
             "id"                         => $this->id,
+            "warehouse_code"             => $this->warehouse_code,
             "occurred_at"                => $this->occurred_at,
             "type"                       => $this->type,
             "sequence_number"            => $this->sequence_number,

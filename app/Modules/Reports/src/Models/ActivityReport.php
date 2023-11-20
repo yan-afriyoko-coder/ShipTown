@@ -15,7 +15,7 @@ class ActivityReport extends Report
 
         $this->report_name = 'Activities Report';
 
-        $this->baseQuery = Activity::query();
+        $this->baseQuery = Activity::query()->orderBy('activity_log.id', 'desc');
 
         $this->fields = [
             'id'            => 'activity_log.id',
@@ -33,11 +33,5 @@ class ActivityReport extends Report
         ];
 
         $this->addAllowedInclude(AllowedInclude::relationship('causer'));
-
-        $this->addFilter(
-            AllowedFilter::callback('search', function (Builder $query, $value) {
-                $query->where('description', 'LIKE', '%'.$value.'%');
-            })
-        );
     }
 }
