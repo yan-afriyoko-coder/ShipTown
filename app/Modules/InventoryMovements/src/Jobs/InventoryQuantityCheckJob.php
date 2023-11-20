@@ -36,7 +36,7 @@ class InventoryQuantityCheckJob extends UniqueJob
                         OR inventory.last_movement_id != inventory_movements.id
                         OR inventory.last_movement_at != inventory_movements.occurred_at
                     )
-            ', [$this->date->toDateTimeLocalString(), $this->date->addDay()->toDateTimeLocalString()]);
+            ', [$this->date->startOfDay()->toDateTimeLocalString(), $this->date->endOfDay()->toDateTimeLocalString()]);
 
             Log::info('Job processing', [
                 'job' => self::class,

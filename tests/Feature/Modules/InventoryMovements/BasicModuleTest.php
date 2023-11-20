@@ -49,7 +49,7 @@ class BasicModuleTest extends TestCase
     public function testInventoryQuantityJob()
     {
         $this->inventory->update([
-            'quantity' => $this->inventory->quantity + rand(1, 100),
+            'quantity' => 0,
         ]);
 
         InventoryQuantityCheckJob::dispatch();
