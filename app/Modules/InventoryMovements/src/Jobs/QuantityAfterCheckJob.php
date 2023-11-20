@@ -34,7 +34,7 @@ class QuantityAfterCheckJob extends UniqueJob
                     inventory_movements.type != "stocktake"
                     AND inventory_movements.quantity_after != quantity_before + quantity_delta
                     AND inventory_movements.occurred_at BETWEEN ? AND ?;
-            ', [$this->date->toDateTimeLocalString(), $this->date->addDay()->toDateTimeLocalString()]);
+            ', [$this->date->startOfDay()->toDateTimeLocalString(), $this->date->endOfDay()->toDateTimeLocalString()]);
 
             Log::info('Job processing', [
                 'job' => self::class,
