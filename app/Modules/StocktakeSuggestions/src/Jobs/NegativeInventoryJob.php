@@ -2,20 +2,11 @@
 
 namespace App\Modules\StocktakeSuggestions\src\Jobs;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use App\Abstracts\UniqueJob;
 use Illuminate\Support\Facades\DB;
 
-class NegativeInventoryJob implements ShouldQueue
+class NegativeInventoryJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
     public function handle(): bool
     {
         $reason = 'negative stock - have you received in the stock correctly?';

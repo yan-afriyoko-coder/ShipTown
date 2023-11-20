@@ -2,21 +2,12 @@
 
 namespace App\Modules\StocktakeSuggestions\src\Jobs;
 
+use App\Abstracts\UniqueJob;
 use App\Models\Warehouse;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
-class NegativeWarehouseStockJob implements ShouldQueue
+class NegativeWarehouseStockJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
     public function handle(): bool
     {
         $reason = 'negative warehouse stock';

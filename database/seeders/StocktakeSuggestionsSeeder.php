@@ -17,7 +17,7 @@ class StocktakeSuggestionsSeeder extends Seeder
     public function run()
     {
         Warehouse::query()
-            ->whereNotIn('code', ['999', 'CRK'])
+            ->whereNotIn('code', ['999'])
             ->get()
             ->each(function (Warehouse $warehouse) {
                 Inventory::query()
@@ -29,6 +29,7 @@ class StocktakeSuggestionsSeeder extends Seeder
                         $stocktakeSuggestion = new StocktakeSuggestion();
                         $stocktakeSuggestion->product_id  = $inventory->product_id;
                         $stocktakeSuggestion->inventory_id  = $inventory->getKey();
+                        $stocktakeSuggestion->warehouse_id  = $inventory->warehouse_id;
                         $stocktakeSuggestion->points  = 20;
                         $stocktakeSuggestion->reason  = 'Manual stoctake request';
                         $stocktakeSuggestion->save();
