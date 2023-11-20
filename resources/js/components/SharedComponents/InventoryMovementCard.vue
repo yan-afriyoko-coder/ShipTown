@@ -14,9 +14,9 @@
                   </tr>
                   <tr>
                     <td @click="toggleDetails()">type:</td>
-                    <td class="pl-1"><a href="" @click="setUrlParameter('filter[type]', record['type'] )">{{ record['type'] }}</a></td>
+                    <td class="pl-1" v-bind:class="{ 'bg-warning': record['type'] === 'stocktake' }"><a href="" @click="setUrlParameter('filter[type]', record['type'] )">{{ record['type'] }}</a></td>
                   </tr>
-                  <tr>ų
+                  <tr>
                     <td @click="toggleDetails()">description:</td>
                     <td class="pl-1"><a href="" @click="setUrlParameter('filter[description]', record['description'] )">{{ record['description'] }}</a></td>
                   </tr>
