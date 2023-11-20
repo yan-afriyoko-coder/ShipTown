@@ -85,7 +85,16 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
             ->where('custom_unique_reference_id', $salesRecord->uuid)
             ->first();
 
+        $attributes = [
+            'sequence_number' => null,
+            'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time)->subHour(),
+            'type' => $salesRecord->type === 'rms_sale' ? 'sale' : 'adjustment',
+            'quantity_delta' => $salesRecord->quantity,
+            'description' => $salesRecord->type === 'rms_sale' ? 'rms_sale' : 'rmsapi_inventory_movement',
+        ];
+
         if ($inventoryMovement) {
+            $inventoryMovement->update($attributes);
             $salesRecord->update([
                 'inventory_movement_id' => $inventoryMovement->getKey(),
                 'processed_at' => now()
@@ -99,18 +108,9 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
             ->first();
 
         if ($salesRecord->type === 'rms_sale') {
-            $inventoryMovement = InventoryService::sell($inventory, $salesRecord->quantity, [
-                'custom_unique_reference_id' => $salesRecord->uuid,
-                'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time)->subHour(),
-                'description' => 'rms_sale',
-            ]);
+            $inventoryMovement = InventoryService::sell($inventory, $salesRecord->quantity, $attributes);
         } else {
-            $inventoryMovement = InventoryService::adjust($inventory, $salesRecord->quantity, [
-                'type' => $salesRecord->type,
-                'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time)->subHour(),
-                'description' => 'rmsapi_inventory_movement',
-                'custom_unique_reference_id' => $salesRecord->uuid
-            ]);
+            $inventoryMovement = InventoryService::adjust($inventory, $salesRecord->quantity, $attributes);
         }
 
         $salesRecord->update([

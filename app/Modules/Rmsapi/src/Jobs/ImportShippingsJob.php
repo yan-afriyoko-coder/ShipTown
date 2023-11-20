@@ -24,8 +24,6 @@ class ImportShippingsJob extends UniqueJob
 {
     private RmsapiConnection $rmsapiConnection;
 
-    public int $uniqueFor = 300;
-
     public function uniqueId(): string
     {
         return implode('-', [get_class($this), $this->rmsapiConnection->getKey()]);

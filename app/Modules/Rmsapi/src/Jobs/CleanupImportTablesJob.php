@@ -2,23 +2,14 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
+use App\Abstracts\UniqueJob;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
 use App\Modules\Rmsapi\src\Models\RmsapiShippingImports;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
-class CleanupImportTablesJob implements ShouldQueue
+class CleanupImportTablesJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
     public function handle(): bool
     {
         // remove duplicates from products import table, keep the latest only
