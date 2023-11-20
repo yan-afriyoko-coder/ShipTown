@@ -86,6 +86,7 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
             ->first();
 
         $attributes = [
+            'custom_unique_reference_id' => $salesRecord->uuid,
             'sequence_number' => null,
             'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time)->subHour(),
             'type' => $salesRecord->type === 'rms_sale' ? 'sale' : 'adjustment',
@@ -95,6 +96,7 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
 
         if ($inventoryMovement) {
             $inventoryMovement->update($attributes);
+
             $salesRecord->update([
                 'inventory_movement_id' => $inventoryMovement->getKey(),
                 'processed_at' => now()
