@@ -12,5 +12,8 @@ class EveryFiveMinutesEventListener
     public function handle()
     {
         ImportAllJob::dispatch();
+        UpdateImportedSalesRecordsJob::dispatch();
+        ProcessImportedProductRecordsJob::dispatch();
+        ProcessImportedSalesRecordsJob::dispatch();
     }
 }

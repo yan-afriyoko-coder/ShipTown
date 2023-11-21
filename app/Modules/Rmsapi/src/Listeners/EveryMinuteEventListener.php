@@ -10,8 +10,5 @@ class EveryMinuteEventListener
 {
     public function handle()
     {
-        UpdateImportedSalesRecordsJob::dispatch();
-        ProcessImportedProductRecordsJob::dispatch();
-        ProcessImportedSalesRecordsJob::dispatch();
     }
 }
