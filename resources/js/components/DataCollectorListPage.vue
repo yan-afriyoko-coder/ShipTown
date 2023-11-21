@@ -20,12 +20,9 @@
             </div>
         </div>
 
-        <div class="row mt-2" v-if="data.length === 0">
-            <div class="col">
-                <div class="alert alert-info" role="alert">
-                    No data collections found
-                </div>
-            </div>
+        <div v-if="(data !== null) && (data.length === 0)" class="text-secondary small text-center mt-3">
+            No records found<br>
+            Click + to create one<br>
         </div>
 
         <template v-for="record in data">
@@ -123,7 +120,7 @@
                     showArchived: false,
                     map_fields: [],
                     csv: null,
-                    data: [],
+                    data: null,
                     nextUrl: null,
                     page: 1,
                     newCollectionName: null,
