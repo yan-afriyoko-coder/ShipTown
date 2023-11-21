@@ -111,6 +111,7 @@
                             @endhasrole
 
 
+                            <a class="dropdown-item text-white lightHover" href="https://ship.town/academy" target="_blank">{{ __('Academy') }}</a>
                             <a class="dropdown-item text-white lightHover" href="https://www.youtube.com/channel/UCl04S5dRXop1ZdZsOqY3OnA" target="_blank">{{ __('YouTube') }}</a>
                             <a class="dropdown-item text-white lightHover" href="https://docs.google.com/spreadsheets/d/1IagdPL-ZKOz0-_Rf83ukhDKj02S-DpgLTz7LrvzWWR4/copy" target="_blank">{{ __('Shelf Labels') }}</a>
 
