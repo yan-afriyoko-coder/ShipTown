@@ -88,7 +88,7 @@
                 this.setUrlParameter('filter[description]', '');
                 this.setUrlParameter('per_page', 20);
                 this.setUrlParameter('search', search);
-                this.setUrlParameter('sort', '-occurred_at,-id');
+                this.getUrlFilterOrSet('sort', '-occurred_at,-sequence_number,-id');
                 this.reloadProducts();
             },
 
@@ -108,7 +108,7 @@
 
                 let params = this.$router.currentRoute.query;
                 params['include'] = 'product,inventory,user,product.tags';
-                params['sort'] = '-occurred_at,-id';
+                params['sort'] = this.getUrlFilterOrSet('sort', '-occurred_at,-sequence_number,-id');
                 params['page'] = page;
                 params['per_page'] = this.perPage;
 
