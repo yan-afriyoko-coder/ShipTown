@@ -4,6 +4,7 @@ namespace App\Modules\Rmsapi\src;
 
 use App\Events\EveryDayEvent;
 use App\Events\EveryFiveMinutesEvent;
+use App\Events\EveryHourEvent;
 use App\Events\EveryMinuteEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
