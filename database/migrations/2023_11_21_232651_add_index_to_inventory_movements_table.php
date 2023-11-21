@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('inventory_movements', function (Blueprint $table) {
-            $table->index(['occurred_at DESC', 'sequence_number DESC','id DESC']);
+            $table->index(['occurred_at DESC', 'sequence_number DESC', 'id DESC'], 'occurred_at_sequence_number_id_index');
         });
     }
 };
