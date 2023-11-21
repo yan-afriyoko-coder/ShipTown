@@ -36,6 +36,11 @@
             @hidden="onModalHidden">
         </data-collector-quantity-request-modal>
 
+        <div v-if="(dataCollectionRecords !== null) && (dataCollectionRecords.length === 0)" class="text-secondary small text-center mt-3">
+            No records found<br>
+            Scan or type in SKU to start<br>
+        </div>
+
         <template v-for="record in dataCollectionRecords">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
