@@ -20,14 +20,15 @@ class EnsureAllRecordsExistsJob extends UniqueJob
     public function handle()
     {
         DB::statement('
-            INSERT INTO orders_products_totals (order_id, created_at)
+            INSERT INTO orders_products_totals (order_id, created_at, updated_at)
                 SELECT
                   orders.id as order_id,
+                  now(),
                   now()
 
                 FROM orders
                 LEFT JOIN orders_products_totals ON orders_products_totals.order_id = orders.id
-                WHERE orders.order_place_at BETWEEN ? AND ?
+                WHERE orders.order_placed_at BETWEEN ? AND ?
                     AND ISNULL(orders_products_totals.id)
         ', [$this->fromDateTime, $this->toDateTime]);
     }
