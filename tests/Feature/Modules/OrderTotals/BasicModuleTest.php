@@ -17,6 +17,10 @@ class BasicModuleTest extends TestCase
 
         $orderProduct = $orderProduct->refresh();
 
+        $this->assertDatabaseHas('orders', ['id' => $orderProduct->order_id]);
+        $this->assertDatabaseHas('orders', ['product_line_count' => 1]);
+        $this->assertDatabaseHas('orders', ['total_products' => $orderProduct->quantity_ordered * $orderProduct->price]);
+
         $this->assertDatabaseHas('orders_products_totals', ['order_id' => $orderProduct->order_id]);
         $this->assertDatabaseHas('orders_products_totals', ['count' => 1]);
         $this->assertDatabaseHas('orders_products_totals', ['quantity_ordered' => $orderProduct->quantity_ordered]);
