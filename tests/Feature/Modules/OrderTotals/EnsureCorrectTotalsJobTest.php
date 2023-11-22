@@ -4,6 +4,7 @@ namespace Tests\Feature\Modules\OrderTotals;
 
 use App\Events\EveryDayEvent;
 use App\Events\EveryHourEvent;
+use App\Events\EveryMinuteEvent;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderProductTotal;
@@ -21,7 +22,7 @@ class EnsureCorrectTotalsJobTest extends TestCase
 
         Bus::fake(EnsureCorrectTotalsJob::class);
 
-        EveryHourEvent::dispatch();
+        EveryMinuteEvent::dispatch();
 
         Bus::assertDispatched(EnsureCorrectTotalsJob::class);
     }
@@ -29,21 +30,27 @@ class EnsureCorrectTotalsJobTest extends TestCase
     public function test_if_updates_totals()
     {
         InventoryReservationsEventServiceProviderBase::enableModule();
+
+        $order = Order::factory()->create(['order_placed_at' => now()]);
+
         // Create Order with order product
         /** @var OrderProduct $orderProduct */
-        $orderProduct = OrderProduct::factory()->create();
+        $orderProduct = OrderProduct::factory()->create(['order_id' => $order->getKey()]);
         $orderProduct = $orderProduct->refresh();
 
         // create order without any orderProduct
-        Order::factory()->create();
+        Order::factory()->create(['order_placed_at' => now()]);
 
         OrderProductTotal::query()->forceDelete();
 
-        EnsureAllRecordsExistsJob::dispatchSync();
+        ray()->showQueries();
+
+        EnsureAllRecordsExistsJob::dispatchSync(now()->subHour(), now()->addDay());
+        EnsureCorrectTotalsJob::dispatch();
+
+        ray(OrderProduct::query()->get()->toArray());
 
         $this->assertDatabaseCount('orders_products_totals', 2);
-
-        EnsureCorrectTotalsJob::dispatchSync();
 
         $this->assertDatabaseHas('orders_products_totals', ['order_id' => $orderProduct->order_id]);
         $this->assertDatabaseHas('orders_products_totals', ['count' => 1]);

@@ -3,13 +3,12 @@
 namespace App\Modules\OrderTotals\src\Jobs;
 
 use App\Abstracts\UniqueJob;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class EnsureAllRecordsExistsJob extends UniqueJob
 {
-    private Carbon $fromDateTime;
-    private Carbon $toDateTime;
+    private mixed $fromDateTime;
+    private mixed $toDateTime;
 
     public function __construct($fromDateTime = null, $toDateTime = null)
     {
@@ -19,7 +18,7 @@ class EnsureAllRecordsExistsJob extends UniqueJob
 
     public function handle()
     {
-        DB::statement('
+        DB::insert('
             INSERT INTO orders_products_totals (order_id, created_at, updated_at)
                 SELECT
                   orders.id as order_id,
@@ -30,6 +29,6 @@ class EnsureAllRecordsExistsJob extends UniqueJob
                 LEFT JOIN orders_products_totals ON orders_products_totals.order_id = orders.id
                 WHERE orders.order_placed_at BETWEEN ? AND ?
                     AND ISNULL(orders_products_totals.id)
-        ', [$this->fromDateTime, $this->toDateTime]);
+        ', [$this->fromDateTime, $this->toDateTime ?? DB::raw('NOW()')]);
     }
 }
