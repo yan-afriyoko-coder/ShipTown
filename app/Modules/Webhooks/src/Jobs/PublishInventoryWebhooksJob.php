@@ -9,6 +9,7 @@ use App\Models\Warehouse;
 use App\Modules\Webhooks\src\Models\PendingWebhook;
 use App\Modules\Webhooks\src\Services\SnsService;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class PublishOrdersWebhooksJob.
@@ -47,6 +48,11 @@ class PublishInventoryWebhooksJob extends UniqueJob
                 PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->update(['reserved_at' => now()]);
 
                 $response = $this->publishInventoryMessage($chunk);
+
+                Log::debug('Published Inventory Webhooks', [
+                    'published_at' => now(),
+                    'sns_message_id' => $response->get('MessageId'),
+                ]);
 
                 PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->update([
                     'published_at' => now(),

@@ -2,54 +2,33 @@
 
 namespace App\Modules\OrderTotals\src\Jobs;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use App\Abstracts\UniqueJob;
 use Illuminate\Support\Facades\DB;
 
-class EnsureAllRecordsExistsJob implements ShouldQueue
+class EnsureAllRecordsExistsJob extends UniqueJob
 {
-    use Dispatchable,
-        InteractsWithQueue,
-        Queueable,
-        SerializesModels;
+    private mixed $fromDateTime;
+    private mixed $toDateTime;
 
-    /**
-     * @var string
-     */
-    private string $checkQuery = /** @lang text */
-        '
-        SELECT count(*) as count
-        FROM orders
-        LEFT JOIN orders_products_totals ON orders_products_totals.order_id = orders.id
-        WHERE ISNULL(orders_products_totals.id)
-        ';
+    public function __construct($fromDateTime = null, $toDateTime = null)
+    {
+        $this->fromDateTime = $fromDateTime ?? now()->subHour();
+        $this->toDateTime = $toDateTime ?? now();
+    }
 
-    /**
-     * @var string
-     */
-    private string $insertQuery = /** @lang text */
-        'INSERT INTO orders_products_totals (order_id, created_at)
-        SELECT
-          orders.id as order_id,
-          now()
-
-        FROM orders
-        LEFT JOIN orders_products_totals ON orders_products_totals.order_id = orders.id
-        WHERE ISNULL(orders_products_totals.id)
-        ';
-
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
     public function handle()
     {
-        do {
-            DB::statement($this->insertQuery);
-        } while (data_get(DB::select($this->checkQuery), '0.count') > 0);
+        DB::insert('
+            INSERT INTO orders_products_totals (order_id, created_at, updated_at)
+                SELECT
+                  orders.id as order_id,
+                  now(),
+                  now()
+
+                FROM orders
+                LEFT JOIN orders_products_totals ON orders_products_totals.order_id = orders.id
+                WHERE orders.order_placed_at BETWEEN ? AND ?
+                    AND ISNULL(orders_products_totals.id)
+        ', [$this->fromDateTime, $this->toDateTime ?? DB::raw('NOW()')]);
     }
 }

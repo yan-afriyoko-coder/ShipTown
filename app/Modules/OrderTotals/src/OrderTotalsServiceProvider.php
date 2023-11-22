@@ -4,6 +4,7 @@ namespace App\Modules\OrderTotals\src;
 
 use App\Events\EveryDayEvent;
 use App\Events\EveryHourEvent;
+use App\Events\EveryMinuteEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
@@ -39,12 +40,12 @@ class OrderTotalsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        SyncRequestedEvent::class => [
-            Listeners\DispatchDatabaseCheckJobs::class
+        EveryMinuteEvent::class => [
+            Listeners\EveryMinuteEventListener::class
         ],
 
-        EveryHourEvent::class => [
-            Listeners\DispatchDatabaseCheckJobs::class
+        EveryDayEvent::class => [
+            Listeners\EveryDayEventListener::class,
         ],
 
         OrderCreatedEvent::class => [
