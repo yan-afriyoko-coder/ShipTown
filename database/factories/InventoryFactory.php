@@ -19,10 +19,10 @@ class InventoryFactory extends Factory
                 return Product::factory()->create();
             },
             'warehouse_id' => function() {
-                return $this->getOrCreateWarehouse()->getKey();
+                return Warehouse::factory()->create();
             },
             'warehouse_code' => function() {
-                return $this->getOrCreateWarehouse()->code;
+                return Warehouse::factory()->create();
             },
         ];
     }
