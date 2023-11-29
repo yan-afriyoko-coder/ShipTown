@@ -21,10 +21,11 @@ class DataCollectorRecordController extends Controller
 
         $resource = $report->queryBuilder()
             ->orderByRaw('
-                ISNULL(data_collection_records.quantity_to_scan) DESC,
                 IFNULL(data_collection_records.quantity_requested, 0) != (data_collection_records.total_transferred_in + data_collection_records.total_transferred_out) DESC,
-                ISNULL(quantity_requested) DESC,
-                (data_collection_records.quantity_scanned > 0) DESC, shelf_location, product.sku')
+                data_collection_records.is_scanned ASC, shelf_location ASC, product.sku,
+                ISNULL(quantity_requested) DESC
+
+                ')
             ->simplePaginate(request()->get('per_page', 10))
             ->appends(request()->query());
 

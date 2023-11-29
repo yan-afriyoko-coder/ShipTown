@@ -4,26 +4,26 @@
         <div class="container text-white">
             <div class="d-block mb-0 navbar-dark bg-primary">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                    <a id="dashboard_link" type="button" class="btn btn-primary" href="{{ route('dashboard') }}"><font-awesome-icon icon="chart-bar" class="fa-lg"></font-awesome-icon></a>
+                    <a style="width: 40px" id="dashboard_link" type="button" class="btn btn-primary" href="{{ route('dashboard') }}"><font-awesome-icon icon="chart-bar" class="fa-lg"></font-awesome-icon></a>
                     <a id="products_link" type="button" class="btn btn-primary " href="{{ route('products') }}">{{ __('Products') }}</a>
                     <a id="orders_link" type="button" class="btn btn-primary" href="{{ route('orders') }}">{{ __('Orders') }}</a>
 
                     @if(Auth::user()->warehouse_id)
                         <!-- Tools -->
-                        <div class="dropdown position-static">
+                        <div class="dropdown">
                             <a id="tools_link" class="dropdown-toggle btn btn-primary" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ __('Tools') }}<span class="caret"></span>
                             </a>
 
-                            <div class="dropdown-menu dropdown-menu-right w-100 text-center bg-primary" aria-labelledby="navbarDropdown" >
-                                <a id="stocktaking_link" class="btn btn-primary d-block" href="{{ route('stocktaking') }}">{{ __('Stocktaking') }}</a>
-                                <a id="restocking_link" class="btn btn-primary d-block" href="{{ route('reports.restocking' , ['sort' => '-quantity_required', 'cache_name' => 'restocking_page']) }}">{{ __('Restocking') }}</a>
-                                <a id="data_collector_link" class="btn btn-primary d-block" href="{{ route('data-collector') }}">{{ __('Data Collector') }}</a>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-md-left w-auto text-left bg-primary " aria-labelledby="navbarDropdown" >
+                                <a class="dropdown-item text-white lightHover mt-1" id="stocktaking_link" href="{{ route('stocktaking') }}">{{ __('Stocktaking') }}</a>
+                                <a class="dropdown-item text-white lightHover mt-1" id="restocking_link" href="{{ route('reports.restocking' , ['sort' => '-quantity_required', 'cache_name' => 'restocking_page']) }}">{{ __('Restocking') }}</a>
+                                <a class="dropdown-item text-white lightHover mt-1" id="data_collector_link" href="{{ route('data-collector') }}">{{ __('Data Collector') }}</a>
+                                <a class="dropdown-item text-white lightHover mt-1 mb-1" id="inventory_movements_link" href="{{ route('reports.inventory-movements') }}">{{ __('Inventory Movements') }}</a>
                             </div>
                         </div>
                     @endif
                 </div>
-
             </div>
 
             <!-- Burger menu -->
@@ -75,7 +75,6 @@
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.picks') }}">{{ __('FC Picks') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.shipments') }}">{{ __('FC Shipments') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory') }}">{{ __('Inventory') }}</a>
-                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements') }}">{{ __('Inventory Movements') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements-summary').'?filter[created_at_between]=-7days,now&per_page=1000' }}">{{ __('Inventory Movements Summary') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.restocking') }}">{{ __('Restocking') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.stocktake-suggestions.index') }}">{{ __('Stocktake Suggestions') }}</a>

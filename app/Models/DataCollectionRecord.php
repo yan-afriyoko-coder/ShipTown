@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Helpers\HasQuantityRequiredSort;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -21,6 +21,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  *  @property double $quantity_requested
  *  @property double $quantity_scanned
  *  @property double $quantity_to_scan
+ *  @property bool   $is_scanned
  *  @property Carbon $created_at
  *  @property Carbon $updated_at
  *

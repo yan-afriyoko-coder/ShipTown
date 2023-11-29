@@ -35,6 +35,10 @@ class DatabaseSeeder extends Seeder
             Demo\OrderProductNotExistsSeeder::class,
 
             Demo\ProductsTagsSeeder::class,
+
+            Demo\DataCollections\TransfersFromWarehouseSeeder::class,
+            Demo\DataCollections\ArchivedTransfersFromWarehouseSeeder::class,
+
             ProductPriceSeeder::class,
 
             InventorySeeder::class,
@@ -43,8 +47,6 @@ class DatabaseSeeder extends Seeder
 
 //            RestockingReportSeeder::class,
 //            DataCollectionsSeeder::class,
-            DataCollections\TransfersFromWarehouseSeeder::class,
-            DataCollections\ArchivedTransfersFromWarehouseSeeder::class,
 //            RmsapiConnectionSeeder::class,
 //            AutomationsSeeder::class,
 

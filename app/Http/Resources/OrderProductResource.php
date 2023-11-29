@@ -2,18 +2,15 @@
 
 namespace App\Http\Resources;
 
+use App\Models\OrderProduct;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin OrderProduct
+ */
 class OrderProductResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return array
-     */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'id'                              => $this->id,
@@ -21,6 +18,7 @@ class OrderProductResource extends JsonResource
             'product_id'                      => $this->product_id,
             'sku_ordered'                     => $this->sku_ordered,
             'name_ordered'                    => $this->name_ordered,
+            'is_shipped'                      => $this->is_shipped,
             'price'                           => $this->price,
             'quantity_ordered'                => $this->quantity_ordered,
             'quantity_split'                  => $this->quantity_split,

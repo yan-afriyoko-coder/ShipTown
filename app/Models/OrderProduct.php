@@ -26,6 +26,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property int|null    $product_id
  * @property string      $sku_ordered
  * @property string      $name_ordered
+ * @property bool        $is_shipped
  * @property float       $price
  * @property float       $quantity_ordered
  * @property float       $quantity_split
@@ -118,6 +119,7 @@ class OrderProduct extends BaseModel
     ];
 
     protected $casts = [
+        'is_shipped'                => 'boolean',
         'price'                     => 'float',
         'quantity_ordered'          => 'float',
         'quantity_split'            => 'float',
@@ -169,6 +171,7 @@ class OrderProduct extends BaseModel
 
                 AllowedFilter::exact('product_id'),
                 AllowedFilter::exact('order_id'),
+                AllowedFilter::exact('is_shipped'),
 
                 AllowedFilter::scope('current_shelf_location', 'MinimumShelfLocation'),
                 AllowedFilter::exact('order.status_code')->ignore(''),
@@ -187,6 +190,7 @@ class OrderProduct extends BaseModel
             ->allowedSorts([
                 'inventory_source_shelf_location',
                 'sku_ordered',
+                'is_shipped',
                 'id',
             ]);
     }
