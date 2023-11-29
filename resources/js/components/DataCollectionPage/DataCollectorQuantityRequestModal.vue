@@ -12,14 +12,14 @@
                     <div class="row text-right mt-0 mb-3">
                         <div class="col">
                             <number-card label="price" :number="prices ? prices['price'] : 0"></number-card>
-                            <number-card label="quantity" :number="productNew ? productNew['inventory'][this.currentUser()['warehouse']['code']]['quantity'] : 0"></number-card>
+                            <number-card :class="{ 'bg-warning': productNew && dataCollectionRecord && dataCollectionRecord['quantity_requested'] >= productNew['inventory'][this.currentUser()['warehouse']['code']]['quantity']}" label="in stock" :number="productNew ? productNew['inventory'][this.currentUser()['warehouse']['code']]['quantity'] : 0"></number-card>
                             <text-card label="shelf" :text="productNew ? productNew['inventory'][this.currentUser()['warehouse']['code']]['shelf_location'] : 0"></text-card>
                         </div>
                     </div>
                     <div class="row-col text-right mt-3 mb-3">
-                        <number-card :class="{ 'bg-warning': productNew && dataCollectionRecord && dataCollectionRecord['quantity_requested'] > productNew['inventory'][this.currentUser()['warehouse']['code']]['quantity']}" label="requested" :number="dataCollectionRecord ? dataCollectionRecord['quantity_requested'] : 0"></number-card>
-                        <number-card label="scanned" :number="dataCollectionRecord ? dataCollectionRecord['quantity_scanned'] : 0"></number-card>
-                        <number-card label="to_scan" :number="dataCollectionRecord ? dataCollectionRecord['quantity_to_scan'] : 0"></number-card>
+                        <number-card label="requested" :number="dataCollectionRecord ? dataCollectionRecord['quantity_requested'] : 0"></number-card>
+                        <number-card :class="{ 'bg-warning': productNew && dataCollectionRecord && dataCollectionRecord['quantity_scanned'] > dataCollectionRecord['quantity_requested']}" label="scanned" :number="dataCollectionRecord ? dataCollectionRecord['quantity_scanned'] : 0"></number-card>
+                        <number-card :class="{ 'bg-warning': productNew && dataCollectionRecord && dataCollectionRecord['quantity_scanned'] > 0 && dataCollectionRecord['quantity_to_scan'] > 0}" label="to scan" :number="dataCollectionRecord ? dataCollectionRecord['quantity_to_scan'] : 0"></number-card>
                     </div>
                 </div>
             </div>

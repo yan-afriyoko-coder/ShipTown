@@ -11,10 +11,11 @@ class RepublishWebhooksForDiscrepencies extends UniqueJob
     {
         // WARNING: Use with caution! It will override the inventory
         DB::statement('
-            INSERT INTO modules_webhooks_pending_webhooks (model_class, model_id, created_at, updated_at)
+            INSERT INTO modules_webhooks_pending_webhooks (model_class, model_id, message, created_at, updated_at)
             SELECT
                 "App\\Models\\Inventory" as model_class,
                 modules_rmsapi_products_quantity_comparison_view.inventory_id as model_id,
+                "{}" as message,
                 now() as created_at,
                 now() as updated_at
             FROM modules_rmsapi_products_quantity_comparison_view

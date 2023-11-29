@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Models\DataCollectionRecord;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -11,12 +10,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class DataCollectionRecordResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  Request  $request
-     * @return array
-     */
     public function toArray($request): array
     {
         return [
@@ -25,6 +18,7 @@ class DataCollectionRecordResource extends JsonResource
             'quantity_requested' => $this->quantity_requested,
             'quantity_scanned'   => $this->quantity_scanned,
             'quantity_to_scan'   => $this->quantity_to_scan,
+            'is_scanned'         => $this->is_scanned,
             'created_at'         => $this->created_at,
             'updated_at'         => $this->updated_at,
 

@@ -373,7 +373,6 @@ return new class extends Migration
 
         Schema::create('orders_products', function (Blueprint $table) {
             $table->id();
-            $table->string('custom_unique_reference_id')->unique()->nullable();
             $table->foreignId('order_id');
             $table->foreignId('product_id')->nullable();
             $table->string('sku_ordered');
@@ -396,6 +395,7 @@ return new class extends Migration
             $table->decimal('quantity_not_picked', 10)->default(0);
             $table->softDeletes();
             $table->timestamps();
+            $table->string('custom_unique_reference_id')->unique()->nullable();
 
             $table->foreign('product_id')
                 ->on('products')
