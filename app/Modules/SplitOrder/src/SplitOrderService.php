@@ -138,6 +138,7 @@ class SplitOrderService
             'quantity_to_pick',
             'quantity_picked',
             'quantity_skipped_picking',
+            'is_shipped',
         ]);
 
         $newOrderProduct->order()->associate($this->getNewOrderOrCreate());
