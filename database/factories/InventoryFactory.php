@@ -8,33 +8,18 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class InventoryFactory extends Factory
 {
-    private Warehouse $warehouse;
-
     public function definition(): array
     {
+        /** @var Warehouse $warehouse */
+        $warehouse = Warehouse::factory()->create();
+
         return [
-            'quantity' => rand(1, 100),
-            'shelve_location' => $this->faker->randomLetter() . $this->faker->randomNumber(2),
             'product_id' => function () {
                 return Product::factory()->create();
             },
-            'warehouse_id' => function() {
-                return Warehouse::factory()->create();
-            },
-            'warehouse_code' => function() {
-                return Warehouse::factory()->create();
-            },
+            'warehouse_id' => $warehouse->getKey(),
+            'warehouse_code' => $warehouse->code,
+            'quantity' => rand(1, 100),
         ];
-    }
-
-    private function getOrCreateWarehouse(): Warehouse
-    {
-        if ($this->warehouse) {
-            return $this->warehouse;
-        }
-
-        $this->warehouse = Warehouse::factory()->create();
-
-        return $this->warehouse;
     }
 }
