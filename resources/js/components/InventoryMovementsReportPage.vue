@@ -64,7 +64,7 @@
 
         data: function() {
             return {
-                per_page: 10,
+                per_page: 25,
                 pagesLoaded: 0,
                 reachedEnd: false,
 
@@ -86,7 +86,6 @@
             findText(search) {
                 this.setUrlParameter('filter[occurred_at_between]', '');
                 this.setUrlParameter('filter[description]', '');
-                this.setUrlParameter('per_page', 20);
                 this.setUrlParameter('search', search);
                 this.getUrlFilterOrSet('sort', '-occurred_at,-sequence_number');
                 this.reloadProducts();

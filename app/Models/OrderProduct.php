@@ -45,33 +45,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property-read Order $order
  * @property-read Product $product
  *
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct increment($column, $quantity)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct addInventorySource($inventory_location_id)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct minimumShelfLocation($currentLocation)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct newQuery()
- * @method static Builder|OrderProduct onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct query()
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereInStock($in_stock)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereNameOrdered($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereOrderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct wherePrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereProductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityNotPicked($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityOrdered($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityToShip($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityPicked($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityShipped($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantitySkippedPicking($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityToPick($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereSkuOrdered($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereStatusCodeIn($statusCodeArray)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereUpdatedAt($value)
- * @method static Builder|OrderProduct withTrashed()
- * @method static Builder|OrderProduct withoutTrashed()
  *
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereHasStockReserved($statusCodeArray)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityOutstanding($value)
@@ -294,42 +269,17 @@ class OrderProduct extends BaseModel
         });
     }
 
-    /**
-     * @param Builder $query
-     * @param int     $inventory_location_id
-     *
-     * @return Builder
-     */
     public function scopeAddInventorySource($query, $inventory_location_id)
     {
         return $query;
-//        $source_inventory = Inventory::query()
-//            ->select([
-//                'location_id as inventory_source_location_id',
-//                'shelve_location as inventory_source_shelf_location',
-//                'quantity as inventory_source_quantity',
-//                'product_id as inventory_source_product_id',
-//            ])
-//            ->where(['location_id'=>$inventory_location_id])
-//            ->toBase();
-//
-//        return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {
-//            $join->on('order_products.product_id', '=', 'inventory_source_product_id');
-//        });
     }
 
-    /**
-     * @return BelongsTo|Order
-     */
-    public function order()
+    public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
-    /**
-     * @return BelongsTo|Product
-     */
-    public function product()
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }

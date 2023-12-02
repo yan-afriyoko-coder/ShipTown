@@ -198,7 +198,7 @@
                                                     </div>
                                                     <div class="col"
                                                          v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
-                                                        <number-card label="inventory"
+                                                        <number-card label="inventory "
                                                                      :number="getProductQuantity(order_product)"></number-card>
                                                     </div>
                                                 </div>
@@ -416,8 +416,6 @@
                                         </div>
                                     </div>
                                 </template>
-
-
                             </div>
                         </div>
                     </div>
