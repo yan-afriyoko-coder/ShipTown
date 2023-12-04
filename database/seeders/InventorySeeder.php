@@ -3,14 +3,13 @@
 namespace Database\Seeders;
 
 use App\Models\Inventory;
-use App\Models\Product;
-use App\Models\Warehouse;
-use App\Services\InventoryService;
+use App\Models\InventoryMovement;
+use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
-class InventorySeeder extends Seeder
+class   InventorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -19,28 +18,34 @@ class InventorySeeder extends Seeder
      */
     public function run()
     {
-        Warehouse::query()
-            ->where('code', '!=', DB::raw('999'))
+        $movements = Inventory::query()
+            ->where('warehouse_code', '!=', DB::raw('999'))
             ->get()
-            ->each(function (Warehouse $warehouse) {
-                Product::query()
-                    ->get()
-                    ->each(function (Product $product) use ($warehouse) {
-                        $restock_level = Arr::random([1, 6, 6, 6, 12, 12, 12, 12, 24, 24, 24, 36, 72]);
+            ->map(function (Inventory $inventory) {
+                $restock_level = fake()->randomElement([1, 6, 6, 6, 12, 12, 12, 12, 24, 24, 24, 36, 72]);
+                $random_location = Str::upper(fake()->randomLetter . fake()->randomNumber(2));
+                $inventory->updateQuietly([
+                    'restock_level'     => $restock_level,
+                    'reorder_point'     => round($restock_level / 3),
+                    'shelve_location'   => $random_location
+                ]);
 
-                        $locations = 'ABCDEFGHIJKLMNOPRSTUWXYZ';
-                        $random_location = $locations[rand(0, strlen($locations) -1)] . rand(10, 50);
-
-                        $inventory = Inventory::find($product->id, $warehouse->id);
-
-                        $inventory->update([
-                            'restock_level'     => $restock_level,
-                            'reorder_point'     => round($restock_level / 3),
-                            'shelve_location'   => $random_location
-                        ]);
-
-                        InventoryService::adjust($inventory, $inventory->restock_level, ['description' => 'First delivery']);
-                    });
+                return [
+                    'occurred_at' => '2022-01-03 09:07:00',
+                    'inventory_id' => $inventory->getKey(),
+                    'product_id' => $inventory->product_id,
+                    'warehouse_id' => $inventory->warehouse_id,
+                    'quantity_before' => 0,
+                    'quantity_delta' => $inventory->restock_level,
+                    'quantity_after' => $inventory->restock_level,
+                    'type' => 'stocktake',
+                    'description' => 'initial stocktake',
+                    'created_at' => '2022-01-03 09:07:00'
+                ];
             });
+
+        InventoryMovement::query()->insert($movements->toArray());
+
+        SequenceNumberJob::dispatch();
     }
 }

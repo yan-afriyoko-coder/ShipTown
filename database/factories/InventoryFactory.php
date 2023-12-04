@@ -14,6 +14,7 @@ class InventoryFactory extends Factory
         $warehouse = Warehouse::factory()->create();
 
         return [
+            'recount_required' => true,
             'product_id' => function () {
                 return Product::factory()->create();
             },

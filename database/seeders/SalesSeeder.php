@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
+use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 use App\Services\InventoryService;
 use Illuminate\Database\Seeder;
 
@@ -24,7 +25,7 @@ class SalesSeeder extends Seeder
 
             $quantityDelta = min(rand(1, 7), $inventory->quantity) * (-1);
 
-            InventoryMovement::query()->create([
+            $attributes[] = [
                 'occurred_at' => now(),
                 'type' => 'sale',
                 'inventory_id' => $inventory->id,
@@ -34,7 +35,11 @@ class SalesSeeder extends Seeder
                 'quantity_delta' => $quantityDelta,
                 'quantity_after' => $inventory->quantity + $quantityDelta,
                 'description' => 'sale',
-            ]);
+            ];
         }
+
+        InventoryMovement::query()->insert($attributes);
+
+        SequenceNumberJob::dispatch();
     }
 }
