@@ -8,6 +8,7 @@ use App\Modules\InventoryTotals\src\InventoryTotalsServiceProvider;
 use App\Modules\Maintenance\src\Jobs\CopyInventoryMovementsToNewTableJob;
 use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,6 +19,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        Artisan::call('up');
+
         QueueMonitorServiceProvider::enableModule();
         InventoryMovementsStatisticsServiceProvider::enableModule();
         InventoryTotalsServiceProvider::enableModule();
@@ -30,12 +33,13 @@ class DatabaseSeeder extends Seeder
             Demo\WarehousesSeeder::class,
             Demo\ProductsSeeder::class,
 
-            Demo\PaidOrdersSeeder::class,
             Demo\TestOrdersSeeder::class,
-            Demo\OrderProductNotExistsSeeder::class,
+
+            Demo\PaidOrdersSeeder::class,
 
             Demo\ProductsTagsSeeder::class,
 
+            Demo\DataCollections\TransferToCorkBranchSeeder::class,
             Demo\DataCollections\TransfersFromWarehouseSeeder::class,
             Demo\DataCollections\ArchivedTransfersFromWarehouseSeeder::class,
 
@@ -70,8 +74,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
 //        RunHourlyJobs::dispatchSync();
-        CopyInventoryMovementsToNewTableJob::dispatch();
+//        CopyInventoryMovementsToNewTableJob::dispatch();
 
-        SyncRequestedEvent::dispatch();
+//        SyncRequestedEvent::dispatch();
     }
 }
