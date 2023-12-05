@@ -45,7 +45,11 @@ return [
         ],
         [
             'class' => \App\Modules\Automations\src\Conditions\Order\LabelTemplateInCondition::class,
-            'description' => 'Label Template in',
+            'description' => 'Courier label template in',
+        ],
+        [
+            'class' => \App\Modules\Automations\src\Conditions\Order\CourierLabelTemplateIsNotInCondition::class,
+            'description' => 'Courier label template NOT in',
         ],
         [
             'class' => \App\Modules\Automations\src\Conditions\Order\LineCountEqualsCondition::class,
