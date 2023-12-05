@@ -13,11 +13,11 @@ return [
         ],
         [
             'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeInCondition::class,
-            'description' => 'Status Code In',
+            'description' => 'Status Code is in',
         ],
         [
             'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeNotInCondition::class,
-            'description' => 'Status Code NOT In',
+            'description' => 'Status Code is NOT in',
         ],
         [
             'class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition::class,
@@ -33,19 +33,23 @@ return [
         ],
         [
             'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeInCondition::class,
-            'description' => 'Shipping Method Code in',
+            'description' => 'Shipping Method Code is in',
         ],
         [
             'class' => \App\Modules\Automations\src\Conditions\Order\ShippingAddressCountryCodeInCondition::class,
-            'description' => 'Shipping Address Country Code in',
+            'description' => 'Shipping Address Country Code is in',
         ],
         [
             'class' => \App\Modules\Automations\src\Conditions\Order\ShippingAddressCountryCodeNotInCondition::class,
-            'description' => 'Shipping Address Country Code NOT in',
+            'description' => 'Shipping Address Country Code is NOT in',
         ],
         [
             'class' => \App\Modules\Automations\src\Conditions\Order\LabelTemplateInCondition::class,
-            'description' => 'Label Template in',
+            'description' => 'Courier label template is in',
+        ],
+        [
+            'class' => \App\Modules\Automations\src\Conditions\Order\CourierLabelTemplateIsNotInCondition::class,
+            'description' => 'Courier label template is NOT in',
         ],
         [
             'class' => \App\Modules\Automations\src\Conditions\Order\LineCountEqualsCondition::class,
@@ -53,7 +57,7 @@ return [
         ],
         [
             'class' => \App\Modules\Automations\src\Conditions\Order\TotalQuantityToShipEqualsCondition::class,
-            'description' => 'Total Quantity To Ship',
+            'description' => 'Total Quantity To Ship equals',
         ],
         [
             'class' => \App\Modules\Automations\src\Conditions\Order\IsPartiallyPaidCondition::class,
