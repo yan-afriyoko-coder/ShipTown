@@ -10,6 +10,7 @@ use App\Models\Warehouse;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\Conditions\Order\IsFullyPackedCondition;
 use App\Modules\Automations\src\Conditions\Order\IsFullyPickedCondition;
+use App\Modules\Automations\src\Conditions\Order\LineCountEqualsCondition;
 use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\AutoRestockLevels\src\AutoRestockLevelsServiceProvider;
@@ -60,8 +61,11 @@ class InstallApp extends Command
         $this->createReadyForCollectionNotificationTemplate();
         $this->createDefaultMailTemplateShipmentNotification();
         $this->createDefaultMailTemplateOversoldProduct();
+
         $this->createPaidToCompleteAutomation();
+        $this->createPickedToCompleteAutomation();
         $this->createPaidToPickedAutomation();
+        $this->createPaidToSingleLineOrdersAutomation();
 
         \App\Services\ModulesService::updateModulesTable();
 
@@ -134,7 +138,8 @@ class InstallApp extends Command
     {
         /** @var Automation $automation */
         $automation = Automation::create([
-            'name' => 'paid to complete',
+            'name' => '"paid" to "complete"',
+            'priority' => 90,
             'enabled' => false,
         ]);
 
@@ -160,7 +165,8 @@ class InstallApp extends Command
     {
         /** @var Automation $automation */
         $automation = Automation::create([
-            'name' => 'picked to complete',
+            'name' => '"picked" to "complete"',
+            'priority' => 91,
             'enabled' => false,
         ]);
 
@@ -186,7 +192,8 @@ class InstallApp extends Command
     {
         /** @var Automation $automation */
         $automation = Automation::create([
-            'name' => 'paid to picked',
+            'name' => '"paid" to "picked"',
+            'priority' => 10,
             'enabled' => false,
         ]);
 
@@ -849,5 +856,32 @@ class InstallApp extends Command
     </html>
         '
         ]);
+    }
+
+    private function createPaidToSingleLineOrdersAutomation()
+    {
+        /** @var Automation $automation */
+        $automation = Automation::create([
+            'name' => '"paid" to "single_line_orders"',
+            'priority' => 10,
+            'enabled' => false,
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => StatusCodeEqualsCondition::class,
+            'condition_value' => 'paid'
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => LineCountEqualsCondition::class,
+            'condition_value' => '1'
+        ]);
+
+        $automation->actions()->create([
+            'action_class' => SetStatusCodeAction::class,
+            'action_value' => 'single_line_orders'
+        ]);
+
+        $automation->update(['enabled' => true]);
     }
 }

@@ -16,6 +16,7 @@ use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Services\ModulesService;
 use App\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Tags\Tag;
@@ -42,6 +43,12 @@ class ClearDatabaseCommand extends Command
         $this->call('down');
 
         $this->resetDatabase();
+
+        DB::transaction(function () {
+            Artisan::call('app:install');
+        });
+
+        $this->call('up');
 
         return CommandAlias::SUCCESS;
     }
