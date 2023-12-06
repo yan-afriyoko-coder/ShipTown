@@ -13,9 +13,9 @@ class JobProcessingListener
     {
         $key = implode('-', ['job_start_time', $event->job->uuid()]);
 
-        Cache::set($key, now(), 3600);
-
         $jobName = data_get($event->job->payload(), 'displayName');
+
+        Cache::set($key, now(), 3600);
 
         if (in_array($jobName, QueueMonitorServiceProvider::$ignoredJobList)) {
             return;

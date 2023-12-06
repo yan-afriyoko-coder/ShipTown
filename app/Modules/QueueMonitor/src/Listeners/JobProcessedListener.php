@@ -19,7 +19,7 @@ class JobProcessedListener
 
         $key = implode('-', ['job_start_time', $event->job->uuid()]);
 
-        $jobStartTime = Cache::get($key);
+        $jobStartTime = Cache::pull($key);
 
         Log::info('Job processed', ['job' => $jobName, 'duration' => now()->diffInSeconds($jobStartTime)]);
     }
