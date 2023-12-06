@@ -18,6 +18,7 @@ use App\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Tags\Tag;
 use Symfony\Component\Console\Command\Command as CommandAlias;
@@ -44,9 +45,13 @@ class ClearDatabaseCommand extends Command
 
         $this->resetDatabase();
 
+        Log::info('Database cleared.');
+
         DB::transaction(function () {
             Artisan::call('app:install');
         });
+
+        Log::info('Application installed.');
 
         $this->call('up');
 
