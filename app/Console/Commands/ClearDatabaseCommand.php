@@ -96,7 +96,6 @@ class ClearDatabaseCommand extends Command
         // now re-register all the roles and permissions (clears cache and reloads relations)
         app()->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
 
-
         App\Modules\Maintenance\src\Jobs\CopyInventoryMovementsToNewTableJob::dispatch();
         App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider::enableModule();
         App\Modules\InventoryReservations\src\EventServiceProviderBase::enableModule();

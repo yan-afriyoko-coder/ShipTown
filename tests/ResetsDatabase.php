@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App;
+use Illuminate\Support\Facades\Artisan;
 
 trait ResetsDatabase
 {
@@ -16,5 +17,7 @@ trait ResetsDatabase
         ray()->className($this)->blue();
 
         App\Console\Commands\ClearDatabaseCommand::resetDatabase();
+
+        Artisan::call('app:install');
     }
 }
