@@ -3,24 +3,10 @@
 namespace App\Console\Commands;
 
 use App;
-use App\Modules\Api2cart\src\Models\Api2cartConnection;
-use App\Modules\Api2cart\src\Models\Api2cartProductLink;
-use App\Modules\Automations\src\Models\Action;
-use App\Modules\Automations\src\Models\Automation;
-use App\Modules\Automations\src\Models\Condition;
-use App\Modules\DpdIreland\src\Models\DpdIreland;
-use App\Modules\MagentoApi\src\Models\MagentoConnection;
-use App\Modules\MagentoApi\src\Models\MagentoProduct;
-use App\Modules\Maintenance\src\Jobs\CopyInventoryMovementsToNewTableJob;
-use App\Modules\Rmsapi\src\Models\RmsapiConnection;
-use App\Services\ModulesService;
-use App\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Spatie\Activitylog\Models\Activity;
-use Spatie\Tags\Tag;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class ClearDatabaseCommand extends Command
@@ -60,6 +46,9 @@ class ClearDatabaseCommand extends Command
 
     public static function resetDatabase(): void
     {
+        \Spatie\Tags\Tag::query()->forceDelete();
+        \Spatie\Activitylog\Models\Activity::query()->forceDelete();
+
         App\Modules\InventoryTotals\src\Models\Configuration::query()->forceDelete();
         App\Modules\InventoryTotals\src\Models\InventoryTotal::query()->forceDelete();
         App\Modules\InventoryTotals\src\Models\InventoryTotalByWarehouseTag::query()->forceDelete();
@@ -87,24 +76,20 @@ class ClearDatabaseCommand extends Command
         App\Models\Session::query()->forceDelete();
         App\Models\Configuration::query()->forceDelete();
 
+        App\Modules\Automations\src\Models\Automation::query()->forceDelete();
+        App\Modules\Automations\src\Models\Condition::query()->forceDelete();
+        App\Modules\Automations\src\Models\Action::query()->forceDelete();
+        App\Modules\Api2cart\src\Models\Api2cartProductLink::query()->forceDelete();
+        App\Modules\Api2cart\src\Models\Api2cartConnection::query()->forceDelete();
+        App\Modules\Rmsapi\src\Models\RmsapiConnection::query()->forceDelete();
+        App\Modules\MagentoApi\src\Models\MagentoProduct::query()->forceDelete();
+        App\Modules\MagentoApi\src\Models\MagentoConnection::query()->forceDelete();
+        App\Modules\DpdIreland\src\Models\DpdIreland::query()->forceDelete();
+        App\User::query()->forceDelete();
 
+        App\Services\ModulesService::updateModulesTable();
 
-        Tag::query()->forceDelete();
-        Automation::query()->forceDelete();
-        Condition::query()->forceDelete();
-        Action::query()->forceDelete();
-        Api2cartProductLink::query()->forceDelete();
-        Api2cartConnection::query()->forceDelete();
-        RmsapiConnection::query()->forceDelete();
-        MagentoProduct::query()->forceDelete();
-        MagentoConnection::query()->forceDelete();
-        DpdIreland::query()->forceDelete();
-        ModulesService::updateModulesTable();
         DB::table('modules_queue_monitor_jobs')->delete();
-        User::query()->forceDelete();
-
-        Activity::query()->forceDelete();
-
 
         App\Models\Configuration::query()->updateOrCreate([], ['disable_2fa' => true]);
 
@@ -112,7 +97,7 @@ class ClearDatabaseCommand extends Command
         app()->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
 
 
-        CopyInventoryMovementsToNewTableJob::dispatch();
+        App\Modules\Maintenance\src\Jobs\CopyInventoryMovementsToNewTableJob::dispatch();
         App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider::enableModule();
         App\Modules\InventoryReservations\src\EventServiceProviderBase::enableModule();
     }
