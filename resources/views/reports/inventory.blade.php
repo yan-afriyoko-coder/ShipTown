@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col">
             <div class="widget-tools-container">
-                <a class="btn btn-primary btn-sm mt-2 fa-arrow-alt-circle-down"  href="{{ request()->fullUrlWithQuery(['filename' =>  __($report_name).'.csv']) }}">{{ __('Download') }}</a>
+                <a class="btn btn-primary btn-sm mt-2 fa-arrow-alt-circle-down"  href="{{ request()->fullUrlWithQuery(['filename' =>  __($report_name).'.csv']) }}">{{ __('Download All') }}</a>
             </div>
             <div class="card">
                 <div class="card-body">

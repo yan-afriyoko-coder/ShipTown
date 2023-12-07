@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title',__('Dashboard'))
+@section('title',__('Fulfillment Statistics'))
 
 @section('content')
 <div class="container dashboard-widgets">
