@@ -24,7 +24,7 @@ class RefillOldOrdersPickingJobTest extends TestCase
             'status_code'     => 'processing',
         ]);
 
-        OrderProduct::factory()->create([
+        OrderProduct::factory(2)->create([
             'order_id' => $order->id,
         ]);
 

@@ -30,10 +30,10 @@ Route::redirect('home', '/')->name('home');
 Route::view('quick-connect/magento', 'quick-connect.magento')->name('quick-connect.magento');
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('fulfilment-dashboard', [DashboardController::class, 'index'])->name('fulfilment-dashboard');
+Route::get('fulfillment-dashboard', [DashboardController::class, 'index'])->name('fulfillment-dashboard');
 Route::get('inventory-dashboard', [Reports\InventoryDashboardController::class, 'index'])->name('inventory-dashboard');
 Route::get('products-merge', [ProductsMergeController::class, 'index'])->name('products-merge');
-Route::view('performance/dashboard', 'performance')->name('performance.dashboard');
+Route::view('fulfillment-statistics', 'fulfillment-statistics')->name('fulfillment-statistics');
 Route::view('products', 'products')->name('products');
 Route::view('picklist', 'picklist')->name('picklist');
 Route::view('orders', 'orders')->name('orders');

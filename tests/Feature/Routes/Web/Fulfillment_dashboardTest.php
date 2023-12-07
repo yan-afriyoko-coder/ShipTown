@@ -1,32 +1,26 @@
 <?php
 
-namespace Tests\Feature\Routes\Web\Performance;
+namespace Tests\Feature\Routes\Web;
 
 use App\User;
 use Tests\TestCase;
 
-/**
- *
- */
-class DashboardTest extends TestCase
+class Fulfillment_dashboardTest extends TestCase
 {
-    /**
-     * @var string
-     */
-    protected string $uri = '/fulfillment-dashboard';
+    protected string $uri = 'fulfillment-dashboard';
 
-    /**
-     * @var User
-     */
-    protected User $user;
+    protected mixed $user;
 
-    /**
-     *
-     */
     protected function setUp(): void
     {
         parent::setUp();
         $this->user = User::factory()->create();
+    }
+
+    /** @test */
+    public function test_if_uri_set()
+    {
+        $this->assertNotEmpty($this->uri);
     }
 
     /** @test */
@@ -57,11 +51,5 @@ class DashboardTest extends TestCase
         $response = $this->get($this->uri);
 
         $response->assertSuccessful();
-    }
-
-    /** @test */
-    public function test_if_uri_set()
-    {
-        $this->assertNotEmpty($this->uri);
     }
 }

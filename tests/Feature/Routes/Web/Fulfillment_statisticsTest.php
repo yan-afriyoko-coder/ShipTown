@@ -3,29 +3,14 @@
 namespace Tests\Feature\Routes\Web;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/**
- *
- */
-class Fulfilment_dashboardTest extends TestCase
+class Fulfillment_statisticsTest extends TestCase
 {
-    use RefreshDatabase;
+    protected string $uri = 'fulfillment-statistics';
 
-    /**
-     * @var string
-     */
-    protected string $uri = 'fulfilment-dashboard';
+    protected mixed $user;
 
-    /**
-     * @var User
-     */
-    protected User $user;
-
-    /**
-     *
-     */
     protected function setUp(): void
     {
         parent::setUp();

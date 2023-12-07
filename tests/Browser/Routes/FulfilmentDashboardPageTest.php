@@ -7,7 +7,7 @@ use Throwable;
 
 class FulfilmentDashboardPageTest extends DuskTestCase
 {
-    private string $uri = '/fulfilment-dashboard';
+    private string $uri = '/fulfillment-dashboard';
 
     /**
      * @throws Throwable

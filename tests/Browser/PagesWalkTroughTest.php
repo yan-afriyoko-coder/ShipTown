@@ -2,10 +2,12 @@
 
 namespace Tests\Browser;
 
+use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\Warehouse;
+use App\Services\InventoryService;
 use App\User;
 use Facebook\WebDriver\Exception\ElementClickInterceptedException;
 use Facebook\WebDriver\Exception\NoSuchElementException;
@@ -34,19 +36,28 @@ class PagesWalkTroughTest extends DuskTestCase
         $product1 = Product::factory()->create(['sku' => '111576']);
         $product2 = Product::factory()->create(['sku' => '222957']);
 
+        $inventory1 = Inventory::query()->where(['product_id' => $product1->getKey(), 'warehouse_id' => $warehouse->getKey()])->first();
+        $inventory2 = Inventory::query()->where(['product_id' => $product2->getKey(), 'warehouse_id' => $warehouse->getKey()])->first();
+
         $this->order = Order::factory()->create(['status_code' => 'paid']);
 
-        OrderProduct::factory()->create([
+        /** @var OrderProduct $orderProduct1 */
+        $orderProduct1 = OrderProduct::factory()->create([
             'order_id' => $this->order->id,
             'product_id' => $product1->getKey(),
             'quantity_ordered' => 1
         ]);
 
-        OrderProduct::factory()->create([
+        /** @var OrderProduct $orderProduct2 */
+        $orderProduct2 = OrderProduct::factory()->create([
             'order_id' => $this->order->id,
             'product_id' => $product2->getKey(),
             'quantity_ordered' => 3
         ]);
+
+
+        InventoryService::stocktake($inventory1, $orderProduct1->quantity_ordered);
+        InventoryService::stocktake($inventory2, $orderProduct2->quantity_ordered);
     }
 
     /**
@@ -61,13 +72,13 @@ class PagesWalkTroughTest extends DuskTestCase
             $browser->disableFitOnFailure();
 
             $this->login($browser);
+            $this->products($browser);
+            $this->orders($browser);
             $this->transferIn($browser);
             $this->stocktaking($browser);
             $this->picklist($browser);
             $this->packlist($browser);
             $this->dashboard($browser);
-            $this->products($browser);
-            $this->orders($browser);
             $this->restocking($browser);
         });
     }
