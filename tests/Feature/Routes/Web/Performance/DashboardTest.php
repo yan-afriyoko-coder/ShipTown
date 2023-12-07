@@ -3,7 +3,6 @@
 namespace Tests\Feature\Routes\Web\Performance;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
@@ -11,12 +10,10 @@ use Tests\TestCase;
  */
 class DashboardTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * @var string
      */
-    protected string $uri = '/performance/dashboard';
+    protected string $uri = '/fulfillment-dashboard';
 
     /**
      * @var User
