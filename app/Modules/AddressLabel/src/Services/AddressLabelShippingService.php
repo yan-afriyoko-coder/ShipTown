@@ -25,7 +25,7 @@ class AddressLabelShippingService extends ShippingServiceAbstract
         $shippingLabel->user_id = auth()->id();
         $shippingLabel->carrier = '';
         $shippingLabel->service = 'address_label';
-        $shippingLabel->shipping_number = '#' . $order->order_number;
+        $shippingLabel->shipping_number = $order->order_number;
         $shippingLabel->content_type = ShippingLabel::CONTENT_TYPE_PDF;
         $shippingLabel->base64_pdf_labels = base64_encode($pdfString);
         $shippingLabel->save();
