@@ -51,8 +51,8 @@ class DpdUKSeeder extends Seeder
     {
         /** @var OrderAddress $testAddress */
         $testAddress = OrderAddress::factory()->make();
-        $testAddress->first_name = 'John';
-        $testAddress->last_name = 'Smith';
+        $testAddress->first_name = 'Artur';
+        $testAddress->last_name = 'Hanusek';
         $testAddress->phone = '12345678901';
         $testAddress->company = "DPD Group Ltd";
         $testAddress->country_code = "GBR";
