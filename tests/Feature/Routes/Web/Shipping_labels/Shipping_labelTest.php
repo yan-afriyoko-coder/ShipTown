@@ -12,7 +12,7 @@ use Tests\TestCase;
  */
 class Shipping_labelTest extends TestCase
 {
-    protected string $uri = 'shipping-labels';
+    protected string $uri = '/shipping-labels';
 
     protected User $user;
 
