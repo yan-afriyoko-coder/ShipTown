@@ -12,6 +12,10 @@ class BasicModuleTest extends TestCase
 {
     public function test_module_basic_functionality()
     {
+        if (empty(env('SCURRI_USERNAME'))) {
+            $this->markTestSkipped('SCURRI_USERNAME is not set');
+        }
+
         ScurriServiceProvider::enableModule();
 
         /** @var Order $order */
@@ -31,6 +35,10 @@ class BasicModuleTest extends TestCase
 
     public function test_address1_too_long_scenario()
     {
+        if (empty(env('SCURRI_USERNAME'))) {
+            $this->markTestSkipped('SCURRI_USERNAME is not set');
+        }
+
         ScurriServiceProvider::enableModule();
 
         $address = OrderAddress::factory()->create(['address1' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget aliquam ultricies, nisl nisl ultricies nisl, nec aliquam nisl nisl nec nisl.']);
