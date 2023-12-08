@@ -34,6 +34,7 @@ class ShippingLabel extends Model
 
     const CONTENT_TYPE_URL = 'url';
     const CONTENT_TYPE_PDF = 'pdf';
+    const CONTENT_TYPE_RAW = 'raw';
 
     protected $table = 'orders_shipments';
 
@@ -57,6 +58,7 @@ class ShippingLabel extends Model
     // as this is then not populated
     // correctly to events
     protected $attributes = [
+        'content_type' => 'raw',
         'base64_pdf_labels' => ''
     ];
 

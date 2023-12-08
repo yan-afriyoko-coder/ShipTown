@@ -14,6 +14,9 @@ class ShippingLabelController extends Controller
             ShippingLabel::CONTENT_TYPE_PDF => response(base64_decode($shipping_label->base64_pdf_labels))
                 ->header('Content-Disposition', 'attachment; filename = "' . $shipping_label->shipping_number . '.pdf"')
                 ->header('Content-Type', 'application/pdf'),
+            ShippingLabel::CONTENT_TYPE_RAW => response(base64_decode($shipping_label->base64_pdf_labels))
+                ->header('Content-Disposition', 'attachment; filename = "' . $shipping_label->shipping_number . '"')
+                ->header('Content-Type', 'text'),
             default => throw new \Exception('Unexpected match value'),
         };
     }

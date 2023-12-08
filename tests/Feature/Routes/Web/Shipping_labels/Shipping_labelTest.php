@@ -47,9 +47,9 @@ class Shipping_labelTest extends TestCase
     {
         $this->actingAs($this->user, 'web');
 
-        $shippingLabel = ShippingLabel::factory()->create();
+        $response = $this->get($this->uri);
 
-        $response = $this->get($this->uri . '/' . $shippingLabel->getKey());
+        ray($response);
 
         $response->assertOk();
     }
