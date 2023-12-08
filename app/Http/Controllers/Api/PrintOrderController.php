@@ -7,6 +7,7 @@ use App\Modules\PrintNode\src\Models\PrintJob;
 use App\Modules\PrintNode\src\PrintNode;
 use App\Modules\PrintNode\src\Resources\PrintJobResource;
 use App\Services\OrderService;
+use Exception;
 use Illuminate\Http\Request;
 
 /**
@@ -15,13 +16,9 @@ use Illuminate\Http\Request;
 class PrintOrderController extends Controller
 {
     /**
-     * @param Request $request
-     * @param $order_number
-     * @param $template
-     *
-     * @return PrintJobResource
+     * @throws Exception
      */
-    public function store(Request $request, $order_number, $template): PrintJobResource
+    public function store(Request $request, string $order_number, string $template): PrintJobResource
     {
         $pdfString = OrderService::getOrderPdf($order_number, $template);
 

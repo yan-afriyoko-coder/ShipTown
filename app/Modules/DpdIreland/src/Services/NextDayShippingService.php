@@ -10,8 +10,6 @@ use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Exceptions\AuthorizationException;
 use App\Modules\DpdIreland\src\Exceptions\ConsignmentValidationException;
 use App\Modules\DpdIreland\src\Responses\PreAdvice;
-use App\Modules\PrintNode\src\Models\PrintJob;
-use App\Modules\PrintNode\src\PrintNode;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Collection;
@@ -70,30 +68,6 @@ class NextDayShippingService extends ShippingServiceAbstract
             throw new ShippingServiceException('DPD: '. $exception->getMessage());
         } catch (AuthorizationException $exception) {
             throw new ShippingServiceException('DPD: Account authorization failed, contact administrator');
-        }
-    }
-
-    /**
-     * @param PreAdvice $preAdvice
-     *
-     * @return int
-     * @throws Exception
-     */
-    public function printOrFail(PreAdvice $preAdvice): int
-    {
-        if (! request()->user()) {
-            return -1;
-        }
-
-        try {
-            $printJob = new PrintJob();
-            $printJob->printer_id = request()->user()->printer_id;
-            $printJob->title = $preAdvice->trackingNumber().'_by_'.request()->user()->id;
-            $printJob->pdf_url = $preAdvice->labelImage();
-
-            return PrintNode::print($printJob);
-        } catch (Exception $exception) {
-            throw new Exception($exception->getMessage());
         }
     }
 }

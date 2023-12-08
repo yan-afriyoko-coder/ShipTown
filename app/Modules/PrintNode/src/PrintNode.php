@@ -2,10 +2,11 @@
 
 namespace App\Modules\PrintNode\src;
 
-use App\Modules\DpdIreland\src\Responses\PreAdvice;
+use App\Exceptions\ShippingServiceException;
 use App\Modules\PrintNode\src\Models\Client;
 use App\Modules\PrintNode\src\Models\PrintJob;
 use Exception;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -50,29 +51,25 @@ class PrintNode
 
     /**
      * @param PrintJob $printJob
-     * @return int
-     * @throws Exception
+     * @return Response
+     * @throws ShippingServiceException
      */
-    public static function print(PrintJob $printJob): int
+    public static function print(PrintJob $printJob): Response
     {
         $printNodeClient = self::getFirstPrintNodeClient();
 
         if (!$printNodeClient) {
             Log::warning('Print job failed, no PrintNode clients configured');
-            throw new Exception('PrintNode service not configured');
+            throw new ShippingServiceException('PrintNode service not configured');
         }
 
-        $response = $printNodeClient->postRequest('printjobs', $printJob->toPrintNodePayload());
-
-        return (int) $response->getBody()->getContents();
+        return $printNodeClient->postRequest('printjobs', $printJob->toPrintNodePayload());
     }
 
     /**
-     * @param string $url
-     * @param int $printerId
-     * @return int
+     * @throws Exception
      */
-    public static function printPdfFromUrl(string $url, int $printerId): int
+    public static function printPdfFromUrl(string $url, int $printerId): Response
     {
         $printJob = new PrintJob();
         $printJob->title = 'Url Print';
@@ -90,11 +87,9 @@ class PrintNode
     }
 
     /**
-     * @param string $base64PdfString
-     * @param int|null $printerId
-     * @return int
+     * @throws Exception
      */
-    public static function printBase64Pdf(string $base64PdfString, int $printerId = null): int
+    public static function printBase64Pdf(string $base64PdfString, int $printerId = null): Response
     {
         $printJob = new PrintJob();
         $printJob->title = 'Url Print';
@@ -115,9 +110,10 @@ class PrintNode
     /**
      * @param string $base64_content
      * @param int|null $printerId
-     * @return int
+     * @return Response
+     * @throws Exception
      */
-    public static function printRaw(string $base64_content, int $printerId = null): int
+    public static function printRaw(string $base64_content, int $printerId = null): Response
     {
         $printJob = new PrintJob();
         $printJob->title = 'Raw Print';

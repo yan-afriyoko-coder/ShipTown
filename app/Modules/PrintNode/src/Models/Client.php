@@ -5,6 +5,8 @@ namespace App\Modules\PrintNode\src\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
 use Psr\Http\Message\ResponseInterface;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -42,7 +44,7 @@ class Client extends Model
     /**
      * @var GuzzleClient
      */
-    private $guzzleClient;
+    private GuzzleClient $guzzleClient;
 
     /**
      * Client constructor.
@@ -60,28 +62,24 @@ class Client extends Model
         ]);
     }
 
-    /**
-     * @param string $uri
-     *
-     * @return ResponseInterface
-     */
+    public function fullUrl(string $uri): string
+    {
+        return 'https://api.printnode.com/' . $uri;
+    }
+
     public function getRequest(string $uri): ResponseInterface
     {
         return $this->guzzleClient->get($uri, ['headers' => $this->generateHeaders()]);
     }
 
-    /**
-     * @param string $uri
-     * @param array  $json
-     *
-     * @return ResponseInterface
-     */
-    public function postRequest(string $uri, array $json): ResponseInterface
+    public function postRequest(string $uri, array $json): Response
     {
-        return $this->guzzleClient->post($uri, [
-            'headers' => $this->generateHeaders(),
-            'json'    => $json,
-        ]);
+        $url = $this->fullUrl($uri);
+
+        $token = base64_encode($this->api_key);
+
+        return Http::withToken($token, 'Basic')
+            ->post($url, $json);
     }
 
     /**
