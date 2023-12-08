@@ -55,6 +55,8 @@ class ClearDatabaseCommand extends Command
         App\Modules\InventoryMovements\src\Models\Configuration::query()->forceDelete();
         App\Modules\PrintNode\src\Models\Client::query()->forceDelete();
         App\Modules\InventoryReservations\src\Models\Configuration::query()->forceDelete();
+        App\Modules\DpdUk\src\Models\Connection::query()->forceDelete();
+        App\Modules\PrintNode\src\Models\PrintJob::query()->forceDelete();
 
         App\Models\InventoryMovementNew::query()->forceDelete();
         App\Models\NavigationMenu::query()->forceDelete();

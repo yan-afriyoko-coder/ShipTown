@@ -2,20 +2,22 @@
 
 namespace App\Modules\DpdUk\src\Api;
 
+use Illuminate\Http\Client\Response;
+
 /**
  *
  */
 class GetShippingLabelResponse
 {
     /**
-     * @var ApiResponse
+     * @var Response
      */
-    public ApiResponse $response;
+    public Response $response;
 
     /**
-     * @param ApiResponse $response
+     * @param Response $response
      */
-    public function __construct(ApiResponse $response)
+    public function __construct(Response $response)
     {
         $this->response = $response;
     }

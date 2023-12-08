@@ -154,6 +154,9 @@ class DpdUkService
         $dpdShipment = $this->apiClient->createShipment($payload);
         $dpdShippingLabel = $this->apiClient->getShipmentLabel($dpdShipment->getShipmentId());
 
+        $content = $dpdShippingLabel->response->getBody()->getContents();
+        ray($content);
+
         $shipment = new ShippingLabel();
         $shipment->order()->associate($order);
         $shipment->user()->associate(Auth::user());
@@ -162,7 +165,7 @@ class DpdUkService
         $shipment->shipping_number = $dpdShipment->getConsignmentNumber();
         $shipment->tracking_url = $this->generateTrackingUrl($shipment);
         $shipment->content_type = ShippingLabel::CONTENT_TYPE_RAW;
-        $shipment->base64_pdf_labels = base64_encode($dpdShippingLabel->response->content);
+        $shipment->base64_pdf_labels = base64_encode($content);
         $shipment->save();
 
         return $shipment;

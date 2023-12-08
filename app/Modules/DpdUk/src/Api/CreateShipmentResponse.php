@@ -2,6 +2,7 @@
 
 namespace App\Modules\DpdUk\src\Api;
 
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
 
 /**
@@ -10,14 +11,14 @@ use Illuminate\Support\Collection;
 class CreateShipmentResponse
 {
     /**
-     * @var ApiResponse
+     * @var Response
      */
-    private ApiResponse $apiResponse;
+    private Response $apiResponse;
 
     /**
-     * @param ApiResponse $response
+     * @param Response $response
      */
-    public function __construct(ApiResponse $response)
+    public function __construct(Response $response)
     {
         $this->apiResponse = $response;
     }
@@ -27,7 +28,7 @@ class CreateShipmentResponse
      */
     public function getShipmentId()
     {
-        return $this->apiResponse->toArray()['data']['shipmentId'];
+        return $this->apiResponse->json('data.shipmentId');
     }
 
     /**
@@ -35,7 +36,7 @@ class CreateShipmentResponse
      */
     public function errors(): Collection
     {
-        return collect($this->apiResponse->toArray()['error']);
+        return collect($this->apiResponse->json('error'));
     }
 
     /**
@@ -43,7 +44,7 @@ class CreateShipmentResponse
      */
     public function getConsignmentNumber()
     {
-        return data_get($this->apiResponse->toArray(), 'data.consignmentDetail.0.consignmentNumber');
+        return $this->apiResponse->json('data.consignmentDetail.0.consignmentNumber');
     }
 
     /**
@@ -51,6 +52,6 @@ class CreateShipmentResponse
      */
     public function getConsignmentParcelNumber()
     {
-        return $this->apiResponse->toArray()['data']['consignmentDetail'][0]['parcelNumbers'][0]['parcelNumbers'];
+        return $this->apiResponse->json('data.consignmentDetail.0.parcelNumbers.0.parcelNumbers');
     }
 }
