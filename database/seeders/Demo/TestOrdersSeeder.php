@@ -113,15 +113,10 @@ class TestOrdersSeeder extends Seeder
 
         OrderComment::create([
             'order_id' => $order->getKey(),
-            'comment' => 'Test order'
+            'comment' => 'Test with incorrect address (too long)'
         ]);
 
-        OrderProduct::factory()->create([
-            'order_id' => $order->getKey(),
-            'sku_ordered' => '123123123123123',
-            'quantity_ordered' => 1,
-            'product_id' => null,
-        ]);
+        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
 
         Order::query()->where(['id' => $order->getKey()])->update(['total_paid' => DB::raw('total_order')]);
     }

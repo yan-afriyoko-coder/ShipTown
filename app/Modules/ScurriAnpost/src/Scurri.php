@@ -4,7 +4,6 @@
 namespace App\Modules\ScurriAnpost\src;
 
 use App\Models\Order;
-use App\Models\OrderShipment;
 use App\Models\ShippingLabel;
 use App\Modules\ScurriAnpost\src\Api\Client;
 use Exception;
@@ -56,15 +55,15 @@ class Scurri
         $documents = Client::getDocuments($consignment_id);
 
         // we need to refresh it in order to obtain shipping number
-        $consignment = Client::getSingleConsignment($consignment_id)->json();
+        $consignment = Client::getConsignment($consignment_id);
 
         $orderShipment = new ShippingLabel([
             'order_id' => $order->getKey(),
-            'carrier' => $consignment['carrier'],
-            'service' => $consignment['service'],
-            'shipping_number' => $consignment['consignment_number'],
-            'tracking_url' => $consignment['tracking_url'],
-            'base64_pdf_labels' => base64_encode($documents->getLabels()),
+            'carrier' => $consignment->json('carrier'),
+            'service' => $consignment->json('service'),
+            'shipping_number' => $consignment->json('consignment_number'),
+            'tracking_url' => $consignment->json('tracking_url'),
+            'base64_pdf_labels' => $documents->json('labels'),
         ]);
 
         $orderShipment->save();

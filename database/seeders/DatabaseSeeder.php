@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Events\SyncRequestedEvent;
 use App\Jobs\DispatchEveryDayEventJob;
 use App\Jobs\DispatchEveryFiveMinutesEventJob;
 use App\Jobs\DispatchEveryHourEventJobs;
@@ -10,8 +9,8 @@ use App\Jobs\DispatchEveryMinuteEventJob;
 use App\Jobs\DispatchEveryTenMinutesEventJob;
 use App\Modules\InventoryMovementsStatistics\src\InventoryMovementsStatisticsServiceProvider;
 use App\Modules\InventoryTotals\src\InventoryTotalsServiceProvider;
-use App\Modules\Maintenance\src\Jobs\CopyInventoryMovementsToNewTableJob;
 use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
+use App\Modules\ScurriAnpost\database\seeders\EnableScurriAnpostModuleSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 
@@ -54,6 +53,8 @@ class DatabaseSeeder extends Seeder
             SalesSeeder::class,
             StocktakeSuggestionsSeeder::class,
 
+
+
 //            RestockingReportSeeder::class,
 //            DataCollectionsSeeder::class,
 //            RmsapiConnectionSeeder::class,
@@ -76,6 +77,8 @@ class DatabaseSeeder extends Seeder
 //        Modules Seeders
 //            WebhooksTestSeeder::class,
 //            DpdUk\DpdUkTestOrdersSeeder::class,
+
+            EnableScurriAnpostModuleSeeder::class,
         ]);
 
 //        RunHourlyJobs::dispatchSync();
