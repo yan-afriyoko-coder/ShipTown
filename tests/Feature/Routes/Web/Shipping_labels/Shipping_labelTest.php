@@ -5,7 +5,6 @@ namespace Tests\Feature\Routes\Web\Shipping_labels;
 use App\Models\Order;
 use App\Models\ShippingLabel;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
@@ -13,21 +12,10 @@ use Tests\TestCase;
  */
 class Shipping_labelTest extends TestCase
 {
-    use RefreshDatabase;
+    protected string $uri = 'shipping-labels';
 
-    /**
-     * @var string
-     */
-    protected string $uri = '';
-
-    /**
-     * @var User
-     */
     protected User $user;
 
-    /**
-     *
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -59,7 +47,9 @@ class Shipping_labelTest extends TestCase
     {
         $this->actingAs($this->user, 'web');
 
-        $response = $this->get($this->uri);
+        $shippingLabel = ShippingLabel::factory()->create();
+
+        $response = $this->get($this->uri . '/' . $shippingLabel->getKey());
 
         $response->assertOk();
     }
