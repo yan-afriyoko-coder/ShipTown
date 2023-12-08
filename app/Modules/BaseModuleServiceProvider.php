@@ -93,6 +93,11 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
         }
     }
 
+    public static function isDisabled(): bool
+    {
+        return ! self::isEnabled();
+    }
+
     /**
      * @return bool
      */

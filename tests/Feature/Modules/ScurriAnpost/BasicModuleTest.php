@@ -3,6 +3,7 @@
 namespace Tests\Feature\Modules\ScurriAnpost;
 
 use App\Models\Order;
+use App\Models\OrderAddress;
 use App\Modules\ScurriAnpost\src\ScurriServiceProvider;
 use App\User;
 use Tests\TestCase;
@@ -21,6 +22,29 @@ class BasicModuleTest extends TestCase
         $response = $this->post('api/shipping-labels', [
             'order_id' => $order->getKey(),
             'shipping_service_code' => $order->label_template
+        ]);
+
+        ray($response->json());
+
+        $response->assertSuccessful();
+    }
+
+    public function test_address1_too_long_scenario()
+    {
+        ScurriServiceProvider::enableModule();
+
+        $address = OrderAddress::factory()->create(['address_1' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget aliquam ultricies, nisl nisl ultricies nisl, nec aliquam nisl nisl nec nisl.']);
+
+        /** @var Order $order */
+        $order = Order::factory()->create([
+            'shipping_address_id' => $address->getKey(),
+        ]);
+
+        $this->actingAs(User::factory()->create(), 'api');
+
+        $response = $this->post('api/shipping-labels', [
+            'order_id' => $order->getKey(),
+            'shipping_service_code' => 'anpost_3day'
         ]);
 
         ray($response->json());

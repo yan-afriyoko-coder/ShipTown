@@ -6,6 +6,7 @@ use App\Abstracts\ShippingServiceAbstract;
 use App\Models\Order;
 use App\Models\ShippingLabel;
 use App\Modules\PrintNode\src\PrintNode;
+use App\Modules\PrintNode\src\PrintNodeServiceProvider;
 use App\Modules\ScurriAnpost\src\Scurri;
 use App\User;
 use Exception;
@@ -32,19 +33,23 @@ class AnPostShippingService extends ShippingServiceAbstract
     }
 
     /**
-     * @param ShippingLabel $orderShipment
+     * @throws Exception
      */
     private function printShippingLabel(ShippingLabel $orderShipment): void
     {
+        if (PrintNodeServiceProvider::isDisabled()) {
+            throw new Exception('PrintNode module is disabled, shipping label generated but could not print');
+        }
+
         /** @var User $user */
         $user = auth()->user();
 
-        if ($user) {
-            $orderShipment->user()->associate(auth()->user());
-
-            if ($user->printer_id) {
-                PrintNode::printBase64Pdf($orderShipment->base64_pdf_labels, $user->printer_id);
-            }
+        if (data_get($user, 'printer_id', 0) === 0) {
+            throw new Exception('User does not have printer selected, shipping label generated but could not print');
         }
+
+        $orderShipment->user()->associate(auth()->user());
+
+        PrintNode::printBase64Pdf($orderShipment->base64_pdf_labels, $user->printer_id);
     }
 }
