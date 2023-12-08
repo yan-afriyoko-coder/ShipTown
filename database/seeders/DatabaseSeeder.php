@@ -10,7 +10,7 @@ use App\Jobs\DispatchEveryTenMinutesEventJob;
 use App\Modules\InventoryMovementsStatistics\src\InventoryMovementsStatisticsServiceProvider;
 use App\Modules\InventoryTotals\src\InventoryTotalsServiceProvider;
 use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
-use App\Modules\ScurriAnpost\database\seeders\EnableScurriAnpostModuleSeeder;
+use App\Modules\ScurriAnpost\database\seeders\ScurriAnpostSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 
@@ -55,6 +55,12 @@ class DatabaseSeeder extends Seeder
             SalesSeeder::class,
             StocktakeSuggestionsSeeder::class,
 
+            PrintNodeClientSeeder::class,
+
+            DpdIrelandSeeder::class,
+            DpdUKSeeder::class,
+            ScurriAnpostSeeder::class,
+            Modules\Slack\ConfigurationSeeder::class,
 
 
 //            RestockingReportSeeder::class,
@@ -62,10 +68,6 @@ class DatabaseSeeder extends Seeder
 //            RmsapiConnectionSeeder::class,
 //            AutomationsSeeder::class,
 
-            PrintNodeClientSeeder::class,
-            Modules\Slack\ConfigurationSeeder::class,
-
-            DpdIrelandSeeder::class,
 //            ProductAliasSeeder::class,
 //            ProductTagsSeeder::class,
 //            SplitOrdersScenarioSeeder::class,
@@ -80,7 +82,6 @@ class DatabaseSeeder extends Seeder
 //            WebhooksTestSeeder::class,
 //            DpdUk\DpdUkTestOrdersSeeder::class,
 
-            EnableScurriAnpostModuleSeeder::class,
         ]);
 
 //        RunHourlyJobs::dispatchSync();

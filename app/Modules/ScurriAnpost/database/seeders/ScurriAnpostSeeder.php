@@ -11,7 +11,7 @@ use App\Modules\ScurriAnpost\src\ScurriServiceProvider;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class EnableScurriAnpostModuleSeeder extends Seeder
+class ScurriAnpostSeeder extends Seeder
 {
     public function run()
     {
