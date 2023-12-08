@@ -23,6 +23,11 @@ class AnPostShippingService extends ShippingServiceAbstract
         $orderShipment->user_id = Auth::id();
         $orderShipment->save();
 
+        activity()
+            ->on($order)
+            ->by(auth()->user())
+            ->log('generated shipping label '. $orderShipment->shipping_number);
+
         return collect()->add($orderShipment);
     }
 }

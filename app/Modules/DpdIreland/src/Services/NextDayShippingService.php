@@ -3,10 +3,12 @@
 namespace App\Modules\DpdIreland\src\Services;
 
 use App\Abstracts\ShippingServiceAbstract;
+use App\Exceptions\ShippingServiceException;
 use App\Models\Order;
 use App\Models\ShippingLabel;
 use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Exceptions\AuthorizationException;
+use App\Modules\DpdIreland\src\Exceptions\ConsignmentValidationException;
 use App\Modules\DpdIreland\src\Responses\PreAdvice;
 use App\Modules\PrintNode\src\Models\PrintJob;
 use App\Modules\PrintNode\src\PrintNode;
@@ -39,6 +41,11 @@ class NextDayShippingService extends ShippingServiceAbstract
         $shippingLabel->base64_pdf_labels = base64_encode($preAdvice->labelImage());
         $shippingLabel->save();
 
+        activity()
+            ->on($order)
+            ->by(auth()->user())
+            ->log("generated shipping label ". $shippingLabel->shipping_number);
+
         return collect()->add($shippingLabel);
     }
 
@@ -59,8 +66,10 @@ class NextDayShippingService extends ShippingServiceAbstract
             }
 
             return $preAdvice;
-        } catch (AuthorizationException | Exception $exception) {
-            throw new Exception($exception->getMessage());
+        } catch (ConsignmentValidationException $exception) {
+            throw new ShippingServiceException('DPD: '. $exception->getMessage());
+        } catch (AuthorizationException $exception) {
+            throw new ShippingServiceException('DPD: Account authorization failed, contact administrator');
         }
     }
 
