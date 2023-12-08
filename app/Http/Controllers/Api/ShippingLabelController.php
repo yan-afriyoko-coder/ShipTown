@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Abstracts\ShippingServiceAbstract;
+use App\Exceptions\ShippingServiceException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreShippingLabelRequest;
 use App\Models\ShippingService;
@@ -32,6 +33,8 @@ class ShippingLabelController extends Controller
 
             $shippingLabelCollection = $shipper->ship($request->validated()['order_id']);
             return JsonResource::collection($shippingLabelCollection);
+        } catch (ShippingServiceException $exception) {
+            $this->respondBadRequest($exception->getMessage());
         } catch (Exception $exception) {
             report($exception);
             $this->respond503ServiceUnavailable($exception->getMessage());

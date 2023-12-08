@@ -3,6 +3,7 @@
 
 namespace App\Modules\PrintNode\src;
 
+use App\Events\ShippingLabelCreatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
@@ -10,7 +11,6 @@ use App\Modules\BaseModuleServiceProvider;
  */
 class PrintNodeServiceProvider extends BaseModuleServiceProvider
 {
-
     /**
      * @var string
      */
@@ -34,5 +34,9 @@ class PrintNodeServiceProvider extends BaseModuleServiceProvider
     /**
      * @var array
      */
-    protected $listen = [];
+    protected $listen = [
+        ShippingLabelCreatedEvent::class => [
+            Listeners\PrintShippingLabelListener::class,
+        ],
+    ];
 }

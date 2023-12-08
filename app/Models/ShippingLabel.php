@@ -13,15 +13,19 @@ use Spatie\QueryBuilder\QueryBuilder;
 /**
  *
  * @property int         $id
+ * @property int|null    $user_id
  * @property int         $order_id
  * @property string      $shipping_number
  * @property string      $carrier
  * @property string      $service
  * @property string      $tracking_url
- * @property int|null    $user_id
+ * @property int|null    $document_id
  * @property string|null $base64_pdf_labels
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
+ * @property-read Order $order
+ * @property-read User|null $user
  *
  */
 class ShippingLabel extends Model
@@ -40,6 +44,7 @@ class ShippingLabel extends Model
         'service',
         'shipping_number',
         'tracking_url',
+        'document_id',
         'base64_pdf_labels',
     ];
 

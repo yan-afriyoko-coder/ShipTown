@@ -33,7 +33,7 @@ class BasicModuleTest extends TestCase
     {
         ScurriServiceProvider::enableModule();
 
-        $address = OrderAddress::factory()->create(['address_1' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget aliquam ultricies, nisl nisl ultricies nisl, nec aliquam nisl nisl nec nisl.']);
+        $address = OrderAddress::factory()->create(['address1' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget aliquam ultricies, nisl nisl ultricies nisl, nec aliquam nisl nisl nec nisl.']);
 
         /** @var Order $order */
         $order = Order::factory()->create([
@@ -49,6 +49,6 @@ class BasicModuleTest extends TestCase
 
         ray($response->json());
 
-        $response->assertSuccessful();
+        $response->assertBadRequest();
     }
 }

@@ -378,17 +378,14 @@
                                                     <tr>
                                                         <td colspan="2">
                                                             <b>
-                                                                {{ shipment['created_at'] | moment('MMM DD') }}
-                                                                <small>@</small>
-                                                                {{ shipment['created_at'] | moment('H:mm') }}:
+                                                                {{ formatDateTime(shipment['created_at']) }}
                                                             </b>
                                                             <a :href="shipment['tracking_url']" target="_blank">
                                                                 {{ shipment['shipping_number'] }}
                                                             </a>
                                                             by {{ shipment['user'] ? shipment['user']['name'] : '' }}
-                                                            <a :href="shippingContentUrl(shipment)" target="_blank"
-                                                               style="color: white">
-                                                                o
+                                                            <a class="btn btn-link btn-sm small" :href="shippingContentUrl(shipment)" target="_blank">
+                                                                VIEW
                                                             </a>
                                                         </td>
                                                     </tr>
