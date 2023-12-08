@@ -19,7 +19,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property string      $carrier
  * @property string      $service
  * @property string      $tracking_url
- * @property int|null    $document_id
+ * @property string      $content_type
  * @property string|null $base64_pdf_labels
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -31,6 +31,9 @@ use Spatie\QueryBuilder\QueryBuilder;
 class ShippingLabel extends Model
 {
     use HasFactory;
+
+    const CONTENT_TYPE_URL = 'url';
+    const CONTENT_TYPE_PDF = 'pdf';
 
     protected $table = 'orders_shipments';
 
@@ -45,6 +48,7 @@ class ShippingLabel extends Model
         'shipping_number',
         'tracking_url',
         'document_id',
+        'content_type',
         'base64_pdf_labels',
     ];
 

@@ -67,6 +67,7 @@ class Scurri
             'service' => $consignment->json('service'),
             'shipping_number' => $consignment->json('consignment_number'),
             'tracking_url' => $consignment->json('tracking_url'),
+            'content_type' => ShippingLabel::CONTENT_TYPE_PDF,
             'base64_pdf_labels' => $documents->json('labels'),
         ]);
     }

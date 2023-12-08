@@ -605,8 +605,6 @@
 
                     return this.apiPostShippingLabel(params)
                         .then((data) => {
-                            this.reloadData();
-
                             this.notifySuccess('Label generated', false,{
                                 closeOnClick: true,
                                 timeout: 1,
@@ -630,6 +628,9 @@
                                 'subject_id': this.order.id,
                                 'description': 'Error when posting shipping label request'
                             });
+                        })
+                        .finally(() => {
+                            this.reloadData();
                         });
                 },
 

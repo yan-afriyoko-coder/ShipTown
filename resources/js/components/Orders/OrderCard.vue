@@ -385,7 +385,7 @@
                                                             </a>
                                                             by {{ shipment['user'] ? shipment['user']['name'] : '' }}
                                                             <a class="btn btn-link btn-sm small" :href="shippingContentUrl(shipment)" target="_blank">
-                                                                VIEW
+                                                                <font-awesome-icon icon="file-download" />
                                                             </a>
                                                         </td>
                                                     </tr>

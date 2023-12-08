@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             Demo\TestOrdersSeeder::class,
 
             Demo\PaidOrdersSeeder::class,
+            Demo\CollectionOrdersSeeder::class,
 
             Demo\ProductsTagsSeeder::class,
 
@@ -63,7 +64,7 @@ class DatabaseSeeder extends Seeder
             PrintNodeClientSeeder::class,
             Modules\Slack\ConfigurationSeeder::class,
 
-//            DpdIrelandSeeder::class,
+            DpdIrelandSeeder::class,
 //            ProductAliasSeeder::class,
 //            ProductTagsSeeder::class,
 //            SplitOrdersScenarioSeeder::class,

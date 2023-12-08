@@ -35,10 +35,9 @@ class NextDayShippingService extends ShippingServiceAbstract
         $shippingLabel->service = 'next_day';
         $shippingLabel->shipping_number = $preAdvice->trackingNumber();
         $shippingLabel->tracking_url = 'https://dpd.ie/tracking?consignmentNumber=' . $preAdvice->trackingNumber();
+        $shippingLabel->content_type = ShippingLabel::CONTENT_TYPE_URL;
         $shippingLabel->base64_pdf_labels = base64_encode($preAdvice->labelImage());
         $shippingLabel->save();
-
-        $this->printOrFail($preAdvice);
 
         return collect()->add($shippingLabel);
     }

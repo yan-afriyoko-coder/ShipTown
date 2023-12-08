@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ShippingLabelShowRequest;
 use App\Models\ShippingLabel;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Response;
 
 class ShippingLabelController extends Controller
 {
-    public function show(ShippingLabelShowRequest $request, ShippingLabel $shipping_label): Response|Application|ResponseFactory
+    public function show(ShippingLabelShowRequest $request, ShippingLabel $shipping_label)
     {
-        return response(base64_decode($shipping_label->base64_pdf_labels))
-            ->header('Content-Type', 'application/pdf');
+        return match ($shipping_label->content_type) {
+            ShippingLabel::CONTENT_TYPE_URL => redirect(base64_decode($shipping_label->base64_pdf_labels), 301),
+            ShippingLabel::CONTENT_TYPE_PDF => response(base64_decode($shipping_label->base64_pdf_labels))
+                ->header('Content-Disposition', 'attachment; filename = "' . $shipping_label->shipping_number . '.pdf"')
+                ->header('Content-Type', 'application/pdf'),
+            default => throw new \Exception('Unexpected match value'),
+        };
     }
 }
