@@ -161,19 +161,10 @@ class DpdUkService
         $shipment->service = 'overnight';
         $shipment->shipping_number = $dpdShipment->getConsignmentNumber();
         $shipment->tracking_url = $this->generateTrackingUrl($shipment);
+        $shipment->content_type = ShippingLabel::CONTENT_TYPE_RAW;
         $shipment->base64_pdf_labels = base64_encode($dpdShippingLabel->response->content);
         $shipment->save();
 
         return $shipment;
-    }
-
-    /**
-     * @param ShippingLabel $shipment
-     */
-    private function printShipment(ShippingLabel $shipment): void
-    {
-        if (isset(auth()->user()->printer_id)) {
-            PrintNode::printRaw($shipment->base64_pdf_labels, auth()->user()->printer_id);
-        }
     }
 }
