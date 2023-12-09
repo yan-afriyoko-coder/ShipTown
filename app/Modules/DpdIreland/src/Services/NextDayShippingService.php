@@ -19,7 +19,6 @@ class NextDayShippingService extends ShippingServiceAbstract
 {
     /**
      * @throws GuzzleException
-     * @throws Exception
      */
     public function ship(int $order_id): Collection
     {
