@@ -21,8 +21,11 @@ class BasicModuleTest extends TestCase
      */
     public function test_module_basic_functionality()
     {
-        /** Connection */
-        $connection = Connection::factory()->create();
+        Connection::factory()->create([
+            'username' => env('TEST_DPDUK_USERNAME'),
+            'password' => env('TEST_DPDUK_PASSWORD'),
+            'account_number' => env('TEST_DPDUK_ACCNUMBER'),
+        ]);
 
         /** @var Order $order */
         $order = Order::factory()->create();
