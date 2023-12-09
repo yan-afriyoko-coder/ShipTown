@@ -22,8 +22,8 @@ class DpdUKSeeder extends Seeder
             'company' => 'ShipTown',
             'address1' => '58-60 Richmond Road',
             'address2' => 'Twickenham',
-            'postcode' => 'TW1 3BE',
             'city' => 'London',
+            'postcode' => 'TW1 3BE',
             'country_code' => 'GB',
             'country_name' => 'GB',
         ]);
