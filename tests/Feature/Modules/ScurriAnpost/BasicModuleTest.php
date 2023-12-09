@@ -43,7 +43,7 @@ class BasicModuleTest extends TestCase
 
         $address = OrderAddress::factory()->create([
             'address1' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget aliquam ultricies, nisl nisl ultricies nisl, nec aliquam nisl nisl nec nisl.',
-            'City' => 'Dublin',
+            'city' => 'Dublin',
             'postcode' => 'D02EY47',
             'country_code' => 'IE',
         ]);
