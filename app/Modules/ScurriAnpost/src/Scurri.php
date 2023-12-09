@@ -3,20 +3,19 @@
 
 namespace App\Modules\ScurriAnpost\src;
 
+use App\Exceptions\ShippingServiceException;
 use App\Models\Order;
-use App\Models\OrderShipment;
 use App\Models\ShippingLabel;
 use App\Modules\ScurriAnpost\src\Api\Client;
-use Exception;
 
 class Scurri
 {
     /**
      * @param Order $order
      * @return ShippingLabel
-     * @throws Exception
+     * @throws ShippingServiceException
      */
-    public static function createShippingLabel(Order $order): ShippingLabel
+    public static function makeShippingLabel(Order $order): ShippingLabel
     {
         $consignment_id = Client::createSingleConsignment([
             "order_number" => $order->order_number,
@@ -55,20 +54,21 @@ class Scurri
         // in order to obtain shipping number we need to generate documents
         $documents = Client::getDocuments($consignment_id);
 
-        // we need to refresh it in order to obtain shipping number
-        $consignment = Client::getSingleConsignment($consignment_id)->json();
+        // we need to refresh it in order to obtain shipping number or possible errors
+        $consignment = Client::getConsignment($consignment_id);
 
-        $orderShipment = new ShippingLabel([
+        if ($documents->failed()) {
+            throw new ShippingServiceException('AnPost: '. $consignment->json('current_status.rejection_reason'));
+        }
+
+        return new ShippingLabel([
             'order_id' => $order->getKey(),
-            'carrier' => $consignment['carrier'],
-            'service' => $consignment['service'],
-            'shipping_number' => $consignment['consignment_number'],
-            'tracking_url' => $consignment['tracking_url'],
-            'base64_pdf_labels' => base64_encode($documents->getLabels()),
+            'carrier' => $consignment->json('carrier'),
+            'service' => $consignment->json('service'),
+            'shipping_number' => $consignment->json('consignment_number'),
+            'tracking_url' => $consignment->json('tracking_url'),
+            'content_type' => ShippingLabel::CONTENT_TYPE_PDF,
+            'base64_pdf_labels' => $documents->json('labels'),
         ]);
-
-        $orderShipment->save();
-
-        return $orderShipment;
     }
 }

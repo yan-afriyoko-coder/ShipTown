@@ -13,20 +13,28 @@ use Spatie\QueryBuilder\QueryBuilder;
 /**
  *
  * @property int         $id
+ * @property int|null    $user_id
  * @property int         $order_id
  * @property string      $shipping_number
  * @property string      $carrier
  * @property string      $service
  * @property string      $tracking_url
- * @property int|null    $user_id
+ * @property string      $content_type
  * @property string|null $base64_pdf_labels
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
+ * @property-read Order $order
+ * @property-read User|null $user
  *
  */
 class ShippingLabel extends Model
 {
     use HasFactory;
+
+    const CONTENT_TYPE_URL = 'url';
+    const CONTENT_TYPE_PDF = 'pdf';
+    const CONTENT_TYPE_RAW = 'raw';
 
     protected $table = 'orders_shipments';
 
@@ -40,6 +48,8 @@ class ShippingLabel extends Model
         'service',
         'shipping_number',
         'tracking_url',
+        'document_id',
+        'content_type',
         'base64_pdf_labels',
     ];
 
@@ -48,6 +58,7 @@ class ShippingLabel extends Model
     // as this is then not populated
     // correctly to events
     protected $attributes = [
+        'content_type' => 'raw',
         'base64_pdf_labels' => ''
     ];
 

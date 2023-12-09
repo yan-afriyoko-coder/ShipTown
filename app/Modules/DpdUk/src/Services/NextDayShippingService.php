@@ -3,9 +3,8 @@
 namespace App\Modules\DpdUk\src\Services;
 
 use App\Abstracts\ShippingServiceAbstract;
+use App\Exceptions\ShippingServiceException;
 use App\Models\Order;
-use App\Models\ShippingLabel;
-use App\Modules\PrintNode\src\PrintNode;
 use Exception;
 use Illuminate\Support\Collection;
 
@@ -22,20 +21,12 @@ class NextDayShippingService extends ShippingServiceAbstract
         /** @var Order $order */
         $order = Order::findOrFail($order_id);
 
-        $shipment = (new DpdUkService())->createShippingLabel($order);
-
-        $this->printShipment($shipment);
+        try {
+            $shipment = (new DpdUkService())->createShippingLabel($order);
+        } catch (Exception $exception) {
+            throw new ShippingServiceException('DPD UK: '. $exception->getMessage());
+        }
 
         return collect()->add($shipment);
-    }
-
-    /**
-     * @param ShippingLabel $shipment
-     */
-    private function printShipment(ShippingLabel $shipment): void
-    {
-        if (isset(auth()->user()->printer_id)) {
-            PrintNode::printRaw($shipment->base64_pdf_labels, auth()->user()->printer_id);
-        }
     }
 }

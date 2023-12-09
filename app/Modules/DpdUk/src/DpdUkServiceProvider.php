@@ -44,7 +44,7 @@ class DpdUkServiceProvider extends BaseModuleServiceProvider
             ->updateOrCreate([
                 'code' => 'dpd_uk_next_day',
             ], [
-                'service_provider_class' => Services\DpdUkService::class,
+                'service_provider_class' => Services\NextDayShippingService::class,
             ]);
 
         return true;

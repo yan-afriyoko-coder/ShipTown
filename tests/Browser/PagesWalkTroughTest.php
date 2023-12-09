@@ -39,6 +39,9 @@ class PagesWalkTroughTest extends DuskTestCase
         $inventory1 = Inventory::query()->where(['product_id' => $product1->getKey(), 'warehouse_id' => $warehouse->getKey()])->first();
         $inventory2 = Inventory::query()->where(['product_id' => $product2->getKey(), 'warehouse_id' => $warehouse->getKey()])->first();
 
+        InventoryService::stocktake($inventory1, 12);
+        InventoryService::stocktake($inventory2, 15);
+
         $this->order = Order::factory()->create(['status_code' => 'paid']);
 
         /** @var OrderProduct $orderProduct1 */

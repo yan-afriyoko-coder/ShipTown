@@ -8,6 +8,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -57,11 +58,11 @@ class ApiClient
 
         $authenticationResponse = $this->postAuthenticationsRequest();
 
-        if ($authenticationResponse->response->http_response->getStatusCode() !== 200) {
+        if ($authenticationResponse->response->status() !== 200) {
             throw new Exception('DPD UK Authentication failed: ' .
-                $authenticationResponse->response->http_response->getStatusCode() .
+                $authenticationResponse->response->status() .
                 ' ' .
-                $authenticationResponse->response->content);
+                $authenticationResponse->response->body());
         }
 
         $geoSession = $authenticationResponse->getGeoSession();
@@ -117,10 +118,14 @@ class ApiClient
     {
         $payload['consignment'][0]['networkCode'] = $this->getNetworkCode($payload);
 
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'GeoSession' => $this->getGeoSession(),
+        ])->post('https://api.dpd.co.uk/shipping/shipment', $payload);
+
         $shipmentResponse = new CreateShipmentResponse(
-            $this->request('POST', 'shipping/shipment', [
-                'json' => $payload
-            ])
+            $response
         );
 
         if ($shipmentResponse->errors()) {
@@ -142,12 +147,13 @@ class ApiClient
      */
     public function getShipmentLabel(int $shipmentId): GetShippingLabelResponse
     {
+        $response = Http::withHeaders([
+            'Accept' => 'text/vnd.eltron-epl',
+            'GeoSession' => $this->getGeoSession(),
+        ])->get('https://api.dpd.co.uk/shipping/shipment/' . $shipmentId . '/label/');
+
         return new GetShippingLabelResponse(
-            $this->request('GET', '/shipping/shipment/' . $shipmentId . '/label/', [
-                'headers' => [
-                    'Accept' => 'text/vnd.eltron-epl'
-                ]
-            ])
+            $response
         );
     }
 
@@ -169,19 +175,15 @@ class ApiClient
             throw new Exception('DPD UK: "account_number" not set');
         }
 
+        $response = Http::withBasicAuth($this->connection->username, $this->connection->password)
+            ->withHeaders([
+                'GeoClient' => 'account/' . $this->connection->account_number,
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->post('https://api.dpd.co.uk/user/?action=login');
+
         return new AuthenticationResponse(
-            $this->request('POST', "user/?action=login", [
-                'auth' => [
-                    $this->connection->username,
-                    $this->connection->password,
-                ],
-                'headers' => [
-                    'GeoClient' => 'account/' . $this->connection->account_number,
-                    'GeoSession' => '',
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json',
-                ]
-            ])
+            $response
         );
     }
 
@@ -194,10 +196,10 @@ class ApiClient
     {
         $query = Arr::dot($payload['consignment'][0]);
 
-        $this->request('GET', "shipping/network", [
-            'headers' => [
-                'Accept' => 'application/json'
-            ],
+        Http::withHeaders([
+            'Accept' => 'application/json',
+            'GeoSession' => $this->getGeoSession(),
+        ])->get('https://api.dpd.co.uk/shipping/network', [
             'query' => $query,
         ]);
 

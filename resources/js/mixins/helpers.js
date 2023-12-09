@@ -129,15 +129,17 @@ export default {
                 this.errorBeep();
             },
 
-            notifySuccess: function (message = null, beep = true) {
+            notifySuccess: function (message = null, beep = true, options = null) {
+                const defaultOptions = {
+                    timeout: 1000,
+                    showProgressBar: false,
+                    pauseOnHover: true,
+                    icon: false,
+                    buttons: []
+                };
+
                 if (message) {
-                    this.$snotify.confirm(message, {
-                        timeout: 1000,
-                        showProgressBar: false,
-                        pauseOnHover: true,
-                        icon: false,
-                        buttons: []
-                    });
+                    this.$snotify.success(message, options ?? defaultOptions);
                 }
 
                 if (beep) {

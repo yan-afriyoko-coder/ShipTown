@@ -123,13 +123,13 @@ class InstallApp extends Command
 
         NavigationMenu::query()->create([
             'name' => 'Status: paid',
-            'url' => '/autopilot/packlist?order.status_code=paid',
+            'url' => '/autopilot/packlist?status=paid',
             'group' => 'packlist'
         ]);
 
         NavigationMenu::query()->create([
             'name' => 'Status: picked',
-            'url' => '/autopilot/packlist?order.status_code=picked',
+            'url' => '/autopilot/packlist?status=picked',
             'group' => 'packlist'
         ]);
     }

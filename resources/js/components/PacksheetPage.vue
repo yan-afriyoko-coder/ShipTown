@@ -289,7 +289,7 @@
 
                     let params = {
                         'filter[order_id]': this.order_id,
-                        'include': 'order_products_totals,order_comments,order_comments.user',
+                        'include': 'order_products_totals,order_comments,order_comments.user,order_shipments',
                     };
 
                     return this.apiGetOrders(params)
@@ -604,9 +604,16 @@
                     };
 
                     return this.apiPostShippingLabel(params)
+                        .then((data) => {
+                            this.notifySuccess('Label generated', false,{
+                                closeOnClick: true,
+                                timeout: 1,
+                                buttons: []
+                            });
+                        })
                         .catch((error) => {
                             this.canClose = false;
-                            let errorMsg = 'Error ' + error.response.status + ': ' + JSON.stringify(error.response.data);
+                            let errorMsg = 'Error ' + error.response.status + ': ' + error.response.data.message;
 
                             this.notifyError(errorMsg, {
                                 closeOnClick: true,
@@ -621,6 +628,9 @@
                                 'subject_id': this.order.id,
                                 'description': 'Error when posting shipping label request'
                             });
+                        })
+                        .finally(() => {
+                            this.reloadData();
                         });
                 },
 

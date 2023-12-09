@@ -5,6 +5,9 @@ namespace Database\Seeders;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderProduct;
+use App\Models\OrderStatus;
+use App\Modules\DpdIreland\src\DpdIrelandServiceProvider;
+use App\Modules\DpdIreland\src\Models\DpdIreland;
 use Illuminate\Database\Seeder;
 
 class DpdIrelandSeeder extends Seeder
@@ -16,10 +19,22 @@ class DpdIrelandSeeder extends Seeder
      */
     public function run()
     {
-        if(env('TEST_DPD_USER')) {
-            \App\Modules\DpdIreland\src\Models\DpdIreland::factory()->create();
-            $this->createTestOrder();
+        if(empty(env('TEST_DPD_USER'))) {
+            return;
         }
+
+        DpdIreland::factory()->create();
+
+        DpdIrelandServiceProvider::enableModule();
+
+        OrderStatus::factory()->create([
+            'name' => 'test_orders_courier_dpd_ireland',
+            'code' => 'test_orders_courier_dpd_ireland',
+            'order_active' => true,
+            'order_on_hold' => true,
+        ]);
+
+        $this->createTestOrder();
     }
 
     /**
@@ -43,10 +58,17 @@ class DpdIrelandSeeder extends Seeder
         $testAddress->save();
 
         /** @var Order $order */
-        $order = Order::factory()->make();
-        $order->order_number = 'TEST-IRL';
+        $order = Order::factory()->make([
+            'status_code' => 'test_orders_courier_dpd_ireland',
+            'label_template' => 'dpd_irl_next_day',
+        ]);
         $order->shippingAddress()->associate($testAddress);
         $order->save();
+
         OrderProduct::factory()->count(3)->create(['order_id' => $order->getKey()]);
+
+        $order->refresh();
+
+        $order->update(['total_paid' => $order->total_order]);
     }
 }

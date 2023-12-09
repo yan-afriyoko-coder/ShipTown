@@ -4,6 +4,7 @@
 namespace App\Modules\ScurriAnpost\src\Api;
 
 use Exception;
+use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -42,57 +43,32 @@ class Client
         return $base_uri . $company_slug . '/' .$endpoint;
     }
 
-    /**
-     * @return Response
-     * @throws Exception
-     */
     public static function getCarriers(): Response
     {
-        return self::authenticatedClient()
-            ->get(self::fullUrl('carriers'));
+        return self::GET('carriers');
     }
 
-    /**
-     * @return Response
-     * @throws Exception
-     */
-    public static function getSingleConsignment(string $consignment_id): Response
+    public static function getConsignment(string $consignment_id): Response
     {
-        return self::authenticatedClient()
-            ->get(self::fullUrl('consignment/'.$consignment_id));
+        return self::GET('consignment/' . $consignment_id);
     }
 
-    /**
-     * @param array $data
-     * @return ConsignmentsResponse|null
-     * @throws Exception
-     */
     public static function createMultipleConsignments(array $data): ?ConsignmentsResponse
     {
         if (empty($data)) {
             return null;
         }
 
-        $response = self::authenticatedClient()->post(self::fullUrl('consignments'), $data);
+        $response = self::POST('consignments', $data);
 
         return new ConsignmentsResponse($response);
     }
 
-    /**
-     * @throws Exception
-     */
-    public static function getDocuments(string $consignment_id): Label
+    public static function getDocuments(string $consignment_id): Response
     {
-        $url = self::fullUrl('consignment') . '/'. $consignment_id .'/documents';
-        $response = self::authenticatedClient()->get($url);
-        return new Label($response);
+        return self::GET('consignment/' . $consignment_id . '/documents');
     }
 
-    /**
-     * @param array $data
-     * @return string
-     * @throws Exception
-     */
     public static function createSingleConsignment(array $data): string
     {
         $consignmentList = [
@@ -106,5 +82,23 @@ class Client
         }
 
         return $response->success[0];
+    }
+
+    protected static function GET(string $endpoint): Response|PromiseInterface
+    {
+        $response = self::authenticatedClient()->get(self::fullUrl($endpoint));
+
+        ray($response->json());
+
+        return $response;
+    }
+
+    protected static function POST(string $endpoint, $data): Response|PromiseInterface
+    {
+        $response = self::authenticatedClient()->post(self::fullUrl($endpoint), $data);
+
+        ray($response->json());
+
+        return $response;
     }
 }

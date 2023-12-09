@@ -2,17 +2,15 @@
 
 namespace App\Modules\DpdIreland\src\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
-use App\Models\OrderAddress;
 use App\Traits\Encryptable;
 use App\User;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Carbon;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 /**
  * App\Models\Configuration.
@@ -64,7 +62,7 @@ class DpdIreland extends BaseModel
 
     use Encryptable;
 
-    protected $table = 'modules_dpd-ireland_configuration';
+    protected $table = 'modules_dpd_ireland_configuration';
 
     protected $fillable = [
         'live',
@@ -82,7 +80,7 @@ class DpdIreland extends BaseModel
         'country_code',
     ];
 
-    protected $encryptable = [
+    protected array $encryptable = [
         'token', 'user', 'password',
     ];
 

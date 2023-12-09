@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Events\SyncRequestedEvent;
 use App\Jobs\DispatchEveryDayEventJob;
 use App\Jobs\DispatchEveryFiveMinutesEventJob;
 use App\Jobs\DispatchEveryHourEventJobs;
@@ -10,8 +9,8 @@ use App\Jobs\DispatchEveryMinuteEventJob;
 use App\Jobs\DispatchEveryTenMinutesEventJob;
 use App\Modules\InventoryMovementsStatistics\src\InventoryMovementsStatisticsServiceProvider;
 use App\Modules\InventoryTotals\src\InventoryTotalsServiceProvider;
-use App\Modules\Maintenance\src\Jobs\CopyInventoryMovementsToNewTableJob;
 use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
+use App\Modules\ScurriAnpost\database\seeders\ScurriAnpostSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 
@@ -41,6 +40,8 @@ class DatabaseSeeder extends Seeder
             Demo\TestOrdersSeeder::class,
 
             Demo\PaidOrdersSeeder::class,
+            Demo\PaidOrdersSeeder::class,
+            Demo\CollectionOrdersSeeder::class,
 
             Demo\ProductsTagsSeeder::class,
 
@@ -54,15 +55,19 @@ class DatabaseSeeder extends Seeder
             SalesSeeder::class,
             StocktakeSuggestionsSeeder::class,
 
+            PrintNodeClientSeeder::class,
+
+            DpdIrelandSeeder::class,
+            DpdUKSeeder::class,
+            ScurriAnpostSeeder::class,
+            Modules\Slack\ConfigurationSeeder::class,
+
+
 //            RestockingReportSeeder::class,
 //            DataCollectionsSeeder::class,
 //            RmsapiConnectionSeeder::class,
 //            AutomationsSeeder::class,
 
-            PrintNodeClientSeeder::class,
-            Modules\Slack\ConfigurationSeeder::class,
-
-//            DpdIrelandSeeder::class,
 //            ProductAliasSeeder::class,
 //            ProductTagsSeeder::class,
 //            SplitOrdersScenarioSeeder::class,
@@ -76,6 +81,7 @@ class DatabaseSeeder extends Seeder
 //        Modules Seeders
 //            WebhooksTestSeeder::class,
 //            DpdUk\DpdUkTestOrdersSeeder::class,
+
         ]);
 
 //        RunHourlyJobs::dispatchSync();

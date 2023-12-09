@@ -3,64 +3,60 @@
 namespace Tests\Feature\Modules\DpdIreland;
 
 use App\Models\Order;
+use App\Models\OrderAddress;
 use App\Models\ShippingLabel;
-use App\Modules\DpdIreland\Dpd;
-use App\Modules\DpdIreland\src\Responses\PreAdvice;
-use App\Modules\DpdIreland\src\Services\NextDayShippingService;
-use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Mockery;
+use App\Modules\DpdIreland\src\DpdIrelandServiceProvider;
+use App\Modules\DpdIreland\src\Models\DpdIreland;
+use App\User;
 use Tests\TestCase;
 
 class BasicModuleTest extends TestCase
 {
-    use RefreshDatabase;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $preAdvice = new PreAdvice(/** @lang text */
-            '<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-                <PreadviceResponse>
-                    <Status>OK</Status>
-                    <PreAdviceErrorCode></PreAdviceErrorCode>
-                    <PreAdviceErrorDetails></PreAdviceErrorDetails>
-                    <ReceivedConsignmentsNumber>1</ReceivedConsignmentsNumber>
-                    <Consignment>
-                        <RecordID>1</RecordID>
-                        <TrackingNumber>999999999</TrackingNumber>
-                        <DeliveryDepot>44</DeliveryDepot>
-                    </Consignment>
-                </PreadviceResponse>
-            '
-        );
-
-        Mockery::mock('alias:'.Dpd::class)
-            ->shouldReceive('shipOrder')
-            ->withAnyArgs()
-            ->andReturn($preAdvice);
-    }
-
-    /** @test
-     * @throws GuzzleException
-     */
     public function test_module_basic_functionality()
     {
+        if (empty(env('TEST_DPD_USER'))) {
+            $this->markTestSkipped('TEST_DPD_USER is not set');
+        }
+
+        DpdIreland::factory()->create([
+            'token'     => env('TEST_DPD_TOKEN'),
+            'user'      => env('TEST_DPD_USER'),
+            'password'  => env('TEST_DPD_PASSWORD'),
+        ]);
+
+        DpdIrelandServiceProvider::enableModule();
+
+        $address = OrderAddress::factory()->create([
+            'address1' => '6-9 Trinity Street',
+            'address2' => '',
+            'city' => 'Dublin',
+            'postcode' => 'D02EY47',
+            'country_code' => 'IE',
+        ]);
+
         /** @var Order $order */
-        $order = Order::factory()->create();
+        $order = Order::factory()->create([
+            'shipping_address_id' => $address->getKey(),
+            'status_code' => 'anpost_courier',
+            'label_template' => 'dpd_irl_next_day'
+        ]);
 
-        $shippingService = new NextDayShippingService();
-        $shippingLabelCollection = $shippingService->ship($order->getKey());
+        $this->actingAs(User::factory()->create(), 'api');
 
-        $this->assertCount(1, $shippingLabelCollection);
+        $response = $this->post('api/shipping-labels', [
+            'order_id' => $order->getKey(),
+            'shipping_service_code' => $order->label_template
+        ]);
+
+        ray($response->json());
+
+        $response->assertSuccessful();
 
         /** @var ShippingLabel $label */
-        $label = $shippingLabelCollection->first();
+        $label = ShippingLabel::query()->first();
 
         $this->assertEquals('DPD Ireland', $label->carrier);
         $this->assertEquals('next_day', $label->service);
-        $this->assertEquals('999999999', $label->shipping_number);
         $this->assertEquals($order->id, $label->order_id);
         $this->assertNotEmpty($label->base64_pdf_labels);
     }

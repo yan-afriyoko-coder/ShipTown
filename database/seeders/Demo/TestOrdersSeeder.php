@@ -3,6 +3,7 @@
 namespace Database\Seeders\Demo;
 
 use App\Models\Order;
+use App\Models\OrderAddress;
 use App\Models\OrderComment;
 use App\Models\OrderProduct;
 use App\Models\Product;
@@ -23,6 +24,8 @@ class TestOrdersSeeder extends Seeder
         $this->create_order_with_sku_not_in_our_database();
 
         $this->create_test_order_for_packing();
+
+        $this->create_order_with_incorrect_address();
     }
 
     protected function create_order_with_sku_not_in_our_database(): void
@@ -76,7 +79,7 @@ class TestOrdersSeeder extends Seeder
         $product1 = Product::query()->firstOrCreate(['sku' => '45'], ['name' => 'Test Product - 45']);
         $product2 = Product::query()->firstOrCreate(['sku' => '44'], ['name' => 'Test Product - 44']);
 
-        $order = Order::query()->create(['order_number' => 'T100002 - Unpaid order', 'order_placed_at' => now()->subDays(3), 'total_paid' => 0]);
+        $order = Order::factory()->create(['order_number' => 'T100002 - Unpaid order', 'order_placed_at' => now()->subDays(3), 'total_paid' => 0]);
 
         OrderProduct::factory()->create([
             'order_id' => $order->getKey(),
@@ -89,5 +92,32 @@ class TestOrdersSeeder extends Seeder
             'quantity_ordered' => 2,
             'product_id' => $product2->getKey(),
         ]);
+    }
+
+    private function create_order_with_incorrect_address()
+    {
+        $orderAddress = OrderAddress::factory()->create([
+            'address1' => 'This address is too long, over 50 characters, and some couriers might not accept it',
+            'address2' => 'Test address',
+            'city' => 'Dublin',
+            'postcode' => 'D02EY47',
+            'country_code' => 'IE',
+            'country_name' => 'Ireland',
+        ]);
+
+        $order = Order::query()->create([
+            'shipping_address_id' => $orderAddress->getKey(),
+            'order_number' => 'T100003 - Incorrect address',
+            'order_placed_at' => now()->subDays(3)
+        ]);
+
+        OrderComment::create([
+            'order_id' => $order->getKey(),
+            'comment' => 'Test with incorrect address (too long)'
+        ]);
+
+        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
+
+        Order::query()->where(['id' => $order->getKey()])->update(['total_paid' => DB::raw('total_order')]);
     }
 }
