@@ -41,7 +41,12 @@ class BasicModuleTest extends TestCase
 
         ScurriServiceProvider::enableModule();
 
-        $address = OrderAddress::factory()->create(['address1' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget aliquam ultricies, nisl nisl ultricies nisl, nec aliquam nisl nisl nec nisl.']);
+        $address = OrderAddress::factory()->create([
+            'address1' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget aliquam ultricies, nisl nisl ultricies nisl, nec aliquam nisl nisl nec nisl.',
+            'City' => 'Dublin',
+            'postcode' => 'D02EY47',
+            'country_code' => 'IE',
+        ]);
 
         /** @var Order $order */
         $order = Order::factory()->create([
