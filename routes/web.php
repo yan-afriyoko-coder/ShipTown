@@ -63,7 +63,7 @@ Route::name('reports.')->group(function () {
 });
 
 Route::view('settings/warehouses', 'settings/warehouses')->name('settings.warehouses');
-Route::view('settings/modules/warehouses', 'settings/modules/magento2msi');
+Route::view('settings/modules/magento2msi', 'settings/modules/magento2msi');
 
 Route::get('pdf/orders/{order_number}/{template}', [PdfOrderController::class, 'show']);
 Route::get('csv/ready_order_shipments', [Csv\ReadyOrderShipmentController::class, 'index'])->name('ready_order_shipments_as_csv');
