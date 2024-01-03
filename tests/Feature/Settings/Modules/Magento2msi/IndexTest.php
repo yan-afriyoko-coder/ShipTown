@@ -45,7 +45,7 @@ class IndexTest extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertNotFound();
+        $response->assertSuccessful();
     }
 
     /** @test */
@@ -57,6 +57,6 @@ class IndexTest extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertNotFound();
+        $response->assertSuccessful();
     }
 }

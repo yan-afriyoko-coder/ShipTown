@@ -63,7 +63,6 @@ Route::name('reports.')->group(function () {
 });
 
 Route::view('settings/warehouses', 'settings/warehouses')->name('settings.warehouses');
-Route::view('settings/modules/magento2msi', 'settings/modules/magento2msi');
 
 Route::get('pdf/orders/{order_number}/{template}', [PdfOrderController::class, 'show']);
 Route::get('csv/ready_order_shipments', [Csv\ReadyOrderShipmentController::class, 'index'])->name('ready_order_shipments_as_csv');
@@ -72,8 +71,8 @@ Route::get('csv/products/picked', [Csv\ProductsPickedInWarehouse::class, 'index'
 Route::get('csv/products/shipped', [Csv\ProductsShippedFromWarehouseController::class, 'index'])->name('warehouse_shipped.csv');
 Route::get('csv/boxtop/stock', [Csv\BoxTopStockController::class, 'index'])->name('boxtop-warehouse-stock.csv');
 
-
 Route::middleware(['role:admin'])->group(function () {
+    Route::view('settings/modules/magento2msi', 'settings/modules/magento2msi');
     Route::view('settings/modules/stocktake-suggestions', 'settings/modules/stocktake-suggestions');
 });
 
