@@ -45,7 +45,7 @@ class IndexTest extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertSuccessful();
+        $response->assertForbidden();
     }
 
     /** @test */
