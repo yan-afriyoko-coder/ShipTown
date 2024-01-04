@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Modules\AutoStatus\Picking\Configuration;
+namespace Tests\Feature\Api\Modules\Autostatus\Picking\Configuration;
 
 use App\Models\AutoStatusPickingConfiguration;
 use App\User;
