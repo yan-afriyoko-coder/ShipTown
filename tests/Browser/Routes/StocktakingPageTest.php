@@ -32,9 +32,9 @@ class StocktakingPageTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             /** @var User $user */
-            $user = User::factory()->create();
-            $warehouse = Warehouse::factory()->create();
-            $user->warehouse()->associate($warehouse);
+            $user = User::factory()->create([
+                'warehouse_id' => Warehouse::factory()->create()->getKey(),
+            ]);
 
             $browser->loginAs($user)
                 ->visit($this->uri)
