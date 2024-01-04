@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Modules\OrderAutomations\ConfigController;
+namespace Tests\Feature\Api\Modules\Automations\Config;
 
 use App\Modules\Automations\src\AutomationsServiceProvider;
 use App\User;

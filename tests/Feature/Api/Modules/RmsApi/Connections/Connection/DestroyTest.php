@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Modules\Rmsapi\Connections\Connection;
+namespace Tests\Feature\Api\Modules\RmsApi\Connections\Connection;
 
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\User;
