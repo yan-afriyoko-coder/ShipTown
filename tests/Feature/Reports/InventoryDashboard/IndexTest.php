@@ -10,7 +10,7 @@ use Tests\TestCase;
 /**
  *
  */
-class Inventory_dashboardTest extends TestCase
+class IndexTest extends TestCase
 {
     use RefreshDatabase;
 

@@ -9,7 +9,7 @@ use Tests\TestCase;
 /**
  *
  */
-class Inventory_movementsTest extends TestCase
+class IndexTest extends TestCase
 {
     use RefreshDatabase;
 

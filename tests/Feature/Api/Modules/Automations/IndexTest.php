@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Modules\OrderAutomations\AutomationController;
+namespace Tests\Feature\Api\Modules\Automations;
 
 use App\User;
 use Tests\TestCase;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Modules\OrderAutomations\AutomationController;
+namespace Tests\Feature\Api\Modules\Automations;
 
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition;
