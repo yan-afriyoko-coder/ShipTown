@@ -2,14 +2,12 @@
 
 namespace Tests\Browser;
 
-use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
 use App\Modules\InventoryTotals\src\InventoryTotalsServiceProvider;
-use App\Services\InventoryService;
 use App\User;
 use Facebook\WebDriver\Exception\ElementClickInterceptedException;
 use Facebook\WebDriver\Exception\NoSuchElementException;
@@ -19,7 +17,7 @@ use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
-class PagesWalkTroughTest extends DuskTestCase
+class PagesWalktroughTest extends DuskTestCase
 {
     private Order $order;
     private User $user;
@@ -39,14 +37,14 @@ class PagesWalkTroughTest extends DuskTestCase
             $browser->disableFitOnFailure();
 
             $this->login($browser);
-            $this->products($browser);
-            $this->orders($browser);
-            $this->dataCollectorStockDelivery($browser);
-            $this->stocktaking($browser);
-            $this->picklist($browser);
-            $this->packlist($browser);
-            $this->dashboard($browser);
-            $this->restocking($browser);
+            $this->products($browser)->screenshot('products.png');
+            $this->orders($browser)->screenshot('orders.png');
+            $this->dataCollectorStockDelivery($browser)->screenshot('data-collector-stock-delivery.png');
+            $this->stocktaking($browser)->screenshot('stocktaking.png');
+            $this->picklist($browser)->screenshot('picklist.png');
+            $this->packlist($browser)->screenshot('packlist.png');
+            $this->dashboard($browser)->screenshot('dashboard.png');
+            $this->restocking($browser)->screenshot('restocking.png');
         });
     }
 
@@ -89,13 +87,7 @@ class PagesWalkTroughTest extends DuskTestCase
         ]);
     }
 
-    /**
-     * @param Browser $browser
-     * @throws ElementClickInterceptedException
-     * @throws NoSuchElementException
-     * @throws TimeOutException
-     */
-    private function packlist(Browser $browser): void
+    private function packlist(Browser $browser): Browser
     {
         $browser->pause($this->shortDelay)->mouseover('#navToggleButton')
             ->pause($this->shortDelay)->click('#navToggleButton')
@@ -135,12 +127,11 @@ class PagesWalkTroughTest extends DuskTestCase
         $browser->driver->getKeyboard()->sendKeys(WebDriverKeys::ENTER);
         $browser->pause($this->shortDelay);
         $browser->pause($this->shortDelay);
+
+        return $browser;
     }
 
-    /**
-     * @param Browser $browser
-     */
-    private function login(Browser $browser): void
+    private function login(Browser $browser)
     {
         $browser->visit('/')
             ->pause($this->shortDelay)
@@ -153,13 +144,7 @@ class PagesWalkTroughTest extends DuskTestCase
             ->pause($this->longDelay);
     }
 
-    /**
-     * @param Browser $browser
-     * @throws ElementClickInterceptedException
-     * @throws NoSuchElementException
-     * @throws TimeOutException
-     */
-    private function dataCollectorStockDelivery(Browser $browser): void
+    private function dataCollectorStockDelivery(Browser $browser): Browser
     {
         $browser
             ->pause($this->shortDelay)->mouseover('#tools_link')
@@ -203,14 +188,11 @@ class PagesWalkTroughTest extends DuskTestCase
             ->pause($this->shortDelay)->mouseover('#transferInButton')
             ->pause($this->shortDelay)->click('#transferInButton')
             ->pause($this->longDelay);
+
+        return $browser;
     }
 
-    /**
-     * @param Browser $browser
-     * @throws ElementClickInterceptedException
-     * @throws NoSuchElementException
-     */
-    private function picklist(Browser $browser): void
+    private function picklist(Browser $browser): Browser
     {
         $browser->pause($this->shortDelay)
             ->pause($this->shortDelay)->mouseover('#navToggleButton')
@@ -229,24 +211,20 @@ class PagesWalkTroughTest extends DuskTestCase
             ->pause($this->shortDelay)->keys('@barcode-input-field', $this->product2->sku)
             ->pause($this->shortDelay)->keys('@barcode-input-field', '{enter}')
             ->pause($this->longDelay);
+
+        return $browser;
     }
 
-    /**
-     * @throws ElementClickInterceptedException
-     * @throws NoSuchElementException
-     */
-    private function dashboard(Browser $browser): void
+    private function dashboard(Browser $browser): Browser
     {
         $browser->mouseover('#dashboard_link')->pause($this->shortDelay)
             ->click('#dashboard_link')->pause($this->longDelay)
             ->pause($this->longDelay);
+
+        return $browser;
     }
 
-    /**
-     * @param Browser $browser
-     * @throws TimeoutException
-     */
-    private function stocktaking(Browser $browser): void
+    private function stocktaking(Browser $browser): Browser
     {
         /** @var Product $product */
         $product = Product::first();
@@ -268,35 +246,31 @@ class PagesWalkTroughTest extends DuskTestCase
             ->pause($this->shortDelay)->typeSlowly('#quantity-request-input', 12)
             ->pause($this->shortDelay)->keys('#quantity-request-input', '{ENTER}')
             ->pause($this->longDelay);
+
+        return $browser;
     }
 
-    /**
-     * @param Browser $browser
-     */
-    private function products(Browser $browser): void
+    private function products(Browser $browser): Browser
     {
-        $browser->mouseover('#products_link')
+        return $browser->mouseover('#products_link')
             ->pause($this->shortDelay)->clickLink('Products')
             ->pause($this->longDelay)
             ->pause($this->shortDelay)->keys('@barcode-input-field', Product::first('sku')['sku'], '{enter}')
             ->pause($this->longDelay);
     }
 
-    private function orders(Browser $browser): void
+    private function orders(Browser $browser): Browser
     {
-        $browser->mouseover('#orders_link')
+        return $browser->mouseover('#orders_link')
             ->pause($this->shortDelay)->clickLink('Orders')
             ->pause($this->longDelay)
             ->pause($this->shortDelay)->keys('@barcode-input-field', Order::first()->getAttribute('order_number'), '{enter}')
             ->pause($this->longDelay);
     }
 
-    /**
-     * @param Browser $browser
-     */
-    private function restocking(Browser $browser): void
+    private function restocking(Browser $browser): Browser
     {
-        $browser->mouseover('#tools_link')->pause($this->shortDelay)
+        return $browser->mouseover('#tools_link')->pause($this->shortDelay)
             ->clickLink('Tools')->pause($this->shortDelay)
             ->mouseover('#restocking_link')->pause($this->shortDelay)
             ->clickLink('Restocking')->pause($this->longDelay);

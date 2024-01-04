@@ -28,7 +28,7 @@ abstract class DuskTestCase extends BaseTestCase
         $arguments = collect([
             '--disable-gpu',
             env('DUSK_HEADLESS', true) ? '--headless' : null,
-            '--window-size=350,600',
+            '--window-size=300,600',
         ])->filter()->toArray();
 
         $options = (new ChromeOptions())->addArguments($arguments);
