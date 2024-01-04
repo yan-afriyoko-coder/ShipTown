@@ -155,4 +155,9 @@ abstract class DuskTestCase extends BaseTestCase
 
         file_put_contents($path, $str);
     }
+
+    protected function sendKeysTo(Browser $browser, string $keys): void
+    {
+        $browser->driver->getKeyboard()->sendKeys($keys);
+    }
 }
