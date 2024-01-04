@@ -46,8 +46,6 @@ class AppGenerateRoutesTests extends Command
 
             if (! file_exists($fullFileName)) {
                 Artisan::call('app:make-test '.$testName.' --stub=test.controller');
-
-                dd($fullFileName);
             }
         });
     }
