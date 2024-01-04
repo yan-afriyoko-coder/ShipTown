@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Modules;
+namespace Tests\Feature\Api\Modules\Module;
 
 use App\Models\Module;
 use App\Modules\BaseModuleServiceProvider;
