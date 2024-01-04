@@ -18,23 +18,11 @@ abstract class DuskTestCase extends BaseTestCase
     protected int $shortDelay = 200;
     protected int $longDelay = 0;
 
-    /**
-     * Prepare for Dusk test execution.
-     *
-     * @beforeClass
-     *
-     * @return void
-     */
     public static function prepare(): void
     {
         static::startChromeDriver();
     }
 
-    /**
-     * Create the RemoteWebDriver instance.
-     *
-     * @return RemoteWebDriver
-     */
     protected function driver(): RemoteWebDriver
     {
         $arguments = collect([
