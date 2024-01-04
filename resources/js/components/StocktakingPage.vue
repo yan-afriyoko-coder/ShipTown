@@ -8,16 +8,16 @@
             <button id="config-button" disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
+        <div class="row pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
+            <div class="col-6 text-left text-nowrap">
+                TOOLS > STOCKTAKING
+            </div>
+            <div class="col-6 text-right text-nowrap">
+                <a :href="'/reports/inventory-movements?filter[description]=stocktake'">SEE MORE</a>
+            </div>
+        </div>
 
         <template v-if="recentStocktakes.data">
-            <div class="row pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
-                <div class="col-6 text-left text-nowrap">
-                    TOOLS > STOCKTAKING
-                </div>
-                <div class="col-6 text-right text-nowrap">
-                    <a :href="'/reports/inventory-movements?filter[description]=stocktake'">SEE MORE</a>
-                </div>
-            </div>
             <div class="text-secondary small text-center" v-if="recentStocktakes.data.length === 0">
                 &nbsp; No recent stocktakes found
             </div>

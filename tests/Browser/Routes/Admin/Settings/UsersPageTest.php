@@ -12,6 +12,9 @@ class UsersPageTest extends DuskTestCase
 {
     private string $uri = '/admin/settings/users';
 
+    /**
+     * @throws Throwable
+     */
     public function testIfPageLoads()
     {
         $this->browse(function (Browser $browser) {
@@ -22,7 +25,7 @@ class UsersPageTest extends DuskTestCase
             $browser->loginAs($admin)
                 ->disableFitOnFailure()
                 ->visit($this->uri)
-                ->pause(300)
+                ->pause($this->shortDelay)
                 ->assertSee('Users')
                 ->assertSee($admin->name);
         });

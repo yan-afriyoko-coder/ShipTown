@@ -5,7 +5,7 @@ namespace Tests\Feature\FulfillmentDashboard;
 use App\User;
 use Tests\TestCase;
 
-class Fulfillment_dashboardTest extends TestCase
+class IndexTest extends TestCase
 {
     protected string $uri = 'fulfillment-dashboard';
 

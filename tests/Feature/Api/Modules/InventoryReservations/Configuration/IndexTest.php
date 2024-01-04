@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Modules\InventoryReservation\Configuration;
+namespace Tests\Feature\Api\Modules\InventoryReservations\Configuration;
 
 use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsEventServiceProviderBase;
 use App\User;

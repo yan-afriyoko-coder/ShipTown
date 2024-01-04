@@ -2,12 +2,33 @@
 
 namespace Tests\Browser\Routes\Reports;
 
+use App\User;
+use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
 class RestockingPageTest extends DuskTestCase
 {
     private string $uri = '/reports/restocking';
+
+    /**
+     * @throws Throwable
+     */
+    public function testPage()
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $user->assignRole('admin');
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->disableFitOnFailure();
+            $browser->loginAs($user);
+            $browser->visit($this->uri);
+            $browser->assertPathIs($this->uri);
+            // $browser->assertSee('');
+            $browser->assertSourceMissing('Server Error');
+        });
+    }
 
     /**
      * @throws Throwable
@@ -19,4 +40,3 @@ class RestockingPageTest extends DuskTestCase
         $this->basicGuestAccessTest($this->uri);
     }
 }
-

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Modules\Rmsapi\Connections;
+namespace Tests\Feature\Api\Modules\RmsApi\Connections;
 
 use App\User;
 use Tests\TestCase;

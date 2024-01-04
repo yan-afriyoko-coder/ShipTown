@@ -3,82 +3,40 @@
 namespace Tests\Browser\Routes\Admin;
 
 use App\User;
-use Exception;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
 class ActivityLogPageTest extends DuskTestCase
 {
-    private string $uri = '';
+    private string $uri = '/admin/activity-log';
 
-    public function testIncomplete()
+    /**
+     * @throws Throwable
+     */
+    public function testPage()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        /** @var User $user */
+        $user = User::factory()->create();
+        $user->assignRole('admin');
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->disableFitOnFailure();
+            $browser->loginAs($user);
+            $browser->visit($this->uri);
+            $browser->assertPathIs($this->uri);
+            // $browser->assertSee('');
+            $browser->assertSourceMissing('Server Error');
+        });
     }
 
-//    /**
-//     * @throws Exception
-//     */
-//    protected function setUp(): void
-//    {
-//        if (empty($this->uri)) {
-//            throw new Exception('Please set the $uri property in your test class.');
-//        }
-//
-//        parent::setUp();
-//    }
-//
-//    /**
-//     * @throws Throwable
-//     */
-//    public function testUserAccess()
-//    {
-//        $this->browse(function (Browser $browser) {
-//            /** @var User $user */
-//            $user = User::factory()->create();
-//            $user->assignRole('user');
-//
-//            $browser->disableFitOnFailure()
-//                ->loginAs($user)
-//                ->visit($this->uri)
-//                ->pause(300)
-//                ->assertRouteIs($this->uri)
-//                ->assertSourceMissing('snotify-error');
-//        });
-//    }
-//
-//    /**
-//     * @throws Throwable
-//     */
-//    public function testAdminAccess()
-//    {
-//        $this->browse(function (Browser $browser) {
-//            /** @var User $admin */
-//            $admin = User::factory()->create();
-//            $admin->assignRole('admin');
-//
-//            $browser->disableFitOnFailure()
-//                ->loginAs($admin)
-//                ->visit($this->uri)
-//                ->pause(300)
-//                ->assertRouteIs($this->uri)
-//                ->assertSourceMissing('snotify-error');
-//        });
-//    }
-//
-//    /**
-//     * @throws Throwable
-//     */
-//    public function testGuestAccess()
-//    {
-//        $this->browse(function (Browser $browser) {
-//            $browser->disableFitOnFailure()
-//                ->logout()
-//                ->visit($this->uri)
-//                ->assertRouteIs('login')
-//                ->assertSee('Login');
-//        });
-//    }
+    /**
+     * @throws Throwable
+     */
+    public function testBasics()
+    {
+        $this->basicUserAccessTest($this->uri, true);
+        $this->basicAdminAccessTest($this->uri, true);
+        $this->basicGuestAccessTest($this->uri);
+    }
 }
-

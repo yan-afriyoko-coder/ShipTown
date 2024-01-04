@@ -9,7 +9,7 @@ use Tests\TestCase;
 /**
  *
  */
-class Manifest_jsonTest extends TestCase
+class IndexTest extends TestCase
 {
     use RefreshDatabase;
 

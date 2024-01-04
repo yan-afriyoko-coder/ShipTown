@@ -25,6 +25,7 @@ class StocktakeSuggestionsPageTest extends DuskTestCase
             $browser->loginAs($user);
             $browser->visit($this->uri);
             $browser->assertPathIs($this->uri);
+            // $browser->assertSee('');
             $browser->assertSourceMissing('Server Error');
         });
     }
@@ -32,7 +33,7 @@ class StocktakeSuggestionsPageTest extends DuskTestCase
     /**
      * @throws Throwable
      */
-    public function test_Basics()
+    public function testBasics()
     {
         $this->basicUserAccessTest($this->uri, true);
         $this->basicAdminAccessTest($this->uri, true);

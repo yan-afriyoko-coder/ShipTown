@@ -1,12 +1,11 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\ShippingLabels;
+namespace Tests\Feature\Api\ShippingLabels;
 
 use App\Abstracts\ShippingServiceAbstract;
 use App\Models\Order;
 use App\Models\ShippingService;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Tests\TestCase;
 

@@ -15,30 +15,23 @@ abstract class DuskTestCase extends BaseTestCase
     use CreatesApplication;
     use ResetsDatabase;
 
-    /**
-     * Prepare for Dusk test execution.
-     *
-     * @beforeClass
-     *
-     * @return void
-     */
+    protected int $shortDelay = 300;
+    protected int $longDelay = 0;
+
     public static function prepare(): void
     {
         static::startChromeDriver();
     }
 
-    /**
-     * Create the RemoteWebDriver instance.
-     *
-     * @return RemoteWebDriver
-     */
     protected function driver(): RemoteWebDriver
     {
-        $options = (new ChromeOptions())->addArguments(collect([
+        $arguments = collect([
             '--disable-gpu',
             env('DUSK_HEADLESS', true) ? '--headless' : null,
-            '--window-size=300,900',
-        ])->filter()->toArray());
+            '--window-size=300,600',
+        ])->filter()->toArray();
+
+        $options = (new ChromeOptions())->addArguments($arguments);
 
         return RemoteWebDriver::create(
             'http://127.0.0.1:9515',
@@ -63,9 +56,9 @@ abstract class DuskTestCase extends BaseTestCase
 
             $browser->loginAs($user);
             $browser->visit($uri);
-            $browser->assertSourceMissing('Server Error');
+            $browser->pause($this->shortDelay);
 
-            $browser->pause(500);
+            $browser->assertSourceMissing('Server Error');
             $browser->assertSourceMissing('snotify-error');
 
             if ($allowed) {
@@ -90,9 +83,9 @@ abstract class DuskTestCase extends BaseTestCase
 
             $browser->loginAs($admin);
             $browser->visit($uri);
-            $browser->assertSourceMissing('Server Error');
+            $browser->pause($this->shortDelay);
 
-            $browser->pause(500);
+            $browser->assertSourceMissing('Server Error');
             $browser->assertSourceMissing('snotify-error');
 
             if ($allowed) {
@@ -112,10 +105,13 @@ abstract class DuskTestCase extends BaseTestCase
 
         $this->browse(function (Browser $browser) use ($uri, $allowed) {
             $browser->disableFitOnFailure();
+
             $browser->logout();
             $browser->visit($uri);
+            $browser->pause($this->shortDelay);
+
             $browser->assertSourceMissing('Server Error');
-            $browser->pause(500);
+            $browser->assertSourceMissing('snotify-error');
 
             if ($allowed) {
                 $browser->assertPathIs($uri);
@@ -149,5 +145,10 @@ abstract class DuskTestCase extends BaseTestCase
         }
 
         file_put_contents($path, $str);
+    }
+
+    protected function sendKeysTo(Browser $browser, string $keys): void
+    {
+        $browser->driver->getKeyboard()->sendKeys($keys);
     }
 }

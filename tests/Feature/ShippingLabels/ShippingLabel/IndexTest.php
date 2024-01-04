@@ -7,10 +7,7 @@ use App\Models\ShippingLabel;
 use App\User;
 use Tests\TestCase;
 
-/**
- *
- */
-class Shipping_labelTest extends TestCase
+class IndexTest extends TestCase
 {
     protected string $uri = '/shipping-labels';
 

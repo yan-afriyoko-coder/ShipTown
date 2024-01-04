@@ -3,7 +3,6 @@
 namespace Tests\Browser\Routes\Reports;
 
 use App\User;
-use Exception;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
@@ -13,25 +12,31 @@ class StocktakeSuggestionsPageTest extends DuskTestCase
     private string $uri = '/reports/stocktake-suggestions';
 
     /**
-     * @throws Exception
+     * @throws Throwable
      */
-    protected function setUp(): void
+    public function testPage()
     {
-        if (empty($this->uri)) {
-            throw new Exception('Please set the $uri property in your test class.');
-        }
+        /** @var User $user */
+        $user = User::factory()->create();
+        $user->assignRole('admin');
 
-        parent::setUp();
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->disableFitOnFailure();
+            $browser->loginAs($user);
+            $browser->visit($this->uri);
+            $browser->assertPathIs($this->uri);
+            // $browser->assertSee('');
+            $browser->assertSourceMissing('Server Error');
+        });
     }
 
     /**
      * @throws Throwable
      */
-    public function testBasicsAccess()
+    public function testBasics()
     {
         $this->basicUserAccessTest($this->uri, true);
         $this->basicAdminAccessTest($this->uri, true);
         $this->basicGuestAccessTest($this->uri);
     }
 }
-

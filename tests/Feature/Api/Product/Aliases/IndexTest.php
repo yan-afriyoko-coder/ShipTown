@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\ProductAliasController\Aliases;
+namespace Tests\Feature\Api\Product\Aliases;
 
 use App\User;
 use Tests\TestCase;

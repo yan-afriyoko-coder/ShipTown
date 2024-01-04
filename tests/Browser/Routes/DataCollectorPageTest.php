@@ -2,12 +2,33 @@
 
 namespace Tests\Browser\Routes;
 
+use App\User;
+use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
 class DataCollectorPageTest extends DuskTestCase
 {
     private string $uri = '/data-collector';
+
+    /**
+     * @throws Throwable
+     */
+    public function testPage()
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $user->assignRole('admin');
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->disableFitOnFailure();
+            $browser->loginAs($user);
+            $browser->visit($this->uri);
+            $browser->assertPathIs($this->uri);
+            // $browser->assertSee('');
+            $browser->assertSourceMissing('Server Error');
+        });
+    }
 
     /**
      * @throws Throwable
@@ -19,4 +40,3 @@ class DataCollectorPageTest extends DuskTestCase
         $this->basicGuestAccessTest($this->uri);
     }
 }
-

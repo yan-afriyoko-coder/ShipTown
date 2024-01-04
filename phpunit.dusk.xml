@@ -9,8 +9,11 @@
          processIsolation="false"
          stopOnFailure="true">
     <testsuites>
+        <testsuite name="Main Features Walktrough Test">
+            <directory suffix="PagesWalktroughTest.php">./tests/Browser</directory>
+        </testsuite>
         <testsuite name="Browser Test Suite">
-            <directory suffix="Test.php">./tests/Browser</directory>
+            <directory suffix="Test.php">./tests/Browser/Routes</directory>
         </testsuite>
     </testsuites>
 </phpunit>
