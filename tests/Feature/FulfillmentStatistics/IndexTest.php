@@ -5,7 +5,7 @@ namespace Tests\Feature\FulfillmentStatistics;
 use App\User;
 use Tests\TestCase;
 
-class Fulfillment_statisticsTest extends TestCase
+class IndexTest extends TestCase
 {
     protected string $uri = 'fulfillment-statistics';
 

@@ -9,7 +9,7 @@ use Tests\TestCase;
 /**
  *
  */
-class Products_mergeTest extends TestCase
+class IndexTest extends TestCase
 {
     /**
      * @var string
