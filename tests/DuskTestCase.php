@@ -15,7 +15,7 @@ abstract class DuskTestCase extends BaseTestCase
     use CreatesApplication;
     use ResetsDatabase;
 
-    protected int $shortDelay = 200;
+    protected int $shortDelay = 300;
     protected int $longDelay = 0;
 
     public static function prepare(): void
