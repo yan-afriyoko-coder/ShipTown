@@ -23,13 +23,9 @@ class PagesWalkTroughTest extends DuskTestCase
 {
     private Order $order;
     private User $user;
-    private int $shortDelay = 120;
-    private int $longDelay = 0;
-
 
     private Product $product1;
     private Product $product2;
-
 
     /**
      * A Dusk test example.

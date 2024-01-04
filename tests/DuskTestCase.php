@@ -15,6 +15,9 @@ abstract class DuskTestCase extends BaseTestCase
     use CreatesApplication;
     use ResetsDatabase;
 
+    protected int $shortDelay = 200;
+    protected int $longDelay = 0;
+
     /**
      * Prepare for Dusk test execution.
      *
@@ -34,11 +37,13 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function driver(): RemoteWebDriver
     {
-        $options = (new ChromeOptions())->addArguments(collect([
+        $arguments = collect([
             '--disable-gpu',
             env('DUSK_HEADLESS', true) ? '--headless' : null,
             '--window-size=300,900',
-        ])->filter()->toArray());
+        ])->filter()->toArray();
+
+        $options = (new ChromeOptions())->addArguments($arguments);
 
         return RemoteWebDriver::create(
             'http://127.0.0.1:9515',
