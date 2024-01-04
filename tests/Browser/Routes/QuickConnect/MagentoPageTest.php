@@ -14,7 +14,7 @@ class MagentoPageTest extends DuskTestCase
     /**
      * @throws Throwable
      */
-    public function testIncomplete()
+    public function testPage()
     {
         /** @var User $user */
         $user = User::factory()->create();
@@ -23,15 +23,17 @@ class MagentoPageTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($user) {
             $browser->disableFitOnFailure();
             $browser->loginAs($user);
-
-            $this->markTestIncomplete('This test has not been implemented yet.');
+            $browser->visit($this->uri);
+            $browser->assertPathIs($this->uri);
+            // $browser->assertSee('');
+            $browser->assertSourceMissing('Server Error');
         });
     }
 
     /**
      * @throws Throwable
      */
-    public function testBasicsAccess()
+    public function testBasics()
     {
         $this->basicUserAccessTest($this->uri, true);
         $this->basicAdminAccessTest($this->uri, true);

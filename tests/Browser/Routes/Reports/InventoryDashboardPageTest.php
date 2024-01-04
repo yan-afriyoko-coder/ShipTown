@@ -2,7 +2,6 @@
 
 namespace Tests\Browser\Routes\Reports;
 
-use App\Models\Warehouse;
 use App\User;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
@@ -15,24 +14,19 @@ class InventoryDashboardPageTest extends DuskTestCase
     /**
      * @throws Throwable
      */
-    public function testInventoryDashboardPage()
+    public function testPage()
     {
-        /** @var Warehouse $warehouse */
-        $warehouse = Warehouse::factory()->create();
-
         /** @var User $user */
         $user = User::factory()->create();
         $user->assignRole('admin');
-        $user->update(['warehouse_id' => $warehouse->id]);
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->disableFitOnFailure();
             $browser->loginAs($user);
             $browser->visit($this->uri);
             $browser->assertPathIs($this->uri);
+            // $browser->assertSee('');
             $browser->assertSourceMissing('Server Error');
-
-            $this->markTestIncomplete('This test has not been implemented yet.');
         });
     }
 

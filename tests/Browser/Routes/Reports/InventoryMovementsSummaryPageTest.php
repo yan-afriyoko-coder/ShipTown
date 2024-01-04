@@ -3,18 +3,40 @@
 namespace Tests\Browser\Routes\Reports;
 
 use App\User;
-use Exception;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
 class InventoryMovementsSummaryPageTest extends DuskTestCase
 {
-    private string $uri = '';
+    private string $uri = '/reports/inventory-movements-summary';
 
-    public function testIncomplete()
+    /**
+     * @throws Throwable
+     */
+    public function testPage()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        /** @var User $user */
+        $user = User::factory()->create();
+        $user->assignRole('admin');
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->disableFitOnFailure();
+            $browser->loginAs($user);
+            $browser->visit($this->uri);
+            $browser->assertPathIs($this->uri);
+            // $browser->assertSee('');
+            $browser->assertSourceMissing('Server Error');
+        });
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testBasics()
+    {
+        $this->basicUserAccessTest($this->uri, true);
+        $this->basicAdminAccessTest($this->uri, true);
+        $this->basicGuestAccessTest($this->uri);
     }
 }
-

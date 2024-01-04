@@ -25,9 +25,8 @@ class Magento2MsiPageTest extends DuskTestCase
             $browser->loginAs($user);
             $browser->visit($this->uri);
             $browser->assertPathIs($this->uri);
+            // $browser->assertSee('');
             $browser->assertSourceMissing('Server Error');
-
-            $this->markTestIncomplete('This test has not been implemented yet.');
         });
     }
 
