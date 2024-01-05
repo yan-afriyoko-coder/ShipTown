@@ -10,7 +10,7 @@ class RepopulateStatisticsTableJobTest extends TestCase
 {
     public function testBasic()
     {
-        InventoryMovement::factory()->create(['type' => 'sale']);
+        InventoryMovement::factory(3)->create(['type' => 'sale']);
 
         RecalculateStatisticsTableJob::dispatch();
 
