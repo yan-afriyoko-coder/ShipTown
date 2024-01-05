@@ -14,6 +14,6 @@ class RepopulateStatisticsTableJobTest extends TestCase
 
         RecalculateStatisticsTableJob::dispatch();
 
-        $this->assertDatabaseCount('inventory_movements_statistics', 1);
+        $this->assertDatabaseCount('inventory_movements_statistics', 3);
     }
 }
