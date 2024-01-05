@@ -3,6 +3,7 @@
 namespace Tests\Feature\Modules\InventoryMovementsStatistics;
 
 use App\Models\InventoryMovement;
+use App\Models\Product;
 use App\Modules\InventoryMovementsStatistics\src\Jobs\RecalculateStatisticsTableJob;
 use Tests\TestCase;
 
@@ -10,10 +11,18 @@ class RepopulateStatisticsTableJobTest extends TestCase
 {
     public function testBasic()
     {
-        InventoryMovement::factory(3)->create(['type' => 'sale']);
+        $product1 = Product::factory()->create();
+        InventoryMovement::factory()->create(['product_id' => $product1->getKey(), 'type' => 'sale']);
+        InventoryMovement::factory()->create(['product_id' => $product1->getKey(), 'type' => 'sale']);
+        InventoryMovement::factory()->create(['product_id' => $product1->getKey(), 'type' => 'sale']);
+
+        $product2 = Product::factory()->create();
+        InventoryMovement::factory()->create(['product_id' => $product2->getKey(), 'type' => 'sale']);
+        InventoryMovement::factory()->create(['product_id' => $product2->getKey(), 'type' => 'sale']);
+        InventoryMovement::factory()->create(['product_id' => $product2->getKey(), 'type' => 'sale']);
 
         RecalculateStatisticsTableJob::dispatch();
 
-        $this->assertDatabaseCount('inventory_movements_statistics', 3);
+        $this->assertDatabaseCount('inventory_movements_statistics', 2);
     }
 }
