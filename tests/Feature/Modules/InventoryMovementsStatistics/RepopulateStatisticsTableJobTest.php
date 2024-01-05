@@ -3,7 +3,7 @@
 namespace Tests\Feature\Modules\InventoryMovementsStatistics;
 
 use App\Models\InventoryMovement;
-use App\Modules\InventoryMovementsStatistics\src\Jobs\RepopulateStatisticsTableJob;
+use App\Modules\InventoryMovementsStatistics\src\Jobs\RecalculateStatisticsTableJob;
 use Tests\TestCase;
 
 class RepopulateStatisticsTableJobTest extends TestCase
@@ -12,7 +12,7 @@ class RepopulateStatisticsTableJobTest extends TestCase
     {
         InventoryMovement::factory()->create(['type' => 'sale']);
 
-        RepopulateStatisticsTableJob::dispatch();
+        RecalculateStatisticsTableJob::dispatch();
 
         $this->assertDatabaseCount('inventory_movements_statistics', 1);
     }

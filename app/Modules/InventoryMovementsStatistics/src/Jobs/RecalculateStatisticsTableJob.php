@@ -8,14 +8,16 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class RepopulateStatisticsTableJob extends UniqueJob
+class RecalculateStatisticsTableJob extends UniqueJob
 {
-    public function handle(): void
+    public function handle($soldSince = null): void
     {
+        $lastSoldAt = $soldSince ?? now()->subDays(60);
+
         Inventory::query()
-            ->where('last_sold_at', '>', now()->subDays(60))
+            ->where('last_sold_at', '>', $lastSoldAt)
             ->chunkById(25, function (Collection $inventories) {
-                $this->repopulateStatisticsTable($inventories->pluck('id'));
+                $this->recalculateInventoryStatistics($inventories->pluck('id'));
                 Log::info('Job processing', [
                     'job' => self::class,
                     'records_updated' => $inventories->count()
@@ -24,7 +26,7 @@ class RepopulateStatisticsTableJob extends UniqueJob
             });
     }
 
-    public function repopulateStatisticsTable($inventory): void
+    public function recalculateInventoryStatistics($inventory): void
     {
         DB::statement('
             REPLACE INTO inventory_movements_statistics (

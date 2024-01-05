@@ -2,12 +2,12 @@
 
 namespace App\Modules\InventoryMovementsStatistics\src\Listeners;
 
-use App\Modules\InventoryMovementsStatistics\src\Jobs\RepopulateStatisticsTableJob;
+use App\Modules\InventoryMovementsStatistics\src\Jobs\RecalculateStatisticsTableJob;
 
 class EveryDayEventListener
 {
     public function handle()
     {
-        RepopulateStatisticsTableJob::dispatch();
+        RecalculateStatisticsTableJob::dispatch();
     }
 }
