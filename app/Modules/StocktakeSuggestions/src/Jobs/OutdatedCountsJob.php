@@ -8,13 +8,17 @@ use Illuminate\Support\Facades\DB;
 
 class OutdatedCountsJob extends UniqueJob
 {
+    private StocktakeSuggestionsConfiguration $config;
+
     public function handle(): bool
     {
+        $this->config = StocktakeSuggestionsConfiguration::query()->firstOrCreate();
+
         $reason = 'outdated count';
         $points = 1;
 
         $this->addSuggestions($reason, $points);
-        $this->removeSuggestions($reason, $points);
+        $this->removeSuggestions($reason);
 
         return true;
     }
@@ -26,16 +30,7 @@ class OutdatedCountsJob extends UniqueJob
      */
     protected function addSuggestions(string $reason, int $points): bool
     {
-        /** @var StocktakeSuggestionsConfiguration $config */
-        $config = StocktakeSuggestionsConfiguration::query()->firstOrCreate();
-
-        DB::statement("
-            DELETE stocktake_suggestions
-            FROM stocktake_suggestions
-            WHERE stocktake_suggestions.reason = ?
-        ", [$reason]);
-
-        if (is_null($config->min_count_date)) {
+        if (is_null($this->config->min_count_date)) {
             return true;
         }
 
@@ -43,16 +38,31 @@ class OutdatedCountsJob extends UniqueJob
             INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
             SELECT inventory.id, inventory.product_id, inventory.warehouse_id, ? , ?, NOW(), NOW()
             FROM inventory
-            WHERE inventory.quantity != 0
+            LEFT JOIN stocktake_suggestions
+                ON stocktake_suggestions.inventory_id = inventory.id
+                AND stocktake_suggestions.reason = ?
+            WHERE stocktake_suggestions.inventory_id IS NULL
+                AND inventory.quantity != 0
                 AND inventory.first_movement_at < ?
                 AND (inventory.last_counted_at IS NULL OR inventory.last_counted_at < ?)
-        ", [$points, $reason, $config->min_count_date->format('Y-m-d'), $config->min_count_date->format('Y-m-d')]);
+        ", [$points, $reason, $reason, $this->config->min_count_date->format('Y-m-d'), $this->config->min_count_date->format('Y-m-d')]);
 
         return true;
     }
 
-    private function removeSuggestions(string $reason, int $points)
+    private function removeSuggestions(string $reason): void
     {
+        if (is_null($this->config->min_count_date)) {
+            DB::statement("
+                DELETE stocktake_suggestions
+                FROM stocktake_suggestions
+                WHERE stocktake_suggestions.reason = ?
+            ", [$reason]);
+            return;
+        }
+
+        $min_count_date = $this->config->min_count_date->format('Y-m-d');
+
         DB::statement("
             DELETE stocktake_suggestions
             FROM stocktake_suggestions
@@ -60,9 +70,9 @@ class OutdatedCountsJob extends UniqueJob
                 ON inventory.id = stocktake_suggestions.inventory_id
             WHERE stocktake_suggestions.reason = ? AND (
                 inventory.quantity = 0
-                OR inventory.first_movement_at > inventory.last_counted_at
-                OR inventory.last_counted_at > NOW()
+                OR inventory.first_movement_at > ?
+                OR inventory.last_counted_at > ?
             )
-        ", [$reason]);
+        ", [$reason, $min_count_date, $min_count_date]);
     }
 }
