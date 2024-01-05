@@ -3,6 +3,7 @@
 namespace App\Modules\StocktakeSuggestions\src;
 
 use App\Events\EveryDayEvent;
+use App\Events\EveryMinuteEvent;
 use App\Events\EveryTenMinutesEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\InventoryMovement\InventoryMovementCreatedEvent;
@@ -49,7 +50,7 @@ class StocktakeSuggestionsServiceProvider extends BaseModuleServiceProvider
         ],
 
         InventoryUpdatedEvent::class => [
-            Listeners\InventoryUpdatedEventListener::class,
+            Listeners\InventoryUpdatedEvent\OutdatedCountListener::class,
         ],
 
         InventoryMovementCreatedEvent::class => [

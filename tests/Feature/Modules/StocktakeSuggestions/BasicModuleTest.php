@@ -42,8 +42,6 @@ class BasicModuleTest extends TestCase
 
     public function test_outdated_counts_job()
     {
-        StocktakeSuggestionsServiceProvider::enableModule();
-
         StocktakeSuggestionsConfiguration::updateOrCreate([], ['min_count_date' => now()->subDay()]);
 
         Inventory::factory()->create()->update([
@@ -64,7 +62,6 @@ class BasicModuleTest extends TestCase
             'quantity' => 1,
         ]);
 
-//        dd(Inventory::get('quantity')->toArray(), StocktakeSuggestion::get()->toArray());
         OutdatedCountsJob::dispatch();
 
         $this->assertEquals(2, StocktakeSuggestion::count());
