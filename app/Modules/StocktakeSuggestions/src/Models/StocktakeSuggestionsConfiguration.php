@@ -2,9 +2,13 @@
 
 namespace App\Modules\StocktakeSuggestions\src\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property Carbon|null $min_count_date
+ */
 class StocktakeSuggestionsConfiguration extends Model
 {
     use HasFactory;
