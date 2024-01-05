@@ -6,7 +6,7 @@ use App\Abstracts\UniqueJob;
 use App\Models\Inventory;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class RepopulateStatisticsTableJob extends UniqueJob
 {
@@ -14,7 +14,7 @@ class RepopulateStatisticsTableJob extends UniqueJob
     {
         Inventory::query()
             ->where('last_sold_at', '>', now()->subDays(60))
-            ->chunkById(10, function (Collection $inventories) {
+            ->chunkById(25, function (Collection $inventories) {
                 $this->repopulateStatisticsTable($inventories->pluck('id'));
                 Log::info('Job processing', [
                     'job' => self::class,
