@@ -53,19 +53,18 @@ class ClearDatabaseCommand extends Command
         App\Modules\InventoryTotals\src\Models\InventoryTotal::query()->forceDelete();
         App\Modules\InventoryTotals\src\Models\InventoryTotalByWarehouseTag::query()->forceDelete();
         App\Modules\InventoryMovements\src\Models\Configuration::query()->forceDelete();
-        App\Modules\PrintNode\src\Models\Client::query()->forceDelete();
         App\Modules\InventoryReservations\src\Models\Configuration::query()->forceDelete();
-        App\Modules\DpdUk\src\Models\Connection::query()->forceDelete();
         App\Modules\PrintNode\src\Models\PrintJob::query()->forceDelete();
+        App\Modules\PrintNode\src\Models\Client::query()->forceDelete();
+        App\Modules\DpdUk\src\Models\Connection::query()->forceDelete();
 
         App\Models\NavigationMenu::query()->forceDelete();
         App\Models\Product::query()->forceDelete();
         App\Models\Inventory::query()->forceDelete();
         App\Models\InventoryMovement::query()->forceDelete();
-        App\Models\InventoryMovementNew::query()->forceDelete();
-        App\Models\ProductAlias::query()->forceDelete();
         App\Models\OrderProduct::query()->forceDelete();
         App\Models\Order::query()->forceDelete();
+        App\Models\ProductAlias::query()->forceDelete();
         App\Models\OrderStatus::query()->forceDelete();
         App\Models\Configuration::query()->forceDelete();
         App\Models\OrderProductTotal::query()->forceDelete();
@@ -73,7 +72,6 @@ class ClearDatabaseCommand extends Command
         App\Models\Module::query()->forceDelete();
         App\Models\DataCollection::query()->forceDelete();
         App\Models\DataCollectionRecord::query()->forceDelete();
-        App\Models\InventoryMovement::query()->forceDelete();
         App\Models\Warehouse::query()->forceDelete();
         App\Models\Session::query()->forceDelete();
         App\Models\Configuration::query()->forceDelete();
@@ -99,7 +97,6 @@ class ClearDatabaseCommand extends Command
         // now re-register all the roles and permissions (clears cache and reloads relations)
         app()->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
 
-        App\Modules\Maintenance\src\Jobs\CopyInventoryMovementsToNewTableJob::dispatch();
         App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider::enableModule();
         App\Modules\InventoryReservations\src\EventServiceProviderBase::enableModule();
     }
