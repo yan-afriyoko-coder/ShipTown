@@ -84,7 +84,6 @@ class EnsureCorrectTotalsJob extends UniqueJob
 
             INNER JOIN tempTable AS recalculations
                 ON recalculations.order_id = orders.id
-                AND recalculations.total_price_expected != orders.total_products
 
             SET
                 orders.product_line_count = recalculations.count_expected,
