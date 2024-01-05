@@ -6,16 +6,18 @@ use App\Abstracts\UniqueJob;
 use App\Models\Inventory;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Log;
+use Illuminate\Support\Facades\Log;
 
-class RepopulateStatisticsTableJob extends UniqueJob
+class RecalculateStatisticsTableJob extends UniqueJob
 {
-    public function handle(): void
+    public function handle($soldSince = null): void
     {
+        $lastSoldAt = $soldSince ?: now()->subDays(60);
+
         Inventory::query()
-            ->where('last_sold_at', '>', now()->subDays(60))
-            ->chunkById(10, function (Collection $inventories) {
-                $this->repopulateStatisticsTable($inventories->pluck('id'));
+            ->where('last_sold_at', '>', $lastSoldAt)
+            ->chunkById(25, function (Collection $inventories) {
+                $this->recalculateInventoryStatistics($inventories->pluck('id'));
                 Log::info('Job processing', [
                     'job' => self::class,
                     'records_updated' => $inventories->count()
@@ -24,7 +26,7 @@ class RepopulateStatisticsTableJob extends UniqueJob
             });
     }
 
-    public function repopulateStatisticsTable($inventory): void
+    public function recalculateInventoryStatistics(Collection $inventory): void
     {
         DB::statement('
             REPLACE INTO inventory_movements_statistics (
@@ -62,8 +64,8 @@ class RepopulateStatisticsTableJob extends UniqueJob
                 now() as updated_at
             FROM inventory_movements
             LEFT JOIN warehouses ON warehouses.id = inventory_movements.warehouse_id
-            WHERE inventory_movements.inventory_id IN (?)
+            WHERE inventory_movements.inventory_id IN ('. $inventory->implode(',') .')
             GROUP BY inventory_movements.type, inventory_movements.inventory_id
-        ', [$inventory->implode(',')]);
+        ');
     }
 }
