@@ -12,7 +12,7 @@ class RecalculateStatisticsTableJob extends UniqueJob
 {
     public function handle($soldSince = null): void
     {
-        $lastSoldAt = $soldSince ?? now()->subDays(60);
+        $lastSoldAt = $soldSince ?: now()->subDays(60);
 
         Inventory::query()
             ->where('last_sold_at', '>', $lastSoldAt)
@@ -26,7 +26,7 @@ class RecalculateStatisticsTableJob extends UniqueJob
             });
     }
 
-    public function recalculateInventoryStatistics($inventory): void
+    public function recalculateInventoryStatistics(Collection $inventory): void
     {
         DB::statement('
             REPLACE INTO inventory_movements_statistics (
@@ -64,8 +64,8 @@ class RecalculateStatisticsTableJob extends UniqueJob
                 now() as updated_at
             FROM inventory_movements
             LEFT JOIN warehouses ON warehouses.id = inventory_movements.warehouse_id
-            WHERE inventory_movements.inventory_id IN (?)
+            WHERE inventory_movements.inventory_id IN ('. $inventory->implode(',') .')
             GROUP BY inventory_movements.type, inventory_movements.inventory_id
-        ', [$inventory->implode(',')]);
+        ');
     }
 }
