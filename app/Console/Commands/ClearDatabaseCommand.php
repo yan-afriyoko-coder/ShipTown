@@ -53,6 +53,7 @@ class ClearDatabaseCommand extends Command
         App\Modules\InventoryTotals\src\Models\InventoryTotal::query()->forceDelete();
         App\Modules\InventoryTotals\src\Models\InventoryTotalByWarehouseTag::query()->forceDelete();
         App\Modules\InventoryMovements\src\Models\Configuration::query()->forceDelete();
+        App\Modules\InventoryMovementsStatistics\src\Models\InventoryMovementsStatistic::query()->forceDelete();
         App\Modules\InventoryReservations\src\Models\Configuration::query()->forceDelete();
         App\Modules\PrintNode\src\Models\PrintJob::query()->forceDelete();
         App\Modules\PrintNode\src\Models\Client::query()->forceDelete();
@@ -76,6 +77,7 @@ class ClearDatabaseCommand extends Command
         App\Models\Session::query()->forceDelete();
         App\Models\Configuration::query()->forceDelete();
         App\Models\StocktakeSuggestion::query()->forceDelete();
+
 
         App\Modules\Automations\src\Models\Automation::query()->forceDelete();
         App\Modules\Automations\src\Models\Condition::query()->forceDelete();
