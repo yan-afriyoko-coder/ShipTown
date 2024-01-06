@@ -13,10 +13,16 @@ return new class extends Migration
         }
 
         if (Schema::hasColumn('inventory_movements', 'next_movement_id')) {
+            Schema::table('inventory_movements', function (Blueprint $table) {
+                $table->dropIndex(['next_movement_id']);
+            });
             Schema::dropColumns('inventory_movements', ['next_movement_id']);
         }
 
         if (Schema::hasColumn('inventory_movements', 'previous_movement_id')) {
+            Schema::table('inventory_movements', function (Blueprint $table) {
+                $table->dropIndex(['previous_movement_id']);
+            });
             Schema::dropColumns('inventory_movements', ['previous_movement_id']);
         }
     }
