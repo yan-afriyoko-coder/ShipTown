@@ -2,6 +2,7 @@
 
 namespace App\Modules\DataCollector\src\Jobs;
 
+use App\Abstracts\UniqueJob;
 use App\Models\DataCollection;
 use App\Modules\DataCollector\src\Services\DataCollectorService;
 use Illuminate\Bus\Queueable;
@@ -14,15 +15,8 @@ use Illuminate\Queue\SerializesModels;
 /**
  * Class SyncCheckFailedProductsJob.
  */
-class TransferToJob implements ShouldQueue, ShouldBeUnique
+class TransferToJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
-    public int $uniqueFor = 60;
-
     public int $dataCollection_id;
 
     public function __construct(int $dataCollection_id)
@@ -30,12 +24,12 @@ class TransferToJob implements ShouldQueue, ShouldBeUnique
         $this->dataCollection_id = $dataCollection_id;
     }
 
-    public function uniqueId(): int
+    public function uniqueId(): string
     {
-        return $this->dataCollection_id;
+        return implode('-', [get_class($this), $this->dataCollection_id]);
     }
 
-    public function handle()
+    public function handle(): void
     {
         /** @var DataCollection $sourceDataCollection */
         $sourceDataCollection = DataCollection::withTrashed()->findOrFail($this->dataCollection_id);

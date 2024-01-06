@@ -2,6 +2,7 @@
 
 namespace App\Modules\DataCollector\src\Jobs;
 
+use App\Abstracts\UniqueJob;
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Modules\DataCollector\src\Services\DataCollectorService;
@@ -17,15 +18,8 @@ use Illuminate\Support\Facades\Log;
 /**
  * Class SyncCheckFailedProductsJob.
  */
-class TransferOutJob implements ShouldQueue, ShouldBeUnique
+class TransferOutJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
-    public int $uniqueFor = 60;
-
     public int $dataCollection_id;
 
     public function __construct($dataCollection_id)
@@ -33,9 +27,9 @@ class TransferOutJob implements ShouldQueue, ShouldBeUnique
         $this->dataCollection_id = $dataCollection_id;
     }
 
-    public function uniqueId(): int
+    public function uniqueId(): string
     {
-        return $this->dataCollection_id;
+        return implode('-', [get_class($this), $this->dataCollection_id]);
     }
 
     public function handle()

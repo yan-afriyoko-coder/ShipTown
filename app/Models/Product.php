@@ -302,6 +302,7 @@ class Product extends BaseModel
             ->when($warehouse_code, function ($query) use ($warehouse_code) {
                 $query->where(['warehouse_code' => $warehouse_code]);
             })
+            ->orderBy('warehouse_code')
             ->keyBy('warehouse_code');
     }
 
