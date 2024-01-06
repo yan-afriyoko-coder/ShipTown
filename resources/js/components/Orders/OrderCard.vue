@@ -315,7 +315,7 @@
 
                                                 <tr>
                                                     <td class="text-nowrap pt-2"> product lines:</td>
-                                                    <td class="text-right"><b> {{ toNumberOrDash(order['product_line_count']) }} </b></td>
+                                                    <td class="text-right"><b> {{ toNumberOrDash(order['order_products_totals']['count']) }} </b></td>
                                                 </tr>
 
                                                 <tr>

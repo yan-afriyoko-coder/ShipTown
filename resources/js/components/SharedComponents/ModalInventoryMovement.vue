@@ -91,8 +91,8 @@ export default {
             let params = {
                 filter: null,
                 include: 'product,inventory,user',
-                sort: '-sequence_number,-occurred_at',
-                page,
+                sort: '-occurred_at,-sequence_number',
+                page: page,
                 per_page: 50
             };
 
