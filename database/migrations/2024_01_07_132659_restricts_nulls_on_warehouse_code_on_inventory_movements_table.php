@@ -8,12 +8,16 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('inventory_movements', function (Blueprint $table) {
-            $table->dropForeign(['warehouse_code']);
-        });
+        try {
+            Schema::table('inventory_movements', function (Blueprint $table) {
+                $table->dropForeign(['warehouse_code']);
+            });
+        } catch (Throwable $th) {
+            //throw $th;
+        }
 
         Schema::table('inventory_movements', function (Blueprint $table) {
-            $table->string('warehouse_code')->nullable(false)->change();
+            $table->string('warehouse_code', 5)->nullable(false)->change();
         });
 
         Schema::table('inventory_movements', function (Blueprint $table) {

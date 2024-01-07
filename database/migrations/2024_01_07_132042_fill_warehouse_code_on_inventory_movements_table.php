@@ -8,15 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement('
-            CREATE TEMPORARY TABLE tempTable AS
-            SELECT id
-            FROM inventory_movements
-            WHERE `warehouse_code` IS NULL AND `warehouse_id` = 2
-            LIMIT 10000;
-        ');
-
         do {
+            DB::statement('
+                CREATE TEMPORARY TABLE tempTable AS
+                SELECT id
+                FROM inventory_movements
+                WHERE `warehouse_code` IS NULL AND `warehouse_id` = 2
+                LIMIT 10000;
+            ');
+
             $recordsUpdated = DB::update('
                 UPDATE inventory_movements
                 INNER JOIN tempTable ON tempTable.id = inventory_movements.id
