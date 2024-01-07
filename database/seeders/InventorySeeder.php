@@ -35,6 +35,7 @@ class InventorySeeder extends Seeder
                     'occurred_at' => '2022-01-03 09:07:00',
                     'inventory_id' => $inventory->getKey(),
                     'product_id' => $inventory->product_id,
+                    'warehouse_code' => $inventory->warehouse_code,
                     'warehouse_id' => $inventory->warehouse_id,
                     'quantity_before' => 0,
                     'quantity_delta' => $inventory->restock_level,
