@@ -8,14 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Warehouse::query()->get()->each(function (Warehouse $warehouse) {
-            do {
-                $recordsUpdated = DB::table('inventory_movements')
-                    ->where('warehouse_id', $warehouse->id)
-                    ->whereNull('warehouse_code')
-                    ->limit(1000)
-                    ->update(['warehouse_code' => $warehouse->code]);
-            } while ($recordsUpdated > 0);
-        });
+        DB::statement('
+            CREATE TEMPORARY TABLE tempTable AS
+            SELECT id
+            FROM inventory_movements
+            WHERE `warehouse_code` IS NULL AND `warehouse_id` = 2
+            LIMIT 10000;
+        ');
+
+        DB::update('
+            UPDATE inventory_movements
+            INNER JOIN tempTable ON tempTable.id = inventory_movements.id
+            LEFT JOIN warehouses ON warehouses.id = inventory_movements.warehouse_id
+            SET inventory_movements.warehouse_code = warehouses.code;
+        ');
     }
 };
