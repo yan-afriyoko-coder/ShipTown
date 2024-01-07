@@ -16,11 +16,13 @@ return new class extends Migration
             LIMIT 10000;
         ');
 
-        DB::update('
-            UPDATE inventory_movements
-            INNER JOIN tempTable ON tempTable.id = inventory_movements.id
-            LEFT JOIN warehouses ON warehouses.id = inventory_movements.warehouse_id
-            SET inventory_movements.warehouse_code = warehouses.code;
-        ');
+        do {
+            $recordsUpdated = DB::update('
+                UPDATE inventory_movements
+                INNER JOIN tempTable ON tempTable.id = inventory_movements.id
+                LEFT JOIN warehouses ON warehouses.id = inventory_movements.warehouse_id
+                SET inventory_movements.warehouse_code = warehouses.code;
+            ');
+        } while ($recordsUpdated > 0);
     }
 };
