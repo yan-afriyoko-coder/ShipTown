@@ -13,7 +13,7 @@ return new class extends Migration
         });
 
         Schema::table('inventory_movements', function (Blueprint $table) {
-            $table->string('warehouse_code')->nullable(false)->change();
+            $table->string('warehouse_code', 5)->nullable(false);
         });
 
         Schema::table('inventory_movements', function (Blueprint $table) {
