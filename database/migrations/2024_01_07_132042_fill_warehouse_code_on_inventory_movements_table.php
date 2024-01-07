@@ -14,7 +14,7 @@ return new class extends Migration
                 CREATE TEMPORARY TABLE tempTable AS
                 SELECT id
                 FROM inventory_movements
-                WHERE `warehouse_code` IS NULL AND `warehouse_id` = 2
+                WHERE `warehouse_code` IS NULL
                 LIMIT 10000;
             ');
 
