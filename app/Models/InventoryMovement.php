@@ -42,8 +42,8 @@ class InventoryMovement extends BaseModel
     const TYPE_SALE = 'sale';
     const TYPE_RETURN = 'return';
     const TYPE_STOCKTAKE = 'stocktake';
-    const TYPE_TRANSFER_IN = 'transfer_in';
-    const TYPE_TRANSFER_OUT = 'transfer_out';
+    const TYPE_TRANSFER_IN = 'transfer in';
+    const TYPE_TRANSFER_OUT = 'transfer out';
 
     protected $fillable = [
         'warehouse_code',

@@ -167,8 +167,8 @@ class DataCollectorService
             ], []);
 
 
-             InventoryService::adjust($inventory, $record->quantity_scanned, [
-                 'description' => 'data collection transfer in',
+             InventoryService::transferIn($inventory, $record->quantity_scanned, [
+                 'description' => $record->dataCollection->name,
                  'custom_unique_reference_id' => $custom_unique_reference_id
              ]);
 
@@ -199,8 +199,8 @@ class DataCollectorService
                 $record->updated_at
             ]);
 
-            InventoryService::adjust($inventory, $record->quantity_scanned * -1, [
-                'description' => 'data collection transfer out',
+            InventoryService::transferOut($inventory, $record->quantity_scanned * -1, [
+                'description' => $record->dataCollection->name,
                 'custom_unique_reference_id' => $custom_unique_reference_id
             ]);
 
