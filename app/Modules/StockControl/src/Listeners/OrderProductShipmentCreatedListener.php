@@ -34,6 +34,7 @@ class OrderProductShipmentCreatedListener
             'type' => 'sale',
             'inventory_id' => $orderProductShipment->inventory->id,
             'product_id' => $orderProductShipment->inventory->product_id,
+            'warehouse_code' => $orderProductShipment->inventory->warehouse_code,
             'warehouse_id' => $orderProductShipment->inventory->warehouse_id,
             'quantity_before' => $orderProductShipment->inventory->quantity,
             'quantity_delta' => $quantityDelta,
