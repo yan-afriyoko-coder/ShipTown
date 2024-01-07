@@ -35,6 +35,7 @@ class InventoryMovementsReport extends Report
             'user_id'                       => 'inventory_movements.user_id',
             'product_id'                    => 'inventory_movements.product_id',
             'inventory_id'                  => 'inventory_movements.inventory_id',
+            'warehouse_code'                => 'inventory_movements.warehouse_code',
             'warehouse_id'                  => 'inventory_movements.warehouse_id',
             'description'                   => 'inventory_movements.description',
             'updated_at'                    => 'inventory_movements.updated_at',
@@ -59,13 +60,6 @@ class InventoryMovementsReport extends Report
                 $query->whereHas('product', function ($query) use ($value) {
                     $query->hasTags($value);
                 });
-            })
-        );
-
-        $this->addFilter(
-            AllowedFilter::callback('warehouse_code', function ($query, $value) {
-                $warehouse = Warehouse::whereCode($value)->firstOrFail();
-                $query->where('warehouse_id', $warehouse->getKey());
             })
         );
 
