@@ -7,14 +7,10 @@ use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
-use App\Modules\InventoryMovements\src\Jobs\InventoryLastMovementIdJob;
 use Tests\TestCase;
 
 class InventoryDatesUpdatesTest extends TestCase
 {
-    private InventoryMovement $inventoryMovement01;
-    private InventoryMovement $inventoryMovement02;
-    private float $initialQuantity;
     private Inventory $inventory;
 
     protected function setUp(): void
@@ -39,6 +35,7 @@ class InventoryDatesUpdatesTest extends TestCase
             'type' => InventoryMovement::TYPE_TRANSFER_IN,
             'inventory_id' => $this->inventory->getKey(),
             'product_id' => $this->inventory->product_id,
+            'warehouse_code' => $this->inventory->warehouse_code,
             'warehouse_id' => $this->inventory->warehouse_id,
             'quantity_before' => $this->inventory->quantity,
             'quantity_delta' => 10,
@@ -62,6 +59,7 @@ class InventoryDatesUpdatesTest extends TestCase
             'type' => InventoryMovement::TYPE_STOCKTAKE,
             'inventory_id' => $this->inventory->getKey(),
             'product_id' => $this->inventory->product_id,
+            'warehouse_code' => $this->inventory->warehouse_code,
             'warehouse_id' => $this->inventory->warehouse_id,
             'quantity_before' => 5,
             'quantity_delta' => 45,
@@ -87,6 +85,7 @@ class InventoryDatesUpdatesTest extends TestCase
             'type' => InventoryMovement::TYPE_SALE,
             'inventory_id' => $this->inventory->getKey(),
             'product_id' => $this->inventory->product_id,
+            'warehouse_code' => $this->inventory->warehouse_code,
             'warehouse_id' => $this->inventory->warehouse_id,
             'quantity_before' => 10,
             'quantity_delta' => -2,

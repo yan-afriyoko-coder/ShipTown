@@ -28,6 +28,7 @@ class SalesSeeder extends Seeder
                     'type' => 'sale',
                     'inventory_id' => $inventory->id,
                     'product_id' => $inventory->product_id,
+                    'warehouse_code' => $inventory->warehouse_code,
                     'warehouse_id' => $inventory->warehouse_id,
                     'quantity_before' => $inventory->quantity,
                     'quantity_delta' => $quantityDelta,

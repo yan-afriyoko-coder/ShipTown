@@ -19,6 +19,30 @@ class InventoryService
         return $movement;
     }
 
+    public static function transferIn(Inventory $inventory, float $quantityDelta, array $attributes = null): InventoryMovement
+    {
+        $movement = InventoryService::adjust($inventory, $quantityDelta, [
+            'type' => InventoryMovement::TYPE_TRANSFER_IN
+        ]);
+
+        $movement->fill($attributes ?? []);
+        $movement->save();
+
+        return $movement;
+    }
+
+    public static function transferOut(Inventory $inventory, float $quantityDelta, array $attributes = null): InventoryMovement
+    {
+        $movement = InventoryService::adjust($inventory, $quantityDelta, [
+            'type' => InventoryMovement::TYPE_TRANSFER_OUT
+        ]);
+
+        $movement->fill($attributes ?? []);
+        $movement->save();
+
+        return $movement;
+    }
+
     public static function stocktake(Inventory $inventory, float $newQuantity, array $attributes = null): InventoryMovement
     {
         $inventoryRefreshed = $inventory->refresh();
