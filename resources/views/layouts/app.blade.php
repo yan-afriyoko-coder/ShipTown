@@ -30,4 +30,6 @@
     </main>
 
     <vue-snotify></vue-snotify>
+
+    <modals></modals>
 @endsection

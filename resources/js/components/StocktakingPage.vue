@@ -46,31 +46,29 @@
         <template v-if="stocktakeSuggestions" v-for="record in stocktakeSuggestions">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
-                    <suggestion-record :record="record" @showModalMovement=showModalMovement></suggestion-record>
+                    <suggestion-record :record="record" @showModalMovement=showRecentInventoryMovementsModal></suggestion-record>
                 </template>
             </swiping-card>
         </template>
 
-        <modal-inventory-movement :product_sku="showMovementSku" :warehouse_code="warehouse_code"/>
-
         <div class="row col" ref="loadingContainerOverride" style="height: 32px"></div>
+
+        <recent-inventory-movements-modal :inventory_id="selectedInventoryId"/>
     </div>
 </template>
 
 <script>
-    import loadingOverlay from '../mixins/loading-overlay';
-    import api from "../mixins/api";
-    import helpers from "../mixins/helpers";
-    import url from "../mixins/url";
-    import SuggestionRecord from "./StocktakingPage/SuggestionRecord";
-    import ModalInventoryMovement from "./SharedComponents/ModalInventoryMovement";
+import loadingOverlay from '../mixins/loading-overlay';
+import api from "../mixins/api";
+import helpers from "../mixins/helpers";
+import url from "../mixins/url";
+import SuggestionRecord from "./StocktakingPage/SuggestionRecord";
 
-    export default {
+export default {
         mixins: [loadingOverlay, url, api, helpers],
 
         components: {
             SuggestionRecord,
-            ModalInventoryMovement,
         },
 
         data: function() {
@@ -81,7 +79,7 @@
 
                 recentStocktakes: [],
                 stocktakeSuggestions: null,
-                showMovementSku: null,
+                selectedInventoryId: null,
                 warehouse_code: null,
             };
         },
@@ -102,10 +100,9 @@
         },
 
         methods: {
-            showModalMovement(product_sku, warehouse_code) {
-                this.showMovementSku = product_sku;
-                this.warehouse_code = warehouse_code;
-                this.$bvModal.show('show-inventory-movements');
+            showRecentInventoryMovementsModal(inventory_id) {
+                this.selectedInventoryId = inventory_id;
+                this.$bvModal.show('recent-inventory-movements-modal')
             },
 
             reloadData() {

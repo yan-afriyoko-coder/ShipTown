@@ -54,7 +54,7 @@
                                 <div>in stock: <strong>{{ dashIfZero(Number(record['inventory_quantity'])) }}</strong></div>
                                 <div>last counted: <strong>{{ formatDateTime(record['inventory_last_counted_at']) }}</strong></div>
                                 <div><div @click="expanded = !expanded" class="d-inline">last movement at:</div>
-                                    <strong @click="showModalMovement(record['product_sku'])" class="text-primary cursor-pointer">{{ formatDateTime(record['last_movement_at']) }}</strong>
+                                    <strong @click="showRecentInventoryMovementsModal(record['inventory_id'])" class="text-primary cursor-pointer">{{ formatDateTime(record['last_movement_at']) }}</strong>
                                 </div>
                             </div>
                             <div class="col-12 col-md-8 text-right">
@@ -159,7 +159,7 @@
 
         <b-modal id="transferToModal" no-fade hide-header @hidden="setFocusElementById('barcodeInput', true, true)">
             <template v-for="warehouse in warehouses">
-                <button @click.prevent="transferToWarehouse(warehouse)" v-if="warehouse.id !== dataCollection.warehouse_id" v-b-toggle class="col btn mb-2 btn-primary">{{ warehouse.name }}</button>
+                <button @click.prevent="transferToWarehouse(warehouse)" v-if="dataCollection && warehouse['id'] !== dataCollection['warehouse_id']" v-b-toggle class="col btn mb-2 btn-primary">{{ warehouse.name }}</button>
             </template>
 
             <template #modal-footer>
@@ -167,7 +167,7 @@
             </template>
         </b-modal>
 
-        <modal-inventory-movement :product_sku="showMovementSku" />
+        <recent-inventory-movements-modal :inventory_id="selectedInventoryId"/>
     </div>
 </template>
 
@@ -183,7 +183,6 @@
     import NumberCard from "./SharedComponents/NumberCard";
     import SwipingCard from "./SharedComponents/SwipingCard";
     import { VueCsvImport } from 'vue-csv-import';
-    import ModalInventoryMovement from './SharedComponents/ModalInventoryMovement';
 
     export default {
         mixins: [loadingOverlay, beep, url, api, helpers],
@@ -193,7 +192,6 @@
             NumberCard,
             SwipingCard,
             VueCsvImport,
-            ModalInventoryMovement
         },
 
         props: {
@@ -205,8 +203,6 @@
                 singleScanEnabled: false,
                 scannedDataCollectionRecord: null,
                 scannedProduct: null,
-                scannedProductPrices: null,
-                scannedInQuantity: 1,
                 dataCollection: null,
                 dataCollectionRecords: [],
                 nextUrl: null,
@@ -215,7 +211,7 @@
                 csv: null,
                 warehouses: [],
                 buttonsEnabled: false,
-                showMovementSku: null
+                selectedInventoryId: null
             };
         },
 
@@ -235,6 +231,11 @@
         },
 
         methods: {
+            showRecentInventoryMovementsModal(inventoryId) {
+                this.selectedInventoryId = inventoryId;
+                this.$bvModal.show('recent-inventory-movements-modal');
+            },
+
             submitCount(data) {
                 this.apiPostDataCollectorRecords(data)
                     .then(response => {
@@ -578,11 +579,6 @@
             hideBvModal(ref) {
                 this.$bvModal.hide(ref);
             },
-
-            showModalMovement(product_sku) {
-                this.showMovementSku = product_sku
-                this.$bvModal.show('show-inventory-movements')
-            }
         },
 
         computed: {

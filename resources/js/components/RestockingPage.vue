@@ -26,7 +26,7 @@
         </b-modal>
 
         <template v-for="record in data">
-            <restocking-record-card :record="record" :key="record.id" @showModalMovement=showModalMovement></restocking-record-card>
+            <restocking-record-card :record="record" :key="record.id" @showModalMovement=showRecentInventoryMovementsModal></restocking-record-card>
         </template>
 
         <div class="row">
@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <modal-inventory-movement :product_sku="showMovementSku"/>
+        <recent-inventory-movements-modal :inventory_id="selectedInventoryId"/>
     </div>
 
 </template>
@@ -45,13 +45,9 @@ import loadingOverlay from '../mixins/loading-overlay';
 import url from "../mixins/url";
 import api from "../mixins/api";
 import helpers from "../mixins/helpers";
-import ModalInventoryMovement from './SharedComponents/ModalInventoryMovement';
+import ModalInventoryMovement from './SharedComponents/RecentInventoryMovementsModal.vue';
 
 export default {
-        components: {
-            ModalInventoryMovement
-        },
-
         mixins: [loadingOverlay, url, api, helpers],
 
         props: {
@@ -69,6 +65,7 @@ export default {
                 newReorderPoint: null,
                 newRestockLevel: null,
                 newQuantityInStock: null,
+                selectedInventoryId: null,
                 showMovementSku: null,
             };
         },
@@ -177,9 +174,9 @@ export default {
                 this.loadRestockingRecords();
             },
 
-            showModalMovement(product_sku) {
-                this.showMovementSku = product_sku
-                this.$bvModal.show('show-inventory-movements')
+            showRecentInventoryMovementsModal(inventory_id) {
+                this.selectedInventoryId = inventory_id;
+                this.$bvModal.show('recent-inventory-movements-modal')
             }
         },
     }

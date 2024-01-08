@@ -36,6 +36,7 @@ class DataCollectionReport extends Report
 
         $this->fields = [
             'id'                            => 'data_collection_records.id',
+            'inventory_id'                  => 'data_collection_records.inventory_id',
             'product_id'                    => 'data_collection_records.product_id',
             'data_collection_id'            => 'data_collection_records.data_collection_id',
             'warehouse_id'                  => 'data_collections.warehouse_id',

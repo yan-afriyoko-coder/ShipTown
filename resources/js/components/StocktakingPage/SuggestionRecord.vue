@@ -11,7 +11,7 @@
                 <div class="small" @click="toggleDetails" >last sold at: <strong>{{ formatDateTime(record['inventory']['last_sold_at']) }}</strong></div>
                 <div>
                     <div @click="toggleDetails" class="d-inline">last movement at:</div>
-                    <strong @click="showInventoryMovementModal(record['product_sku'], record['inventory']['warehouse_code'])" class="text-primary cursor-pointer">{{ formatDateTime(record['inventory']['last_movement_at']) }}</strong>
+                    <strong @click="showInventoryMovementModal" class="text-primary cursor-pointer">{{ formatDateTime(record['inventory']['last_movement_at']) }}</strong>
                 </div>
 
                 <template v-if="expanded">
@@ -56,7 +56,7 @@ import BarcodeInputField from "./../SharedComponents/BarcodeInputField";
 import api from "../../mixins/api";
 import helpers from "../../mixins/helpers";
 import url from "../../mixins/url";
-import ModalInventoryMovement from '../SharedComponents/ModalInventoryMovement';
+import ModalInventoryMovement from '../SharedComponents/RecentInventoryMovementsModal.vue';
 
 export default {
       name: 'SuggestionRecord',
@@ -94,8 +94,8 @@ export default {
             this.expanded = !this.expanded;
           },
 
-          showInventoryMovementModal(product_sku, warehouse_code) {
-            this.$emit('showModalMovement', product_sku, warehouse_code);
+          showInventoryMovementModal() {
+            this.$emit('showModalMovement', this.record['inventory_id']);
           }
       },
   }
