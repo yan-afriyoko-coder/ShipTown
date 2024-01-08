@@ -349,7 +349,7 @@ export default {
             },
 
             showInventoryMovementModal() {
-                this.$emit('showModalMovement', this.record['product']['sku'])
+                this.$emit('showModalMovement', this.record['inventory_id'])
             },
         },
     }

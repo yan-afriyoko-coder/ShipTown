@@ -1,5 +1,5 @@
 <template>
-    <b-modal body-class="ml-0 mr-0 pl-1 pr-1" id="show-inventory-movements" size="xl" scrollable no-fade>
+    <b-modal body-class="ml-0 mr-0 pl-1 pr-1" id="recent-inventory-movements-modal" ref="blue" size="xl" scrollable no-fade>
         <template #modal-header>
             <span>Inventory Movements</span>
             <a :href="productItemMovementLink" class="fa-pull-right">See all</a>
@@ -48,20 +48,16 @@ export default {
     mixins: [api, loadingOverlay],
 
     props: {
-        product_sku: {
+        inventory_id: {
             default: null,
-            type: String
+            type: Number
         },
-        warehouse_code: {
-            default: null,
-            type: String
-        }
     },
 
     watch: {
-        product_sku() {
+        inventory_id() {
             this.loadRecords()
-        }
+        },
     },
 
     data: function() {
@@ -73,31 +69,27 @@ export default {
 
     computed: {
         productItemMovementLink() {
-            return '/reports/inventory-movements?hide_nav_bar=true&filter[search]=' + this.product_sku + '&filter[warehouse_code]=' + this.warehouse_code;
+            return '/reports/inventory-movements?filter[inventory_id]=' + this.inventory_id;
         },
-    },
-
-    mounted: function () {
-        if (this.currentUser()['warehouse']) {
-            this.warehouse_code = this.currentUser()['warehouse']['code'];
-        }
     },
 
     methods: {
         loadRecords: function(page = 1) {
+            if (this.inventory_id == null) {
+                this.notifyError('Inventory ID is required')
+                return;
+            }
+
             this.showLoading();
             this.records = []
 
             let params = {
-                filter: null,
+                "filter[inventory_id]": this.inventory_id,
                 include: 'product,inventory,user',
                 sort: '-occurred_at,-sequence_number',
                 page: page,
                 per_page: 50
             };
-
-            params["filter[warehouse_code]"] = this.warehouse_code;
-            params["filter[search]"] = this.product_sku
 
             this.apiGetInventoryMovements(params)
                 .then(({data}) => {
