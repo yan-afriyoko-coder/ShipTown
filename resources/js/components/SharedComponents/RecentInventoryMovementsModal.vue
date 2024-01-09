@@ -24,12 +24,7 @@
         </div>
 
         <template #modal-footer>
-            <b-button
-                v-show="!isLoading"
-                variant="outline-secondary"
-                class="float-right"
-                @click="$bvModal.hide('show-inventory-movements')"
-            >
+            <b-button v-show="!isLoading" variant="outline-secondary" class="float-right" @click="$bvModal.hide('recent-inventory-movements-modal')">
                 Close
             </b-button>
         </template>
