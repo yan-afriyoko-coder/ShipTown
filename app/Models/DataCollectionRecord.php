@@ -15,6 +15,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 /**
  *  @property int    $id
  *  @property int    $data_collection_id,
+ *  @property int    $inventory_id
  *  @property int    $product_id
  *  @property double $total_transferred_in
  *  @property double $total_transferred_out
