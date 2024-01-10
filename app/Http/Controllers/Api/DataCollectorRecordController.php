@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DataCollectorStoreRequest;
 use App\Http\Resources\DataCollectionRecordResource;
 use App\Models\DataCollectionRecord;
+use App\Models\Inventory;
 use App\Models\ProductAlias;
 use App\Modules\Reports\src\Models\DataCollectionReport;
 use Illuminate\Http\Request;
@@ -38,11 +39,20 @@ class DataCollectorRecordController extends Controller
         $record = $request->validated();
 
         if (isset($record['product_sku'])) {
-            $record['product_id'] = ProductAlias::where('alias', $record['product_sku'])
+            $record['product_id'] = ProductAlias::query()
+                ->where('alias', $record['product_sku'])
                 ->first('product_id')->product_id;
 
             unset($record['product_sku']);
         }
+
+        if (! isset($record['inventory_id'])) {
+            $record['inventory_id'] = Inventory::query()
+                ->where('product_id', $record['product_id'])
+                ->where('warehouse_id', $record['warehouse_id'])
+                ->first('id')->id;
+        }
+
 
         $collectionRecord = null;
 
@@ -50,6 +60,7 @@ class DataCollectorRecordController extends Controller
             /** @var DataCollectionRecord $collectionRecord */
             $collectionRecord = DataCollectionRecord::firstOrCreate([
                 'data_collection_id' => $record['data_collection_id'],
+                'inventory_id' => $record['inventory_id'],
                 'product_id' => $record['product_id'],
             ]);
 
