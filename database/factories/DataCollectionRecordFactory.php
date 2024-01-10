@@ -13,8 +13,6 @@ class DataCollectionRecordFactory extends Factory
 {
     public function definition(): array
     {
-//        $this->state(fn (array $attributes) { str($attributes['data_collection_id'])
-//            ->slug()});
         return [
             'data_collection_id' =>  function () {
                 return DataCollection::factory()->create();

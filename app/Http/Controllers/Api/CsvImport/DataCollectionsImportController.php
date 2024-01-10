@@ -90,18 +90,26 @@ class DataCollectionsImportController extends Controller
                     DB::statement('
                         INSERT INTO data_collection_records (
                             data_collection_id,
+                            inventory_id,
                             product_id,
                             quantity_requested,
                             created_at,
                             updated_at
                         )
-                        SELECT '. $dataCollector->getKey() .',
-                            product_id,
+                        SELECT
+                            '. $dataCollector->getKey() .',
+                            inventory.id,
+                            inventory.product_id,
                             IFNULL(`' .$warehouse->code. '`, 0) as quantity_requested,
                             NOW(),
                             NOW()
 
-                        FROM ' . $tempTableName . ' WHERE IFNULL(`' .$warehouse->code. '`, 0) != 0
+                        FROM ' . $tempTableName . '
+                        LEFT JOIN inventory
+                          ON ' . $tempTableName . '.product_id = inventory.product_id
+                          AND inventory.warehouse_id = ' . $warehouse->id . '
+
+                        WHERE IFNULL(`' .$warehouse->code. '`, 0) != 0
                     ');
                 }
             });
