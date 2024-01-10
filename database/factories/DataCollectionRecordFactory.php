@@ -27,13 +27,13 @@ class DataCollectionRecordFactory extends Factory
 
     public function configure()
     {
-        return $this->afterCreating(function (DataCollectionRecord $dataCollectionRecord) {
-            $dataCollectionRecord->update([
-                'inventory_id' => Inventory::where([
+        return $this->afterMaking(function (DataCollectionRecord $dataCollectionRecord) {
+            $inventory = Inventory::query()->where([
                     'product_id' => $dataCollectionRecord->product_id,
                     'warehouse_id' => $dataCollectionRecord->dataCollection->warehouse_id,
-                ])->first()->id,
-            ]);
+                ])
+                ->first();
+            $dataCollectionRecord->inventory_id = $inventory->id;
         });
     }
 }

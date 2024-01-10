@@ -68,6 +68,7 @@ class CsvImportController extends Controller
         DB::statement('
             INSERT INTO data_collection_records (
                 data_collection_id,
+                inventory_id,
                 product_id,
                 quantity_requested,
                 quantity_scanned,
@@ -75,13 +76,19 @@ class CsvImportController extends Controller
                 updated_at
             )
             SELECT '. $validatedData['data_collection_id'] .',
-                product_id,
-                quantity_requested,
-                IFNULL(quantity_scanned, 0),
+                inventory.id,
+                tempTable.product_id,
+                tempTable.quantity_requested,
+                IFNULL(tempTable.quantity_scanned, 0),
                 NOW(),
                 NOW()
 
-            FROM ' . $tempTableName . '
+            FROM ' . $tempTableName . ' as tempTable
+            LEFT JOIN data_collections
+                ON data_collections.id = '. $validatedData['data_collection_id'] .'
+            LEFT JOIN inventory
+                ON inventory.product_id = tempTable.product_id
+                AND inventory.warehouse_id = data_collections.warehouse_id
         ');
 
         return JsonResource::make(['success' => true]);
