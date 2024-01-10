@@ -50,7 +50,7 @@ class DataCollectorRecordController extends Controller
         if (! isset($record['inventory_id'])) {
             $record['inventory_id'] = Inventory::query()
                 ->where('product_id', $record['product_id'])
-                ->where('warehouse_id', DataCollection::find($record['data_collection_id'])->warehouse_id)
+                ->where('warehouse_id', DataCollection::qyery()->find($record['data_collection_id'])->warehouse_id)
                 ->first('id')->id;
         }
 
