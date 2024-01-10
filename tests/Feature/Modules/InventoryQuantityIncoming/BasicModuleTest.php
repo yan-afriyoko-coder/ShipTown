@@ -40,6 +40,7 @@ class BasicModuleTest extends TestCase
         ]);
 
         $dataCollection->records()->create([
+            'inventory_id' => $inventory->id,
             'product_id' => $inventory->product_id,
             'quantity_requested' => 10,
         ]);
@@ -73,6 +74,7 @@ class BasicModuleTest extends TestCase
         ]);
 
         $record = $dataCollection->records()->create([
+            'inventory_id' => $inventory->id,
             'product_id' => $inventory->product_id,
             'quantity_requested' => 10,
         ]);
@@ -142,6 +144,7 @@ class BasicModuleTest extends TestCase
         ]);
 
         $dataCollection->records()->create([
+            'inventory_id' => $inventory->id,
             'product_id' => $inventory->product_id,
             'quantity_requested' => 10,
         ]);
