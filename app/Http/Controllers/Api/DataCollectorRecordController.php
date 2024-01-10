@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DataCollectorStoreRequest;
 use App\Http\Resources\DataCollectionRecordResource;
+use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\Inventory;
 use App\Models\ProductAlias;
@@ -49,7 +50,7 @@ class DataCollectorRecordController extends Controller
         if (! isset($record['inventory_id'])) {
             $record['inventory_id'] = Inventory::query()
                 ->where('product_id', $record['product_id'])
-                ->where('warehouse_id', $record['warehouse_id'])
+                ->where('warehouse_id', DataCollection::find($record['data_collection_id'])->warehouse_id)
                 ->first('id')->id;
         }
 
