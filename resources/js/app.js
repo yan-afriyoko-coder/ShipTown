@@ -119,6 +119,12 @@ Vue.use(Snotify, {
     }
 });
 
+// import our plugin
+import Modals from './plugins/Modals.js'
+
+// use it
+Vue.use(Modals);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue mixins. It will recursively scan this directory for the Vue
@@ -138,7 +144,8 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 /**
  * Application mixins
  */
-Vue.component('recent-inventory-movements-modal', require('./components/SharedComponents/RecentInventoryMovementsModal.vue').default);
+Vue.component('recent-inventory-movements-modal', require('./modals/RecentInventoryMovementsModal.vue').default);
+Vue.component('product-info-modal', require('./modals/ProductInfoModal.vue').default);
 Vue.component('stocktake-suggestions-page', require('./components/Settings/Modules/StocktakeSuggestionsPage.vue').default);
 Vue.component('activity-log-page', require('./components/ActivityLogPage.vue').default);
 Vue.component('admin-modules-slack-config-page', require('./components/admin/modules/slack/config-page.vue').default);

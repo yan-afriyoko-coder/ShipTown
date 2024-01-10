@@ -34,10 +34,7 @@
                 <div ref="loadingContainerOverride" dusk="loadingContainerOverride" style="height: 32px"></div>
             </div>
         </div>
-
-        <recent-inventory-movements-modal :inventory_id="selectedInventoryId"/>
     </div>
-
 </template>
 
 <script>
@@ -45,7 +42,6 @@ import loadingOverlay from '../mixins/loading-overlay';
 import url from "../mixins/url";
 import api from "../mixins/api";
 import helpers from "../mixins/helpers";
-import ModalInventoryMovement from './SharedComponents/RecentInventoryMovementsModal.vue';
 
 export default {
         mixins: [loadingOverlay, url, api, helpers],
@@ -98,8 +94,6 @@ export default {
                 params['include'] = 'product,product.tags,product.prices';
                 params['per_page'] = this.per_page;
                 params['page'] = page;
-
-                // params['cache_name'] = page === 1 ? params['cache_name'] : '';
 
                 this.apiGetRestocking(params)
                     .then((response) => {
@@ -175,8 +169,7 @@ export default {
             },
 
             showRecentInventoryMovementsModal(inventory_id) {
-                this.selectedInventoryId = inventory_id;
-                this.$bvModal.show('recent-inventory-movements-modal')
+                this.$modal.showRecentInventoryMovementsModal(inventory_id);
             }
         },
     }

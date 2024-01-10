@@ -56,7 +56,6 @@ import BarcodeInputField from "./../SharedComponents/BarcodeInputField";
 import api from "../../mixins/api";
 import helpers from "../../mixins/helpers";
 import url from "../../mixins/url";
-import ModalInventoryMovement from '../SharedComponents/RecentInventoryMovementsModal.vue';
 
 export default {
       name: 'SuggestionRecord',
