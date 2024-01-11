@@ -55,7 +55,7 @@ class ImportAsStocktakeJob extends UniqueJob
             });
 
         DB::transaction(function () use ($dataCollection, $inventoryMovementRecords) {
-            InventoryMovement::query()->upsert($inventoryMovementRecords->toArray(), ['custom_unique_reference_id'], ['quantity_delta', 'quantity_after', 'updated_at']);
+            InventoryMovement::query()->upsert($inventoryMovementRecords->toArray(), ['custom_unique_reference_id'], ['sequence_number', 'quantity_after', 'updated_at']);
 
             if ($dataCollection->deleted_at === null) {
                 $dataCollection->delete();
