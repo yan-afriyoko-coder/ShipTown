@@ -8,16 +8,14 @@ use App\Models\DataCollectionStocktake;
 use App\Models\DataCollectionTransferIn;
 use App\Models\DataCollectionTransferOut;
 use App\Models\Inventory;
-use App\Models\InventoryMovement;
 use App\Models\Warehouse;
+use App\Modules\DataCollector\src\Jobs\DispatchCollectionsTasksJob;
 use App\Modules\DataCollector\src\Jobs\ImportAsStocktakeJob;
 use App\Modules\DataCollector\src\Jobs\TransferInJob;
 use App\Modules\DataCollector\src\Jobs\TransferOutJob;
 use App\Modules\DataCollector\src\Jobs\TransferToJob;
 use App\Services\InventoryService;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class DataCollectorService
 {
@@ -35,7 +33,7 @@ class DataCollectorService
                 $dataCollection->delete();
             }
 
-            TransferInJob::dispatch($dataCollection->id);
+            DispatchCollectionsTasksJob::dispatch();
             return;
         }
 
@@ -63,7 +61,7 @@ class DataCollectorService
 
             $dataCollection->delete();
 
-            TransferToJob::dispatch($dataCollection->id);
+            DispatchCollectionsTasksJob::dispatch();
             return;
         }
 
@@ -79,13 +77,13 @@ class DataCollectorService
 
         if ($action === 'import_as_stocktake') {
             $dataCollection->update([
-                'type' => DataCollectionTransferOut::class,
-                'currently_running_task' => TransferToJob::class
+                'type' => DataCollectionStocktake::class,
+                'currently_running_task' => ImportAsStocktakeJob::class
             ]);
 
             $dataCollection->delete();
 
-            ImportAsStocktakeJob::dispatchSync($dataCollection->getKey());
+            DispatchCollectionsTasksJob::dispatch();
         }
     }
 

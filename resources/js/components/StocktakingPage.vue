@@ -52,8 +52,6 @@
         </template>
 
         <div class="row col" ref="loadingContainerOverride" style="height: 32px"></div>
-
-        <recent-inventory-movements-modal :inventory_id="selectedInventoryId"/>
     </div>
 </template>
 
@@ -96,13 +94,11 @@ export default {
 
             this.loadStocktakeSuggestions();
             this.loadRecentStocktakes();
-
         },
 
         methods: {
             showRecentInventoryMovementsModal(inventory_id) {
-                this.selectedInventoryId = inventory_id;
-                this.$bvModal.show('recent-inventory-movements-modal')
+                this.$modal.showRecentInventoryMovementsModal(inventory_id);
             },
 
             reloadData() {

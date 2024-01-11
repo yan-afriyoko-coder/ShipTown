@@ -166,12 +166,10 @@
                 <b-button variant="outline-secondary" class="float-right" @click="$bvModal.hide('transferToModal');">Close</b-button>
             </template>
         </b-modal>
-
-        <recent-inventory-movements-modal :inventory_id="selectedInventoryId"/>
     </div>
 </template>
 
-    <script>
+<script>
     import beep from '../mixins/beep';
     import loadingOverlay from '../mixins/loading-overlay';
 
@@ -231,9 +229,8 @@
         },
 
         methods: {
-            showRecentInventoryMovementsModal(inventoryId) {
-                this.selectedInventoryId = inventoryId;
-                this.$bvModal.show('recent-inventory-movements-modal');
+            showRecentInventoryMovementsModal(inventory_id) {
+                this.$modal.showRecentInventoryMovementsModal(inventory_id);
             },
 
             submitCount(data) {
@@ -596,7 +593,7 @@
             },
         },
     }
-    </script>
+</script>
 
 
 <style lang="scss">

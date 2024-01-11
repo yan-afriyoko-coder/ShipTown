@@ -1,13 +1,11 @@
 <template>
-    <b-modal body-class="ml-0 mr-0 pl-1 pr-1" id="recent-inventory-movements-modal" ref="blue" size="xl" scrollable no-fade>
+    <b-modal body-class="ml-0 mr-0 pl-1 pr-1" id="product-info-modal" size="xl" scrollable no-fade>
         <template #modal-header>
             <span>Inventory Movements</span>
             <a :href="productItemMovementLink" class="fa-pull-right">See all</a>
         </template>
 
-        <template v-for="record in records">
-            <inventory-movement-card :record="record" />
-        </template>
+<!--        <product-card :product="product" :expanded="true"/>-->
 
         <div class="d-flex align-items-center justify-content-center" style="height:100px" v-if="!isLoading && !records.length">
             No records found
@@ -19,12 +17,12 @@
             </div>
         </div>
 
-        <div class="d-flex justify-content-end">
-            <a v-if="hasNextPage" :href="productItemMovementLink" target="_blank">See more</a>
-        </div>
+<!--        <div class="d-flex justify-content-end">-->
+<!--            <a v-if="hasNextPage" :href="productItemMovementLink" target="_blank">See more</a>-->
+<!--        </div>-->
 
         <template #modal-footer>
-            <b-button v-show="!isLoading" variant="outline-secondary" class="float-right" @click="$bvModal.hide('recent-inventory-movements-modal')">
+            <b-button v-show="!isLoading" variant="outline-secondary" class="float-right" @click="$bvModal.hide('product-info-modal')">
                 Close
             </b-button>
         </template>
@@ -33,33 +31,28 @@
 
 <script>
 
-import api from "../../mixins/api";
-import loadingOverlay from '../../mixins/loading-overlay';
-import InventoryMovementCard from './InventoryMovementCard';
+import api from "../mixins/api.vue";
+import loadingOverlay from '../mixins/loading-overlay';
+import InventoryMovementCard from '../components/SharedComponents/InventoryMovementCard.vue';
+import ProductCard from "../components/Products/ProductCard.vue";
 
 export default {
-    components: { InventoryMovementCard },
+    components: {ProductCard, InventoryMovementCard },
 
     mixins: [api, loadingOverlay],
 
     props: {
-        inventory_id: {
+        product: {
             default: null,
-            type: Number
+            type: Object
         },
     },
 
     watch: {
-        inventory_id() {
-            this.loadRecords()
+        product() {
+            console.log(this.product);
+            // this.loadRecords()
         },
-    },
-
-    data: function() {
-        return {
-            records: [],
-            hasNextPage: false
-        };
     },
 
     computed: {
