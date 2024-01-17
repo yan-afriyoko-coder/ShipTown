@@ -23,8 +23,9 @@
                 <barcode-input-field :input_id="'barcode_input'" @barcodeScanned="onBarcodeScanned" placeholder="Scan sku or alias" class="text-center font-weight-bold"></barcode-input-field>
             </div>
 
-            <input ref="current_location" placeholder="Shelf" style="width: 75px" class="form-control text-center ml-2 font-weight-bold"
+            <input ref="current_location" placeholder="Shelf" style="width: 60px" class="form-control text-center ml-2 font-weight-bold"
                    v-model="minShelfLocation"
+                   @focus="simulateSelectAll"
                    @keyup.enter="setMinShelfLocation"/>
 
             <button id="showConfigurationButton" v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
