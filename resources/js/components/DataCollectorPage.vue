@@ -23,7 +23,14 @@
                 <barcode-input-field :input_id="'barcode_input'" @barcodeScanned="onBarcodeScanned" placeholder="Scan sku or alias" class="text-center font-weight-bold"></barcode-input-field>
             </div>
 
-            <barcode-input-field :input_id="'min_shelf_location'" :url_param_name="'filter[shelf_location_greater_than]'" @barcodeScanned="setMinShelfLocation" placeholder="shelf" style="width: 75px" class="text-center ml-2 font-weight-bold"></barcode-input-field>
+<!--            <barcode-input-field :input_id="'min_shelf_location'" -->
+<!--                                 :url_param_name="'filter[shelf_location_greater_than]'" -->
+<!--                                 @barcodeScanned="setMinShelfLocation" placeholder="shelf"-->
+<!--                                 style="width: 75px" class="text-center ml-2 font-weight-bold"></barcode-input-field>-->
+
+            <input ref="current_location" placeholder="Shelf" style="width: 75px" class="text-center ml-2 font-weight-bold"
+                   v-model="minShelfLocation"
+                   @keyup.enter="setMinShelfLocation"/>
 
             <button id="showConfigurationButton" v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
@@ -198,6 +205,7 @@
 
         data: function() {
             return {
+                minShelfLocation: '',
                 singleScanEnabled: false,
                 scannedDataCollectionRecord: null,
                 scannedProduct: null,
@@ -486,9 +494,10 @@
                 this.loadDataCollectorRecords(++this.page);
             },
 
-            setMinShelfLocation (shelfLocation) {
-                this.setUrlParameter( "filter[shelf_location_greater_than]", shelfLocation);
+            setMinShelfLocation() {
+                this.setUrlParameter( "filter[shelf_location_greater_than]", this.minShelfLocation);
                 this.loadDataCollectorRecords();
+                this.setFocusElementById('barcode_input');
             },
 
             loadDataCollectorRecords(page = 1) {
