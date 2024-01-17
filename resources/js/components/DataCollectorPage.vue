@@ -25,7 +25,7 @@
 
             <input ref="current_location" placeholder="Shelf" style="width: 60px" class="form-control text-center ml-2 font-weight-bold"
                    v-model="minShelfLocation"
-                   @click="simulateSelectAll"
+                   @focus="simulateSelectAll"
                    @keyup.enter="setMinShelfLocation"/>
 
             <button id="showConfigurationButton" v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
