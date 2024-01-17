@@ -40,8 +40,8 @@
             </div>
 
             <template #modal-footer="{ ok, cancel }" class="text-left">
-                <b-button style="width: 75px" class="btn mr-auto" variant="secondary" @click="cancel()">Cancel</b-button>
-                <b-button style="width: 75px" class="btn" variant="primary" @click="ok()">OK</b-button>
+                <b-button style="width: 75px" class="btn mr-auto small" variant="secondary" @click="cancel()">Cancel</b-button>
+                <b-button style="width: 75px" class="btn small" variant="primary" @click="ok()">OK</b-button>
             </template>
         </b-modal>
     </div>

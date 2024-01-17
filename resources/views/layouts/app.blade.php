@@ -31,6 +31,5 @@
 
     <vue-snotify></vue-snotify>
 
-    <recent-inventory-movements-modal/>
-
+    <recent-inventory-movements-modal></recent-inventory-movements-modal>
 @endsection

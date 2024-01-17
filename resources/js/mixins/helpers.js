@@ -17,9 +17,7 @@ export default {
 
             simulateSelectAll(e) {
                 console.log(e);
-                // setTimeout(() => {
-                //     document.execCommand('selectall', false, 'tet');
-                // }, 50);
+                // e.target.element selectAll();
             },
 
             copyToClipBoard(textToCopy){
@@ -64,6 +62,8 @@ export default {
                 if (element === null) {
                     return;
                 }
+
+                element.blur();
 
                 const isIos = () => !!window.navigator.userAgent.match(/Mac OS|iPad|iPhone/i);
 

@@ -224,20 +224,18 @@
 
                 let s = this.command['name'] + ':' + this.command['value'];
 
-                this.notifySuccess('Scanned: ' + textEntered);
-                this.notifySuccess('Command: ' + s);
-
                 if (textEntered === s) {
                     event.target.value = '';
 
                     if (this.shelfLocationModalContinuesScan) {
+                        this.setFocusOnBarcodeInput();
                         this.$bvModal.hide(this.getModalID);
                         return;
 
                     }
 
                     this.shelfLocationModalContinuesScan = true;
-                    return ;
+                    return;
                 }
 
                 this.apiInventoryGet({
@@ -271,6 +269,7 @@
                     return;
                 }
 
+                this.setFocusOnBarcodeInput();
                 this.$bvModal.hide(this.getModalID);
             },
 

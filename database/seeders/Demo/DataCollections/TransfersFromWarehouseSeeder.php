@@ -89,6 +89,25 @@ class TransfersFromWarehouseSeeder extends Seeder
                     'quantity_scanned' => 6,
                 ]);
 
+                // under scanned
+                DataCollectionRecord::factory()->create([
+                    'data_collection_id' => $dataCollection->getKey(),
+                    'quantity_requested' => 6,
+                    'quantity_scanned' => 5,
+                ]);
+
+                DataCollectionRecord::factory()->create([
+                    'data_collection_id' => $dataCollection->getKey(),
+                    'quantity_requested' => 24,
+                    'quantity_scanned' => 11,
+                ]);
+
+                DataCollectionRecord::factory()->create([
+                    'data_collection_id' => $dataCollection->getKey(),
+                    'quantity_requested' => 3,
+                    'quantity_scanned' => 1,
+                ]);
+
                 // not requested
                 DataCollectionRecord::factory()->create([
                     'data_collection_id' => $dataCollection->getKey(),
