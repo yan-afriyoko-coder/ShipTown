@@ -5,7 +5,7 @@
 
         <b-modal :id="modal_name" scrollable no-fade hide-header
                  @ok="submitStocktake"
-                 @shown="setFocusElementById('quantity-request-input')"
+                 @shown="setFocusElementById('quantity-request-input', true)"
                  @hidden="setFocusElementById(input_id)"
         >
             <template v-if="inventory">
