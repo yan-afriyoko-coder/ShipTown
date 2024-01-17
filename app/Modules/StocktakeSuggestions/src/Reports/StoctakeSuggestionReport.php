@@ -46,12 +46,7 @@ class StoctakeSuggestionReport extends Report
 
         $this->baseQuery = StocktakeSuggestion::query()
             ->leftJoin('inventory', 'inventory.id', '=', 'stocktake_suggestions.inventory_id')
-            ->leftJoin('products', 'products.id', '=', 'stocktake_suggestions.product_id')
-            ->groupBy([
-                'stocktake_suggestions.inventory_id',
-                'stocktake_suggestions.product_id',
-                'stocktake_suggestions.warehouse_id'
-            ]);
+            ->leftJoin('products', 'products.id', '=', 'stocktake_suggestions.product_id');
 
         $this->fields = [
             'inventory_id'          => 'stocktake_suggestions.inventory_id',
@@ -61,11 +56,11 @@ class StoctakeSuggestionReport extends Report
             'last_movement_at'      => 'inventory.last_movement_at',
             'last_counted_at'       => 'inventory.last_counted_at',
             'last_sold_at'          => 'inventory.last_sold_at',
-            'product_sku'           => DB::raw('max(products.sku)'),
-            'product_name'          => DB::raw('max(products.name)'),
-            'points'                => DB::raw('sum(points)'),
-            'quantity_in_stock'     => DB::raw('max(inventory.quantity)'),
-            'suggestion_details'    => DB::raw("group_concat(points, ' points - ', reason, char(13))"),
+            'product_sku'           => 'products.sku',
+            'product_name'          => 'products.name',
+            'points'                => 'points',
+            'quantity_in_stock'     => 'inventory.quantity',
+            'suggestion_details'    => DB::raw("concat(points, ' points - ', reason, char(13))"),
         ];
 
         $this->casts = [
