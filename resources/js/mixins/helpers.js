@@ -16,7 +16,8 @@ export default {
             },
 
             simulateSelectAll(e) {
-                e.target.selectAll();
+                console.log(e);
+                // e.target.element selectAll();
             },
 
             copyToClipBoard(textToCopy){
