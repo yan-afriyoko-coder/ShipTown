@@ -23,12 +23,7 @@
                 <barcode-input-field :input_id="'barcode_input'" @barcodeScanned="onBarcodeScanned" placeholder="Scan sku or alias" class="text-center font-weight-bold"></barcode-input-field>
             </div>
 
-<!--            <barcode-input-field :input_id="'min_shelf_location'" -->
-<!--                                 :url_param_name="'filter[shelf_location_greater_than]'" -->
-<!--                                 @barcodeScanned="setMinShelfLocation" placeholder="shelf"-->
-<!--                                 style="width: 75px" class="text-center ml-2 font-weight-bold"></barcode-input-field>-->
-
-            <input ref="current_location" placeholder="Shelf" style="width: 75px" class="text-center ml-2 font-weight-bold"
+            <input ref="current_location" placeholder="Shelf" style="width: 75px" class="form-control text-center ml-2 font-weight-bold"
                    v-model="minShelfLocation"
                    @keyup.enter="setMinShelfLocation"/>
 
