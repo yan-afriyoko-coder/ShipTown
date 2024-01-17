@@ -228,13 +228,14 @@
                     event.target.value = '';
 
                     if (this.shelfLocationModalContinuesScan) {
+                        this.setFocusOnBarcodeInput();
                         this.$bvModal.hide(this.getModalID);
                         return;
 
                     }
 
                     this.shelfLocationModalContinuesScan = true;
-                    return ;
+                    return;
                 }
 
                 this.apiInventoryGet({

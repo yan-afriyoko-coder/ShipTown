@@ -35,7 +35,7 @@
             :dataCollectionRecord="scannedDataCollectionRecord"
             :product="scannedProduct"
             @productCountCollected="submitCount"
-            @hidden="onModalHidden">
+            @hidden="onQuantityRequestModalHidden">
         </data-collector-quantity-request-modal>
 
         <div v-if="(dataCollectionRecords !== null) && (dataCollectionRecords.length === 0)" class="text-secondary small text-center mt-3">
@@ -253,8 +253,8 @@
                 this.loadDataCollectorRecords();
             },
 
-            onModalHidden() {
-                this.setFocusElementById('barcode_input', true, true);
+            onQuantityRequestModalHidden() {
+                this.setFocusElementById('barcode_input', false, true);
 
                 setTimeout(() => {
                     this.reloadDataCollection();
