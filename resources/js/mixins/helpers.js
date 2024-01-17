@@ -65,6 +65,8 @@ export default {
                     return;
                 }
 
+                element.blur();
+
                 const isIos = () => !!window.navigator.userAgent.match(/Mac OS|iPad|iPhone/i);
 
                 if (isIos()) {

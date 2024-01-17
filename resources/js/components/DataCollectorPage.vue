@@ -20,10 +20,10 @@
 
         <div class="row mb-1 pb-2 p-1 mt-0 sticky-top bg-light flex-nowrap" style="z-index: 10;">
             <div class="flex-fill">
-                <barcode-input-field @barcodeScanned="onBarcodeScanned" placeholder="Scan sku or alias" class="text-center font-weight-bold"></barcode-input-field>
+                <barcode-input-field :input_id="'barcode_input'" @barcodeScanned="onBarcodeScanned" placeholder="Scan sku or alias" class="text-center font-weight-bold"></barcode-input-field>
             </div>
 
-            <barcode-input-field v-bind:auto-focus-after=0 :url_param_name="'filter[shelf_location_greater_than]'" @barcodeScanned="setMinShelfLocation" placeholder="shelf" style="width: 75px" class="text-center ml-2 font-weight-bold"></barcode-input-field>
+            <barcode-input-field :input_id="'min_shelf_location'" :url_param_name="'filter[shelf_location_greater_than]'" @barcodeScanned="setMinShelfLocation" placeholder="shelf" style="width: 75px" class="text-center ml-2 font-weight-bold"></barcode-input-field>
 
             <button id="showConfigurationButton" v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
@@ -79,7 +79,7 @@
 
         <b-modal id="configuration-modal" no-fade hide-header
                  @shown="onShownConfigurationModal"
-                 @hidden="setFocusElementById('barcodeInput')"
+                 @hidden="setFocusElementById('barcode_input')"
         >
             <div v-if="dataCollection">
                 <stocktake-input></stocktake-input>
@@ -157,7 +157,7 @@
 
         </b-modal>
 
-        <b-modal id="transferToModal" no-fade hide-header @hidden="setFocusElementById('barcodeInput', true, true)">
+        <b-modal id="transferToModal" no-fade hide-header @hidden="setFocusElementById('barcode_input', true, true)">
             <template v-for="warehouse in warehouses">
                 <button @click.prevent="transferToWarehouse(warehouse)" v-if="dataCollection && warehouse['id'] !== dataCollection['warehouse_id']" v-b-toggle class="col btn mb-2 btn-primary">{{ warehouse.name }}</button>
             </template>
@@ -251,7 +251,7 @@
             },
 
             onModalHidden() {
-                this.setFocusElementById('barcodeInput', true, true);
+                this.setFocusElementById('barcode_input', true, true);
 
                 setTimeout(() => {
                     this.reloadDataCollection();
