@@ -159,7 +159,7 @@
 
         </b-modal>
 
-        <b-modal id="transferToModal" no-fade hide-header @hidden="setFocusElementById('barcode_input', true, true)">
+        <b-modal id="transferToModal" no-fade hide-header @hidden="setFocusElementById('barcode_input')">
             <template v-for="warehouse in warehouses">
                 <button @click.prevent="transferToWarehouse(warehouse)" v-if="dataCollection && warehouse['id'] !== dataCollection['warehouse_id']" v-b-toggle class="col btn mb-2 btn-primary">{{ warehouse.name }}</button>
             </template>
@@ -254,7 +254,7 @@
             },
 
             onQuantityRequestModalHidden() {
-                this.setFocusElementById('barcode_input', false, true);
+                this.setFocusElementById('barcode_input');
 
                 setTimeout(() => {
                     this.reloadDataCollection();
