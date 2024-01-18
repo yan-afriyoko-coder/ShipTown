@@ -2,30 +2,16 @@
 
 namespace App\Modules\InventoryQuantityIncoming\src\Jobs;
 
+use App\Abstracts\UniqueJob;
 use App\Models\DataCollectionTransferIn;
 use App\Models\Inventory;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
 /**
  *
  */
-class FixIncorrectQuantityIncomingJob implements ShouldQueue
+class FixIncorrectQuantityIncomingJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
     public function handle()
     {
         $this->zeroQuantityIncomingIfNotComing();

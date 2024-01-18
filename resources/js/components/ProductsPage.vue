@@ -133,11 +133,10 @@
             },
 
             findProductsWithExactSku: function() {
-                this.showLoading();
-
                 const params = { ...this.$router.currentRoute.query};
-                params['filter[sku]'] = this.getUrlParameter('sku') ?? this.getUrlParameter('search');
+                params['filter[sku_or_alias]'] = this.getUrlParameter('sku') ?? this.getUrlParameter('search');
                 params['include'] = 'inventory,tags,prices,aliases,inventory.warehouse,inventoryMovementsStatistics';
+                params['per_page'] = 1;
 
                 this.apiGetProducts(params)
                     .then(({data}) => {
@@ -149,9 +148,6 @@
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
-                    })
-                    .finally(() => {
-                        this.hideLoading();
                     });
             },
 

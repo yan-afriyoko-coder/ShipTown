@@ -9,17 +9,17 @@ use App\Models\DataCollectionRecord;
 
 class DataCollectionRecordObserver
 {
-    public function created(DataCollectionRecord $dataCollectionRecord)
+    public function created(DataCollectionRecord $dataCollectionRecord): void
     {
         DataCollectionRecordCreatedEvent::dispatch($dataCollectionRecord);
     }
 
-    public function updated(DataCollectionRecord $dataCollectionRecord)
+    public function updated(DataCollectionRecord $dataCollectionRecord): void
     {
         DataCollectionRecordUpdatedEvent::dispatch($dataCollectionRecord);
     }
 
-    public function deleted(DataCollectionRecord $dataCollectionRecord)
+    public function deleted(DataCollectionRecord $dataCollectionRecord): void
     {
         DataCollectionRecordDeletedEvent::dispatch($dataCollectionRecord);
     }

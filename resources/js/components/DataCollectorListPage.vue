@@ -178,9 +178,7 @@
                 prepareNewCollectionModal() {
                     this.csv = null;
                     this.newCollectionName = null;
-                    this.$nextTick(() => {
-                        this.setFocusElementById('collection_name_input');
-                    });
+                    this.setFocusElementById('collection_name_input', true);
                 },
 
                 openDataCollection(data_collection_id)  {
