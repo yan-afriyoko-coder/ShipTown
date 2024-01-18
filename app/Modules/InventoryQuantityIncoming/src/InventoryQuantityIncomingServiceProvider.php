@@ -6,7 +6,6 @@ use App\Events\DataCollection\DataCollectionDeletedEvent;
 use App\Events\DataCollectionRecord\DataCollectionRecordCreatedEvent;
 use App\Events\DataCollectionRecord\DataCollectionRecordDeletedEvent;
 use App\Events\DataCollectionRecord\DataCollectionRecordUpdatedEvent;
-use App\Events\EveryHourEvent;
 use App\Modules\Api2cart\src\Listeners\DailyEventListener;
 use App\Modules\BaseModuleServiceProvider;
 use App\Modules\InventoryQuantityIncoming\src\Jobs\FixIncorrectQuantityIncomingJob;
