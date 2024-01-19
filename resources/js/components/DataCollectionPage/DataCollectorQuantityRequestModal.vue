@@ -92,7 +92,7 @@
                 this.prices = null;
                 this.dataCollectionRecord = null;
 
-                this.$bvModal.show('data-collector-quantity-request-modal');
+                this.loadDataAndShowModal();
             })
         },
 
@@ -101,12 +101,14 @@
                 this.$emit('hidden');
             },
 
-            modalShown() {
-                this.setFocusElementById('data-collection-record-quantity-request-input', true);
-
+            loadDataAndShowModal: function () {
                 this.loadProduct();
                 this.loadDataCollection();
                 this.loadDataCollectionRecord();
+            },
+
+            modalShown() {
+                this.setFocusElementById('data-collection-record-quantity-request-input', true, true, 10);
             },
 
             loadProduct: function () {
@@ -116,12 +118,14 @@
                 })
                 .then(response => {
                     if (response.data.data.length === 0) {
-                        this.notifyError('No product found with barcode: ' + this.sku_or_alias);
+                        this.notifyError('No product found with barcode "' + this.sku_or_alias + '"');
                         return;
                     }
                     this.product = response.data.data[0];
                     this.inventory = this.product['inventory'];
                     this.prices = this.product['prices'];
+
+                    this.$bvModal.show('data-collector-quantity-request-modal');
                 })
                 .catch((error) => {
                     this.displayApiCallError(error);

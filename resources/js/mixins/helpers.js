@@ -144,7 +144,7 @@ export default {
             showError: function (message, options) {
                 const defaultOptions = {
                     closeOnClick: true,
-                    timeout: 15 * 1000,
+                    timeout: 5 * 1000,
                     showProgressBar: true,
                     buttons: [
                         {text: 'OK', action: null},
