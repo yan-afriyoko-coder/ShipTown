@@ -29,6 +29,7 @@ class DataCollectionReport extends Report
         $this->allowedIncludes = [
             'product',
             'product.tags',
+            'product.aliases',
             'dataCollection',
             'inventory',
             'products_prices',

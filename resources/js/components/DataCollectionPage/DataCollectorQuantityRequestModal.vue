@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="productNew">
         <b-modal @ok="submitCount" id="data-collector-quantity-request-modal" scrollable no-fade hide-header
                  @shown="modalShown"
                  @hidden="onHidden"
@@ -71,6 +71,7 @@
 
         data: function() {
             return {
+                inventory: null,
                 productNew: null,
                 quantity: null,
                 prices: null,
@@ -84,7 +85,7 @@
         },
 
         watch: {
-            product: function (newProduct, oldDataCollectionRecord) {
+            product: function (newProduct) {
                 if (newProduct === null) {
                     this.prices = null;
                     return;
@@ -96,6 +97,7 @@
                 }).then(response => {
                     this.productNew = response.data.data[0];
                     this.prices = response.data.data[0]['prices'][this.currentUser()['warehouse']['code']];
+                    this.inventory = response.data.data[0]['inventory'][this.currentUser()['warehouse']['code']];
                 });
             }
         },
@@ -161,11 +163,21 @@
 
                 const data = {
                     'data_collection_id': this.dataCollection['id'],
+                    'warehouse_id': this.dataCollection['warehouse_id'],
+                    'warehouse_code': this.dataCollection['warehouse_code'],
                     'product_id': this.product['id'],
+                    'inventory_id': this.inventory['id'],
                     'quantity_scanned':  Number(this.quantity),
                 };
 
-                this.$emit('productCountCollected', data);
+                this.apiPostDataCollectorRecords(data)
+                    .then(() => {
+                        this.notifySuccess('1 x ' + this.product['sku']);
+                        this.reloadDataCollection()
+                    })
+                    .catch((error) => {
+                        this.displayApiCallError(error);
+                    });
             },
         },
     }

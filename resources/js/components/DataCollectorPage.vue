@@ -35,7 +35,6 @@
             :dataCollection="dataCollection"
             :dataCollectionRecord="scannedDataCollectionRecord"
             :product="scannedProduct"
-            @productCountCollected="submitCount"
             @hidden="onQuantityRequestModalHidden">
         </data-collector-quantity-request-modal>
 
@@ -237,18 +236,6 @@
                 this.$modal.showRecentInventoryMovementsModal(inventory_id);
             },
 
-            submitCount(data) {
-                this.apiPostDataCollectorRecords(data)
-                    .then(response => {
-                        this.notifySuccess('Data collection record added');
-                        this.$emit('dataCollectionRecordAdded', response.data.data);
-                        this.reloadDataCollection();
-                    })
-                    .catch((error) => {
-                        this.displayApiCallError(error);
-                    });
-            },
-
             reloadDataCollection() {
                 this.loadDataCollectorDetails();
                 this.loadDataCollectorRecords();
@@ -282,6 +269,7 @@
 
                 this.apiGetProducts({
                         'filter[sku_or_alias]': barcode,
+                        'include': 'inventory',
                     })
                     .then(response => {
                         if (response.data.data.length === 0) {
@@ -292,11 +280,23 @@
                         this.scannedProduct = response.data.data[0];
 
                         if (this.singleScanEnabled) {
-                            this.submitCount({
-                                'data_collection_id': this.data_collection_id,
+                            const data = {
+                                'data_collection_id': this.dataCollection['id'],
+                                'warehouse_id': this.dataCollection['warehouse_id'],
+                                'warehouse_code': this.dataCollection['warehouse_code'],
                                 'product_id': this.scannedProduct['id'],
-                                'quantity_scanned': 1,
-                            });
+                                'inventory_id': this.scannedProduct['inventory'][this.dataCollection['warehouse_code']]['id'],
+                                'quantity_scanned':  1,
+                            };
+
+                            this.apiPostDataCollectorRecords(data)
+                                .then(() => {
+                                    this.notifySuccess('1 x ' + this.scannedProduct['sku']);
+                                    this.reloadDataCollection()
+                                })
+                                .catch((error) => {
+                                    this.displayApiCallError(error);
+                                });
 
                             return;
                         }
@@ -501,10 +501,9 @@
 
                 const params = this.$router.currentRoute.query;
                 params['filter[data_collection_id]'] = this.data_collection_id;
-                params['include'] = 'product,inventory,product.tags';
+                params['include'] = 'product,inventory,product.tags,product.aliases';
                 params['per_page'] = this.per_page;
                 params['page'] = page;
-                // params['sort'] = ['-quantity_to_scan', 'shelf_location'];
 
                 this.apiGetDataCollectorRecords(params)
                     .then((response) => {
