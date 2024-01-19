@@ -64,7 +64,7 @@ export default {
     },
 
     beforeMount() {
-        Modals.EventBus.$on('show::modal::recent-inventory-movements-modal', (modal, data) => {
+        Modals.EventBus.$on('show::modal::recent-inventory-movements-modal', (data) => {
             this.inventory_id= data.inventory_id;
             this.$bvModal.show('recent-inventory-movements-modal');
         })

@@ -31,12 +31,7 @@
             <button id="showConfigurationButton" v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
-        <data-collector-quantity-request-modal
-            :dataCollection="dataCollection"
-            :dataCollectionRecord="scannedDataCollectionRecord"
-            :product="scannedProduct"
-            @hidden="onQuantityRequestModalHidden">
-        </data-collector-quantity-request-modal>
+        <data-collector-quantity-request-modal @hidden="onQuantityRequestModalHidden"></data-collector-quantity-request-modal>
 
         <div v-if="(dataCollectionRecords !== null) && (dataCollectionRecords.length === 0)" class="text-secondary small text-center mt-3">
             No records found<br>
@@ -243,10 +238,7 @@
 
             onQuantityRequestModalHidden() {
                 this.setFocusElementById('barcode_input');
-
-                setTimeout(() => {
-                    this.reloadDataCollection();
-                }, 100);
+                this.reloadDataCollection();
             },
 
             onShownConfigurationModal() {
@@ -264,55 +256,24 @@
                     return;
                 }
 
-                this.scannedProduct = null;
-                this.scannedDataCollectionRecord = null;
+                if (this.singleScanEnabled) {
+                    this.apiPostDataCollectorActionsAddProduct({
+                            'data_collection_id': this.dataCollection['id'],
+                            'sku_or_alias': barcode,
+                            'quantity_scanned': 1,
+                        })
+                        .then(() => {
+                            this.notifySuccess('1 x ' + barcode);
+                            this.reloadDataCollection();
+                        })
+                        .catch((error) => {
+                            this.displayApiCallError(error);
+                        });
 
-                this.apiGetProducts({
-                        'filter[sku_or_alias]': barcode,
-                        'include': 'inventory',
-                    })
-                    .then(response => {
-                        if (response.data.data.length === 0) {
-                            this.notifyError('Product "' + barcode + '" not found');
-                            return;
-                        }
+                    return;
+                }
 
-                        this.scannedProduct = response.data.data[0];
-
-                        if (this.singleScanEnabled) {
-                            const data = {
-                                'data_collection_id': this.dataCollection['id'],
-                                'warehouse_id': this.dataCollection['warehouse_id'],
-                                'warehouse_code': this.dataCollection['warehouse_code'],
-                                'product_id': this.scannedProduct['id'],
-                                'inventory_id': this.scannedProduct['inventory'][this.dataCollection['warehouse_code']]['id'],
-                                'quantity_scanned':  1,
-                            };
-
-                            this.apiPostDataCollectorRecords(data)
-                                .then(() => {
-                                    this.notifySuccess('1 x ' + this.scannedProduct['sku']);
-                                    this.reloadDataCollection()
-                                })
-                                .catch((error) => {
-                                    this.displayApiCallError(error);
-                                });
-
-                            return;
-                        }
-
-                        this.$root.$emit('barcodeScanned', barcode);
-                    })
-                    .catch((error) => {
-                        this.displayApiCallError(error);
-                    });
-
-                this.apiGetDataCollectorRecords({
-                    'filter[data_collection_id]': this.data_collection_id,
-                    'filter[sku_or_alias]': barcode,
-                }).then(response => {
-                    this.scannedDataCollectionRecord = response.data.data[0];
-                });
+                this.$modal.showDataCollectorQuantityRequestModal(this.dataCollection['id'], barcode);
             },
 
             toggleSingleScanMode() {

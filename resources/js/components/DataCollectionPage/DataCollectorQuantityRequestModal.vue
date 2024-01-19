@@ -1,5 +1,5 @@
 <template>
-    <div v-if="productNew">
+    <div>
         <b-modal @ok="submitCount" id="data-collector-quantity-request-modal" scrollable no-fade hide-header
                  @shown="modalShown"
                  @hidden="onHidden"
@@ -11,27 +11,27 @@
                 <div class="col">
                     <div class="row text-right mt-0 mb-3">
                         <div class="col">
-                            <number-card label="price" :number="prices ? prices['price'] : 0"></number-card>
-                            <number-card :class="{ 'bg-warning': productNew && dataCollectionRecord && dataCollectionRecord['quantity_requested'] >= productNew['inventory'][this.currentUser()['warehouse']['code']]['quantity']}" label="in stock" :number="productNew ? productNew['inventory'][this.currentUser()['warehouse']['code']]['quantity'] : 0"></number-card>
-                            <text-card label="shelf" :text="productNew ? productNew['inventory'][this.currentUser()['warehouse']['code']]['shelf_location'] : 0"></text-card>
+                            <number-card label="price" :number="prices && dataCollection ? prices[dataCollection['warehouse_code']] : 0"></number-card>
+                            <number-card label="in stock" :number="inventory && dataCollection ? inventory[dataCollection['warehouse_code']]['quantity'] : 0" :class="{ 'bg-warning': inventory && dataCollectionRecord && dataCollectionRecord['quantity_requested'] >= inventory[dataCollection['warehouse_code']]['quantity']}" ></number-card>
+                            <text-card label="shelf" :text="inventory && dataCollection ? inventory[dataCollection['warehouse_code']]['shelf_location'] : 0"></text-card>
                         </div>
                     </div>
                     <div class="row-col text-right mt-3 mb-3">
                         <number-card label="requested" :number="dataCollectionRecord ? dataCollectionRecord['quantity_requested'] : 0"></number-card>
-                        <number-card :class="{ 'bg-warning': productNew && dataCollectionRecord && dataCollectionRecord['quantity_scanned'] > dataCollectionRecord['quantity_requested']}" label="scanned" :number="dataCollectionRecord ? dataCollectionRecord['quantity_scanned'] : 0"></number-card>
-                        <number-card :class="{ 'bg-warning': productNew && dataCollectionRecord && dataCollectionRecord['quantity_scanned'] > 0 && dataCollectionRecord['quantity_to_scan'] > 0}" label="to scan" :number="dataCollectionRecord ? dataCollectionRecord['quantity_to_scan'] : 0"></number-card>
+                        <number-card :class="{ 'bg-warning': dataCollectionRecord && dataCollectionRecord['quantity_scanned'] > dataCollectionRecord['quantity_requested']}" label="scanned" :number="dataCollectionRecord ? dataCollectionRecord['quantity_scanned'] : 0"></number-card>
+                        <number-card :class="{ 'bg-warning': dataCollectionRecord && dataCollectionRecord['quantity_scanned'] > 0 && dataCollectionRecord['quantity_to_scan'] > 0}" label="to scan" :number="dataCollectionRecord ? dataCollectionRecord['quantity_to_scan'] : 0"></number-card>
                     </div>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-12">
-                    <input class="form-control" :placeholder="'quantity to add'" :class="{ 'border-danger': this.quantity < 0, 'border-success': this.quantity > 0}"
+                    <input class="form-control" :placeholder="'quantity to add'" :class="{ 'border-danger': this.quantity_to_add < 0, 'border-success': this.quantity_to_add > 0}"
                            id="data-collection-record-quantity-request-input"
                            name="data-collection-record-quantity-request-input"
                            ref="data-collection-record-quantity-request-input"
                            dusk="data-collection-record-quantity-request-input"
-                           v-model="quantity"
+                           v-model="quantity_to_add"
                            type="number"
                            inputmode="numeric"
                            @keyup.enter="submitCount"
@@ -53,6 +53,7 @@
     import api from "../../mixins/api";
     import helpers from "../../mixins/helpers";
     import url from "../../mixins/url";
+    import Modals from "../../plugins/Modals";
 
     export default {
         mixins: [loadingOverlay, url, api, helpers],
@@ -62,82 +63,98 @@
         },
 
         props: {
-            dataCollection: null,
-            dataCollectionRecord: null,
-            product: null,
             placeholder: '',
-            requestedQuantity: null,
         },
 
         data: function() {
             return {
+                data_collection_id: null,
+                sku_or_alias: null,
+
+                quantity_to_add: null,
+
+                dataCollection: null,
+                product: null,
                 inventory: null,
-                productNew: null,
-                quantity: null,
                 prices: null,
+                dataCollectionRecord: null,
             };
         },
 
-        mounted() {
-            this.$root.$on('barcodeScanned', function () {
+        beforeMount() {
+            Modals.EventBus.$on('show::modal::data-collector-quantity-request-modal', (data) => {
+                this.data_collection_id = data['data_collection_id'];
+                this.sku_or_alias = data['sku_or_alias'];
+                this.quantity_to_add = null;
+                this.dataCollection = null;
+                this.product = null;
+                this.inventory = null;
+                this.prices = null;
+                this.dataCollectionRecord = null;
+
                 this.$bvModal.show('data-collector-quantity-request-modal');
-            });
-        },
-
-        watch: {
-            product: function (newProduct) {
-                if (newProduct === null) {
-                    this.prices = null;
-                    return;
-                }
-
-                this.apiGetProducts({
-                    'filter[id]': newProduct['id'],
-                    'include': 'prices,inventory',
-                }).then(response => {
-                    this.productNew = response.data.data[0];
-                    this.prices = response.data.data[0]['prices'][this.currentUser()['warehouse']['code']];
-                    this.inventory = response.data.data[0]['inventory'][this.currentUser()['warehouse']['code']];
-                });
-            }
+            })
         },
 
         methods: {
             onHidden() {
-                this.prices = null;
-                this.quantity = null;
                 this.$emit('hidden');
             },
 
             modalShown() {
                 this.setFocusElementById('data-collection-record-quantity-request-input', true);
+
+                this.loadProduct();
+                this.loadDataCollection();
+                this.loadDataCollectionRecord();
             },
 
-            barcodeScanned: async function (barcode) {
-                if (barcode === null) {
-                    return;
-                }
-
-                if (barcode === "") {
-                    return;
-                }
-
-                this.quantity = null;
-
-                const params = {
-                    'filter[sku_or_alias]': barcode,
+            loadProduct: function () {
+                this.apiGetProducts({
+                    'filter[sku_or_alias]': this.sku_or_alias,
                     'include': 'inventory,prices',
-                };
+                })
+                .then(response => {
+                    if (response.data.data.length === 0) {
+                        this.notifyError('No product found with barcode: ' + this.sku_or_alias);
+                        return;
+                    }
+                    this.product = response.data.data[0];
+                    this.inventory = this.product['inventory'];
+                    this.prices = this.product['prices'];
+                })
+                .catch((error) => {
+                    this.displayApiCallError(error);
+                });
+            },
 
-                this.apiGetProducts(params)
+            loadDataCollection: function () {
+                this.apiGetDataCollector({
+                    'filter[id]': this.data_collection_id,
+                })
+                .then(response => {
+                    if (response.data.data.length === 0) {
+                        this.notifyError('No collection found');
+                        return;
+                    }
+                    this.dataCollection = response.data.data[0];
+                })
+                .catch((error) => {
+                    this.displayApiCallError(error);
+                });
+            },
+
+            loadDataCollectionRecord() {
+                this.apiGetDataCollectorRecords({
+                    'filter[data_collection_id]': this.data_collection_id,
+                    'filter[sku_or_alias]': this.sku_or_alias,
+                })
                     .then(response => {
                         if (response.data.data.length === 0) {
-                            this.notifyError('No product found with barcode: ' + barcode);
+                            this.dataCollectionRecord = null;
                             return;
                         }
-                        this.product = response.data.data[0];
-
-                        this.$bvModal.show('data-collector-quantity-request-modal');
+                        this.dataCollectionRecord = response.data.data[0];
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
@@ -145,40 +162,35 @@
             },
 
             submitCount: function () {
-                if (this.quantity === null) {
+                if (this.quantity_to_add === null) {
                     return;
                 }
 
-                if (this.quantity === "") {
+                if (this.quantity_to_add === "") {
                     return;
                 }
 
-                if (this.quantity.length > 7) {
-                    this.notifyError('Quantity is too large', {'timeout': 5000});
+                if (Math.abs(this.quantity_to_add) > 99999) {
+                    this.notifyError('Quantity is too large', {'timeout': 3000});
                     this.setFocusElementById('data-collection-record-quantity-request-input', true);
                     return;
                 }
 
                 this.$bvModal.hide('data-collector-quantity-request-modal');
 
-                const data = {
-                    'data_collection_id': this.dataCollection['id'],
-                    'warehouse_id': this.dataCollection['warehouse_id'],
-                    'warehouse_code': this.dataCollection['warehouse_code'],
-                    'product_id': this.product['id'],
-                    'inventory_id': this.inventory['id'],
-                    'quantity_scanned':  Number(this.quantity),
-                };
-
-                this.apiPostDataCollectorRecords(data)
+                this.apiPostDataCollectorActionsAddProduct({
+                        'data_collection_id': this.dataCollection['id'],
+                        'sku_or_alias': this.sku_or_alias,
+                        'quantity_scanned': this.quantity_to_add,
+                    })
                     .then(() => {
-                        this.notifySuccess('1 x ' + this.product['sku']);
-                        this.reloadDataCollection()
+                        this.notifySuccess(this.quantity_to_add + ' x ' + this.sku_or_alias);
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
                     });
-            },
+
+            }
         },
     }
 </script>

@@ -47,23 +47,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  *
  * @property-read Warehouse $warehouse
  *
- * @method static Builder|Inventory increment($column, $quantity)
- * @method static Builder|Inventory newModelQuery()
- * @method static Builder|Inventory newQuery()
- * @method static Builder|Inventory query()
- * @method static Builder|Inventory whereCreatedAt($value)
- * @method static Builder|Inventory whereDeletedAt($value)
- * @method static Builder|Inventory whereId($value)
- * @method static Builder|Inventory whereLocationId($value)
- * @method static Builder|Inventory whereProductId($value)
- * @method static Builder|Inventory whereQuantity($value)
- * @method static Builder|Inventory whereQuantityReserved($value)
- * @method static Builder|Inventory whereShelveLocation($value)
- * @method static Builder|Inventory whereUpdatedAt($value)
- * @method static Builder|Inventory whereWarehouseId($value)
- * @method static Builder|Inventory whereWarehouseCode($value)
- * @method static Inventory firstOrNew(array $array)
- *
  * @property-read Collection|Activity[] $activities
  * @property-read int|null $activities_count
  * @mixin Eloquent
