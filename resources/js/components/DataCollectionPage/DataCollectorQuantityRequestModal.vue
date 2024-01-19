@@ -176,14 +176,13 @@
                     return;
                 }
 
-                this.$bvModal.hide('data-collector-quantity-request-modal');
-
                 this.apiPostDataCollectorActionsAddProduct({
                         'data_collection_id': this.dataCollection['id'],
                         'sku_or_alias': this.sku_or_alias,
                         'quantity_scanned': this.quantity_to_add,
                     })
                     .then(() => {
+                        this.$bvModal.hide('data-collector-quantity-request-modal');
                         this.notifySuccess(this.quantity_to_add + ' x ' + this.sku_or_alias);
                     })
                     .catch((error) => {
