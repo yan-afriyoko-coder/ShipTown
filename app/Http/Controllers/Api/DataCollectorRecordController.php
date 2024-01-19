@@ -20,9 +20,9 @@ class DataCollectorRecordController extends Controller
         $resource = $report->queryBuilder()
             ->orderByRaw('
                 data_collection_records.is_fully_scanned ASC,
-                data_collection_records.is_requested DESC,
-                data_collection_records.is_over_scanned DESC,
+                data_collection_records.is_requested ASC,
                 (data_collection_records.quantity_scanned > 0) ASC,
+                data_collection_records.is_over_scanned ASC,
                 shelf_location ASC,
                 data_collection_records.quantity_to_scan DESC
             ')

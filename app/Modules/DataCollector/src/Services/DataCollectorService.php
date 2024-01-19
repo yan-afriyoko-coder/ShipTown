@@ -9,7 +9,6 @@ use App\Models\DataCollectionTransferIn;
 use App\Models\DataCollectionTransferOut;
 use App\Models\Inventory;
 use App\Models\Warehouse;
-use App\Modules\DataCollector\src\Jobs\DispatchCollectionsTasksJob;
 use App\Modules\DataCollector\src\Jobs\ImportAsStocktakeJob;
 use App\Modules\DataCollector\src\Jobs\TransferInJob;
 use App\Modules\DataCollector\src\Jobs\TransferOutJob;
@@ -19,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 
 class DataCollectorService
 {
-    public static function runAction(DataCollection $dataCollection, $action)
+    public static function runAction(DataCollection $dataCollection, $action): void
     {
         if ($action === 'transfer_in_scanned') {
             $dataCollection->update([
@@ -33,7 +32,7 @@ class DataCollectorService
                 $dataCollection->delete();
             }
 
-            DispatchCollectionsTasksJob::dispatch();
+            TransferInJob::dispatch($dataCollection->id);
             return;
         }
 
@@ -61,7 +60,7 @@ class DataCollectorService
 
             $dataCollection->delete();
 
-            DispatchCollectionsTasksJob::dispatch();
+            TransferToJob::dispatch($dataCollection->id);
             return;
         }
 
@@ -83,7 +82,7 @@ class DataCollectorService
 
             $dataCollection->delete();
 
-            DispatchCollectionsTasksJob::dispatch();
+            ImportAsStocktakeJob::dispatch($dataCollection->id);
         }
     }
 
