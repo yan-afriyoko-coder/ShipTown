@@ -3,6 +3,7 @@
 namespace Tests\Feature\Api\DataCollectorRecords;
 
 use App\Models\DataCollection;
+use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\User;
@@ -15,14 +16,18 @@ class StoreTest extends TestCase
     {
         $user = User::factory()->create();
 
+        $inventory = Inventory::factory()->create();
+
         $dataCollection = DataCollection::factory()->create([
-            'warehouse_id' => Warehouse::factory()->create()->getKey(),
+            'warehouse_id' => $inventory->warehouse_id,
             'name' => 'test'
         ]);
 
         $response = $this->actingAs($user, 'api')->postJson(route('data-collector-records.store'), [
             'data_collection_id' => $dataCollection->getKey(),
-            'product_id'=> Product::factory()->create()->getKey(),
+            'inventory_id' => $inventory->getKey(),
+            'warehouse_code' => $inventory->warehouse_code,
+            'product_id'=> $inventory->product_id,
             'quantity_scanned' => rand(0, 100),
         ]);
 

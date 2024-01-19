@@ -5,15 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DataCollectorStoreRequest;
 use App\Http\Resources\DataCollectionRecordResource;
-use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
-use App\Models\Inventory;
-use App\Models\ProductAlias;
 use App\Modules\Reports\src\Models\DataCollectionReport;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\DB;
 
 class DataCollectorRecordController extends Controller
 {
@@ -24,9 +20,9 @@ class DataCollectorRecordController extends Controller
         $resource = $report->queryBuilder()
             ->orderByRaw('
                 data_collection_records.is_fully_scanned ASC,
-                data_collection_records.is_requested DESC,
-                data_collection_records.is_over_scanned DESC,
+                data_collection_records.is_requested ASC,
                 (data_collection_records.quantity_scanned > 0) ASC,
+                data_collection_records.is_over_scanned ASC,
                 shelf_location ASC,
                 data_collection_records.quantity_to_scan DESC
             ')
@@ -38,46 +34,18 @@ class DataCollectorRecordController extends Controller
 
     public function store(DataCollectorStoreRequest $request): DataCollectionRecordResource
     {
-        $record = $request->validated();
-
-        if (isset($record['product_sku'])) {
-            $record['product_id'] = ProductAlias::query()
-                ->where('alias', $record['product_sku'])
-                ->first('product_id')->product_id;
-
-            unset($record['product_sku']);
-        }
-
-        if (! isset($record['inventory_id'])) {
-            $record['inventory_id'] = Inventory::query()
-                ->where('product_id', $record['product_id'])
-                ->where('warehouse_id', DataCollection::find($record['data_collection_id'])->warehouse_id)
-                ->first('id')->id;
-        }
-
-
-        $collectionRecord = null;
-
-        DB::transaction(function () use ($record, &$collectionRecord) {
-            /** @var DataCollectionRecord $collectionRecord */
-            $collectionRecord = DataCollectionRecord::firstOrCreate([
-                'data_collection_id' => $record['data_collection_id'],
-                'inventory_id' => $record['inventory_id'],
-                'product_id' => $record['product_id'],
+        $collectionRecord = DataCollectionRecord::query()->firstOrCreate([
+                'data_collection_id' => $request->validated('data_collection_id'),
+                'inventory_id' => $request->validated('inventory_id'),
+            ], [
+                'product_id' => $request->validated('product_id'),
+                'warehouse_code' => $request->validated('warehouse_code'),
             ]);
 
-            $toUpdate = [];
-
-            if (array_key_exists('quantity_scanned', $record)) {
-                $toUpdate['quantity_scanned'] = $collectionRecord->quantity_scanned + $record['quantity_scanned'];
-            }
-
-            if (array_key_exists('quantity_requested', $record)) {
-                $toUpdate['quantity_requested'] = $record['quantity_requested'];
-            }
-
-            $collectionRecord->update($toUpdate);
-        });
+        $collectionRecord->update([
+            'quantity_scanned' => $collectionRecord->quantity_scanned + $request->validated('quantity_scanned', 0),
+            'quantity_requested' => $collectionRecord->quantity_requested + $request->validated('quantity_requested', 0),
+        ]);
 
         return DataCollectionRecordResource::make($collectionRecord);
     }

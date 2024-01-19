@@ -9,17 +9,17 @@ use App\Models\DataCollectionTransferIn;
 use App\Models\DataCollectionTransferOut;
 use App\Models\Inventory;
 use App\Models\Warehouse;
-use App\Modules\DataCollector\src\Jobs\DispatchCollectionsTasksJob;
 use App\Modules\DataCollector\src\Jobs\ImportAsStocktakeJob;
 use App\Modules\DataCollector\src\Jobs\TransferInJob;
 use App\Modules\DataCollector\src\Jobs\TransferOutJob;
 use App\Modules\DataCollector\src\Jobs\TransferToJob;
 use App\Services\InventoryService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class DataCollectorService
 {
-    public static function runAction(DataCollection $dataCollection, $action)
+    public static function runAction(DataCollection $dataCollection, $action): void
     {
         if ($action === 'transfer_in_scanned') {
             $dataCollection->update([
@@ -33,7 +33,7 @@ class DataCollectorService
                 $dataCollection->delete();
             }
 
-            DispatchCollectionsTasksJob::dispatch();
+            TransferInJob::dispatch($dataCollection->id);
             return;
         }
 
@@ -61,7 +61,7 @@ class DataCollectorService
 
             $dataCollection->delete();
 
-            DispatchCollectionsTasksJob::dispatch();
+            TransferToJob::dispatch($dataCollection->id);
             return;
         }
 
@@ -83,7 +83,7 @@ class DataCollectorService
 
             $dataCollection->delete();
 
-            DispatchCollectionsTasksJob::dispatch();
+            ImportAsStocktakeJob::dispatch($dataCollection->id);
         }
     }
 
@@ -166,7 +166,8 @@ class DataCollectorService
 
 
              InventoryService::transferIn($inventory, $record->quantity_scanned, [
-                 'description' => $record->dataCollection->name,
+                 'occurred_at' => $record->dataCollection->deleted_at ?? now()->utc()->toDateTimeLocalString(),
+                 'description' => Str::substr('Data Collection - ' . $record->dataCollection->name, 0, 50),
                  'custom_unique_reference_id' => $custom_unique_reference_id
              ]);
 
@@ -192,13 +193,14 @@ class DataCollectorService
             ], []);
 
             $custom_unique_reference_id = implode(':', [
+                'occurred_at' => $record->dataCollection->deleted_at ?? now()->utc()->toDateTimeLocalString(),
                 'data_collection_id' , $record->data_collection_id,
                 'data_collection_record_id' , $record->getKey(),
                 $record->updated_at
             ]);
 
             InventoryService::transferOut($inventory, $record->quantity_scanned * -1, [
-                'description' => $record->dataCollection->name,
+                'description' => Str::substr('Data Collection - ' . $record->dataCollection->name, 0, 50),
                 'custom_unique_reference_id' => $custom_unique_reference_id
             ]);
 

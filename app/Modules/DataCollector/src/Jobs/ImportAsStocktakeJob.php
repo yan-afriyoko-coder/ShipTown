@@ -7,6 +7,7 @@ use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\DataCollectionStocktake;
 use App\Models\InventoryMovement;
+use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -63,5 +64,7 @@ class ImportAsStocktakeJob extends UniqueJob
 
             $dataCollection->update(['type' => DataCollectionStocktake::class, 'currently_running_task' => null]);
         });
+
+        SequenceNumberJob::dispatch();
     }
 }

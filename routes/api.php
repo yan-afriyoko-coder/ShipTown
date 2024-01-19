@@ -32,6 +32,7 @@ Route::name('api.')->group(function () {
     Route::apiResource('inventory-movements', Api\InventoryMovementController::class)->only(['store', 'index']);
     Route::apiResource('stocktakes', Api\StocktakesController::class)->only(['store']);
     Route::apiResource('data-collector', Api\DataCollectorController::class)->except(['show']);
+    Route::apiResource('data-collector-actions/add-product', Api\DataCollectorActions\AddProductController::class)->only(['store']);
     Route::apiResource('logs', Api\LogController::class)->only(['index']);
     Route::apiResource('activities', Api\ActivityController::class)->only(['index', 'store']);
     Route::apiResource('csv-import', Api\CsvImportController::class)->only(['store']);

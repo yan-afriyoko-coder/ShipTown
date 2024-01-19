@@ -31,13 +31,7 @@
             <button id="showConfigurationButton" v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
-        <data-collector-quantity-request-modal
-            :dataCollection="dataCollection"
-            :dataCollectionRecord="scannedDataCollectionRecord"
-            :product="scannedProduct"
-            @productCountCollected="submitCount"
-            @hidden="onQuantityRequestModalHidden">
-        </data-collector-quantity-request-modal>
+        <data-collector-quantity-request-modal @hidden="onQuantityRequestModalHidden"></data-collector-quantity-request-modal>
 
         <div v-if="(dataCollectionRecords !== null) && (dataCollectionRecords.length === 0)" class="text-secondary small text-center mt-3">
             No records found<br>
@@ -237,18 +231,6 @@
                 this.$modal.showRecentInventoryMovementsModal(inventory_id);
             },
 
-            submitCount(data) {
-                this.apiPostDataCollectorRecords(data)
-                    .then(response => {
-                        this.notifySuccess('Data collection record added');
-                        this.$emit('dataCollectionRecordAdded', response.data.data);
-                        this.reloadDataCollection();
-                    })
-                    .catch((error) => {
-                        this.displayApiCallError(error);
-                    });
-            },
-
             reloadDataCollection() {
                 this.loadDataCollectorDetails();
                 this.loadDataCollectorRecords();
@@ -256,10 +238,7 @@
 
             onQuantityRequestModalHidden() {
                 this.setFocusElementById('barcode_input');
-
-                setTimeout(() => {
-                    this.reloadDataCollection();
-                }, 100);
+                this.reloadDataCollection();
             },
 
             onShownConfigurationModal() {
@@ -277,42 +256,24 @@
                     return;
                 }
 
-                this.scannedProduct = null;
-                this.scannedDataCollectionRecord = null;
+                if (this.singleScanEnabled) {
+                    this.apiPostDataCollectorActionsAddProduct({
+                            'data_collection_id': this.dataCollection['id'],
+                            'sku_or_alias': barcode,
+                            'quantity_scanned': 1,
+                        })
+                        .then(() => {
+                            this.notifySuccess('1 x ' + barcode);
+                            this.reloadDataCollection();
+                        })
+                        .catch((error) => {
+                            this.displayApiCallError(error);
+                        });
 
-                this.apiGetProducts({
-                        'filter[sku_or_alias]': barcode,
-                    })
-                    .then(response => {
-                        if (response.data.data.length === 0) {
-                            this.notifyError('Product "' + barcode + '" not found');
-                            return;
-                        }
+                    return;
+                }
 
-                        this.scannedProduct = response.data.data[0];
-
-                        if (this.singleScanEnabled) {
-                            this.submitCount({
-                                'data_collection_id': this.data_collection_id,
-                                'product_id': this.scannedProduct['id'],
-                                'quantity_scanned': 1,
-                            });
-
-                            return;
-                        }
-
-                        this.$root.$emit('barcodeScanned', barcode);
-                    })
-                    .catch((error) => {
-                        this.displayApiCallError(error);
-                    });
-
-                this.apiGetDataCollectorRecords({
-                    'filter[data_collection_id]': this.data_collection_id,
-                    'filter[sku_or_alias]': barcode,
-                }).then(response => {
-                    this.scannedDataCollectionRecord = response.data.data[0];
-                });
+                this.$modal.showDataCollectorQuantityRequestModal(this.dataCollection['id'], barcode);
             },
 
             toggleSingleScanMode() {
@@ -501,10 +462,9 @@
 
                 const params = this.$router.currentRoute.query;
                 params['filter[data_collection_id]'] = this.data_collection_id;
-                params['include'] = 'product,inventory,product.tags';
+                params['include'] = 'product,inventory,product.tags,product.aliases';
                 params['per_page'] = this.per_page;
                 params['page'] = page;
-                // params['sort'] = ['-quantity_to_scan', 'shelf_location'];
 
                 this.apiGetDataCollectorRecords(params)
                     .then((response) => {

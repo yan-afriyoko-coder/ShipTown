@@ -58,7 +58,7 @@ class TransferOutJob extends UniqueJob
             Log::debug('TransferOutJob finished', ['data_collection_id' => $this->dataCollection_id]);
         }
 
-        if ($dataCollection->records()->where('quantity_to_scan', '>', 0)->doesntExist()) {
+        if ($dataCollection->deleted_at === null && $dataCollection->records()->where('quantity_to_scan', '>', 0)->doesntExist()) {
             $dataCollection->delete();
         }
     }

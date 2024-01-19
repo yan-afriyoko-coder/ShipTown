@@ -27,7 +27,7 @@ class AppGenerateRoutesTests extends Command
 
     private function generateApiRoutesTestsFiles(Collection $except): void
     {
-        Artisan::call('route:list --json --path=/api/ --env=production');
+        Artisan::call('route:list --json --path=api/ --env=production');
 
         $routes = collect(json_decode(Artisan::output()));
 
