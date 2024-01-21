@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\InventoryMovements\src\Jobs;
+namespace App\Modules\InventoryTotals\src\Jobs;
 
 use App\Abstracts\UniqueJob;
 use Illuminate\Support\Facades\DB;
