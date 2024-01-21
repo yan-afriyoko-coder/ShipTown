@@ -33,7 +33,7 @@ class RecalculateInventoryRecordsJob extends UniqueJob
                         SELECT id
                         FROM inventory
                         WHERE inventory.recount_required = 1
-                        ORDER BY inventory.last_movement_at DESC
+//                        ORDER BY inventory.last_movement_at DESC
                         LIMIT 100
                     ) as tbl
                 );
