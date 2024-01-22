@@ -18,6 +18,7 @@ use App\Modules\InventoryMovements\src\Jobs\QuantityAfterCheckJob;
 use App\Modules\InventoryMovements\src\Jobs\QuantityBeforeCheckJob;
 use App\Modules\InventoryMovements\src\Jobs\QuantityDeltaCheckJob;
 use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
+use App\Modules\InventoryTotals\src\Jobs\RecalculateInventoryRecordsJob;
 use App\Services\InventoryService;
 use Tests\TestCase;
 
@@ -49,12 +50,15 @@ class BasicModuleTest extends TestCase
     public function testInventoryQuantityJob()
     {
         $this->inventory->update([
+            'recount_required' => true,
             'quantity' => 0,
         ]);
 
         InventoryQuantityCheckJob::dispatch();
 
         SequenceNumberJob::dispatch();
+
+        RecalculateInventoryRecordsJob::dispatch();
 
         ray(InventoryMovement::query()->get()->toArray());
 

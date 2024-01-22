@@ -19,6 +19,7 @@ class SequenceNumberJob extends UniqueJob
 
             Schema::dropIfExists('inventoryIdsToProcess');
 
+            // Create a temporary table with the first 100 movements that need to be processed
             DB::statement('
                 CREATE TEMPORARY TABLE inventoryIdsToProcess AS
                 SELECT
@@ -31,6 +32,7 @@ class SequenceNumberJob extends UniqueJob
                 LIMIT 100;
             ');
 
+            // Reset sequence_number to null for all movements that occurred after the first movement for the inventory_id with s
             DB::update('
                 UPDATE inventory_movements
                 INNER JOIN inventoryIdsToProcess
@@ -43,6 +45,7 @@ class SequenceNumberJob extends UniqueJob
 
             Schema::dropIfExists('tempTable');
 
+            // Recalculate running totals for all movements that occurred after the first movement for the inventory_id
             DB::statement('
                 CREATE TEMPORARY TABLE tempTable AS
                 SELECT
@@ -70,6 +73,7 @@ class SequenceNumberJob extends UniqueJob
                 ) tempTable2;
             ', [$minOccurred, $maxOccurred]);
 
+            // Update the sequence_number, quantity_before and quantity_after for all movements that occurred after the first movement for the inventory_id
             $recordsUpdated = DB::update('
                 UPDATE inventory_movements
 
@@ -94,6 +98,7 @@ class SequenceNumberJob extends UniqueJob
                     END;
             ');
 
+            // Update the quantity_delta for all stocktake movements that occurred after the first movement for the inventory_id
             DB::update('
                 UPDATE inventory_movements
 
@@ -109,20 +114,7 @@ class SequenceNumberJob extends UniqueJob
             DB::update('
                 UPDATE inventory
 
-                SET
-                    inventory.recount_required      = 0,
-                    inventory.last_sequence_number  = (SELECT sequence_number FROM inventory_movements WHERE inventory_id = inventory.id AND sequence_number IS NOT NULL ORDER BY occurred_at DESC, sequence_number DESC LIMIT 1),
-                    inventory.quantity              = IFNULL((SELECT quantity_after FROM inventory_movements WHERE inventory_id = inventory.id ORDER BY occurred_at DESC, sequence_number DESC LIMIT 1), 0),
-                    inventory.last_movement_id      = (SELECT id FROM inventory_movements WHERE inventory_id = inventory.id ORDER BY occurred_at DESC, sequence_number DESC LIMIT 1),
-                    inventory.first_movement_at     = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id),
-                    inventory.last_movement_at      = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id),
-                    inventory.first_counted_at      = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "stocktake"),
-                    inventory.last_counted_at       = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "stocktake"),
-                    inventory.first_sold_at         = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "sale"),
-                    inventory.last_sold_at          = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "sale"),
-                    inventory.first_received_at     = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0),
-                    inventory.last_received_at      = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0),
-                    inventory.updated_at            = now()
+                SET inventory.recount_required = 1
 
                 WHERE inventory.id IN (SELECT DISTINCT inventory_id FROM tempTable);
             ');
