@@ -3,12 +3,11 @@
 namespace App\Modules\InventoryMovements\src\Listeners;
 
 use App\Events\InventoryMovement\InventoryMovementCreatedEvent;
-use App\Models\InventoryMovement;
 use Carbon\Carbon;
 
 class InventoryMovementCreatedEventListener
 {
-    public function handle(InventoryMovementCreatedEvent $event)
+    public function handle(InventoryMovementCreatedEvent $event): void
     {
         $movement = $event->inventoryMovement;
 
@@ -16,11 +15,6 @@ class InventoryMovementCreatedEventListener
             return;
         }
 
-        $this->updateInventoryRecord($movement);
-    }
-
-    private function updateInventoryRecord(InventoryMovement $movement): void
-    {
         $attributes = [
             'quantity' => $movement->quantity_after,
             'last_movement_id' => $movement->id,
