@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\InventoryMovements\src\Jobs;
+namespace App\Modules\InventoryTotals\src\Jobs;
 
 use App\Abstracts\UniqueJob;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +29,14 @@ class RecalculateInventoryRecordsJob extends UniqueJob
                     inventory.last_received_at      = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0),
                     inventory.updated_at            = now()
 
-                WHERE inventory.id IN (SELECT id FROM (SELECT id FROM inventory WHERE inventory.recount_required = 1 LIMIT 100) as tbl);
+                WHERE inventory.id IN (SELECT id FROM (
+                        SELECT id
+                        FROM inventory
+                        WHERE inventory.recount_required = 1
+                        ORDER BY inventory.last_movement_at DESC
+                        LIMIT 100
+                    ) as tbl
+                );
             ');
 
             Log::info('Job processing', [

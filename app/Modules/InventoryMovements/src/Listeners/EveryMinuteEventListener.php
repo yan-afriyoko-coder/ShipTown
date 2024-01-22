@@ -2,7 +2,6 @@
 
 namespace App\Modules\InventoryMovements\src\Listeners;
 
-use App\Modules\InventoryMovements\src\Jobs\RecalculateInventoryRecordsJob;
 use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 
 class EveryMinuteEventListener
@@ -10,6 +9,5 @@ class EveryMinuteEventListener
     public function handle()
     {
         SequenceNumberJob::dispatch();
-        RecalculateInventoryRecordsJob::dispatch();
     }
 }
