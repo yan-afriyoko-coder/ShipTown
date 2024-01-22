@@ -140,6 +140,7 @@ class BasicModuleTest extends TestCase
     public function testLastMovementIdJob(): void
     {
         Inventory::query()->update([
+            'recount_required' => true,
             'last_movement_id' => null,
             'last_movement_at' => null,
             'quantity' => 0,
@@ -147,6 +148,7 @@ class BasicModuleTest extends TestCase
 
         InventoryQuantityCheckJob::dispatch();
         SequenceNumberJob::dispatch();
+        RecalculateInventoryRecordsJob::dispatch();
 
         $this->assertDatabaseHas('inventory', [
             'id' => $this->inventory->id,

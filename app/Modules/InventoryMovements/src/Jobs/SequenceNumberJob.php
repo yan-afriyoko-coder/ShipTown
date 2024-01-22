@@ -145,7 +145,6 @@ class SequenceNumberJob extends UniqueJob
                 SET inventory_movements.sequence_number = null;
             ');
 
-
             Log::info('Job processing', [
                 'job' => self::class,
                 'recordsUpdated' => $recordsUpdated
