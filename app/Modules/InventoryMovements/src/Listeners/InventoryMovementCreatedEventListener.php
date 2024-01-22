@@ -28,23 +28,19 @@ class InventoryMovementCreatedEventListener
             'last_movement_at' => Carbon::parse($movement->occurred_at)->max($movement->inventory->last_movement_at)->toDateTimeString(),
         ];
 
-        switch ($movement->type) {
-            case $movement::TYPE_SALE:
-                $attributes['first_sold_at'] = Carbon::parse($movement->occurred_at)->min($movement->inventory->first_sold_at)->toDateTimeString();
-                $attributes['last_sold_at'] = Carbon::parse($movement->occurred_at)->max($movement->inventory->last_sold_at)->toDateTimeString();
-                break;
+        if ($movement->type = $movement::TYPE_SALE) {
+            $attributes['first_sold_at'] = Carbon::parse($movement->occurred_at)->min($movement->inventory->first_sold_at)->toDateTimeString();
+            $attributes['last_sold_at'] = Carbon::parse($movement->occurred_at)->max($movement->inventory->last_sold_at)->toDateTimeString();
+        }
 
-            case $movement::TYPE_STOCKTAKE:
-                $attributes['first_counted_at'] = Carbon::parse($movement->occurred_at)->min($movement->inventory->first_counted_at)->toDateTimeString();
-                $attributes['last_counted_at'] = Carbon::parse($movement->occurred_at)->max($movement->inventory->last_counted_at)->toDateTimeString();
-                break;
+        if ($movement->type = $movement::TYPE_STOCKTAKE) {
+            $attributes['first_counted_at'] = Carbon::parse($movement->occurred_at)->min($movement->inventory->first_counted_at)->toDateTimeString();
+            $attributes['last_counted_at'] = Carbon::parse($movement->occurred_at)->max($movement->inventory->last_counted_at)->toDateTimeString();
+        }
 
-            default:
-                if ($movement->quantity_delta > 0) {
-                    $attributes['first_received_at'] = Carbon::parse($movement->occurred_at)->min($movement->inventory->first_received_at)->toDateTimeString();
-                    $attributes['last_received_at'] = Carbon::parse($movement->occurred_at)->max($movement->inventory->last_received_at)->toDateTimeString();
-                }
-                break;
+        if ($movement->quantity_delta > 0) {
+            $attributes['first_received_at'] = Carbon::parse($movement->occurred_at)->min($movement->inventory->first_received_at)->toDateTimeString();
+            $attributes['last_received_at'] = Carbon::parse($movement->occurred_at)->max($movement->inventory->last_received_at)->toDateTimeString();
         }
 
         $movement->inventory->update($attributes);
