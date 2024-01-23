@@ -27,13 +27,13 @@ class InventoryMovementCreatedEventListener
         $inventoryMovement = $event->inventoryMovement;
 
         if ($inventoryMovement->quantity_after < 0 and $inventoryMovement->quantity_before >= 0) {
-            StocktakeSuggestion::create([
+            StocktakeSuggestion::query()->upsert([
                 'inventory_id' => $inventoryMovement->inventory_id,
                 'product_id' => $inventoryMovement->product_id,
                 'warehouse_id' => $inventoryMovement->warehouse_id,
                 'points' => $points,
                 'reason' => $reason,
-            ]);
+            ], ['inventory_id', 'reason']);
 
             return;
         }
@@ -43,8 +43,6 @@ class InventoryMovementCreatedEventListener
                 'inventory_id' => $inventoryMovement->inventory_id,
                 'reason' => $reason
             ])->delete();
-
-            return;
         }
     }
 }
