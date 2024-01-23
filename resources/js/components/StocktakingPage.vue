@@ -46,7 +46,7 @@
         <template v-if="stocktakeSuggestions" v-for="record in stocktakeSuggestions">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
-                    <suggestion-record :record="record" @showModalMovement=showRecentInventoryMovementsModal></suggestion-record>
+                    <suggestion-record :record="record"></suggestion-record>
                 </template>
             </swiping-card>
         </template>
@@ -97,10 +97,6 @@ export default {
         },
 
         methods: {
-            showRecentInventoryMovementsModal(inventory_id) {
-                this.$modal.showRecentInventoryMovementsModal(inventory_id);
-            },
-
             reloadData() {
                 this.loadStocktakeSuggestions();
                 this.loadRecentStocktakes();

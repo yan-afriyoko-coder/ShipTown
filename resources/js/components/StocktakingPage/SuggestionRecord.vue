@@ -94,7 +94,7 @@ export default {
           },
 
           showInventoryMovementModal() {
-            this.$emit('showModalMovement', this.record['inventory_id']);
+              this.$modal.showRecentInventoryMovementsModal(this.record['inventory_id']);
           }
       },
   }
