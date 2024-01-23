@@ -24,7 +24,8 @@ class DataCollectorRecordController extends Controller
                 (data_collection_records.quantity_scanned > 0) ASC,
                 data_collection_records.is_over_scanned ASC,
                 shelf_location ASC,
-                data_collection_records.quantity_to_scan DESC
+                data_collection_records.quantity_to_scan DESC,
+                data_collection_records.id DESC
             ')
             ->simplePaginate(request()->get('per_page', 10))
             ->appends(request()->query());
@@ -34,6 +35,7 @@ class DataCollectorRecordController extends Controller
 
     public function store(DataCollectorStoreRequest $request): DataCollectionRecordResource
     {
+        /** @var DataCollectionRecord $collectionRecord */
         $collectionRecord = DataCollectionRecord::query()->firstOrCreate([
                 'data_collection_id' => $request->validated('data_collection_id'),
                 'inventory_id' => $request->validated('inventory_id'),
