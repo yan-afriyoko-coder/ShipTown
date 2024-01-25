@@ -13,6 +13,69 @@ use Tests\TestCase;
 
 class BasicModuleTest extends TestCase
 {
+    public function test_in_stock_since()
+    {
+        StocktakeSuggestionsServiceProvider::enableModule();
+
+        StocktakeSuggestionsConfiguration::query()->updateOrCreate([], [
+            'min_count_date' => now()->subWeek()
+        ]);
+
+        $inventory = Inventory::factory()->create();
+
+        $inventory->update([
+            'last_counted_at' => now()->subMonth(),
+            'in_stock_since' => now()->subMonth(),
+            'quantity' => 1,
+        ]);
+
+        OutdatedCountsJob::dispatch();
+
+        $this->assertEquals(1, StocktakeSuggestion::query()->count());
+
+        $inventory->update([
+            'last_counted_at' => now()->subMonth(),
+            'in_stock_since' => now()->subDay(),
+            'quantity' => 1,
+        ]);
+
+        OutdatedCountsJob::dispatch();
+
+        $this->assertEquals(0, StocktakeSuggestion::query()->count());
+    }
+
+    public function test_in_stock_since_doesnt_add_suggestion()
+    {
+        StocktakeSuggestionsServiceProvider::enableModule();
+
+        StocktakeSuggestionsConfiguration::updateOrCreate([], ['min_count_date' => now()->subWeek()]);
+
+        Inventory::factory()->create()->update([
+            'last_counted_at' => now()->subMonth(),
+            'first_movement_at' => now()->subMonth(),
+            'in_stock_since' => now()->subDay(),
+            'quantity' => 1,
+        ]);
+
+        $this->assertEquals(0, StocktakeSuggestion::query()->count());
+    }
+
+    public function test_outdated_counts_suggestion_adding()
+    {
+        StocktakeSuggestionsServiceProvider::enableModule();
+
+        StocktakeSuggestionsConfiguration::updateOrCreate([], ['min_count_date' => now()->subWeek()]);
+
+        Inventory::factory()->create()->update([
+            'last_counted_at' => now()->subMonth(),
+            'first_movement_at' => now()->subMonth(),
+            'in_stock_since' => now()->subMonth(),
+            'quantity' => 1,
+        ]);
+
+        $this->assertEquals(1, StocktakeSuggestion::query()->count());
+    }
+
     public function test_outdated_counts_suggestion()
     {
         StocktakeSuggestionsServiceProvider::enableModule();
@@ -21,19 +84,19 @@ class BasicModuleTest extends TestCase
 
         Inventory::factory()->create()->update([
             'last_counted_at' => now()->subMonth(),
-            'first_movement_at' => now()->subMonth(),
+            'in_stock_since' => now()->subMonth(),
             'quantity' => 1,
         ]);
 
         Inventory::factory()->create()->update([
             'last_counted_at' => null,
-            'first_movement_at' => now()->subMonth(),
+            'in_stock_since' => now()->subMonth(),
             'quantity' => 1,
         ]);
 
         Inventory::factory()->create()->update([
             'last_counted_at' => null,
-            'first_movement_at' => now(),
+            'in_stock_since' => now(),
             'quantity' => 1,
         ]);
 
@@ -46,19 +109,19 @@ class BasicModuleTest extends TestCase
 
         Inventory::factory()->create()->update([
             'last_counted_at' => now()->subMonth(),
-            'first_movement_at' => now()->subMonth(),
+            'in_stock_since' => now()->subMonth(),
             'quantity' => 1,
         ]);
 
         Inventory::factory()->create()->update([
             'last_counted_at' => null,
-            'first_movement_at' => now()->subMonth(),
+            'in_stock_since' => now()->subMonth(),
             'quantity' => 1,
         ]);
 
         Inventory::factory()->create()->update([
             'last_counted_at' => null,
-            'first_movement_at' => now(),
+            'in_stock_since' => now(),
             'quantity' => 1,
         ]);
 

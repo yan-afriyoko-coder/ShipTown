@@ -6,7 +6,9 @@ use App\Abstracts\UniqueJob;
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\DataCollectionStocktake;
+use App\Models\Inventory;
 use App\Models\InventoryMovement;
+use App\Models\StocktakeSuggestion;
 use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -55,8 +57,14 @@ class ImportAsStocktakeJob extends UniqueJob
                 ];
             });
 
-        DB::transaction(function () use ($dataCollection, $inventoryMovementRecords) {
+        $inventoryIds = collect($inventoryMovementRecords)->map(function ($record) {
+            return $record['inventory_id'];
+        });
+
+        DB::transaction(function () use ($dataCollection, $inventoryMovementRecords, $inventoryIds) {
             InventoryMovement::query()->upsert($inventoryMovementRecords->toArray(), ['custom_unique_reference_id'], ['sequence_number', 'quantity_after', 'updated_at']);
+
+            StocktakeSuggestion::query()->whereIn('id', $inventoryIds)->delete();
 
             if ($dataCollection->deleted_at === null) {
                 $dataCollection->delete();

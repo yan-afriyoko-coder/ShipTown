@@ -34,6 +34,7 @@ class OutdatedCountsJob extends UniqueJob
             return true;
         }
 
+        $minCountDate = $this->config->min_count_date->format('Y-m-d');
         DB::statement("
             INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
             SELECT inventory.id, inventory.product_id, inventory.warehouse_id, ? , ?, NOW(), NOW()
@@ -43,9 +44,9 @@ class OutdatedCountsJob extends UniqueJob
                 AND stocktake_suggestions.reason = ?
             WHERE stocktake_suggestions.inventory_id IS NULL
                 AND inventory.quantity != 0
-                AND inventory.first_movement_at < ?
+                AND (inventory.in_stock_since IS NULL OR inventory.in_stock_since < ?)
                 AND (inventory.last_counted_at IS NULL OR inventory.last_counted_at < ?)
-        ", [$points, $reason, $reason, $this->config->min_count_date->format('Y-m-d'), $this->config->min_count_date->format('Y-m-d')]);
+        ", [$points, $reason, $reason, $minCountDate, $minCountDate]);
 
         return true;
     }
@@ -70,7 +71,7 @@ class OutdatedCountsJob extends UniqueJob
                 ON inventory.id = stocktake_suggestions.inventory_id
             WHERE stocktake_suggestions.reason = ? AND (
                 inventory.quantity = 0
-                OR inventory.first_movement_at > ?
+                OR inventory.in_stock_since > ?
                 OR inventory.last_counted_at > ?
             )
         ", [$reason, $min_count_date, $min_count_date]);
