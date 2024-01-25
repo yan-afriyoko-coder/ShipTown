@@ -10,6 +10,6 @@ class DailyEventListener
     public function handle()
     {
         FirstMovementAtJob::dispatch();
-        LastCountedAtJob::dispatch();
+//        LastCountedAtJob::dispatch();
     }
 }
