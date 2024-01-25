@@ -27,7 +27,7 @@ class LastCountedAtJob extends UniqueJob
                     LEFT JOIN inventory_movements
                       ON inventory_movements.inventory_id = inventory.id
                       AND inventory_movements.type = "stocktake"
-                      AND inventory_movements.created_at = inventory.last_counted_at
+                      AND inventory_movements.occurred_at = inventory.last_counted_at
 
                     WHERE inventory.last_counted_at is not null
 
