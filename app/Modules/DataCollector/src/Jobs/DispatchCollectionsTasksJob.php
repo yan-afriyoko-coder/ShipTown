@@ -17,12 +17,10 @@ class DispatchCollectionsTasksJob extends UniqueJob
             ->chunkById(1, function ($batch) {
                 $batch->each(function (DataCollection $dataCollection) {
                     try {
-                        dd(1);
                         /** @var Dispatchable $job */
                         $job = $dataCollection->currently_running_task;
                         $job::dispatch($dataCollection->getKey());
                     } catch (Exception $e) {
-                        dd($e->getMessage());
                         Log::error($e->getMessage());
                         report($e);
                     }
