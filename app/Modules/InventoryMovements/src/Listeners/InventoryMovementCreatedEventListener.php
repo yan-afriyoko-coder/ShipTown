@@ -16,6 +16,7 @@ class InventoryMovementCreatedEventListener
         }
 
         $attributes = [
+            'recount_required' => true,
             'quantity' => $movement->quantity_after,
             'last_movement_id' => $movement->id,
             'first_movement_at' => Carbon::parse($movement->occurred_at)->min($movement->inventory->first_movement_at)->toDateTimeString(),
@@ -35,6 +36,10 @@ class InventoryMovementCreatedEventListener
         if ($movement->quantity_delta > 0) {
             $attributes['first_received_at'] = Carbon::parse($movement->occurred_at)->min($movement->inventory->first_received_at)->toDateTimeString();
             $attributes['last_received_at'] = Carbon::parse($movement->occurred_at)->max($movement->inventory->last_received_at)->toDateTimeString();
+        }
+
+        if ($movement->quantity_before = 0) {
+            $attributes['in_stock_since'] = Carbon::parse($movement->occurred_at)->max($movement->inventory->in_stock_since)->toDateTimeString();
         }
 
         $movement->inventory->update($attributes);

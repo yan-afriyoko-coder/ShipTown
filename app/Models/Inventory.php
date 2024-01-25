@@ -39,6 +39,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property Carbon|null $last_sold_at
  * @property Carbon|null $first_counted_at
  * @property Carbon|null $last_counted_at
+ * @property Carbon|null $in_stock_since
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -78,9 +79,8 @@ class Inventory extends BaseModel
         'restock_level',
         'reorder_point',
         'last_counted_at',
+        'in_stock_since',
         'last_movement_id',
-
-
         'first_movement_at',
         'last_movement_at',
         'first_received_at',

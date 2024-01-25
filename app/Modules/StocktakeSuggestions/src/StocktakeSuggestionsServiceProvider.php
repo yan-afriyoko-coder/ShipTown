@@ -50,7 +50,7 @@ class StocktakeSuggestionsServiceProvider extends BaseModuleServiceProvider
         ],
 
         InventoryUpdatedEvent::class => [
-            Listeners\InventoryUpdatedEvent\OutdatedCountListener::class,
+            Listeners\InventoryUpdatedEvent\AddOutdatedCountSuggestionListener::class,
         ],
 
         InventoryMovementCreatedEvent::class => [

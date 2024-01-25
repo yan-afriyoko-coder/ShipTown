@@ -7,26 +7,27 @@ use App\Models\StocktakeSuggestion;
 use App\Modules\StocktakeSuggestions\src\Models\StocktakeSuggestionsConfiguration;
 use Illuminate\Support\Facades\Cache;
 
-class OutdatedCountListener
+class AddOutdatedCountSuggestionListener
 {
     public function handle(InventoryUpdatedEvent $event): void
     {
         $inventory = $event->inventory;
 
-        if ($inventory->quantity === 0.00 || $inventory->first_movement_at === null) {
+        if ($inventory->quantity === 0.00) {
             return;
         }
 
-        $min_count_date = Cache::get('stocktake_suggestions_min_count_date', function () {
-            /** @var StocktakeSuggestionsConfiguration $configuration */
-            $configuration = StocktakeSuggestionsConfiguration::query()->firstOrCreate();
+        if ($inventory->first_movement_at === null) {
+            return;
+        }
 
-            Cache::set('stocktake_suggestions_min_count_date', $configuration->min_count_date, 60);
+        $min_count_date = $this->getMinCountDate();
 
-            return $configuration->min_count_date;
-        });
+        if ($min_count_date === null) {
+            return;
+        }
 
-        if ($min_count_date === null || $inventory->first_movement_at->isAfter($min_count_date)) {
+        if ($inventory->in_stock_since->isAfter($min_count_date)) {
             return;
         }
 
@@ -39,5 +40,20 @@ class OutdatedCountListener
                 'reason' => 'outdated count',
             ], ['inventory_id', 'reason']);
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getMinCountDate(): mixed
+    {
+        return Cache::get('stocktake_suggestions_min_count_date', function () {
+            /** @var StocktakeSuggestionsConfiguration $configuration */
+            $configuration = StocktakeSuggestionsConfiguration::query()->firstOrCreate();
+
+            Cache::set('stocktake_suggestions_min_count_date', $configuration->min_count_date, 60);
+
+            return $configuration->min_count_date;
+        });
     }
 }
