@@ -6,6 +6,8 @@ use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\DataCollectionTransferIn;
 use App\Models\Warehouse;
+use App\Modules\DataCollector\src\Jobs\DispatchCollectionsTasksJob;
+use App\Modules\DataCollector\src\Jobs\TransferInJob;
 use Illuminate\Database\Seeder;
 
 class ArchivedTransfersFromWarehouseSeeder extends Seeder
@@ -38,6 +40,8 @@ class ArchivedTransfersFromWarehouseSeeder extends Seeder
                     ]);
 
                 $dataCollection->delete();
+
+                TransferInJob::dispatch($dataCollection->getKey());
             });
     }
 }
