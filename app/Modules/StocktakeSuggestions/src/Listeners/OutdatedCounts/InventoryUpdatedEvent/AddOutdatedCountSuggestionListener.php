@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\StocktakeSuggestions\src\Listeners\InventoryUpdatedEvent;
+namespace App\Modules\StocktakeSuggestions\src\Listeners\OutdatedCounts\InventoryUpdatedEvent;
 
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Models\StocktakeSuggestion;
@@ -17,29 +17,27 @@ class AddOutdatedCountSuggestionListener
             return;
         }
 
-        if ($inventory->first_movement_at === null) {
-            return;
-        }
-
         $min_count_date = $this->getMinCountDate();
 
         if ($min_count_date === null) {
             return;
         }
 
-        if ($inventory->in_stock_since->isAfter($min_count_date)) {
+        if ($inventory->in_stock_since !== null && $inventory->in_stock_since->isAfter($min_count_date)) {
             return;
         }
 
-        if ($inventory->last_counted_at === null || $inventory->last_counted_at->isBefore($min_count_date)) {
-            StocktakeSuggestion::query()->upsert([
-                'inventory_id' => $inventory->id,
-                'product_id' => $inventory->product_id,
-                'warehouse_id' => $inventory->warehouse_id,
-                'points' => 1,
-                'reason' => 'outdated count',
-            ], ['inventory_id', 'reason']);
+        if ($inventory->last_counted_at !== null && $inventory->last_counted_at->isAfter($min_count_date)) {
+            return;
         }
+
+        StocktakeSuggestion::query()->upsert([
+            'inventory_id' => $inventory->id,
+            'product_id' => $inventory->product_id,
+            'warehouse_id' => $inventory->warehouse_id,
+            'points' => 1,
+            'reason' => 'outdated count',
+        ], ['inventory_id', 'reason']);
     }
 
     /**
