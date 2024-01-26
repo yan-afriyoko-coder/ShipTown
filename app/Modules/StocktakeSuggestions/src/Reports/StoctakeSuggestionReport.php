@@ -26,6 +26,7 @@ class StoctakeSuggestionReport extends Report
             'last_movement_at',
             'last_counted_at',
             'last_sold_at',
+            'in_stock_since',
             'inventory_id',
             'product_id',
             'warehouse_id',
