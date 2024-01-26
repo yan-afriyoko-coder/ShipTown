@@ -81,7 +81,7 @@ class ImportAsStocktakeJob extends UniqueJob
             DB::transaction(function () use ($dataCollection, $inventoryMovementRecords, $dataCollectionRecords) {
                 InventoryMovement::query()->upsert($inventoryMovementRecords->toArray(), ['custom_unique_reference_id'], ['sequence_number', 'quantity_after', 'updated_at', 'description']);
 
-                StocktakeSuggestion::query()->whereIn('id', $dataCollectionRecords->pluck('inventory_id'))->delete();
+                StocktakeSuggestion::query()->whereIn('inventory_id', $dataCollectionRecords->pluck('inventory_id'))->delete();
 
                 DataCollectionRecord::query()->whereIn('id', $dataCollectionRecords->pluck('id'))->update(['is_processed' => true]);
             });
