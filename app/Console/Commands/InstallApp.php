@@ -17,6 +17,7 @@ use App\Modules\AutoRestockLevels\src\AutoRestockLevelsServiceProvider;
 use App\Modules\DataCollector\src\DataCollectorServiceProvider;
 use App\Modules\InventoryMovementsStatistics\src\InventoryMovementsStatisticsServiceProvider;
 use App\Modules\InventoryQuantityIncoming\src\InventoryQuantityIncomingServiceProvider;
+use App\Modules\InventoryReservations\src\EventServiceProviderBase;
 use App\Modules\NonInventoryProductTag\src\NonInventoryProductTagServiceProvider;
 use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
 use App\Modules\Slack\src\SlackServiceProvider;
@@ -86,6 +87,7 @@ class InstallApp extends Command
         TelescopeModuleServiceProvider::installModule();
         InventoryMovementsStatisticsServiceProvider::enableModule();
         SlackServiceProvider::installModule();
+        EventServiceProviderBase::enableModule();
 
         return 0;
     }

@@ -2,34 +2,17 @@
 
 namespace App\Modules\InventoryReservations\src\Jobs;
 
+use App\Abstracts\UniqueJob;
 use App\Helpers\TemporaryTable;
 use App\Models\Inventory;
 use App\Models\OrderProduct;
 use App\Modules\InventoryReservations\src\Models\Configuration;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-/**
- *
- */
-class RecalculateQuantityReservedJob implements ShouldQueue
+class RecalculateQuantityReservedJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
     public function handle()
     {
         $this->prepareTempTable('temp_table_totals');

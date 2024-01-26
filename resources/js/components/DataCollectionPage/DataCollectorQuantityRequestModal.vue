@@ -16,15 +16,17 @@
                             <text-card label="shelf" :text="inventory && dataCollection ? inventory[dataCollection['warehouse_code']]['shelf_location'] : 0"></text-card>
                         </div>
                     </div>
-                    <div class="row-col text-right mt-3 mb-3">
-                        <number-card label="requested" :number="dataCollectionRecord ? dataCollectionRecord['quantity_requested'] : 0"></number-card>
-                        <number-card :class="{ 'bg-warning': dataCollectionRecord && dataCollectionRecord['quantity_scanned'] > dataCollectionRecord['quantity_requested']}" label="scanned" :number="dataCollectionRecord ? dataCollectionRecord['quantity_scanned'] : 0"></number-card>
-                        <number-card :class="{ 'bg-warning': dataCollectionRecord && dataCollectionRecord['quantity_scanned'] > 0 && dataCollectionRecord['quantity_to_scan'] > 0}" label="to scan" :number="dataCollectionRecord ? dataCollectionRecord['quantity_to_scan'] : 0"></number-card>
-                    </div>
                 </div>
             </div>
 
-            <div class="row">
+            <div class="col text-right mt-3 mb-3">
+                <number-card label="reserved" :number="product ? product['inventory'][dataCollection['warehouse_code']]['quantity_reserved'] : 0" :class="{ 'bg-warning': product ? product['inventory'][dataCollection['warehouse_code']]['quantity_reserved'] : 0 > 0}"></number-card>
+                <number-card label="requested" :number="dataCollectionRecord ? dataCollectionRecord['quantity_requested'] : 0"></number-card>
+                <number-card label="scanned" :class="{ 'bg-warning': dataCollectionRecord && dataCollectionRecord['quantity_scanned'] > dataCollectionRecord['quantity_requested']}":number="dataCollectionRecord ? dataCollectionRecord['quantity_scanned'] : 0"></number-card>
+                <number-card label="to scan" :class="{ 'bg-warning': dataCollectionRecord && dataCollectionRecord['quantity_scanned'] > 0 && dataCollectionRecord['quantity_to_scan'] > 0}" :number="dataCollectionRecord ? dataCollectionRecord['quantity_to_scan'] : 0"></number-card>
+            </div>
+
+            <div class="row-col">
                 <div class="col-12">
                     <input class="form-control" :placeholder="'quantity to add'" :class="{ 'border-danger': this.quantity_to_add < 0, 'border-success': this.quantity_to_add > 0}"
                            id="data-collection-record-quantity-request-input"
