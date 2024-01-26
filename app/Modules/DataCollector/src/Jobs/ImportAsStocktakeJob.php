@@ -92,8 +92,10 @@ class ImportAsStocktakeJob extends UniqueJob
                         'warehouse_id' => $dataCollection->warehouse_id,
                         'warehouse_code' => $dataCollection->warehouse->code,
                         'product_id' => $record->product_id,
+                        'last_movement_at' => now()->utc()->toDateTimeLocalString(),
+                        'last_count_at' => now()->utc()->toDateTimeLocalString(),
                     ];
-                })->toArray(), ['id'], ['quantity']);
+                })->toArray(), ['id'], ['quantity', 'last_movement_at', 'last_count_at']);
             });
         } while ($dataCollectionRecords->isNotEmpty());
     }
