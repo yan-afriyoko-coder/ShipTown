@@ -84,6 +84,16 @@ class ImportAsStocktakeJob extends UniqueJob
                 StocktakeSuggestion::query()->whereIn('inventory_id', $dataCollectionRecords->pluck('inventory_id'))->delete();
 
                 DataCollectionRecord::query()->whereIn('id', $dataCollectionRecords->pluck('id'))->update(['is_processed' => true]);
+
+                Inventory::query()->upsert($dataCollectionRecords->map(function (DataCollectionRecord $record) use ($dataCollection) {
+                    return [
+                        'id' => $record->inventory_id,
+                        'quantity' => $record->quantity_scanned,
+                        'warehouse_id' => $dataCollection->warehouse_id,
+                        'warehouse_code' => $dataCollection->warehouse->code,
+                        'product_id' => $record->product_id,
+                    ];
+                })->toArray(), ['id'], ['quantity']);
             });
         } while ($dataCollectionRecords->isNotEmpty());
     }
