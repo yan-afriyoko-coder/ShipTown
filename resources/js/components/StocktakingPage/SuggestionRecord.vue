@@ -1,30 +1,29 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-sm-12 col-md-5">
+            <div class="col-sm-12 col-md-4">
                 <product-info-card :product= "record['product']"></product-info-card>
             </div>
-            <div class="col-sm-12 col-md-3 text-left small text-nowrap">
-                <div class="small" @click="toggleDetails" :class="{ 'bg-warning':  Number(record['inventory']['quantity_available']) < 0}">in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
-                <div class="small" @click="toggleDetails" >price: <b>{{ Number(productPrice) }}</b></div>
-                <div class="small" @click="toggleDetails" >in stock since: <b>{{ formatDateTime(record['inventory']['in_stock_since']) }}</b></div>
-                <div class="small" @click="toggleDetails" >last sold at: <strong>{{ formatDateTime(record['inventory']['last_sold_at']) }}</strong></div>
-                <div class="small" @click="toggleDetails" >last counted at: <b>{{ formatDateTime(record['inventory']['last_counted_at']) }}</b></div>
+            <div class="col-sm-12 col-md-4 text-left small text-nowrap cursor-pointer" @click.prevent="showInventoryMovementModal">
+                <div class="small" :class="{ 'bg-warning':  Number(record['inventory']['quantity_available']) < 0}">in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
+                <div class="small">price: <strong>{{ Number(productPrice) }}</strong></div>
+                <div class="small">in stock since: <span class="link">{{ formatDateTime(record['inventory']['in_stock_since']) }}</span></div>
+                <div class="small">last sold at: <span class="link">{{ formatDateTime(record['inventory']['last_sold_at']) }}</span></div>
+                <div class="small">last counted at: <span class="link">{{ formatDateTime(record['inventory']['last_counted_at']) }}</span></div>
                 <div>
-                    <div @click="toggleDetails" class="small d-inline">last movement at:</div>
-                    <a @click.prevent="showInventoryMovementModal" class="small text-primary cursor-pointer">{{ formatDateTime(record['inventory']['last_movement_at']) }}</a>
+                    <div class="small d-inline">last movement at: <span class="link">{{ formatDateTime(record['inventory']['last_movement_at']) }}</span></div>
                 </div>
 
                 <template v-if="expanded">
-                    <div class="row mb-3" @click="toggleDetails" >
-                        <div class="col-12" @click="toggleDetails" >last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
-                        <div class="col-12" @click="toggleDetails" >first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
+                    <div class="row mb-3">
+                        <div class="small col-12">last received at: <span class="link">{{ formatDateTime(record['inventory']['last_received_at']) }}</span></div>
+                        <div class="small col-12">first received at: <span class="link">{{ formatDateTime(record['inventory']['first_received_at']) }}</span></div>
                     </div>
                 </template>
 
             </div>
 
-            <div @click="toggleDetails" class="col-sm-12 col-md-4 text-right">
+            <div @click="toggleDetails" class="col-sm-12 col-md-4 text-right cursor-pointer">
                 <div class="row">
                     <div class="col">
                         <text-card class="fa-pull-left" label="location" :text="record['inventory']['warehouse_code']"></text-card>
@@ -35,7 +34,7 @@
 
                 <div class="row">
                     <div class="col text-left small">
-                        {{ record['suggestion_details'] }}
+                        {{ record['reason'] }}
                     </div>
                 </div>
                 <div class="row">
