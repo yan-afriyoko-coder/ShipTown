@@ -1,7 +1,7 @@
 <template>
     <div>
         <template v-if="dataCollection && dataCollection['currently_running_task'] != null">
-            <div class="alert alert-danger">Please wait while stock being transferred</div>
+            <div class="alert alert-danger">Please wait while stock being updated</div>
         </template>
 
         <swiping-card>
