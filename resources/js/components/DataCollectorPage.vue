@@ -41,27 +41,23 @@
         <template v-for="record in dataCollectionRecords">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
-                    <div class="row" >
-                        <div class="col-sm-12 col-lg-4">
+                    <div class="row">
+                        <div class="col-12 col-md-4">
                             <product-info-card :product= "record['product']"></product-info-card>
                         </div>
-
-                        <div class="row col-sm-12 col-lg-8 text-right">
-                            <div class="col-12 col-md-4 text-left small">
-                                <div>in stock: <strong>{{ dashIfZero(Number(record['inventory_quantity'])) }}</strong></div>
-                                <div>last counted: <strong>{{ formatDateTime(record['inventory_last_counted_at']) }}</strong></div>
-                                <div><div @click="expanded = !expanded" class="d-inline">last movement at:</div>
-                                    <strong @click="showRecentInventoryMovementsModal(record['inventory_id'])" class="text-primary cursor-pointer">{{ formatDateTime(record['last_movement_at']) }}</strong>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-8 text-right">
-                                <number-card label="total out" :number="record['total_transferred_out']" v-if="record['total_transferred_out'] !== 0" v-bind:class="{'bg-warning': record['quantity_requested'] &&  record['quantity_requested'] < record['quantity_scanned'] + record['total_transferred_out'] + record['total_transferred_in']}"></number-card>
-                                <number-card label="total in" :number="record['total_transferred_in']" v-if="record['total_transferred_in'] !== 0" v-bind:class="{'bg-warning': record['quantity_requested'] &&  record['quantity_requested'] < record['quantity_scanned'] + record['total_transferred_out'] + record['total_transferred_in']}"></number-card>
-                                <number-card label="requested" :number="record['quantity_requested']" v-bind:class="{'bg-warning': (record['quantity_requested'] ?? 0) === 0 && (record['quantity_scanned'] ?? 0) > 0 }"></number-card>
-                                <number-card label="scanned" :number="record['quantity_scanned']" v-bind:class="{'bg-warning': record['quantity_scanned'] > 0 && record['quantity_requested'] &&  record['quantity_requested'] < record['quantity_scanned'] + record['total_transferred_out'] + record['total_transferred_in']}"></number-card>
-                                <number-card label="to scan" :number="record['quantity_to_scan'] ?? 0" ></number-card>
-                                <text-card label="shelf" :text="record['shelf_location']"></text-card>
-                            </div>
+                        <div class="col-12 col-md-3 text-left small">
+                            <div>in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity'])) }}</strong></div>
+                            <div>last counted: <strong>{{ formatDateTime(record['inventory_last_counted_at']) }}</strong></div>
+                            <div><div @click="expanded = !expanded" class="d-inline">last movement at: </div><strong @click="showRecentInventoryMovementsModal(record['inventory_id'])" class="text-primary cursor-pointer">{{ formatDateTime(record['last_movement_at']) }}</strong></div>
+                        </div>
+                        <div class="col-12 col-md-5 text-right">
+                            <number-card label="total out" :number="record['total_transferred_out']" v-if="record['total_transferred_out'] !== 0" v-bind:class="{'bg-warning': record['quantity_requested'] &&  record['quantity_requested'] < record['quantity_scanned'] + record['total_transferred_out'] + record['total_transferred_in']}"></number-card>
+                            <number-card label="total in" :number="record['total_transferred_in']" v-if="record['total_transferred_in'] !== 0" v-bind:class="{'bg-warning': record['quantity_requested'] &&  record['quantity_requested'] < record['quantity_scanned'] + record['total_transferred_out'] + record['total_transferred_in']}"></number-card>
+                            <number-card label="reserved" :number="record['inventory']['quantity_reserved']" v-if="record['inventory']['quantity_reserved'] > 0" class="bg-warning"></number-card>
+                            <number-card label="requested" :number="record['quantity_requested']" v-bind:class="{'bg-warning': (record['quantity_requested'] ?? 0) === 0 && (record['quantity_scanned'] ?? 0) > 0 }"></number-card>
+                            <number-card label="scanned" :number="record['quantity_scanned']" v-bind:class="{'bg-warning': record['quantity_scanned'] > 0 && record['quantity_requested'] &&  record['quantity_requested'] < record['quantity_scanned'] + record['total_transferred_out'] + record['total_transferred_in']}"></number-card>
+                            <number-card label="to scan" :number="record['quantity_to_scan'] ?? 0" ></number-card>
+                            <text-card label="shelf" :text="record['shelf_location']"></text-card>
                         </div>
                     </div>
                 </template>
