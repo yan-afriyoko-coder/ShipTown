@@ -71,7 +71,7 @@ export default {
 
         data: function() {
             return {
-                per_page: 10,
+                per_page: 20,
                 pagesLoaded: 0,
                 reachedEnd: false,
 
