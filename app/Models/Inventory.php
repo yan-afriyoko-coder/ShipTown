@@ -116,6 +116,7 @@ class Inventory extends BaseModel
         'last_sold_at'       => 'datetime',
         'first_counted_at'   => 'datetime',
         'last_counted_at'    => 'datetime',
+        'in_stock_since'     => 'datetime',
         'deleted_at'         => 'datetime',
         'created_at'         => 'datetime',
         'updated_at'         => 'datetime',
