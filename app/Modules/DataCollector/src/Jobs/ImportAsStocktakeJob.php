@@ -45,6 +45,12 @@ class ImportAsStocktakeJob extends UniqueJob
                 ->limit(100)
                 ->get();
 
+            if ($dataCollectionRecords->isEmpty()) {
+                $dataCollection->update(['currently_running_task' => null]);
+                SequenceNumberJob::dispatch();
+                return;
+            }
+
             $inventoryMovementRecords = $dataCollectionRecords->map(function (DataCollectionRecord $record) use ($dataCollection) {
                 $custom_uuid = implode('-', ['source_data_collections_records_id', $record->getKey()]);
 
@@ -67,26 +73,12 @@ class ImportAsStocktakeJob extends UniqueJob
                 ];
             });
 
-            if ($inventoryMovementRecords->isEmpty()) {
-                $dataCollection->update(['currently_running_task' => null]);
-                SequenceNumberJob::dispatch();
-                return;
-            }
-
-            $inventoryIds = $dataCollectionRecords->map(function ($record) {
-                return $record['inventory_id'];
-            });
-
-            $recordIds = $dataCollectionRecords->map(function ($record) {
-                return $record['id'];
-            });
-
-            DB::transaction(function () use ($recordIds, $dataCollection, $inventoryMovementRecords, $inventoryIds) {
+            DB::transaction(function () use ($dataCollection, $inventoryMovementRecords, $dataCollectionRecords) {
                 InventoryMovement::query()->upsert($inventoryMovementRecords->toArray(), ['custom_unique_reference_id'], ['sequence_number', 'quantity_after', 'updated_at', 'description']);
 
-                StocktakeSuggestion::query()->whereIn('id', $inventoryIds)->delete();
+                StocktakeSuggestion::query()->whereIn('id', $dataCollectionRecords->pluck('inventory_id'))->delete();
 
-                DataCollectionRecord::query()->whereIn('id', $recordIds)->update(['is_processed' => true]);
+                DataCollectionRecord::query()->whereIn('id', $dataCollectionRecords->pluck('id'))->update(['is_processed' => true]);
             });
         } while ($dataCollectionRecords->isNotEmpty());
     }
