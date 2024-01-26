@@ -2,7 +2,7 @@
     <b-modal body-class="ml-0 mr-0 pl-1 pr-1" id="recent-inventory-movements-modal" ref="blue" size="xl" scrollable no-fade>
         <template #modal-header>
             <span>Inventory Movements</span>
-            <a :href="productItemMovementLink" class="fa-pull-right">See all</a>
+            <a :href="productItemMovementLink" target="_blank" class="fa-pull-right">See all</a>
         </template>
 
         <template v-for="record in records">

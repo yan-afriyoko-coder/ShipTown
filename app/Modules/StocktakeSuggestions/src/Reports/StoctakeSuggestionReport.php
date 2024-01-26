@@ -20,6 +20,7 @@ class StoctakeSuggestionReport extends Report
             'warehouse_code',
             'product_sku',
             'product_name',
+            'reason',
             'points',
             'quantity_in_stock',
             'last_movement_at',
@@ -28,7 +29,6 @@ class StoctakeSuggestionReport extends Report
             'inventory_id',
             'product_id',
             'warehouse_id',
-            'suggestion_details'
         ]);
 
         $this->defaultSort = 'points';
@@ -52,15 +52,16 @@ class StoctakeSuggestionReport extends Report
             'inventory_id'          => 'stocktake_suggestions.inventory_id',
             'product_id'            => 'stocktake_suggestions.product_id',
             'warehouse_id'          => 'stocktake_suggestions.warehouse_id',
+            'reason'                => 'stocktake_suggestions.reason',
+            'points'                => 'stocktake_suggestions.points',
             'warehouse_code'        => 'inventory.warehouse_code',
             'last_movement_at'      => 'inventory.last_movement_at',
             'last_counted_at'       => 'inventory.last_counted_at',
             'last_sold_at'          => 'inventory.last_sold_at',
+            'in_stock_since'        => 'inventory.in_stock_since',
             'product_sku'           => 'products.sku',
             'product_name'          => 'products.name',
-            'points'                => 'points',
             'quantity_in_stock'     => 'inventory.quantity',
-            'suggestion_details'    => DB::raw("concat(points, ' points - ', reason, char(13))"),
         ];
 
         $this->casts = [
@@ -90,10 +91,5 @@ class StoctakeSuggestionReport extends Report
                 });
             })
         );
-    }
-
-    public function suggestionDetails(): HasMany
-    {
-        return $this->hasMany(StocktakeSuggestion::class, 'inventory_id', 'inventory_id');
     }
 }
