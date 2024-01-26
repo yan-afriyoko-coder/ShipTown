@@ -10,7 +10,9 @@ use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Models\StocktakeSuggestion;
 use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
+use App\Modules\InventoryTotals\src\Jobs\RecalculateInventoryRecordsJob;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -45,6 +47,15 @@ class ImportAsStocktakeJob extends UniqueJob
                 ->limit(100)
                 ->get();
 
+            if ($dataCollectionRecords->isEmpty()) {
+                $dataCollection->update(['currently_running_task' => null]);
+                Bus::chain([
+                    new SequenceNumberJob(),
+                    new RecalculateInventoryRecordsJob(),
+                ])->dispatch();
+                return;
+            }
+
             $inventoryMovementRecords = $dataCollectionRecords->map(function (DataCollectionRecord $record) use ($dataCollection) {
                 $custom_uuid = implode('-', ['source_data_collections_records_id', $record->getKey()]);
 
@@ -60,33 +71,19 @@ class ImportAsStocktakeJob extends UniqueJob
                     'quantity_before' => $record->inventory->quantity,
                     'quantity_delta' => $record->quantity_scanned - $record->inventory->quantity,
                     'quantity_after' => $record->quantity_scanned,
-                    'description' => Str::substr('Data Collection - ' . $dataCollection->name, 0, 50),
+                    'description' => Str::substr('Data Collection - ' . $dataCollection->name, 255),
                     'user_id' => Auth::id(),
                     'created_at' => now()->utc()->toDateTimeLocalString(),
                     'updated_at' => now()->utc()->toDateTimeLocalString(),
                 ];
             });
 
-            if ($inventoryMovementRecords->isEmpty()) {
-                $dataCollection->update(['currently_running_task' => null]);
-                SequenceNumberJob::dispatch();
-                return;
-            }
+            DB::transaction(function () use ($dataCollection, $inventoryMovementRecords, $dataCollectionRecords) {
+                InventoryMovement::query()->upsert($inventoryMovementRecords->toArray(), ['custom_unique_reference_id'], ['sequence_number', 'quantity_after', 'updated_at', 'description']);
 
-            $inventoryIds = $dataCollectionRecords->map(function ($record) {
-                return $record['inventory_id'];
-            });
+                StocktakeSuggestion::query()->whereIn('id', $dataCollectionRecords->pluck('inventory_id'))->delete();
 
-            $recordIds = $dataCollectionRecords->map(function ($record) {
-                return $record['id'];
-            });
-
-            DB::transaction(function () use ($recordIds, $dataCollection, $inventoryMovementRecords, $inventoryIds) {
-                InventoryMovement::query()->upsert($inventoryMovementRecords->toArray(), ['custom_unique_reference_id'], ['sequence_number', 'quantity_after', 'updated_at']);
-
-                StocktakeSuggestion::query()->whereIn('id', $inventoryIds)->delete();
-
-                DataCollectionRecord::query()->whereIn('id', $recordIds)->update(['is_processed' => true]);
+                DataCollectionRecord::query()->whereIn('id', $dataCollectionRecords->pluck('id'))->update(['is_processed' => true]);
             });
         } while ($dataCollectionRecords->isNotEmpty());
     }
