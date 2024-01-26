@@ -7,11 +7,12 @@
             <div class="col-sm-12 col-md-3 text-left small text-nowrap">
                 <div class="small" @click="toggleDetails" :class="{ 'bg-warning':  Number(record['inventory']['quantity_available']) < 0}">in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
                 <div class="small" @click="toggleDetails" >price: <b>{{ Number(productPrice) }}</b></div>
-                <div class="small" @click="toggleDetails" >last counted at: <b>{{ formatDateTime(record['inventory']['last_counted_at']) }}</b></div>
+                <div class="small" @click="toggleDetails" >in stock since: <b>{{ formatDateTime(record['inventory']['in_stock_since']) }}</b></div>
                 <div class="small" @click="toggleDetails" >last sold at: <strong>{{ formatDateTime(record['inventory']['last_sold_at']) }}</strong></div>
+                <div class="small" @click="toggleDetails" >last counted at: <b>{{ formatDateTime(record['inventory']['last_counted_at']) }}</b></div>
                 <div>
-                    <div @click="toggleDetails" class="d-inline">last movement at:</div>
-                    <strong @click="showInventoryMovementModal" class="text-primary cursor-pointer">{{ formatDateTime(record['inventory']['last_movement_at']) }}</strong>
+                    <div @click="toggleDetails" class="small d-inline">last movement at:</div>
+                    <a @click.prevent="showInventoryMovementModal" class="small text-primary cursor-pointer">{{ formatDateTime(record['inventory']['last_movement_at']) }}</a>
                 </div>
 
                 <template v-if="expanded">
