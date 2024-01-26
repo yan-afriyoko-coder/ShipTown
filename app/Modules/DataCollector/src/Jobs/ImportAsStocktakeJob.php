@@ -60,7 +60,7 @@ class ImportAsStocktakeJob extends UniqueJob
                     'quantity_before' => $record->inventory->quantity,
                     'quantity_delta' => $record->quantity_scanned - $record->inventory->quantity,
                     'quantity_after' => $record->quantity_scanned,
-                    'description' => Str::substr('Data Collection - ' . $dataCollection->name, 0, 50),
+                    'description' => Str::substr('Data Collection - ' . $dataCollection->name, 255),
                     'user_id' => Auth::id(),
                     'created_at' => now()->utc()->toDateTimeLocalString(),
                     'updated_at' => now()->utc()->toDateTimeLocalString(),
@@ -82,7 +82,7 @@ class ImportAsStocktakeJob extends UniqueJob
             });
 
             DB::transaction(function () use ($recordIds, $dataCollection, $inventoryMovementRecords, $inventoryIds) {
-                InventoryMovement::query()->upsert($inventoryMovementRecords->toArray(), ['custom_unique_reference_id'], ['sequence_number', 'quantity_after', 'updated_at']);
+                InventoryMovement::query()->upsert($inventoryMovementRecords->toArray(), ['custom_unique_reference_id'], ['sequence_number', 'quantity_after', 'updated_at', 'description']);
 
                 StocktakeSuggestion::query()->whereIn('id', $inventoryIds)->delete();
 
