@@ -16,6 +16,7 @@ class RecalculateInventoryRecordsJob extends UniqueJob
 
                 SET
                     inventory.recount_required      = 0,
+                    inventory.recalculated_at       = now(),
                     inventory.last_sequence_number  = (SELECT sequence_number FROM inventory_movements WHERE inventory_id = inventory.id AND sequence_number IS NOT NULL ORDER BY occurred_at DESC, sequence_number DESC LIMIT 1),
                     inventory.quantity              = IFNULL((SELECT quantity_after FROM inventory_movements WHERE inventory_id = inventory.id ORDER BY occurred_at DESC, sequence_number DESC LIMIT 1), 0),
                     inventory.last_movement_id      = (SELECT id FROM inventory_movements WHERE inventory_id = inventory.id ORDER BY occurred_at DESC, sequence_number DESC LIMIT 1),
@@ -23,7 +24,7 @@ class RecalculateInventoryRecordsJob extends UniqueJob
                     inventory.last_movement_at      = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id),
                     inventory.first_counted_at      = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "stocktake"),
                     inventory.last_counted_at       = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "stocktake"),
-                    inventory.in_stock_since        = IFNULL((SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_before = 0), inventory.last_movement_at),
+                    inventory.in_stock_since        = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_before = 0),
                     inventory.first_sold_at         = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "sale"),
                     inventory.last_sold_at          = (SELECT MAX(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND type = "sale"),
                     inventory.first_received_at     = (SELECT MIN(occurred_at) FROM inventory_movements WHERE inventory_id = inventory.id AND quantity_delta > 0),
@@ -34,8 +35,8 @@ class RecalculateInventoryRecordsJob extends UniqueJob
                         SELECT id
                         FROM inventory
                         WHERE inventory.recount_required = 1
-                        ORDER BY inventory.last_movement_at DESC
-                        LIMIT 100
+                        ORDER BY inventory.last_movement_at
+                        LIMIT 10
                     ) as tbl
                 );
             ');
@@ -45,7 +46,7 @@ class RecalculateInventoryRecordsJob extends UniqueJob
                 'recordsUpdated' => $recordsUpdated
             ]);
 
-            usleep(100000); // 0.1 seconds
+            usleep(50000); // 0.05 seconds
         } while ($recordsUpdated > 0);
     }
 }
