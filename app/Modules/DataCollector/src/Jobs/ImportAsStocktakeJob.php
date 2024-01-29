@@ -95,7 +95,7 @@ class ImportAsStocktakeJob extends UniqueJob
                         'last_movement_at' => now()->utc()->toDateTimeLocalString(),
                         'last_counted_at' => now()->utc()->toDateTimeLocalString(),
                     ];
-                })->toArray(), ['id'], ['quantity', 'last_movement_at', 'last_count_at']);
+                })->toArray(), ['id'], ['quantity', 'last_movement_at', 'last_counted_at']);
             });
         } while ($dataCollectionRecords->isNotEmpty());
     }
