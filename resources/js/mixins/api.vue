@@ -103,6 +103,10 @@ export default {
                 return axios.put("/api/data-collector/" + id, data);
             },
 
+            apiDataCollectorActionImportAsStocktake(data) {
+                return axios.post("/api/data-collector-actions/import-as-stocktake", data);
+            },
+
             apiDeleteDataCollection(id) {
                 return axios.delete("/api/data-collector/" + id);
             },

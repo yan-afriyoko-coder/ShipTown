@@ -7,9 +7,9 @@ use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\Inventory;
 use App\Models\ProductAlias;
-use Arr;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 
 class AddProductController
 {

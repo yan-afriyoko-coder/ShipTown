@@ -74,7 +74,7 @@
                             <a class="dropdown-item text-white lightHover" href="{{ route('fulfillment-statistics') .'?between_dates=-7days,now' }}">{{ __('Fulfillment Statistics') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.picks') }}">{{ __('Order Picks') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.shipments') }}">{{ __('Order Shipments') }}</a>
-                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory', ['filter[warehouse_code]' => 'DUB', 'per_page' => 50, 'filter[quantity_between]=0.01,999999999', 'sort' => '-quantity']) }}">{{ __('Inventory') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory', ['per_page' => 50, 'filter[quantity_between]=0.01,999999999', 'sort' => '-quantity']) }}">{{ __('Inventory') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements') }}">{{ __('Inventory Movements') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements-summary').'?filter[created_at_between]=-7days,now&per_page=1000' }}">{{ __('Inventory Movements Summary') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.restocking') }}">{{ __('Restocking') }}</a>

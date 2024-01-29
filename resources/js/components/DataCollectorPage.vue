@@ -376,10 +376,10 @@
                 this.buttonsEnabled = false;
 
                 let data = {
-                    'action': 'import_as_stocktake',
+                    'data_collection_id': this.data_collection_id,
                 }
 
-                this.apiUpdateDataCollection(this.data_collection_id, data)
+                this.apiDataCollectorActionImportAsStocktake(data)
                     .then(response => {
                         this.$snotify.success('Stocktake imported successfully');
                         this.$bvModal.hide('configuration-modal');

@@ -71,7 +71,7 @@ class ImportAsStocktakeJob extends UniqueJob
                     'quantity_before' => $record->inventory->quantity,
                     'quantity_delta' => $record->quantity_scanned - $record->inventory->quantity,
                     'quantity_after' => $record->quantity_scanned,
-                    'description' => Str::substr('Data Collection - ' . $dataCollection->name, 255),
+                    'description' => Str::substr('Data Collection - ' . $dataCollection->name, 0, 255),
                     'user_id' => Auth::id(),
                     'created_at' => now()->utc()->toDateTimeLocalString(),
                     'updated_at' => now()->utc()->toDateTimeLocalString(),
@@ -92,8 +92,10 @@ class ImportAsStocktakeJob extends UniqueJob
                         'warehouse_id' => $dataCollection->warehouse_id,
                         'warehouse_code' => $dataCollection->warehouse->code,
                         'product_id' => $record->product_id,
+                        'last_movement_at' => now()->utc()->toDateTimeLocalString(),
+                        'last_counted_at' => now()->utc()->toDateTimeLocalString(),
                     ];
-                })->toArray(), ['id'], ['quantity']);
+                })->toArray(), ['id'], ['quantity', 'last_movement_at', 'last_counted_at']);
             });
         } while ($dataCollectionRecords->isNotEmpty());
     }
