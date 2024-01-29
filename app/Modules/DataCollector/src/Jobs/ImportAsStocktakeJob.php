@@ -71,7 +71,7 @@ class ImportAsStocktakeJob extends UniqueJob
                     'quantity_before' => $record->inventory->quantity,
                     'quantity_delta' => $record->quantity_scanned - $record->inventory->quantity,
                     'quantity_after' => $record->quantity_scanned,
-                    'description' => Str::substr('Data Collection - ' . $dataCollection->name, 255),
+                    'description' => Str::substr('Data Collection - ' . $dataCollection->name, 0, 255),
                     'user_id' => Auth::id(),
                     'created_at' => now()->utc()->toDateTimeLocalString(),
                     'updated_at' => now()->utc()->toDateTimeLocalString(),
