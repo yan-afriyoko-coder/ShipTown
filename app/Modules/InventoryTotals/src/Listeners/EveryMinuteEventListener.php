@@ -4,7 +4,7 @@ namespace App\Modules\InventoryTotals\src\Listeners;
 
 use App\Modules\InventoryTotals\src\Jobs\RecalculateInventoryRecordsJob;
 
-class EveryHourEventListener
+class EveryMinuteEventListener
 {
     public function handle()
     {
