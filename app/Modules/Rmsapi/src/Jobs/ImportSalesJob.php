@@ -5,6 +5,7 @@ namespace App\Modules\Rmsapi\src\Jobs;
 use App\Abstracts\UniqueJob;
 use App\Models\Heartbeat;
 use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
+use App\Modules\Rmsapi\src\Api\RequestResponse;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
 use GuzzleHttp\Exception\GuzzleException;
@@ -29,46 +30,60 @@ class ImportSalesJob extends UniqueJob
     {
         $per_page = 1000;
 
+        do {
+            try {
+                $response = $this->importSalesRecords($per_page);
+
+                if ($response->getResult()) {
+                    $this->saveImportedRecords($response->getResult());
+                }
+
+                $recordsLeftToDownload = $response->asArray()['total'] - count($response->getResult());
+
+                Log::info('Job processing', [
+                    'job' => self::class,
+                    'warehouse_code' => $this->rmsConnection->location_id,
+                    'rmsapi_connection_id' => $this->rmsConnection->getKey(),
+                    'records_downloaded' => count($response->getResult()),
+                    'records_to_download' => $response->asArray()['total'] - count($response->getResult()),
+                ]);
+
+                Heartbeat::query()->updateOrCreate([
+                    'code' => 'modules_rmsapi_successful_sales_fetch_warehouseId_' . $this->rmsConnection->location_id,
+                ], [
+                    'level' => Heartbeat::LEVEL_ERROR,
+                    'error_message' => 'RMSAPI Sales not synced for last hour WarehouseID: ' . $this->rmsConnection->location_id,
+                    'expires_at' => now()->addHour()
+                ]);
+            } catch (GuzzleException $e) {
+                Log::warning('RMSAPI ImportSalesJob Failed sales fetch', [
+                    'code' => $e->getCode(),
+                    'message' => $e->getMessage(),
+                ]);
+
+                return false;
+            }
+
+            sleep(1);
+        } while ($recordsLeftToDownload > 0);
+
+        return true;
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    protected function importSalesRecords(int $per_page): RequestResponse
+    {
         $this->rmsConnection->refresh();
 
         $params = [
-            'per_page'            => $per_page,
-            'order_by'            => 'db_change_stamp:asc',
+            'per_page' => $per_page,
+            'order_by' => 'db_change_stamp:asc',
             'min:db_change_stamp' => $this->rmsConnection->sales_last_timestamp,
         ];
 
-        try {
-            $response = RmsapiClient::GET($this->rmsConnection, 'api/transaction-entries', $params);
-
-            if ($response->getResult()) {
-                $this->saveImportedRecords($response->getResult());
-            }
-
-            Log::info('Job processing', [
-                'job'                  => self::class,
-                'warehouse_code'       => $this->rmsConnection->location_id,
-                'rmsapi_connection_id' => $this->rmsConnection->getKey(),
-                'records_downloaded'   => count($response->getResult()),
-                'records_to_download'  => $response->asArray()['total'] - count($response->getResult()),
-            ]);
-
-            Heartbeat::query()->updateOrCreate([
-                'code' => 'modules_rmsapi_successful_sales_fetch_warehouseId_'.$this->rmsConnection->location_id,
-            ], [
-                'level' => Heartbeat::LEVEL_ERROR,
-                'error_message' => 'RMSAPI Sales not synced for last hour WarehouseID: '.$this->rmsConnection->location_id,
-                'expires_at' => now()->addHour()
-            ]);
-        } catch (GuzzleException $e) {
-            Log::warning('RMSAPI ImportSalesJob Failed sales fetch', [
-                'code' => $e->getCode(),
-                'message' => $e->getMessage(),
-            ]);
-
-            return false;
-        }
-
-        return true;
+        return RmsapiClient::GET($this->rmsConnection, 'api/transaction-entries', $params);
     }
 
     public function saveImportedRecords(array $salesRecords)
