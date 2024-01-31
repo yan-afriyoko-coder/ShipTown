@@ -4,6 +4,7 @@ namespace App\Modules\Rmsapi\src\Models;
 
 use App\BaseModel;
 use App\Models\Inventory;
+use App\Models\Warehouse;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -30,6 +31,8 @@ use Illuminate\Support\Carbon;
  * @property array       $raw_import
  *
  * @property RmsapiConnection $rmsapiConnection
+ * @property mixed $inventory_id
+ * @property Warehouse $warehouse
  *
  */
 class RmsapiSaleImport extends BaseModel
@@ -76,6 +79,11 @@ class RmsapiSaleImport extends BaseModel
 
     public function inventory(): BelongsTo
     {
-        return $this->belongsTo(Inventory::class, 'inventory_movement_id');
+        return $this->belongsTo(Inventory::class, 'inventory_id');
+    }
+
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouse_id');
     }
 }

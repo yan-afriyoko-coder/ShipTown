@@ -3,20 +3,16 @@
 namespace App\Modules\Rmsapi\src\Jobs;
 
 use App\Abstracts\UniqueJob;
-use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
-use App\Services\InventoryService;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Support\Facades\Log;
 
 class ProcessImportedSalesRecordsJob extends UniqueJob
 {
-    public function handle()
+    public function handle(): bool
     {
         $batch_size = 50;
-        $maxRunCount = 100;
 
         do {
             $this->processImportedRecords($batch_size);
@@ -28,17 +24,16 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
             $hasNoRecordsToProcess = ! RmsapiSaleImport::query()
                 ->whereNull('reserved_at')
                 ->whereNull('processed_at')
+                ->whereNotNull('inventory_id')
                 ->whereNotNull('product_id')
                 ->whereNotNull('warehouse_id')
                 ->where('comment', 'not like', 'PM_OrderProductShipment_%')
                 ->exists();
 
-            if ($hasNoRecordsToProcess) {
-                return true;
-            }
+            usleep(100000); // 0.1 sec
+        } while ($hasNoRecordsToProcess);
 
-            $maxRunCount--;
-        } while ($maxRunCount > 0);
+        return true;
     }
 
     private function processImportedRecords(int $batch_size): void
@@ -48,6 +43,7 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
         $ids = RmsapiSaleImport::query()
             ->whereNull('reserved_at')
             ->whereNull('processed_at')
+            ->whereNotNull('inventory_id')
             ->whereNotNull('product_id')
             ->whereNotNull('warehouse_id')
             ->where('comment', 'not like', 'PM_OrderProductShipment_%')
@@ -61,63 +57,48 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
             ->update(['reserved_at' => $reservationTime]);
 
         // process records
-        RmsapiSaleImport::query()
+        $records = RmsapiSaleImport::query()
             ->whereIn('id', $ids)
             ->where('reserved_at', $reservationTime)
             ->whereNull('processed_at')
             ->orderBy('id')
-            ->get()
-            ->each(function (RmsapiSaleImport $salesRecord) {
-                try {
-                    retry(2, function () use ($salesRecord) {
-                        $this->import($salesRecord);
-                    }, 100);
-                } catch (Exception $e) {
-                    report($e);
-                    Log::emergency($e->getMessage(), $e->getTrace());
-                }
+            ->get();
+
+        $inventoryMovements = $records
+            ->map(function (RmsapiSaleImport $salesRecord) {
+                return [
+                    'inventory_id' => $salesRecord->inventory_id,
+                    'custom_unique_reference_id' => $salesRecord->uuid,
+                    'warehouse_code' => $salesRecord->warehouse->code,
+                    'warehouse_id' => $salesRecord->warehouse_id,
+                    'product_id' => $salesRecord->product_id,
+                    'sequence_number' => null,
+                    'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time, 'Europe/Dublin')->utc(),
+                    'type' => $salesRecord->type === 'rms_sale' ? 'sale' : 'adjustment',
+                    'quantity_delta' => $salesRecord->quantity,
+                    'description' => $salesRecord->type === 'rms_sale' ? 'rms_sale' : 'rmsapi_inventory_movement',
+                    'updated_at' => now()->utc()->toDateTimeLocalString(),
+                    'created_at' => now()->utc()->toDateTimeLocalString()
+                ];
             });
-    }
 
-    private function import(RmsapiSaleImport $salesRecord)
-    {
-        $inventoryMovement = InventoryMovement::query()
-            ->where('custom_unique_reference_id', $salesRecord->uuid)
-            ->first();
-
-        $attributes = [
-            'custom_unique_reference_id' => $salesRecord->uuid,
-            'sequence_number' => null,
-            'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time, 'Europe/Dublin')->utc(),
-            'type' => $salesRecord->type === 'rms_sale' ? 'sale' : 'adjustment',
-            'quantity_delta' => $salesRecord->quantity,
-            'description' => $salesRecord->type === 'rms_sale' ? 'rms_sale' : 'rmsapi_inventory_movement',
-        ];
-
-        if ($inventoryMovement) {
-            $inventoryMovement->update($attributes);
-
-            $salesRecord->update([
-                'inventory_movement_id' => $inventoryMovement->getKey(),
-                'processed_at' => now()
+        InventoryMovement::query()
+            ->upsert($inventoryMovements->toArray(), ['custom_unique_reference_id'], [
+                'inventory_id',
+                'warehouse_code',
+                'warehouse_id',
+                'product_id',
+                'sequence_number',
+                'occurred_at',
+                'type',
+                'quantity_delta',
+                'description',
+                'updated_at',
             ]);
-            return;
-        }
 
-        $inventory = Inventory::query()
-            ->where('product_id', $salesRecord->product_id)
-            ->where('warehouse_id', $salesRecord->warehouse_id)
-            ->first();
-
-        if ($salesRecord->type === 'rms_sale') {
-            $inventoryMovement = InventoryService::sell($inventory, $salesRecord->quantity, $attributes);
-        } else {
-            $inventoryMovement = InventoryService::adjust($inventory, $salesRecord->quantity, $attributes);
-        }
-
-        $salesRecord->update([
-            'inventory_movement_id' => $inventoryMovement->getKey(),
-            'processed_at' => now()
-        ]);
+        RmsapiSaleImport::query()
+            ->whereIn('id', $ids)
+            ->where('reserved_at', $reservationTime)
+            ->update(['processed_at' => now()->utc()->toDateTimeLocalString()]);
     }
 }
