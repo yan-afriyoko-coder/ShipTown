@@ -21,7 +21,7 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
                 'count' => $batch_size,
             ]);
 
-            $hasNoRecordsToProcess = ! RmsapiSaleImport::query()
+            $hasNoRecordsToProcess = RmsapiSaleImport::query()
                 ->whereNull('reserved_at')
                 ->whereNull('processed_at')
                 ->whereNotNull('inventory_id')
