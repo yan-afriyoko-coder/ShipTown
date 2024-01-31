@@ -5,6 +5,7 @@ namespace Tests\Feature\Modules\Rmsapi;
 use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedSalesRecordsJob;
+use App\Modules\Rmsapi\src\Jobs\UpdateImportedSalesRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
 use Tests\TestCase;
@@ -16,6 +17,8 @@ class ProcessImportedSalesRecordsJobTest extends TestCase
         // prepare
         /** @var RmsapiSaleImport $saleRecord */
         $saleRecord = RmsapiSaleImport::factory()->create();
+
+        UpdateImportedSalesRecordsJob::dispatchSync();
 
         // execute
         ProcessImportedSalesRecordsJob::dispatchSync();
@@ -51,6 +54,8 @@ class ProcessImportedSalesRecordsJobTest extends TestCase
         // prepare
         /** @var RmsapiSaleImport $saleRecord */
         $saleRecord = RmsapiSaleImport::factory()->create();
+
+        UpdateImportedSalesRecordsJob::dispatchSync();
 
         // execute
         ProcessImportedSalesRecordsJob::dispatchSync();
