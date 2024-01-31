@@ -63,7 +63,7 @@ class UpdateImportedSalesRecordsJob extends UniqueJob
               ON modules_rmsapi_sales_imports.product_id = inventory.product_id
               AND modules_rmsapi_sales_imports.warehouse_id = inventory.warehouse_id
 
-            SET modules_rmsapi_sales_imports.inventory_id = products_aliases.inventory_id
+            SET modules_rmsapi_sales_imports.inventory_id = inventory.id
 
             WHERE modules_rmsapi_sales_imports.inventory_id IS NULL
         ');
