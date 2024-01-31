@@ -38,9 +38,7 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
 
     private function processImportedRecords(int $batch_size): void
     {
-        $reservationTime = now();
-
-        $ids = RmsapiSaleImport::query()
+        $records = RmsapiSaleImport::query()
             ->whereNull('reserved_at')
             ->whereNull('processed_at')
             ->whereNotNull('inventory_id')
@@ -49,19 +47,6 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
             ->where('comment', 'not like', 'PM_OrderProductShipment_%')
             ->orderBy('id')
             ->limit($batch_size)
-            ->pluck('id');
-
-        RmsapiSaleImport::query()
-            ->whereIn('id', $ids)
-            ->whereNull('reserved_at')
-            ->update(['reserved_at' => $reservationTime]);
-
-        // process records
-        $records = RmsapiSaleImport::query()
-            ->whereIn('id', $ids)
-            ->where('reserved_at', $reservationTime)
-            ->whereNull('processed_at')
-            ->orderBy('id')
             ->get();
 
         $inventoryMovements = $records
@@ -99,8 +84,7 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
             ]);
 
         RmsapiSaleImport::query()
-            ->whereIn('id', $ids)
-            ->where('reserved_at', $reservationTime)
+            ->whereIn('id', $records->pluck('id')->toArray())
             ->update(['processed_at' => now()->utc()->toDateTimeLocalString()]);
     }
 }
