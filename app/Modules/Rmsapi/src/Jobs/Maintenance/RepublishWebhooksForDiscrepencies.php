@@ -10,7 +10,6 @@ class RepublishWebhooksForDiscrepencies extends UniqueJob
 {
     public function handle()
     {
-        // WARNING: Use with caution! It will override the inventory
         DB::statement('
             INSERT INTO modules_webhooks_pending_webhooks (model_class, model_id, message, created_at, updated_at)
             SELECT
