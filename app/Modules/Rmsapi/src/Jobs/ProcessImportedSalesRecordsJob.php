@@ -12,7 +12,7 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
 {
     public function handle(): bool
     {
-        $batch_size = 50;
+        $batch_size = 500;
 
         do {
             $this->processImportedRecords($batch_size);
