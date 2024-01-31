@@ -88,7 +88,7 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
         $attributes = [
             'custom_unique_reference_id' => $salesRecord->uuid,
             'sequence_number' => null,
-            'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time)->subHour(),
+            'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time, 'Europe/Dublin')->utc(),
             'type' => $salesRecord->type === 'rms_sale' ? 'sale' : 'adjustment',
             'quantity_delta' => $salesRecord->quantity,
             'description' => $salesRecord->type === 'rms_sale' ? 'rms_sale' : 'rmsapi_inventory_movement',
