@@ -75,7 +75,9 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
                     'sequence_number' => null,
                     'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time, 'Europe/Dublin')->utc(),
                     'type' => $salesRecord->type === 'rms_sale' ? 'sale' : 'adjustment',
+                    'quantity_before' => 0,
                     'quantity_delta' => $salesRecord->quantity,
+                    'quantity_after' => 0,
                     'description' => $salesRecord->type === 'rms_sale' ? 'rms_sale' : 'rmsapi_inventory_movement',
                     'updated_at' => now()->utc()->toDateTimeLocalString(),
                     'created_at' => now()->utc()->toDateTimeLocalString()
