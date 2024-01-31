@@ -14,7 +14,9 @@ class UpdateImportedSalesRecordsJob extends UniqueJob
 
         $this->updateProductIds();
 
-        $this->releaseTimesOutSalesRecords();
+        $this->updateInventoryIds();
+
+        $this->releaseTimedoutSalesRecords();
 
         return true;
     }
@@ -45,11 +47,25 @@ class UpdateImportedSalesRecordsJob extends UniqueJob
         ');
     }
 
-    private function releaseTimesOutSalesRecords(): void
+    private function releaseTimedoutSalesRecords(): void
     {
         RmsapiSaleImport::query()
             ->whereNull('processed_at')
             ->where('reserved_at', '<', now()->subMinutes(5))
             ->update(['reserved_at' => null]);
+    }
+
+    private function updateInventoryIds()
+    {
+        DB::statement('
+            UPDATE modules_rmsapi_sales_imports
+            LEFT JOIN inventory
+              ON modules_rmsapi_sales_imports.product_id = inventory.product_id
+              AND modules_rmsapi_sales_imports.warehouse_id = inventory.warehouse_id
+
+            SET modules_rmsapi_sales_imports.inventory_id = products_aliases.inventory_id
+
+            WHERE modules_rmsapi_sales_imports.inventory_id IS NULL
+        ');
     }
 }
