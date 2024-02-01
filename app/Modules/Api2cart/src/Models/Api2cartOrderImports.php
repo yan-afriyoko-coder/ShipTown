@@ -100,27 +100,24 @@ class Api2cartOrderImports extends BaseModel
      */
     public function extractShippingAddressAttributes(): array
     {
-        $shipping_address = $this->raw_import['shipping_address'];
-
-        // array_filter will cleanup null values
         return array_filter([
-            'company' => $shipping_address['company'],
-            'gender' => $shipping_address['gender'],
-            'first_name' => $shipping_address['first_name'],
-            'last_name' => $shipping_address['last_name'],
-            'email' => $this->raw_import['customer']['email'],
-            'address1' => $shipping_address['address1'],
-            'address2' => $shipping_address['address2'],
-            'postcode' => $shipping_address['postcode'],
-            'city' => $shipping_address['city'],
-            'state_code' => $shipping_address['state'] ? $shipping_address['state']['code'] : '',
-            'state_name' => $shipping_address['state'] ? $shipping_address['state']['name'] : '',
-            'country_code' => $shipping_address['country']['code3'],
-            'country_name' => $shipping_address['country']['name'],
-            'phone' => $shipping_address['phone'],
-            'fax' => $shipping_address['fax'],
-            'website' => $shipping_address['website'],
-            'region' => $shipping_address['region'],
+            'company' => data_get($this->raw_import, 'shipping_address.company', ''),
+            'gender' => data_get($this->raw_import, 'shipping_address.gender', ''),
+            'first_name' => data_get($this->raw_import, 'shipping_address.first_name', ''),
+            'last_name' => data_get($this->raw_import, 'shipping_address.last_name', ''),
+            'email' => data_get($this->raw_import, 'customer.email', ''),
+            'address1' => data_get($this->raw_import, 'shipping_address.address1', ''),
+            'address2' => data_get($this->raw_import, 'shipping_address.address2', ''),
+            'postcode' => data_get($this->raw_import, 'shipping_address.postcode', ''),
+            'city' => data_get($this->raw_import, 'shipping_address.city', ''),
+            'state_code' => data_get($this->raw_import, 'shipping_address.state.code', ''),
+            'state_name' => data_get($this->raw_import, 'shipping_address.state.name', ''),
+            'country_code' => data_get($this->raw_import, 'shipping_address.country.code3', ''),
+            'country_name' => data_get($this->raw_import, 'shipping_address.country.name', ''),
+            'phone' => data_get($this->raw_import, 'shipping_address.phone', ''),
+            'fax' => data_get($this->raw_import, 'shipping_address.fax', ''),
+            'website' => data_get($this->raw_import, 'shipping_address.website', ''),
+            'region' => data_get($this->raw_import, 'shipping_address.region', ''),
         ]);
     }
 
