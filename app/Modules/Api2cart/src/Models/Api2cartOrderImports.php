@@ -2,14 +2,12 @@
 
 namespace App\Modules\Api2cart\src\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 /**
@@ -79,14 +77,12 @@ class Api2cartOrderImports extends BaseModel
         'raw_import' => '{}',
     ];
 
-    public function save(array $options = [])
+    public function save(array $options = []): bool
     {
-        $this->order_number = $this->raw_import['id'];
-        $this->api2cart_order_id = $this->raw_import['order_id'];
-        $this->shipping_method_name = $this->raw_import['shipping_method']['name'];
-        if (Arr::has($this->raw_import['shipping_method'], 'additional_fields')) {
-            $this->shipping_method_code = $this->raw_import['shipping_method']['additional_fields']['code'];
-        }
+        $this->order_number = data_get($this->raw_import, 'id');
+        $this->api2cart_order_id = data_get($this->raw_import, 'order_id');
+        $this->shipping_method_name = data_get($this->raw_import, 'shipping_method.name', '');
+        $this->shipping_method_code = data_get($this->raw_import, 'shipping_method.additional_fields.code');
 
         return parent::save($options);
     }
