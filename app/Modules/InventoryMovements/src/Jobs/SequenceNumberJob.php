@@ -38,6 +38,7 @@ class SequenceNumberJob extends UniqueJob
                 INNER JOIN inventoryIdsToProcess
                   ON inventory_movements.inventory_id = inventoryIdsToProcess.inventory_id
                   AND inventory_movements.occurred_at >= inventoryIdsToProcess.occurred_at
+                  AND CASE WHEN inventory_movements.occurred_at = inventoryIdsToProcess.occurred_at THEN inventory_movements.id > inventoryIdsToProcess.movement_id ELSE TRUE END
                   AND inventory_movements.sequence_number IS NOT NULL
 
                 SET inventory_movements.sequence_number = null;
