@@ -37,7 +37,7 @@ class SequenceNumberJob extends UniqueJob
                 UPDATE inventory_movements
                 INNER JOIN inventoryIdsToProcess
                   ON inventory_movements.inventory_id = inventoryIdsToProcess.inventory_id
-                  AND inventory_movements.occurred_at > inventoryIdsToProcess.occurred_at
+                  AND inventory_movements.occurred_at >= inventoryIdsToProcess.occurred_at
                   AND inventory_movements.sequence_number IS NOT NULL
 
                 SET inventory_movements.sequence_number = null;
