@@ -2,7 +2,9 @@
 
 namespace App\Modules\Rmsapi\src\Models;
 
+use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\ProductPrice;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -26,6 +28,9 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property RmsapiConnection $rmsapiConnection
+ * @property Product $product
+ * @property Inventory $inventory
+ * @property ProductPrice $prices
  *
  * @method static Builder|RmsapiProductImport newModelQuery()
  * @method static Builder|RmsapiProductImport newQuery()
@@ -99,5 +104,15 @@ class RmsapiProductImport extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function inventory(): BelongsTo
+    {
+        return $this->belongsTo(Inventory::class);
+    }
+
+    public function prices(): BelongsTo
+    {
+        return $this->belongsTo(ProductPrice::class, 'product_price_id', 'id');
     }
 }

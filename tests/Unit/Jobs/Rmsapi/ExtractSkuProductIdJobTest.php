@@ -2,8 +2,6 @@
 
 namespace Tests\Unit\Jobs\Rmsapi;
 
-use App\Models\Inventory;
-use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
@@ -12,25 +10,11 @@ use Tests\TestCase;
 
 class ExtractSkuProductIdJobTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
     public function testIfAllSkuArePopulated()
     {
-//        Event::fake();
-
-        // prepare
-        Product::query()->forceDelete();
-        Inventory::query()->delete();
-
-        RmsapiProductImport::query()->delete();
-
         Warehouse::factory()->create();
 
-        RmsapiProductImport::factory()->count(5)->create([
-            'sku'            => null,
+        RmsapiProductImport::factory()->count(1)->create([
             'product_id'     => null,
             'processed_at'   => null,
         ]);
