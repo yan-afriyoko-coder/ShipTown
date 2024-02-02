@@ -46,8 +46,8 @@ class DataCollectorListReport extends Report
             'created_at'            => 'datetime',
             'updated_at'            => 'datetime',
             'deleted_at'            => 'datetime',
-            'warehouses_code'        => 'string',
-            'warehouses_name'        => 'string',
+            'warehouse_code'        => 'string',
+            'warehouse_name'        => 'string',
             'currently_running_task' => 'string',
         ];
 
