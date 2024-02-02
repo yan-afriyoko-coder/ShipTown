@@ -28,6 +28,8 @@ class ProductFactory extends Factory
         return [
             'sku'                   => (string) $this->faker->unique()->randomNumber(4),
             'name'                  => $randomProductName,
+            'department'            => $this->faker->randomElement(['Electronics', 'Books', 'Movies', 'Music', 'Games', 'Home', 'Toys', 'Health', 'Beauty', 'Clothing', 'Food', 'Jewelry', 'Sports', 'Automotive', 'Industrial']),
+            'category'              => $this->faker->randomElement(['TV', 'Movies', 'Music', 'Games', 'Home', 'Toys', 'Health', 'Beauty', 'Clothing', 'Food', 'Jewelry', 'Sports', 'Automotive', 'Industrial']),
             'price'                 => $this->faker->randomFloat(2, 0.01, 110),
             'sale_price'            => $this->faker->randomFloat(2, 0.01, 110),
             'sale_price_start_date' => $this->faker->dateTimeBetween('-1 year', '+5 months'),
