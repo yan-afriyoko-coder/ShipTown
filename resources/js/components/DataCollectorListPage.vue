@@ -2,7 +2,7 @@
     <div>
         <div class="row mb-1 pb-2 p-1 sticky-top bg-light">
             <div class="flex-fill">
-                <barcode-input-field placeholder="Search"></barcode-input-field>
+                <barcode-input-field placeholder="Search" :url_param_name="'filter[name_contains]'" @barcodeScanned="loadData(1)"></barcode-input-field>
             </div>
 
             <button id="new_data_collection" dusk="new_data_collection" v-b-modal="'new-collection-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="plus" class="fa-lg"></font-awesome-icon></button>
