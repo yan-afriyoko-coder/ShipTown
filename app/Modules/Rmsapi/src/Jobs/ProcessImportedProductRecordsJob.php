@@ -20,15 +20,9 @@ class ProcessImportedProductRecordsJob extends UniqueJob
     {
         $batch_size = 200;
 
-        DB::statement('
-            UPDATE modules_rmsapi_products_imports
-            LEFT JOIN products_aliases
-                ON modules_rmsapi_products_imports.sku = products_aliases.alias
+        $this->fillProductIds();
 
-            SET modules_rmsapi_products_imports.product_id = products_aliases.product_id
-
-            WHERE modules_rmsapi_products_imports.product_id IS NULL
-        ');
+        $this->fillInventoryIds();
 
         do {
             $this->processImportedProducts($batch_size);
@@ -49,9 +43,10 @@ class ProcessImportedProductRecordsJob extends UniqueJob
         $reservationTime = now();
 
         $updatedRecords = RmsapiProductImport::query()
+            ->whereNotNull('inventory_id')
             ->whereNull('reserved_at')
             ->whereNull('processed_at')
-            ->orderByRaw('id ASC')
+            ->orderBy('id')
             ->limit($batch_size)
             ->update(['reserved_at' => $reservationTime]);
 
@@ -89,6 +84,8 @@ class ProcessImportedProductRecordsJob extends UniqueJob
             $product = Product::query()->firstOrCreate(['sku' => $importedProduct->sku], [
                 'sku'  => $importedProduct->sku,
                 'name' => $importedProduct->name,
+                'department' => $importedProduct->raw_import['department_name'],
+                'category' => $importedProduct->raw_import['category'],
             ]);
         }
 
@@ -245,5 +242,46 @@ class ProcessImportedProductRecordsJob extends UniqueJob
         if ($importedProduct->raw_import['sub_description_3']) {
             $product->syncTagByType('rms_sub_description_3', trim($importedProduct->raw_import['sub_description_3']));
         }
+    }
+
+    protected function fillProductIds(): void
+    {
+        do {
+            $recordsUpdated = DB::update('
+                UPDATE modules_rmsapi_products_imports
+                INNER JOIN products_aliases
+                    ON modules_rmsapi_products_imports.sku = products_aliases.alias
+
+                SET modules_rmsapi_products_imports.product_id = products_aliases.product_id
+
+                WHERE modules_rmsapi_products_imports.product_id IS NULL
+
+                LIMIT 200;
+            ');
+
+            usleep(100000); // 100ms
+        } while ($recordsUpdated > 0);
+    }
+
+    protected function fillInventoryIds(): void
+    {
+        do {
+            $recordsUpdated = DB::update('
+                UPDATE modules_rmsapi_products_imports
+                INNER JOIN inventory
+                    ON modules_rmsapi_products_imports.product_id = inventory.product_id
+                    AND modules_rmsapi_products_imports.warehouse_id = inventory.warehouse_id
+
+                SET modules_rmsapi_products_imports.inventory_id = inventory.id
+
+                WHERE modules_rmsapi_products_imports.inventory_id IS NULL
+                AND modules_rmsapi_products_imports.product_id IS NOT NULL
+                AND modules_rmsapi_products_imports.warehouse_id IS NOT NULL
+
+                LIMIT 200;
+            ');
+
+            usleep(100000); // 100ms
+        } while ($recordsUpdated > 0);
     }
 }
