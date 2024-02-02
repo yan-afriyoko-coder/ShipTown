@@ -154,7 +154,8 @@ class Report extends Model
 
         $filters = $filters->merge($this->addExactFilters());
         $filters = $filters->merge($this->addContainsFilters());
-        $filters = $filters->merge($this->addBetweenFilters());
+        $filters = $filters->merge($this->addBetweenStringFilters());
+        $filters = $filters->merge($this->addBetweenFloatFilters());
         $filters = $filters->merge($this->addBetweenDatesFilters());
         $filters = $filters->merge($this->addGreaterThan());
         $filters = $filters->merge($this->addLowerThan());
@@ -243,7 +244,7 @@ class Report extends Model
     /**
      * @return array
      */
-    private function addBetweenFilters(): array
+    private function addBetweenFloatFilters(): array
     {
         $allowedFilters = [];
 
@@ -323,7 +324,7 @@ class Report extends Model
 
         collect($this->casts)
             ->filter(function ($type) {
-                return in_array($type, ['string', 'datetime']);
+                return in_array($type, ['string', 'datetime', 'float']);
             })
             ->each(function ($record, $alias) use (&$allowedFilters) {
                 $filterName = $alias . '_greater_than';
@@ -368,19 +369,18 @@ class Report extends Model
 
         collect($this->casts)
             ->filter(function ($type) {
-                return $type === 'float';
+                return in_array($type, ['string', 'datetime', 'float']);
             })
-            ->each(function ($record, $alias) use (&$allowedFilters) {
+            ->each(function ($type, $alias) use (&$allowedFilters) {
                 $filterName = $alias . '_lower_than';
 
-                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias) {
-                    // we add this to make sure query returns no records if array of two values is not specified
-                    if ((!is_array($value)) or (count($value) != 2)) {
-                        $query->whereRaw('1=2');
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($type, $alias) {
+                    if ($type === 'float') {
+                        $query->where($this->fields[$alias], '<', floatval($value));
                         return;
                     }
 
-                    $query->where($this->fields[$alias], '<', floatval($value));
+                    $query->where($this->fields[$alias], '<', $value);
                 });
             });
 
@@ -407,5 +407,37 @@ class Report extends Model
     public function simplePaginatedCollection(): Paginator
     {
         return $this->queryBuilder()->simplePaginate(request()->get('per_page', 10));
+    }
+
+    private function addBetweenStringFilters()
+    {
+        $allowedFilters = [];
+
+        collect($this->casts)
+            ->filter(function ($type) {
+                return $type === 'string';
+            })
+            ->each(function ($fieldType, $fieldAlias) use (&$allowedFilters) {
+                $filterName = $fieldAlias . '_between';
+                $fieldQuery = $this->fields[$fieldAlias];
+
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fieldType, $fieldAlias, $fieldQuery) {
+                    // we add this to make sure query returns no records if array of two values is not specified
+                    if ((!is_array($value)) or (count($value) != 2)) {
+                        $query->whereRaw('1=2');
+                        return;
+                    }
+
+                    if ($fieldQuery instanceof Expression) {
+                        $query->whereBetween(DB::raw('(' . $fieldQuery . ')'), [floatval($value[0]), floatval($value[1])]);
+
+                        return;
+                    }
+
+                    $query->whereBetween($fieldQuery, [$value[0], $value[1]]);
+                });
+            });
+
+        return $allowedFilters;
     }
 }

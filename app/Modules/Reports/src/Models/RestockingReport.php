@@ -44,6 +44,7 @@ class RestockingReport extends Report
             'last_received_at',
             'last_movement_at',
             'last_counted_at',
+            'inventory_source_shelf_location'
         ]);
 
         $this->defaultSort = '-quantity_required';
@@ -93,6 +94,7 @@ class RestockingReport extends Report
             'warehouse_quantity'                 => DB::raw('IFNULL(inventory_source.quantity_available, 0)'),
             'inventory_source_warehouse_code'    => 'inventory_source.warehouse_code',
             'warehouse_has_stock'                => 'inventory_source.is_in_stock',
+            'inventory_source_shelf_location'    => 'inventory_source.shelve_location',
         ];
 
         $this->casts = [
@@ -115,6 +117,7 @@ class RestockingReport extends Report
             "last_movement_at"                 => 'datetime',
             'last_counted_at'                  => 'datetime',
             'warehouse_has_stock'              => 'boolean',
+            'inventory_source_shelf_location'  => 'string',
         ];
 
         $this->addFilter(
