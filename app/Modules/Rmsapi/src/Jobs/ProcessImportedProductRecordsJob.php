@@ -173,15 +173,24 @@ class ProcessImportedProductRecordsJob extends UniqueJob
     {
         do {
             $recordsUpdated = DB::affectingStatement('
+                WITH fillProductIds AS (
+                    SELECT modules_rmsapi_products_imports.id as record_id, products_aliases.product_id
+
+                    FROM modules_rmsapi_products_imports
+                    INNER JOIN products_aliases
+                        ON modules_rmsapi_products_imports.sku = products_aliases.alias
+
+                    WHERE modules_rmsapi_products_imports.product_id IS NULL
+
+                    LIMIT 200
+                )
+
                 UPDATE modules_rmsapi_products_imports
-                INNER JOIN products_aliases
-                    ON modules_rmsapi_products_imports.sku = products_aliases.alias
 
-                SET modules_rmsapi_products_imports.product_id = products_aliases.product_id
+                INNER JOIN fillProductIds
+                    ON modules_rmsapi_products_imports.id = fillProductIds.record_id
 
-                WHERE modules_rmsapi_products_imports.product_id IS NULL
-
-                LIMIT 200;
+                SET modules_rmsapi_products_imports.product_id = fillProductIds.product_id
             ');
 
             usleep(100000); // 100ms
@@ -194,18 +203,25 @@ class ProcessImportedProductRecordsJob extends UniqueJob
 
         do {
             $recordsUpdated = DB::affectingStatement('
+                WITH fillInventoryIds AS (
+                    SELECT modules_rmsapi_products_imports.id as record_id, inventory.id as inventory_id
+
+                    FROM modules_rmsapi_products_imports
+                    INNER JOIN inventory
+                        ON modules_rmsapi_products_imports.product_id = inventory.product_id
+                        AND modules_rmsapi_products_imports.warehouse_id = inventory.warehouse_id
+
+                    WHERE modules_rmsapi_products_imports.inventory_id IS NULL
+                    AND modules_rmsapi_products_imports.product_id IS NOT NULL
+                    AND modules_rmsapi_products_imports.warehouse_id IS NOT NULL
+
+                    LIMIT 200
+                )
                 UPDATE modules_rmsapi_products_imports
-                INNER JOIN inventory
-                    ON modules_rmsapi_products_imports.product_id = inventory.product_id
-                    AND modules_rmsapi_products_imports.warehouse_id = inventory.warehouse_id
+                INNER JOIN fillInventoryIds
+                    ON modules_rmsapi_products_imports.id = fillInventoryIds.record_id
 
-                SET modules_rmsapi_products_imports.inventory_id = inventory.id
-
-                WHERE modules_rmsapi_products_imports.inventory_id IS NULL
-                AND modules_rmsapi_products_imports.product_id IS NOT NULL
-                AND modules_rmsapi_products_imports.warehouse_id IS NOT NULL
-
-                LIMIT 200;
+                SET modules_rmsapi_products_imports.inventory_id = fillInventoryIds.inventory_id
             ');
 
             usleep(100000); // 100ms
@@ -216,18 +232,26 @@ class ProcessImportedProductRecordsJob extends UniqueJob
     {
         do {
             $recordsUpdated = DB::affectingStatement('
+                WITH fillProductPricesIds AS (
+                    SELECT modules_rmsapi_products_imports.id as record_id, products_prices.id as product_price_id
+
+                    FROM modules_rmsapi_products_imports
+                    INNER JOIN products_prices
+                        ON modules_rmsapi_products_imports.product_id = products_prices.product_id
+                        AND modules_rmsapi_products_imports.warehouse_id = products_prices.warehouse_id
+
+                    WHERE modules_rmsapi_products_imports.product_price_id IS NULL
+                        AND modules_rmsapi_products_imports.product_id IS NOT NULL
+                        AND modules_rmsapi_products_imports.warehouse_id IS NOT NULL
+
+                    LIMIT 200
+                )
+
                 UPDATE modules_rmsapi_products_imports
-                INNER JOIN products_prices
-                    ON modules_rmsapi_products_imports.product_id = products_prices.product_id
-                    AND modules_rmsapi_products_imports.warehouse_id = products_prices.warehouse_id
+                INNER JOIN fillProductPricesIds
+                    ON modules_rmsapi_products_imports.id = fillProductPricesIds.record_id
 
-                SET modules_rmsapi_products_imports.product_price_id = products_prices.id
-
-                WHERE modules_rmsapi_products_imports.product_price_id IS NULL
-                AND modules_rmsapi_products_imports.product_id IS NOT NULL
-                AND modules_rmsapi_products_imports.warehouse_id IS NOT NULL
-
-                LIMIT 200;
+                SET modules_rmsapi_products_imports.product_price_id = fillProductPricesIds.product_price_id
             ');
 
             usleep(100000); // 100ms
@@ -237,10 +261,6 @@ class ProcessImportedProductRecordsJob extends UniqueJob
     private function createNewProducts()
     {
         do {
-            ray('products', Product::all()->toArray())->expand(2);
-            ray('products_aliases', ProductAlias::all()->toArray())->expand(2);
-            ray('modules_rmsapi_products_imports', RmsapiProductImport::all()->toArray())->expand(2);
-
             $recordsInserted = DB::affectingStatement('
                 INSERT INTO products (sku, name, created_at, updated_at)
                 SELECT
