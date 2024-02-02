@@ -40,8 +40,7 @@ class SplitOrderToWarehouseCodeAction_SplitSingleProductTest extends TestCase
             Inventory::updateOrCreate([
                 'product_id' => $product->getKey(),
                 'warehouse_id' => $warehouse->getKey(),
-                'location_id' => $warehouse->code,
-            ],[
+            ], [
                 'quantity' => 1
             ]);
         });

@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Modules\InventoryMovementsStatistics;
 
-use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 use App\Modules\InventoryMovementsStatistics\src\Jobs\RecalculateStatisticsTableJob;
+use App\Modules\InventoryTotals\src\Jobs\RecalculateInventoryRecordsJob;
 use Tests\TestCase;
 
 class RepopulateStatisticsTableJobTest extends TestCase
@@ -25,6 +25,8 @@ class RepopulateStatisticsTableJobTest extends TestCase
         InventoryMovement::factory()->create(['product_id' => $product2->getKey(), 'type' => 'sale', 'occurred_at' => now()->subDays(2)]);
 
         SequenceNumberJob::dispatchSync();
+
+        RecalculateInventoryRecordsJob::dispatchSync();
 
         RecalculateStatisticsTableJob::dispatch();
 

@@ -71,12 +71,12 @@ class RmsapiProductImportFactory extends Factory
                 "aliases": [
                      {
                          "id": 1,
-                         "alias": "'. $this->faker->unique()->randomNumber(6) .'-alias",
+                         "alias": "'. $this->faker->unique()->ean13() . '",
                          "item_id": 1
                      },
                      {
                          "id": 2,
-                         "alias": "'. $this->faker->unique()->randomNumber(6) .'-alias",
+                         "alias": "'. $this->faker->unique()->ean13() . '",
                          "item_id": 1
                      }
                 ]
