@@ -275,7 +275,7 @@ class ProcessImportedProductRecordsJob extends UniqueJob
 
                 WHERE
                     modules_rmsapi_products_imports.product_id IS NULL
-                    AND products.id IS NOT NULL
+                    AND products.id IS NULL
 
                 LIMIT 200;
             ');
