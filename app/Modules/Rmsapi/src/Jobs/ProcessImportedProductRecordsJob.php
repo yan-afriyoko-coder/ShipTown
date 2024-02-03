@@ -265,7 +265,7 @@ class ProcessImportedProductRecordsJob extends UniqueJob
                 INSERT INTO products (sku, name, created_at, updated_at)
                 SELECT
                     modules_rmsapi_products_imports.sku,
-                    modules_rmsapi_products_imports.name,
+                    MAX(modules_rmsapi_products_imports.name),
                     NOW() as created_at,
                     NOW() as updated_at
                 FROM modules_rmsapi_products_imports
@@ -276,6 +276,8 @@ class ProcessImportedProductRecordsJob extends UniqueJob
                 WHERE
                     modules_rmsapi_products_imports.product_id IS NULL
                     AND products.id IS NULL
+
+                GROUP BY modules_rmsapi_products_imports.sku
 
                 LIMIT 200;
             ');
