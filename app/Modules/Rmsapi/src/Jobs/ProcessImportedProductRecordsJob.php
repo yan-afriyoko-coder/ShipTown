@@ -4,7 +4,6 @@ namespace App\Modules\Rmsapi\src\Jobs;
 
 use App\Abstracts\UniqueJob;
 use App\Models\Inventory;
-use App\Models\Product;
 use App\Models\ProductAlias;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Exception;
