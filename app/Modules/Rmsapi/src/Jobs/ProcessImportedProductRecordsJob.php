@@ -266,12 +266,12 @@ class ProcessImportedProductRecordsJob extends UniqueJob
                 SELECT
                     modules_rmsapi_products_imports.sku,
                     modules_rmsapi_products_imports.name,
-                    NOW(),
-                    NOW()
+                    NOW() as created_at,
+                    NOW() as updated_at
                 FROM modules_rmsapi_products_imports
 
                 LEFT JOIN products
-                    ON modules_rmsapi_products_imports.sku = products.sku
+                    ON products.sku = modules_rmsapi_products_imports.sku
 
                 WHERE
                     modules_rmsapi_products_imports.product_id IS NULL
