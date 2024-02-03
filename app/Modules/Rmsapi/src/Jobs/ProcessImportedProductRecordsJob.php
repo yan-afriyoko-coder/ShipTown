@@ -264,22 +264,26 @@ class ProcessImportedProductRecordsJob extends UniqueJob
             $recordsInserted = DB::affectingStatement('
                 INSERT INTO products (sku, name, created_at, updated_at)
                 SELECT
-                    modules_rmsapi_products_imports.sku,
-                    MAX(modules_rmsapi_products_imports.name),
+                    sku,
+                    max(name) as name,
                     NOW() as created_at,
                     NOW() as updated_at
-                FROM modules_rmsapi_products_imports
+                FROM (
+                    SELECT
+                        modules_rmsapi_products_imports.sku,
+                        modules_rmsapi_products_imports.name
+                    FROM modules_rmsapi_products_imports
 
-                LEFT JOIN products
-                    ON products.sku = modules_rmsapi_products_imports.sku
+                    LEFT JOIN products
+                        ON products.sku = modules_rmsapi_products_imports.sku
 
-                WHERE
-                    modules_rmsapi_products_imports.product_id IS NULL
-                    AND products.id IS NULL
+                    WHERE
+                        modules_rmsapi_products_imports.product_id IS NULL
+                        AND products.id IS NULL
 
-                GROUP BY modules_rmsapi_products_imports.sku
-
-                LIMIT 200;
+                    LIMIT 200
+                ) as new_products
+                GROUP BY sku
             ');
 
             usleep(100000); // 100ms
