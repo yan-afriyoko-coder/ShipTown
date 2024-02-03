@@ -34,6 +34,11 @@ class ProcessImportedProductRecordsJob extends UniqueJob
                 ->whereNull('processed_at')
                 ->exists();
 
+            Log::debug('RMSAPI ProcessImportedProductRecordsJob Processed imported product records', [
+                'count' => $batch_size,
+                'hasRecordsToProcess' => $hasRecordsToProcess,
+            ]);
+
             usleep(100000); // 0.1 sec
         } while ($hasRecordsToProcess);
 
@@ -93,6 +98,11 @@ class ProcessImportedProductRecordsJob extends UniqueJob
 
         $importedProduct->update([
             'processed_at' => now(),
+        ]);
+
+        Log::debug('RMSAPI ProcessImportedProductRecordsJob imported product', [
+            'job' => self::class,
+            'product' => $importedProduct->toArray(),
         ]);
     }
 
@@ -193,6 +203,11 @@ class ProcessImportedProductRecordsJob extends UniqueJob
                 SET modules_rmsapi_products_imports.product_id = fillProductIds.product_id
             ');
 
+            Log::debug('RMSAPI fillProductIds', [
+                'job' => self::class,
+                'recordsUpdated' => $recordsUpdated,
+            ]);
+
             usleep(100000); // 100ms
         } while ($recordsUpdated > 0);
     }
@@ -224,6 +239,11 @@ class ProcessImportedProductRecordsJob extends UniqueJob
                 SET modules_rmsapi_products_imports.inventory_id = fillInventoryIds.inventory_id
             ');
 
+            Log::debug('RMSAPI fillInventoryIds', [
+                'job' => self::class,
+                'recordsUpdated' => $recordsUpdated,
+            ]);
+
             usleep(100000); // 100ms
         } while ($recordsUpdated > 0);
     }
@@ -253,6 +273,11 @@ class ProcessImportedProductRecordsJob extends UniqueJob
 
                 SET modules_rmsapi_products_imports.product_price_id = fillProductPricesIds.product_price_id
             ');
+
+            Log::debug('RMSAPI fillProductPricesIds', [
+                'job' => self::class,
+                'recordsUpdated' => $recordsUpdated,
+            ]);
 
             usleep(100000); // 100ms
         } while ($recordsUpdated > 0);
@@ -285,6 +310,11 @@ class ProcessImportedProductRecordsJob extends UniqueJob
                 ) as new_products
                 GROUP BY sku
             ');
+
+            Log::debug('RMSAPI createNewProducts', [
+                'job' => self::class,
+                'recordsInserted' => $recordsInserted,
+            ]);
 
             usleep(100000); // 100ms
         } while ($recordsInserted > 0);
