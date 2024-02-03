@@ -258,7 +258,7 @@ class ProcessImportedProductRecordsJob extends UniqueJob
         } while ($recordsUpdated > 0);
     }
 
-    private function createNewProducts()
+    private function createNewProducts(): void
     {
         do {
             $recordsInserted = DB::affectingStatement('
@@ -269,14 +269,16 @@ class ProcessImportedProductRecordsJob extends UniqueJob
                     NOW(),
                     NOW()
                 FROM modules_rmsapi_products_imports
+
                 LEFT JOIN products
-                    ON modules_rmsapi_products_imports.product_id = products.id
-                WHERE modules_rmsapi_products_imports.product_id IS NULL
-                AND products.id IS NULL
+                    ON modules_rmsapi_products_imports.sku = products.sku
+
+                WHERE
+                    modules_rmsapi_products_imports.product_id IS NULL
+                    AND products.id IS NOT NULL
+
                 LIMIT 200;
             ');
-
-            $this->fillProductIds();
 
             usleep(100000); // 100ms
         } while ($recordsInserted > 0);
