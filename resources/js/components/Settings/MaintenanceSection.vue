@@ -32,6 +32,26 @@
             </div>
         </div>
 
+
+
+        <div class="card card-default">
+            <div class="card-header">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>
+                        Maintenance
+                    </span>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <template v-for="job in jobs">
+                    <button :disabled="buttonDisabled[job]" @click.prevent="runJob(job)" class="btn btn-block btn-primary mb-2 small">
+                        {{ job }}
+                    </button>
+                </template>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -45,6 +65,9 @@ export default {
     data: function () {
         return {
             buttonDisabled: {},
+            jobs: [
+                'MODULE_RMSAPI_ProcessImportedProductRecordsJob'
+            ],
         }
     },
     methods: {
@@ -57,6 +80,19 @@ export default {
                 )
                 .catch(() => {
                         this.$snotify.error('Cron run request failed');
+                    }
+                );
+        },
+
+        runJob(jobName) {
+            this.apiPostRunScheduledJobsRequest({"job": jobName})
+                .then((response) => {
+                        this.$snotify.success(response.data['message']);
+                        this.buttonDisabled[jobName] = true;
+                    }
+                )
+                .catch((error) => {
+                        this.$snotify.error(error.response.data.message);
                     }
                 );
         },

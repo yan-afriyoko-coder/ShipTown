@@ -3,7 +3,6 @@
 namespace App\Modules\Rmsapi\src\Jobs;
 
 use App\Abstracts\UniqueJob;
-use App\Models\Inventory;
 use App\Models\ProductAlias;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Exception;
@@ -17,11 +16,27 @@ class ProcessImportedProductRecordsJob extends UniqueJob
     {
         $batch_size = 200;
 
+        Log::debug('RMSAPI ProcessImportedProductRecordsJob createNewProducts', [
+            'job' => self::class,
+        ]);
+
         $this->createNewProducts();
+
+        Log::debug('RMSAPI ProcessImportedProductRecordsJob fillProductIds', [
+            'job' => self::class,
+        ]);
 
         $this->fillProductIds();
 
+        Log::debug('RMSAPI ProcessImportedProductRecordsJob fillInventoryIds', [
+            'job' => self::class,
+        ]);
+
         $this->fillInventoryIds();
+
+        Log::debug('RMSAPI ProcessImportedProductRecordsJob fillProductPricesIds', [
+            'job' => self::class,
+        ]);
 
         $this->fillProductPricesIds();
 
@@ -213,8 +228,6 @@ class ProcessImportedProductRecordsJob extends UniqueJob
 
     protected function fillInventoryIds(): void
     {
-        ray('inventory', Inventory::all()->toArray())->expand(2);
-
         do {
             $recordsUpdated = DB::affectingStatement('
                 WITH fillInventoryIds AS (
