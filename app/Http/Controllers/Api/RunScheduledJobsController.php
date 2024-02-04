@@ -12,11 +12,27 @@ use App\Jobs\DispatchEveryTenMinutesEventJob;
 use App\Jobs\DispatchMonthlyEventJob;
 use App\Jobs\DispatchWeeklyEventJob;
 use App\Jobs\SyncRequestJob;
+use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 
 class RunScheduledJobsController extends Controller
 {
     public function store(RunScheduledJobsRequest $request)
     {
+        $runnableJobs = collect([
+            'MODULE_RMSAPI_ProcessImportedProductRecordsJob' => ProcessImportedProductRecordsJob::class,
+        ]);
+
+        if ($runnableJobs->has($request->validated('job'))) {
+            $job = new $runnableJobs[$request->validated('job')];
+            $job->dispatch();
+
+            return response()->json([
+                'message' => 'Job dispatched successfully',
+                'job' => $request->validated('job')
+            ]);
+        }
+
+
         switch ($request->validated('schedule')) {
             case 'EveryMinute':
                 DispatchEveryMinuteEventJob::dispatch();
