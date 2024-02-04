@@ -13,13 +13,11 @@ class ProcessImportedProductRecordsJob extends UniqueJob
 {
     public function handle(): bool
     {
-        $batch_size = 200;
+        Log::debug('RMSAPI ProcessImportedProductRecordsJob createNewProducts', [
+            'job' => self::class,
+        ]);
 
-//        Log::debug('RMSAPI ProcessImportedProductRecordsJob createNewProducts', [
-//            'job' => self::class,
-//        ]);
-//
-//        $this->createNewProducts();
+        $this->createNewProducts();
 
         Log::debug('RMSAPI ProcessImportedProductRecordsJob fillProductIds', [
             'job' => self::class,
@@ -48,28 +46,28 @@ class ProcessImportedProductRecordsJob extends UniqueJob
                 ->whereNull('processed_at')
                 ->exists();
 
-            Log::debug('RMSAPI ProcessImportedProductRecordsJob Processed imported product records', [
-                'count' => $batch_size,
-                'hasRecordsToProcess' => $hasRecordsToProcess,
-            ]);
-
             usleep(100000); // 0.1 sec
         } while ($hasRecordsToProcess);
 
         return true;
     }
-
     private function processImportedProducts(): void
     {
+        $batch_size = 10;
+
         RmsapiProductImport::query()->with(['product', 'inventory', 'prices'])
             ->whereNotNull('inventory_id')
             ->whereNotNull('product_price_id')
             ->whereNull('processed_at')
             ->orderBy('id')
-            ->limit(10)
+            ->limit($batch_size)
             ->get()
-            ->each(function (RmsapiProductImport $productImport) {
+            ->each(function (RmsapiProductImport $productImport) use ($batch_size) {
                 $this->import($productImport);
+
+                Log::debug('RMSAPI ProcessImportedProductRecordsJob Processed imported product records', [
+                    'count' => $batch_size,
+                ]);
             });
     }
 
