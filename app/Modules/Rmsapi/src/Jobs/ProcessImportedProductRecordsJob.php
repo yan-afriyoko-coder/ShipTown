@@ -5,7 +5,6 @@ namespace App\Modules\Rmsapi\src\Jobs;
 use App\Abstracts\UniqueJob;
 use App\Models\ProductAlias;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
-use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -41,10 +40,11 @@ class ProcessImportedProductRecordsJob extends UniqueJob
         $this->fillProductPricesIds();
 
         do {
-            $this->processImportedProducts($batch_size);
+            $this->processImportedProducts();
 
             $hasRecordsToProcess = RmsapiProductImport::query()
                 ->whereNotNull('inventory_id')
+                ->whereNotNull('product_price_id')
                 ->whereNull('processed_at')
                 ->exists();
 
@@ -59,9 +59,11 @@ class ProcessImportedProductRecordsJob extends UniqueJob
         return true;
     }
 
-    private function processImportedProducts(int $batch_size): void
+    private function processImportedProducts(): void
     {
         RmsapiProductImport::query()->with(['product', 'inventory', 'prices'])
+            ->whereNotNull('inventory_id')
+            ->whereNotNull('product_price_id')
             ->whereNull('processed_at')
             ->orderBy('id')
             ->limit(10)
