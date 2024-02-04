@@ -61,36 +61,14 @@ class ProcessImportedProductRecordsJob extends UniqueJob
 
     private function processImportedProducts(int $batch_size): void
     {
-        $reservationTime = now();
-
-        $updatedRecords = RmsapiProductImport::query()
-            ->whereNotNull('inventory_id')
+        RmsapiProductImport::query()->with(['product', 'inventory', 'prices'])
             ->whereNull('processed_at')
             ->orderBy('id')
-            ->limit($batch_size)
-            ->update(['reserved_at' => $reservationTime]);
-
-        Log::debug('Job processing', [
-            'job' => self::class,
-            'updatedRecords' => $updatedRecords,
-            'reservationTime' => $reservationTime,
-        ]);
-
-        ray('RmsapiProductImport', RmsapiProductImport::all()->toArray());
-        $records = RmsapiProductImport::query()->with(['product', 'inventory', 'prices'])
-            ->where(['reserved_at' => $reservationTime])
-            ->whereNull('processed_at')
-            ->orderBy('id')
-            ->get();
-
-        $records->each(function (RmsapiProductImport $productImport) {
-            try {
+            ->limit(10)
+            ->get()
+            ->each(function (RmsapiProductImport $productImport) {
                 $this->import($productImport);
-            } catch (Exception $e) {
-                report($e);
-                Log::emergency($e->getMessage(), $e->getTrace());
-            }
-        });
+            });
     }
 
     private function import(RmsapiProductImport $importedProduct): void
