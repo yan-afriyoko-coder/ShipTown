@@ -3,7 +3,6 @@
 namespace App\Modules\Rmsapi\src\Jobs;
 
 use App\Abstracts\UniqueJob;
-use App\Models\Inventory;
 use App\Models\ProductAlias;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Exception;
@@ -229,8 +228,6 @@ class ProcessImportedProductRecordsJob extends UniqueJob
 
     protected function fillInventoryIds(): void
     {
-        ray('inventory', Inventory::all()->toArray())->expand(2);
-
         do {
             $recordsUpdated = DB::affectingStatement('
                 WITH fillInventoryIds AS (

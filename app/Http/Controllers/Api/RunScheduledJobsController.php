@@ -32,7 +32,6 @@ class RunScheduledJobsController extends Controller
             ]);
         }
 
-
         switch ($request->validated('schedule')) {
             case 'EveryMinute':
                 DispatchEveryMinuteEventJob::dispatch();
