@@ -16,11 +16,11 @@ class ProcessImportedProductRecordsJob extends UniqueJob
     {
         $batch_size = 200;
 
-        Log::debug('RMSAPI ProcessImportedProductRecordsJob createNewProducts', [
-            'job' => self::class,
-        ]);
-
-        $this->createNewProducts();
+//        Log::debug('RMSAPI ProcessImportedProductRecordsJob createNewProducts', [
+//            'job' => self::class,
+//        ]);
+//
+//        $this->createNewProducts();
 
         Log::debug('RMSAPI ProcessImportedProductRecordsJob fillProductIds', [
             'job' => self::class,
