@@ -5,7 +5,6 @@ namespace App\Modules\Rmsapi\src\Jobs;
 use App\Abstracts\UniqueJob;
 use App\Models\ProductAlias;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
-use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -14,8 +13,6 @@ class ProcessImportedProductRecordsJob extends UniqueJob
 {
     public function handle(): bool
     {
-        $batch_size = 200;
-
         Log::debug('RMSAPI ProcessImportedProductRecordsJob createNewProducts', [
             'job' => self::class,
         ]);
@@ -41,56 +38,37 @@ class ProcessImportedProductRecordsJob extends UniqueJob
         $this->fillProductPricesIds();
 
         do {
-            $this->processImportedProducts($batch_size);
+            $this->processImportedProducts();
 
             $hasRecordsToProcess = RmsapiProductImport::query()
                 ->whereNotNull('inventory_id')
+                ->whereNotNull('product_price_id')
                 ->whereNull('processed_at')
                 ->exists();
-
-            Log::debug('RMSAPI ProcessImportedProductRecordsJob Processed imported product records', [
-                'count' => $batch_size,
-                'hasRecordsToProcess' => $hasRecordsToProcess,
-            ]);
 
             usleep(100000); // 0.1 sec
         } while ($hasRecordsToProcess);
 
         return true;
     }
-
-    private function processImportedProducts(int $batch_size): void
+    private function processImportedProducts(): void
     {
-        $reservationTime = now();
+        $batch_size = 10;
 
-        $updatedRecords = RmsapiProductImport::query()
+        RmsapiProductImport::query()->with(['product', 'inventory', 'prices'])
             ->whereNotNull('inventory_id')
+            ->whereNotNull('product_price_id')
             ->whereNull('processed_at')
             ->orderBy('id')
             ->limit($batch_size)
-            ->update(['reserved_at' => $reservationTime]);
-
-        Log::debug('Job processing', [
-            'job' => self::class,
-            'updatedRecords' => $updatedRecords,
-            'reservationTime' => $reservationTime,
-        ]);
-
-        ray('RmsapiProductImport', RmsapiProductImport::all()->toArray());
-        $records = RmsapiProductImport::query()->with(['product', 'inventory', 'prices'])
-            ->where(['reserved_at' => $reservationTime])
-            ->whereNull('processed_at')
-            ->orderBy('id')
-            ->get();
-
-        $records->each(function (RmsapiProductImport $productImport) {
-            try {
+            ->get()
+            ->each(function (RmsapiProductImport $productImport) use ($batch_size) {
                 $this->import($productImport);
-            } catch (Exception $e) {
-                report($e);
-                Log::emergency($e->getMessage(), $e->getTrace());
-            }
-        });
+
+                Log::debug('RMSAPI ProcessImportedProductRecordsJob Processed imported product records', [
+                    'count' => $batch_size,
+                ]);
+            });
     }
 
     private function import(RmsapiProductImport $importedProduct): void
