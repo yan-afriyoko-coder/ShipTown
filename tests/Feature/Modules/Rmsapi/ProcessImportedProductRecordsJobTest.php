@@ -6,7 +6,7 @@ use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Tests\TestCase;
 
-class ProcessImportedProductsRecordsJobTest extends TestCase
+class ProcessImportedProductRecordsJobTest extends TestCase
 {
     public function test_handle()
     {
