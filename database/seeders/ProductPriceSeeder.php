@@ -20,10 +20,17 @@ class ProductPriceSeeder extends Seeder
                 foreach ($productsList as $product) {
                     $randomPrice = rand(1, 100) - (0.05 * rand(0, 1));
 
+                    $salesPrice = $randomPrice * ([1, 1, 2/3, 0.5][rand(0, 3)]);
+                    $saleStartDate = today()->subDays(rand(10, 30));
+                    $salePriceEndDate = today()->subDays(9)->addDays(rand(0, 20));
+
                     ProductPrice::query()
                         ->where('product_id', '=', $product->getKey())
                         ->update([
                             'price' => $randomPrice,
+                            'sale_price' => $salesPrice,
+                            'sale_price_start_date' => $saleStartDate,
+                            'sale_price_end_date' => $salePriceEndDate,
                         ]);
                 }
             });

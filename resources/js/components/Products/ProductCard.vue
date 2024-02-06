@@ -15,8 +15,8 @@
                                       <th class="text-left">Shelf</th>
                                       <th class="text-right">Available</th>
                                       <th class="text-right d-none d-md-table-cell">Reserved</th>
-                                      <th class="text-right">Incoming</th>
-                                      <th class="text-right d-none d-md-table-cell">Required</th>
+                                      <th class="text-right pr-1">Incoming</th>
+                                      <th class="text-right d-none d-md-table-cell pr-1">Required</th>
                                       <th class="text-right">Price</th>
                                       <th class="text-right">7 day</th>
                                   </tr>
@@ -28,9 +28,9 @@
                                           <td class="text-left">{{ inventory['shelf_location'] }}</td>
                                           <td>{{ toNumberOrDash(inventory['quantity_available'])}}</td>
                                           <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity_reserved'])}}</td>
-                                          <td>{{ toNumberOrDash(inventory['quantity_incoming']) }}</td>
-                                          <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity_required']) }}</td>
-                                          <td class="ml-2">{{ toNumberOrDash(product.prices[inventory['warehouse_code']]['price'], 2) }}</td>
+                                          <td class="pr-1">{{ toNumberOrDash(inventory['quantity_incoming']) }}</td>
+                                          <td class="d-none d-md-table-cell pr-1">{{ toNumberOrDash(inventory['quantity_required']) }}</td>
+                                          <td class="ml-2 pl-2" :class="{ 'bg-warning': product.prices[inventory['warehouse_code']]['is_on_sale'] === true }">{{ toNumberOrDash(product.prices[inventory['warehouse_code']]['current_price'], 2) }}</td>
                                           <td class="ml-2"><div v-if="product['inventoryMovementsStatistics'][inventory['warehouse_code']]">{{ toNumberOrDash( product['inventoryMovementsStatistics'][inventory['warehouse_code']]['quantity_sold_last_7_days']) }}</div>
                                           </td>
                                       </tr>
@@ -171,6 +171,7 @@
                                         <thead>
                                         <tr class="small font-weight-bold">
                                             <th>Location</th>
+                                            <th class="text-right pr-1">Price</th>
                                             <th class="text-right">Sale Price</th>
                                             <th class="text-right">Start Date</th>
                                             <th class="text-right">End Date</th>
@@ -178,11 +179,12 @@
                                         </thead>
                                         <tbody>
                                         <template v-for="price in product['prices']">
-                                            <tr :key="price.id" v-bind:class="{ 'table-active': currentUser()['warehouse'] && price['location_id'] === currentUser()['warehouse']['code']}" >
-                                                <td>{{ price['location_id'] }}</td>
-                                                <td class="text-right">{{ price['sale_price'] }}</td>
-                                                <td class="text-right">{{ price['sale_price_start_date'] }}</td>
-                                                <td class="text-right">{{ price['sale_price_end_date'] }}</td>
+                                            <tr :key="price.id" v-bind:class="{ 'table-active': currentUser()['warehouse'] && price['warehouse_code'] === currentUser()['warehouse']['code']}" >
+                                                <td>{{ price['warehouse_code'] }}</td>
+                                                <td class="text-right pr-1">{{ price['price'] }}</td>
+                                                <td class="text-right" :class="{ 'bg-warning': price['is_on_sale'] }">{{ price['sale_price'] }}</td>
+                                                <td class="text-right">{{ formatDateTime(price['sale_price_start_date'], 'YYYY MMM D') }}</td>
+                                                <td class="text-right">{{ formatDateTime(price['sale_price_end_date'], 'YYYY MMM D') }}</td>
                                             </tr>
                                         </template>
                                         </tbody>

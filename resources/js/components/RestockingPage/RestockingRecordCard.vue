@@ -26,10 +26,10 @@
                         <div class="row-col text-right" @click="expanded = !expanded">
                             <div class="row">
                                 <div class="col-3">
-                                    <number-card :class="{ 'text-secondary': isOnSale }" label="price" :number="pricing['price']"></number-card>
+                                    <text-card label="price" :text="pricing['price']" :class="{ 'text-secondary': isOnSale }" ></text-card>
                                 </div>
                                 <div class="col-3">
-                                    <number-card v-if="isOnSale" label="sale price" :number="pricing['sale_price']" class="bg-warning"></number-card>
+                                    <text-card label="sale price" :text="pricing['sale_price']" v-if="isOnSale" class="bg-warning"></text-card>
                                 </div>
                                 <div class="col-3">
                                     <number-card label="in stock" :number="record['quantity_in_stock']" v-bind:class="{'bg-warning' : record['quantity_in_stock'] < 0 }"></number-card>
