@@ -11,7 +11,7 @@
                 <div class="col">
                     <div class="row text-right mt-0 mb-3">
                         <div class="col">
-                            <number-card label="price" :number="prices && dataCollection ? prices[dataCollection['warehouse_code']] : 0"></number-card>
+                            <text-card label="price" :text="prices && dataCollection ? prices[dataCollection['warehouse_code']]['current_price'] : 0" :class="{ 'bg-warning': prices[dataCollection['warehouse_code']]['is_on_sale'] }"></text-card>
                             <number-card label="in stock" :number="inventory && dataCollection ? inventory[dataCollection['warehouse_code']]['quantity'] : 0" :class="{ 'bg-warning': inventory && dataCollectionRecord && dataCollectionRecord['quantity_requested'] >= inventory[dataCollection['warehouse_code']]['quantity']}" ></number-card>
                             <text-card label="shelf" :text="inventory && dataCollection ? inventory[dataCollection['warehouse_code']]['shelf_location'] : 0"></text-card>
                         </div>

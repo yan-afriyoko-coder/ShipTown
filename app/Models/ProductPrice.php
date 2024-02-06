@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\BaseModel;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -14,15 +15,17 @@ use Illuminate\Support\Carbon;
  * @property int         $product_id
  * @property int         $warehouse_id
  * @property string      $warehouse_code
- * @property int         $location_id
- * @property string      $price
- * @property string      $cost
- * @property string      $sale_price
- * @property Carbon      $sale_price_start_date
- * @property Carbon      $sale_price_end_date
- * @property string|null $deleted_at
+ * @property boolean     $is_on_sale
+ * @property double      $current_price
+ * @property double      $price
+ * @property double      $cost
+ * @property double      $sale_price
+ * @property Carbon|null $sale_price_start_date
+ * @property Carbon|null $sale_price_end_date
+ * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @property Product     $product
  * @property Warehouse   $warehouse
  *
@@ -40,7 +43,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|ProductPrice whereSalePriceEndDate($value)
  * @method static Builder|ProductPrice whereSalePriceStartDate($value)
  * @method static Builder|ProductPrice whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class ProductPrice extends BaseModel
 {
@@ -68,6 +71,33 @@ class ProductPrice extends BaseModel
         'sale_price_start_date' => '2001-01-01 00:00:00',
         'sale_price_end_date'   => '2001-01-01 00:00:00',
     ];
+
+    protected $casts = [
+        'price'                 => 'float',
+        'sale_price'            => 'float',
+        'cost'                  => 'float',
+        'is_on_sale'            => 'boolean',
+        'created_at'            => 'datetime',
+        'updated_at'            => 'datetime',
+        'deleted_at'            => 'datetime',
+        'sale_price_start_date' => 'datetime',
+        'sale_price_end_date'   => 'datetime',
+    ];
+
+    protected $appends = [
+        'current_price',
+        'is_on_sale',
+    ];
+
+    public function getCurrentPriceAttribute(): float
+    {
+        return $this->getIsOnSaleAttribute() ? $this->sale_price : $this->price;
+    }
+
+    public function getIsOnSaleAttribute(): bool
+    {
+        return ($this->sale_price < $this->price) && now()->between($this->sale_price_start_date, $this->sale_price_end_date);
+    }
 
     /**
      * @return BelongsTo
