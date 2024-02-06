@@ -16,10 +16,9 @@ class ProductPriceSeeder extends Seeder
     public function run()
     {
         Product::query()
-            ->where('price', '=', '0')
             ->chunkById(50, function ($productsList) {
                 foreach ($productsList as $product) {
-                    $randomPrice = rand(1, 100) - 0.05;
+                    $randomPrice = rand(1, 100) - (0.05 * rand(0, 1));
 
                     ProductPrice::query()
                         ->where('product_id', '=', $product->getKey())
