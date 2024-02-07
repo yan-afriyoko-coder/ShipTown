@@ -251,8 +251,9 @@ class Report extends Model
     {
         $allowedFilters = [];
 
-        collect($this->casts)
-            ->filter(function ($type) {
+        collect($this->fields)
+            ->filter(function ($fieldQuery, $fieldName) {
+                $type = data_get($this->casts, $fieldName, 'string');
                 return $type === 'float';
             })
             ->each(function ($fieldType, $fieldAlias) use (&$allowedFilters) {
@@ -287,8 +288,9 @@ class Report extends Model
     {
         $allowedFilters = [];
 
-        collect($this->casts)
-            ->filter(function ($type) {
+        collect($this->fields)
+            ->filter(function ($fieldQuery, $fieldName) {
+                $type = data_get($this->casts, $fieldName, 'string');
                 return in_array($type, ['datetime', 'date']);
             })
             ->each(function ($fieldType, $fieldAlias) use (&$allowedFilters) {
@@ -325,8 +327,9 @@ class Report extends Model
     {
         $allowedFilters = [];
 
-        collect($this->casts)
-            ->filter(function ($type) {
+        collect($this->fields)
+            ->filter(function ($fieldQuery, $fieldName) {
+                $type = data_get($this->casts, $fieldName, 'string');
                 return in_array($type, ['string', 'datetime', 'float']);
             })
             ->each(function ($record, $alias) use (&$allowedFilters) {
@@ -416,8 +419,9 @@ class Report extends Model
     {
         $allowedFilters = [];
 
-        collect($this->casts)
-            ->filter(function ($type) {
+        collect($this->fields)
+            ->filter(function ($fieldQuery, $fieldName) {
+                $type = data_get($this->casts, $fieldName, 'string');
                 return $type === 'string';
             })
             ->each(function ($fieldType, $fieldAlias) use (&$allowedFilters) {
@@ -448,7 +452,7 @@ class Report extends Model
     {
         $allowedFilters = [];
 
-        collect($this->casts)
+        collect($this->fields)
             ->each(function ($type, $alias) use (&$allowedFilters) {
                 $filterName = $alias . '_not_in';
 
