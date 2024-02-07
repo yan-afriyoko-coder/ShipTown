@@ -15,17 +15,23 @@ class InventoryReport extends Report
         $this->report_name = 'Inventory Report';
 
         $this->baseQuery = Inventory::query()
-            ->leftJoin('products as product', 'inventory.product_id', '=', 'product.id');
+            ->leftJoin('products as product', 'inventory.product_id', '=', 'product.id')
+            ->leftJoin('products_prices as product_prices', function ($join) {
+                $join->on('inventory.product_id', '=', 'product_prices.product_id')
+                    ->on('inventory.warehouse_id', '=', 'product_prices.warehouse_id');
+            });
 
-        $this->defaultSelect= implode(',', [
+        $this->defaultSelect = implode(',', [
             'warehouse_code',
             'product_sku',
             'product_name',
             'department',
             'shelf_location',
-            'quantity_available',
             'quantity',
+            'retail_value',
+            'cost_value',
             'quantity_reserved',
+            'quantity_available',
             'quantity_incoming',
             'quantity_required',
             'reorder_point',
@@ -44,7 +50,6 @@ class InventoryReport extends Report
             'id'                    => 'inventory.id',
             'warehouse_id'          => 'inventory.warehouse_id',
             'product_id'            => 'inventory.product_id',
-            'location_id'           => 'inventory.location_id',
             'warehouse_code'        => 'inventory.warehouse_code',
             'shelf_location'        => 'inventory.shelve_location',
             'recount_required'      => 'inventory.recount_required',
@@ -68,13 +73,26 @@ class InventoryReport extends Report
             'deleted_at'            => 'inventory.deleted_at',
             'created_at'            => 'inventory.created_at',
             'updated_at'            => 'inventory.updated_at',
+            'price'                 => 'products_prices.price',
+            'cost'                  => 'products_prices.cost',
+            'sale_price'            => 'products_prices.sale_price',
+            'sale_start_date'       => 'products_prices.sale_price_start_date',
+            'sale_end_date'         => 'products_prices.sale_price_end_date',
+            'retail_value'          => DB::raw('ROUND(product_prices.price * inventory.quantity, 2)'),
+            'cost_value'            => DB::raw('ROUND(product_prices.cost * inventory.quantity, 2)'),
         ];
 
         $this->casts = [
             'id'                    => 'integer',
             'warehouse_id'          => 'integer',
             'product_id'            => 'integer',
-            'location_id'           => 'string',
+            'price'                 => 'float',
+            'cost'                  => 'float',
+            'sale_price'            => 'float',
+            'sale_start_date'       => 'datetime',
+            'sale_end_date'         => 'datetime',
+            'retail_value'          => 'float',
+            'cost_value'            => 'float',
             'warehouse_code'        => 'string',
             'shelf_location'        => 'string',
             'recount_required'      => 'string',
