@@ -147,6 +147,7 @@ class Report extends Model
 
     /**
      * @return array
+     * @throws Exception
      */
     private function getAllowedFilters(): array
     {
@@ -154,6 +155,8 @@ class Report extends Model
 
         $filters = $filters->merge($this->addExactFilters());
         $filters = $filters->merge($this->addContainsFilters());
+        $filters = $filters->merge($this->addInFilters());
+        $filters = $filters->merge($this->addNotInFilters());
         $filters = $filters->merge($this->addBetweenStringFilters());
         $filters = $filters->merge($this->addBetweenFloatFilters());
         $filters = $filters->merge($this->addBetweenDatesFilters());
@@ -248,8 +251,9 @@ class Report extends Model
     {
         $allowedFilters = [];
 
-        collect($this->casts)
-            ->filter(function ($type) {
+        collect($this->fields)
+            ->filter(function ($fieldQuery, $fieldName) {
+                $type = data_get($this->casts, $fieldName, 'string');
                 return $type === 'float';
             })
             ->each(function ($fieldType, $fieldAlias) use (&$allowedFilters) {
@@ -284,8 +288,9 @@ class Report extends Model
     {
         $allowedFilters = [];
 
-        collect($this->casts)
-            ->filter(function ($type) {
+        collect($this->fields)
+            ->filter(function ($fieldQuery, $fieldName) {
+                $type = data_get($this->casts, $fieldName, 'string');
                 return in_array($type, ['datetime', 'date']);
             })
             ->each(function ($fieldType, $fieldAlias) use (&$allowedFilters) {
@@ -322,8 +327,9 @@ class Report extends Model
     {
         $allowedFilters = [];
 
-        collect($this->casts)
-            ->filter(function ($type) {
+        collect($this->fields)
+            ->filter(function ($fieldQuery, $fieldName) {
+                $type = data_get($this->casts, $fieldName, 'string');
                 return in_array($type, ['string', 'datetime', 'float']);
             })
             ->each(function ($record, $alias) use (&$allowedFilters) {
@@ -409,12 +415,13 @@ class Report extends Model
         return $this->queryBuilder()->simplePaginate(request()->get('per_page', 10));
     }
 
-    private function addBetweenStringFilters()
+    private function addBetweenStringFilters(): array
     {
         $allowedFilters = [];
 
-        collect($this->casts)
-            ->filter(function ($type) {
+        collect($this->fields)
+            ->filter(function ($fieldQuery, $fieldName) {
+                $type = data_get($this->casts, $fieldName, 'string');
                 return $type === 'string';
             })
             ->each(function ($fieldType, $fieldAlias) use (&$allowedFilters) {
@@ -435,6 +442,38 @@ class Report extends Model
                     }
 
                     $query->whereBetween($fieldQuery, [$value[0], $value[1]]);
+                });
+            });
+
+        return $allowedFilters;
+    }
+
+    private function addNotInFilters(): array
+    {
+        $allowedFilters = [];
+
+        collect($this->fields)
+            ->each(function ($type, $alias) use (&$allowedFilters) {
+                $filterName = $alias . '_not_in';
+
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($type, $alias) {
+                    $query->whereNotIn($this->fields[$alias], explode(',', $value));
+                });
+            });
+
+        return $allowedFilters;
+    }
+
+    private function addInFilters(): array
+    {
+        $allowedFilters = [];
+
+        collect($this->fields)
+            ->each(function ($type, $alias) use (&$allowedFilters) {
+                $filterName = $alias . '_in';
+
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($type, $alias) {
+                    $query->whereIn($this->fields[$alias], explode(',', $value));
                 });
             });
 
