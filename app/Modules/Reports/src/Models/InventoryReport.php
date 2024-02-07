@@ -15,17 +15,23 @@ class InventoryReport extends Report
         $this->report_name = 'Inventory Report';
 
         $this->baseQuery = Inventory::query()
-            ->leftJoin('products as product', 'inventory.product_id', '=', 'product.id');
+            ->leftJoin('products as product', 'inventory.product_id', '=', 'product.id')
+            ->leftJoin('products_prices as product_price', function ($join) {
+                $join->on('inventory.product_id', '=', 'product_price.product_id')
+                    ->where('inventory.warehouse_id', '=', 'product_price.warehouse_id');
+            });
 
-        $this->defaultSelect= implode(',', [
+        $this->defaultSelect = implode(',', [
             'warehouse_code',
             'product_sku',
             'product_name',
             'department',
             'shelf_location',
-            'quantity_available',
             'quantity',
+            'retail_value',
+            'cost_value',
             'quantity_reserved',
+            'quantity_available',
             'quantity_incoming',
             'quantity_required',
             'reorder_point',
@@ -68,6 +74,13 @@ class InventoryReport extends Report
             'deleted_at'            => 'inventory.deleted_at',
             'created_at'            => 'inventory.created_at',
             'updated_at'            => 'inventory.updated_at',
+            'price'                 => 'products_prices.price',
+            'cost'                  => 'products_prices.cost',
+            'sale_price'            => 'products_prices.sale_price',
+            'sale_start_date'       => 'products_prices.sale_price_start_date',
+            'sale_end_date'         => 'products_prices.sale_price_end_date',
+            'retail_value'          => DB::raw('products_prices.price * inventory.quantity'),
+            'cost_value'            => DB::raw('products_prices.cost * inventory.quantity'),
         ];
 
         $this->casts = [
