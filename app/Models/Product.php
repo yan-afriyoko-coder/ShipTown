@@ -111,6 +111,8 @@ class Product extends BaseModel
     protected $fillable = [
         'sku',
         'name',
+        'department',
+        'category',
         'price',
         'sale_price',
         'sale_price_start_date',
