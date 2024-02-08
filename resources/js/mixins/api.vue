@@ -229,6 +229,14 @@ export default {
                 return axios.get(`/api/modules/dpd-uk/dpd-uk-connections`);
             },
 
+            apiPostDpdUkConnection(data) {
+                return axios.post(`/api/modules/dpd-uk/dpd-uk-connections`, data);
+            },
+
+            apiDeleteDpdUkConnection(id) {
+                return axios.delete(`/api/modules/dpd-uk/dpd-uk-connections/${id}`);
+            },
+
             apiPostDpdConfiguration: function (data) { return axios.post(`/api/modules/dpd-ireland/connections`, data) },
 
             apiDeleteDpdConfiguration: function (id) { return axios.delete(`/api/modules/dpd-ireland/connections/${id}`) },
