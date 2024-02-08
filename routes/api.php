@@ -55,7 +55,7 @@ Route::prefix('modules')->name('api.modules.')->group(function () {
     Route::apiResource('printnode/printjobs', Api\Modules\Printnode\PrintJobController::class, ['as' => 'printnode'])->only(['store']);
     Route::apiResource('rms_api/connections', Api\Modules\Rmsapi\RmsapiConnectionController::class, ['as' => 'rmsapi'])->only(['index', 'store', 'destroy']);
     Route::apiResource('slack/config', Api\Modules\Slack\ConfigController::class)->only(['index', 'store']);
-//    Route::apiResource('stocktake-suggestions/configuration', Api\Modules\StocktakeSuggestions\Configuration::class)->only(['index', 'store']);
+    Route::apiResource('stocktake-suggestions/configuration', Api\Modules\StocktakeSuggestions\ConfigurationController::class)->only(['index', 'store']);
     Route::apiResource('webhooks/subscriptions', Api\Modules\Webhooks\SubscriptionController::class, ['as' => 'webhooks'])->only(['index', 'store']);
     Route::apiResource('magento-api/connections', Api\Modules\MagentoApi\MagentoApiConnectionController::class, ['as' => 'magento-api'])->except(['show']);
     Route::apiResource('inventory-reservations/configuration', Api\Modules\InventoryReservation\InventoryReservationController::class, ['as' => 'inventory-reservations'])->only(['index', 'update']);

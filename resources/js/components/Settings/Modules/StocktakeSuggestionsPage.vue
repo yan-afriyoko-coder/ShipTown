@@ -8,7 +8,7 @@
             </div>
             <div class="card-body m-0">
                 <div class="font-weight-bold">Minimum Count Date
-                    <input class="form-control" id="minimum_count_date" type="date" v-model="configuration.min_count_date">
+                    <input class="form-control" id="minimum_count_date" type="date" v-model="configuration.min_count_date" @change="save()">
                 </div>
                 <div class="small text-secondary">
                     Its the date from which the system will start to count the stock
@@ -30,12 +30,28 @@ export default {
         },
     }),
 
-    watch: {
-        configuration: {
-            handler: function (val, oldVal, e) {
-                console.log(val, oldVal, e);
-            },
-            deep: true
+    mounted() {
+        this.load();
+    },
+
+    methods: {
+        save() {
+            this.apiPostStocktakeSuggestionsConfiguration(this.configuration)
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => {
+                    this.displayApiCallError(error);
+                });
+        },
+        load() {
+            this.apiGetStocktakeSuggestionsConfiguration('settings/stocktake-suggestions')
+                .then(response => {
+                    this.configuration = response.data.data;
+                })
+                .catch(error => {
+                    this.displayApiCallError(error)
+                });
         }
     },
 }
