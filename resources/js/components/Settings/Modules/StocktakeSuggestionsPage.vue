@@ -8,13 +8,21 @@
         <div class="card card-default mt-2">
             <div class="card-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <b>Suggestion:</b>Minimum Count Date
+                    Manimum allowed last counted date
                 </div>
             </div>
             <div class="card-body m-0 ">
                 <div class="row">
-                    <div class="col-12 col-lg-8">Its the date from which the system will start to count the stock</div>
-                    <div class="col-12 col-lg-4 text-right"><input style="max-width: 200px;" class="form-control fa-pull-right" id="min_count_date" type="date" v-model="min_count_date" @change="save()"></div>
+                    <div class="col-12 col-lg-6">
+                        <div class="">
+                            Automatically request stock checks for products which haven't been counted since that date
+                        </div>
+                        <div class="small text-secondary mt-2 mb-2">
+                            Products that have been out of stock since this date will be excluded from check requests as when new products arrived, staff would have confirmed the stock level
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3"></div>
+                    <div class="col-12 col-lg-3 text-right m-sm-auto"><input class="form-control fa-pull-right" id="min_count_date" type="date" v-model="min_count_date" @change="save()"></div>
                 </div>
             </div>
         </div>
