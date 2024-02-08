@@ -4,46 +4,44 @@
             <div class="card-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span>
-                        DPD UK Integration Configuration
+                        DPD UK
                     </span>
                 </div>
             </div>
 
             <div class="card-body">
 
-                <p v-if="configurations.length === 0" class="flex-fill text-center">
-                    No connections found
-<!--                    <br><br>-->
-<!--                    <button class="btn btn-sm btn-primary">NEW</button>-->
+                <p v-if="connections.length === 0" class="flex-fill text-center">
+                    <button class="btn btn-primary mt-3" v-b-modal.dpd-create-form-modal>Connect</button>
                 </p>
 
-                <table v-if="configurations.length" class="table table-borderless table-responsive mb-0">
+                <table v-if="connections.length > 0" class="table table-borderless table-responsive mb-0">
                     <thead>
                         <tr>
-                            <th>API Username</th>
+                            <th>Account Number</th>
+                            <th>Username</th>
                             <th>Collection Address</th>
 <!--                            <th></th>&lt;!&ndash;Delete&ndash;&gt;-->
                         </tr>
                     </thead>
                     <tbody>
-                    <template v-for="configuration in configurations">
-                        <tr key="{{ configuration.id }}">
-                            <td>{{ configuration.username }}</td>
+                    <template v-for="connection in connections">
+                        <tr key="{{ connection['id'] }}">
+                            <td>{{ connection['account_number'] }}</td>
                             <td>
-                                <div>{{ configuration.collection_address.first_name }} {{ configuration.collection_address.last_name }}</div>
-                                <div>{{ configuration.collection_address.compnay }}</div>
-                                <div>{{ configuration.collection_address.address1 }}</div>
-                                <div>{{ configuration.collection_address.address2 }}</div>
-                                <div>{{ configuration.collection_address.city }}</div>
-                                <div>{{ configuration.collection_address.country_code }}</div>
-                                <div>{{ configuration.collection_address.phone }}</div>
-                                <div></div>
-                                <div>{{ configuration.collection_telephone }}</div>
-                                <div>{{ configuration.collection_email }}</div>
+                                <div>{{ connection['collection_address']['first_name'] }} {{ connection['collection_address']['last_name'] }}</div>
+                                <div>{{ connection['collection_address']['compnay'] }}</div>
+                                <div>{{ connection['collection_address']['address1'] }}</div>
+                                <div>{{ connection['collection_address']['address2'] }}</div>
+                                <div>{{ connection['collection_address']['city'] }}</div>
+                                <div>{{ connection['collection_address']['country_code'] }}</div>
+                                <div>&nbsp;</div>
+                                <div>{{ connection['collection_address']['phone'] }}</div>
+                                <div>{{ connection['collection_address']['email'] }}</div>
                             </td>
-<!--                            <td>-->
-<!--                                <a @click="handleDelete(configuration.id)" class="action-link text-danger">Delete</a>-->
-<!--                            </td>-->
+                            <td>
+                                <a @click="handleDelete(connection.id)" class="action-link text-danger">Delete</a>
+                            </td>
                         </tr>
                     </template>
                     </tbody>
@@ -52,7 +50,7 @@
         </div>
 
         <!-- The modal -->
-        <b-modal ref="createFormModal" id="dpd-create-form-modal" title="Create DPD Configuration" @ok="handleModalOk">
+        <b-modal ref="createFormModal" id="dpd-create-form-modal" title="New DPD UK connection" @ok="handleModalOk">
             <dpd-configuration-form ref="createForm" @saved="handleSaved" />
             <template #modal-footer="{ ok, cancel }">
                 <b-button @click="cancel()">
@@ -69,15 +67,15 @@
 <script>
     import { BModal, VBModal, BButton} from 'bootstrap-vue';
 
-    import DpdConfigurationForm from '../SharedComponents/DpdConfigurationForm.vue';
     import api from "../../mixins/api";
     import helpers from "../../mixins/helpers";
+    import DpdUkNewConnectionForm from "../SharedComponents/DpdUkNewConnectionForm";
 
     export default {
         components: {
             'b-modal': BModal,
             'b-button': BButton,
-            'dpd-configuration-form': DpdConfigurationForm,
+            'dpd-configuration-form': DpdUkNewConnectionForm,
         },
 
         mixins: [api, helpers],
@@ -87,19 +85,18 @@
         },
 
         data: () => ({
-            configurations: [],
-            has_configuration : false,
+            connections: [],
         }),
 
         mounted() {
-            this.getConfiguration();
+            this.reloadConnections();
         },
 
         methods: {
-            getConfiguration() {
+            reloadConnections() {
                 this.apiGetDpdUkConnections()
                     .then(({ data }) => {
-                        this.configurations = data.data;
+                        this.connections = data.data;
                     })
                     .catch((error) => {
                         this.notifyError('Api call failed - Error ' + error.response.status +': '+ error.response.statusText);
@@ -115,24 +112,21 @@
                     this.$refs.createForm.submit();
                 }
 
-                this.getConfiguration();
+                this.reloadConnections();
             },
 
             handleSaved(data) {
                 this.configuration = data;
                 this.$nextTick(() => {
-                    if (this.configuration) {
-                        this.$refs.updateFormModal.hide();
-                    } else {
-                        this.$refs.createFormModal.hide();
-                    }
+                    this.$refs.createFormModal.hide();
+                    this.reloadConnections();
                 });
             },
 
             handleDelete(id) {
-                this.apiDeleteDpdConfiguration(id)
+                this.apiDeleteDpdUkConnection(id)
                     .then(() => {
-                        this.configurations = [];
+                        this.connections = [];
                     });
             },
         }

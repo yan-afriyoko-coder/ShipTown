@@ -49,12 +49,13 @@ Route::prefix('modules')->name('api.modules.')->group(function () {
     Route::apiResource('automations/config', Api\Modules\OrderAutomations\ConfigController::class, ['as' => 'automations'])->only(['index']);
     Route::apiResource('automations', Api\Modules\OrderAutomations\AutomationController::class);
     Route::apiResource('dpd-ireland/connections', Api\Modules\DpdIreland\DpdIrelandController::class, ['as' => 'dpd-ireland'])->only(['index', 'store', 'destroy']);
-    Route::apiResource('dpd-uk/dpd-uk-connections', Api\Modules\DpdUk\DpdUkConnectionController::class, ['as' => 'dpd-uk'])->only(['index']);
+    Route::apiResource('dpd-uk/dpd-uk-connections', Api\Modules\DpdUk\DpdUkConnectionController::class, ['as' => 'dpd-uk'])->only(['index', 'store', 'destroy']);
     Route::apiResource('printnode/clients', Api\Modules\Printnode\ClientController::class, ['as' => 'printnode'])->only(['index', 'store', 'destroy']);
     Route::apiResource('printnode/printers', Api\Modules\Printnode\PrinterController::class)->only(['index']);
     Route::apiResource('printnode/printjobs', Api\Modules\Printnode\PrintJobController::class, ['as' => 'printnode'])->only(['store']);
     Route::apiResource('rms_api/connections', Api\Modules\Rmsapi\RmsapiConnectionController::class, ['as' => 'rmsapi'])->only(['index', 'store', 'destroy']);
     Route::apiResource('slack/config', Api\Modules\Slack\ConfigController::class)->only(['index', 'store']);
+//    Route::apiResource('stocktake-suggestions/configuration', Api\Modules\StocktakeSuggestions\Configuration::class)->only(['index', 'store']);
     Route::apiResource('webhooks/subscriptions', Api\Modules\Webhooks\SubscriptionController::class, ['as' => 'webhooks'])->only(['index', 'store']);
     Route::apiResource('magento-api/connections', Api\Modules\MagentoApi\MagentoApiConnectionController::class, ['as' => 'magento-api'])->except(['show']);
     Route::apiResource('inventory-reservations/configuration', Api\Modules\InventoryReservation\InventoryReservationController::class, ['as' => 'inventory-reservations'])->only(['index', 'update']);

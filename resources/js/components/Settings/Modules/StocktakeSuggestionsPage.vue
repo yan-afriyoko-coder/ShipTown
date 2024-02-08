@@ -38,12 +38,6 @@ export default {
             deep: true
         }
     },
-    mounted() {
-
-    },
-
-    methods: {
-    },
 }
 
 </script>

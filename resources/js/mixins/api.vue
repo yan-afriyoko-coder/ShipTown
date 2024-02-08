@@ -71,6 +71,10 @@ export default {
                 return this.apiGet('/api/stocktake-suggestions-details', {params: params});
             },
 
+            apiPostStocktakeSuggestionsConfiguration(data) {
+                return axios.post('/api/modules/stocktake-suggestions/configuration', data);
+            },
+
 
             apiGetRestocking(params) {
                 return axios.get('/api/restocking', {params: params});
@@ -223,6 +227,14 @@ export default {
 
             apiGetDpdUkConnections() {
                 return axios.get(`/api/modules/dpd-uk/dpd-uk-connections`);
+            },
+
+            apiPostDpdUkConnection(data) {
+                return axios.post(`/api/modules/dpd-uk/dpd-uk-connections`, data);
+            },
+
+            apiDeleteDpdUkConnection(id) {
+                return axios.delete(`/api/modules/dpd-uk/dpd-uk-connections/${id}`);
             },
 
             apiPostDpdConfiguration: function (data) { return axios.post(`/api/modules/dpd-ireland/connections`, data) },
