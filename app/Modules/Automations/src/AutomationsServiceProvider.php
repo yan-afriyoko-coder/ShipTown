@@ -11,9 +11,6 @@ use App\Events\ShippingLabelCreatedEvent;
 use App\Modules\Automations\src\Jobs\RunEnabledAutomationsJob;
 use App\Modules\BaseModuleServiceProvider;
 
-// todo: :job Create Products Automations module :price 500 :description Should be able to
-// todo: :job UI beautify price :price 100 :description column on products page when highlighted yellow, (sale price is on)
-
 class AutomationsServiceProvider extends BaseModuleServiceProvider
 {
     /**
