@@ -11,6 +11,8 @@ use App\Events\ShippingLabelCreatedEvent;
 use App\Modules\Automations\src\Jobs\RunEnabledAutomationsJob;
 use App\Modules\BaseModuleServiceProvider;
 
+// todo: create Products Automations module
+
 class AutomationsServiceProvider extends BaseModuleServiceProvider
 {
     /**
