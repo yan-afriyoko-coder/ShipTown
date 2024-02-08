@@ -71,6 +71,10 @@ export default {
                 return this.apiGet('/api/stocktake-suggestions-details', {params: params});
             },
 
+            apiPostStocktakeSuggestionsConfiguration(data) {
+                return axios.post('/api/modules/stocktake-suggestions/configuration', data);
+            },
+
 
             apiGetRestocking(params) {
                 return axios.get('/api/restocking', {params: params});
