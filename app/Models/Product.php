@@ -361,7 +361,6 @@ class Product extends BaseModel
         return $this->hasMany(InventoryMovementsStatistic::class)
             ->when($warehouse_code, function ($query) use ($warehouse_code) {
                 $query->where(['warehouse_code' => $warehouse_code]);
-            })
-            ->keyBy('warehouse_code');
+            });
     }
 }

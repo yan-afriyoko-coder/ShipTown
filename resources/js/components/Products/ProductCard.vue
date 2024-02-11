@@ -31,7 +31,10 @@
                                           <td class="pr-1">{{ toNumberOrDash(inventory['quantity_incoming']) }}</td>
                                           <td class="d-none d-md-table-cell pr-1">{{ toNumberOrDash(inventory['quantity_required']) }}</td>
                                           <td class="ml-2 pl-2" :class="{ 'bg-warning': product.prices[inventory['warehouse_code']]['is_on_sale'] === true }">{{ toNumberOrDash(product.prices[inventory['warehouse_code']]['current_price'], 2) }}</td>
-                                          <td class="ml-2"><div v-if="product['inventoryMovementsStatistics'][inventory['warehouse_code']]">{{ toNumberOrDash( product['inventoryMovementsStatistics'][inventory['warehouse_code']]['quantity_sold_last_7_days']) }}</div>
+                                          <td class="ml-2">
+                                              <template v-for="inventory_statistic in product['inventoryMovementsStatistics']">
+                                                <div v-if="inventory_statistic['type'] === 'sale' && inventory['warehouse_code'] === inventory_statistic['warehouse_code']">{{ toNumberOrDash( inventory_statistic['last7days_quantity_delta'] * (-1) ) }}</div>
+                                              </template>
                                           </td>
                                       </tr>
                                    </template>

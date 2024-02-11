@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
+use App\Modules\InventoryMovementsStatistics\src\Jobs\RecalculateStatisticsTableJob;
 use Illuminate\Database\Seeder;
 
 class SalesSeeder extends Seeder
@@ -21,7 +22,7 @@ class SalesSeeder extends Seeder
             ->limit(20)
             ->get()
             ->map(function (Inventory $inventory) {
-                $quantityDelta = min(rand(1, 7), $inventory->quantity) * (-1);
+                $quantityDelta = rand(-7, -1);
 
                 return [
                     'occurred_at' => now(),
@@ -40,5 +41,7 @@ class SalesSeeder extends Seeder
         InventoryMovement::query()->insert($inventoryMovements->toArray());
 
         SequenceNumberJob::dispatch();
+
+        RecalculateStatisticsTableJob::dispatch();
     }
 }
