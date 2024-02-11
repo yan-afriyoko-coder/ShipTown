@@ -2,3 +2,5 @@
 // todo: :job Fix Last 7 days sales :price 500 :description Last 7 days sales are not showing correctly on products page, the whole process of calculating sales need to be improved
 // todo: :job UI beautify price :price 100 :description When column Price on products page is highlighted yellow (sale price is on)
 // todo: :job Redesign products reserved quantity :price 500 :description When column Reserved on products page is highlighted yellow (reserved quantity is on)
+
+// todo: :job Design DEMO LOGIN PAGE as sales page :price 500 :description Create a new page for sales, where they can login and see the live demo with One Click login. This will then replace /login page for marketing purposes

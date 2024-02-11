@@ -29,7 +29,7 @@ class RemoveOutdatedSalesJob extends UniqueJob
                  ON inventory_movements.inventory_id = inventory_movements_statistics.inventory_id
                  AND inventory_movements.type = inventory_movements_statistics.type
                  AND inventory_movements.id >= inventory_movements_statistics.last'.$days.'days_min_movement_id
-                 AND inventory_movements.created_at < date_sub(now(), interval '.$days.' day)
+                 AND inventory_movements.occurred_at < date_sub(now(), interval '.$days.' day)
                 WHERE inventory_movements_statistics.last'.$days.'days_min_movement_id IS NOT NULL
                 GROUP BY inventory_movements.type, inventory_movements.inventory_id
                 LIMIT 1000
