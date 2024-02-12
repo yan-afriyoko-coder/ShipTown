@@ -3,8 +3,8 @@
 namespace App\Modules\Magento2MSI\src\Listeners;
 
 use App\Events\Product\ProductTagAttachedEvent;
-use App\Modules\Magento2MSI\src\Models\MagentoConnection;
-use App\Modules\Magento2MSI\src\Models\MagentoProduct;
+use App\Modules\Magento2MSI\src\Models\Magento2msiConnection;
+use App\Modules\Magento2MSI\src\Models\Magento2msiProduct;
 
 class ProductTagAttachedEventListener
 {
@@ -18,10 +18,10 @@ class ProductTagAttachedEventListener
     public function handle(ProductTagAttachedEvent $event)
     {
         if ($event->tag === 'Available Online') {
-            MagentoConnection::query()
+            Magento2msiConnection::query()
                 ->get()
-                ->each(function (MagentoConnection $connection) use ($event) {
-                    MagentoProduct::firstOrCreate([
+                ->each(function (Magento2msiConnection $connection) use ($event) {
+                    Magento2msiProduct::firstOrCreate([
                         'connection_id' => $connection->getKey(),
                         'product_id' => $event->product->id
                     ], []);

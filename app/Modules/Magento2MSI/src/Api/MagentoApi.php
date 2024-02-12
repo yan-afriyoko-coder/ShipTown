@@ -2,11 +2,50 @@
 
 namespace App\Modules\Magento2MSI\src\Api;
 
+use App\Modules\Magento2MSI\src\Models\Magento2msiConnection;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 
 class MagentoApi
 {
+    public static function getModules(Magento2msiConnection $connection): ?Response
+    {
+        return Client::get($connection->api_access_token, $connection->base_url . '/modules', [
+            'searchCriteria' => [
+                'filterGroups' => [
+                    [
+                        'filters' => [
+//                            [
+//                                'field' => '',
+//                                'value' => '',
+//                                'condition_type' => 'in'
+//                            ]
+                        ]
+                    ],
+                ]
+            ],
+        ]);
+    }
+
+    public static function getInventorySources(Magento2msiConnection $connection): ?Response
+    {
+        return Client::get($connection->api_access_token, $connection->base_url . '/inventory/sources', [
+            'searchCriteria' => [
+                'filterGroups' => [
+                    [
+                        'filters' => [
+//                            [
+//                                'field' => '',
+//                                'value' => '',
+//                                'condition_type' => 'in'
+//                            ]
+                        ]
+                    ],
+                ]
+            ],
+        ]);
+    }
+
     public static function getOrders($token, $parameters = []): ?Response
     {
         return Client::get($token, '/orders', $parameters);
@@ -65,11 +104,11 @@ class MagentoApi
         return Client::get($token, '/stockItems/'.$sku);
     }
 
-    public static function getInventorySourceItems($token, $storeCode, $skuList): ?Response
+    public static function getInventorySourceItems(Magento2msiConnection $connection, $skuList): ?Response
     {
-        $skus = collect($skuList)->implode('sku', ',');
+        $skus = collect($skuList)->implode(',');
 
-        return Client::get($token, '/inventory/source-items', [
+        return Client::get($connection->api_access_token, $connection->base_url . '/inventory/source-items', [
             'searchCriteria' => [
                 'filterGroups' => [
                     [
@@ -85,7 +124,7 @@ class MagentoApi
                         'filters' => [
                             [
                                 'field' => 'source_code',
-                                'value' => $storeCode,
+                                'value' => $connection->store_code,
                                 'condition_type' => 'in'
                             ]
                         ]
