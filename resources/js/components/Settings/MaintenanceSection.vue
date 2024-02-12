@@ -66,7 +66,8 @@ export default {
         return {
             buttonDisabled: {},
             jobs: [
-                'MODULE_RMSAPI_ProcessImportedProductRecordsJob'
+                'MODULE_RMSAPI_ProcessImportedProductRecordsJob',
+                'MODULE_Magento2msi_FetchStockItemsJob',
             ],
         }
     },
@@ -80,19 +81,6 @@ export default {
                 )
                 .catch(() => {
                         this.$snotify.error('Cron run request failed');
-                    }
-                );
-        },
-
-        runJob(jobName) {
-            this.apiPostRunScheduledJobsRequest({"job": jobName})
-                .then((response) => {
-                        this.$snotify.success(response.data['message']);
-                        this.buttonDisabled[jobName] = true;
-                    }
-                )
-                .catch((error) => {
-                        this.$snotify.error(error.response.data.message);
                     }
                 );
         },

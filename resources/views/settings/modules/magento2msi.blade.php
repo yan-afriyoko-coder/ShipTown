@@ -12,7 +12,7 @@
                 </div>
             @endif
 
-            <magento-api-configuration-page></magento-api-configuration-page>
+            <magento2msi-configuration-page></magento2msi-configuration-page>
     </div>
 </div>
 @endsection

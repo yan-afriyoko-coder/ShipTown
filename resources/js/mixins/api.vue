@@ -27,6 +27,18 @@ export default {
                 return axios.post(url, data)
             },
 
+            runJob(jobName) {
+                this.apiPostRunScheduledJobsRequest({"job": jobName})
+                    .then((response) => {
+                            this.$snotify.success(response.data['message']);
+                        }
+                    )
+                    .catch((error) => {
+                            this.$snotify.error(error.response.data.message);
+                        }
+                    );
+            },
+
             displayApiCallError: function (error) {
                 console.log('API failed call response', error);
 
@@ -78,7 +90,7 @@ export default {
             apiGetStocktakeSuggestionsConfiguration(params) {
                 return axios.get('/api/modules/stocktake-suggestions/configuration', params);
             },
-            
+
             apiGetRestocking(params) {
                 return axios.get('/api/restocking', {params: params});
             },

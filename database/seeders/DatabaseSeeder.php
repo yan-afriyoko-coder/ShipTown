@@ -60,6 +60,7 @@ class DatabaseSeeder extends Seeder
             DpdUKSeeder::class,
             ScurriAnpostSeeder::class,
             Modules\Slack\ConfigurationSeeder::class,
+            Modules\Magento2MSI\ConnectionSeeder::class,
 
 
 //            RestockingReportSeeder::class,
