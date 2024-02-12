@@ -31,19 +31,14 @@ class FetchStockItemsJob extends UniqueJob
 
             WHERE modules_magento2msi_products.id IS NULL
        ");
+
         Magento2msiConnection::query()->get()
             ->each(function (Magento2msiConnection $connection) {
-                Magento2msiProduct::query()
-                    ->where(['connection_id' => $connection->getKey()])
-//                    ->whereRaw('IFNULL(exists_in_magento, 1) = 1')
+                Magento2msiProduct::query()->where(['connection_id' => $connection->getKey()])
                     ->whereRaw('(stock_items_fetched_at IS NULL OR stock_items_raw_import IS NULL)')
-                    ->chunkById(100, function (Collection $products) use ($connection) {
+                    ->chunkById(50, function (Collection $products) use ($connection) {
                         try {
-                            $skuList = $products->map(function (Magento2msiProduct $product) {
-                                return $product->product->sku;
-                            });
-//                            dd($skuList);
-                            $productsToSave = MagentoApi::getInventorySourceItems($connection, $skuList);
+                            $productsToSave = MagentoApi::getInventorySourceItems($connection, $products->pluck('product.sku')->toArray());
                         } catch (Exception $exception) {
                             report($exception);
                         }
