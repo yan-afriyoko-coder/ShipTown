@@ -2,6 +2,7 @@
 
 namespace App\Modules\Magento2MSI\src\Api;
 
+use App\Modules\Magento2MSI\src\Models\Magento2msiConnection;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 
@@ -65,11 +66,11 @@ class MagentoApi
         return Client::get($token, '/stockItems/'.$sku);
     }
 
-    public static function getInventorySourceItems($token, $storeCode, $skuList): ?Response
+    public static function getInventorySourceItems(Magento2msiConnection $connection, $skuList): ?Response
     {
-        $skus = collect($skuList)->implode('sku', ',');
+        $skus = collect($skuList)->implode(',');
 
-        return Client::get($token, '/inventory/source-items', [
+        return Client::get($connection->api_access_token, $connection->base_url . '/inventory/source-items', [
             'searchCriteria' => [
                 'filterGroups' => [
                     [
@@ -85,7 +86,7 @@ class MagentoApi
                         'filters' => [
                             [
                                 'field' => 'source_code',
-                                'value' => $storeCode,
+                                'value' => $connection->store_code,
                                 'condition_type' => 'in'
                             ]
                         ]
