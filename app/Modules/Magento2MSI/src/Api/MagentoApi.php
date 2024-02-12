@@ -8,6 +8,44 @@ use Illuminate\Support\Arr;
 
 class MagentoApi
 {
+    public static function getModules(Magento2msiConnection $connection): ?Response
+    {
+        return Client::get($connection->api_access_token, $connection->base_url . '/modules', [
+            'searchCriteria' => [
+                'filterGroups' => [
+                    [
+                        'filters' => [
+//                            [
+//                                'field' => '',
+//                                'value' => '',
+//                                'condition_type' => 'in'
+//                            ]
+                        ]
+                    ],
+                ]
+            ],
+        ]);
+    }
+
+    public static function getInventorySources(Magento2msiConnection $connection): ?Response
+    {
+        return Client::get($connection->api_access_token, $connection->base_url . '/inventory/sources', [
+            'searchCriteria' => [
+                'filterGroups' => [
+                    [
+                        'filters' => [
+//                            [
+//                                'field' => '',
+//                                'value' => '',
+//                                'condition_type' => 'in'
+//                            ]
+                        ]
+                    ],
+                ]
+            ],
+        ]);
+    }
+
     public static function getOrders($token, $parameters = []): ?Response
     {
         return Client::get($token, '/orders', $parameters);
