@@ -2,50 +2,59 @@
     <div>
         <div class="card card-default">
             <div class="card-header">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; justify-content: space-between; align-items: center;" class="btn" @click="show['create_new_connection_tab'] = ! show['create_new_connection_tab']">
                     <span>
-                        Magento Api Configurations
+                        New Connection
                     </span>
-                    <span class="text-primary cursor-pointer" @click="showCreateForm">
-                        Create New Connection
+                    <span class="btn-outline-light text-dark font-weight-bold small">
+                        <span v-if="! show['create_new_connection_tab']"><</span>
                     </span>
                 </div>
             </div>
 
-            <div class="card-body">
-                <table v-if="connections.length > 0" class="table table-hover table-borderless table-responsive mb-0">
-                    <thead>
-                    <tr>
-                        <th>URL</th>
-                        <th>Magento Store ID</th>
-                        <th>Connection Tag</th>
-                        <th>Pricing Source</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="connection in connections" :key="connection.id" @click.prevent="showEditForm(connection)">
-                        <td>{{ connection.base_url }}</td>
-                        <td>{{ connection.magento_store_id }}</td>
-                        <td>
-                            <template v-for="tag in connection.tags">
-                                <a class="badge text-uppercase" :key="tag.id"> {{ tag.name }} </a>
-                            </template>
-                        </td>
-                        <td>{{ connection.warehouse?.name }}</td>
-                    </tr>
-                    </tbody>
-                </table>
+            <div class="card-body" v-if="show['create_new_connection_tab']">
+                <form class="form" @submit.prevent="submit" ref="loadingContainer">
+                    <div class="form-group">
+                        <label class="form-label" for="base_url">Base URL</label>
+                        <input v-model="newConnection.base_url" class="form-control" id="create-base_url" type="url" required>
+                    </div>
 
-                <p v-else class="mb-0">
-                    You have not created any Magento Api connections.
-                </p>
+                    <div class="form-group">
+                        <label class="form-label" for="api_access_token">Access Token</label>
+                        <input v-model="newConnection.api_access_token" class="form-control" id="api_access_token" required>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-primary fa-pull-right" @click.prevent="submit">Connect</button>
+                    </div>
+                </form>
             </div>
         </div>
 
+        <table style="width: 100%" class="table table-fit table-hover table-borderless table-responsive mb-0 rounded">
+            <thead>
+                <tr class="small table-active w-auto">
+                    <th class="">URL</th>
+                    <th class="w-100"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-if="(!connections) || connections.length === 0">
+                    <td colspan="2">
+                        You have not created any Magento Api connections.
+                    </td>
+                </tr>
+                <tr v-for="connection in connections" :key="connection.id" @click.prevent="">
+                    <td class="w-auto">{{ connection.base_url }}</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
         <button class="btn btn-primary" @click.prevent="runJob('MODULE_Magento2msi_FetchStockItemsJob')">MODULE_Magento2msi_FetchStockItemsJob</button>
 
-        <create-modal @onCreated="getConnections"></create-modal>
-        <edit-modal :connection="selectedConnection" id="editForm" @onUpdated="conncetionUpdatedEvent"></edit-modal>
+<!--        <create-modal @onCreated="reloadConnections"></create-modal>-->
+<!--        <edit-modal :connection="selectedConnection" id="editForm" @onUpdated="conncetionUpdatedEvent"></edit-modal>-->
     </div>
 </template>
 
@@ -63,28 +72,33 @@ export default {
     mixins: [api],
 
     data: () => ({
+        newConnection: {
+            base_url: '',
+            api_access_token: '',
+        },
+        show: {
+            create_new_connection_tab: false,
+        },
         selectedConnection: null,
         connections: [],
     }),
 
     mounted() {
-        this.getConnections();
+        this.reloadConnections();
     },
 
     methods: {
-
-        getConnections() {
-            this.apiGetMagentoApiConnections({
-                'per_page': 100,
-                'include': 'tags,warehouse'
-            })
+        reloadConnections() {
+            this.apiGetMagento2msiConnections({
+                    'per_page': 100,
+                    'include': 'tags,warehouse'
+                })
                 .then(({ data }) => {
                     this.connections = data.data;
+                })
+                .catch((error) => {
+                    this.displayApiCallError(error);
                 });
-        },
-
-        showCreateForm() {
-            this.$bvModal.show('modal-create-connection')
         },
 
         confirmDelete(connection_id){
@@ -103,13 +117,25 @@ export default {
             });
         },
 
-        showEditForm(connection) {
-            this.selectedConnection = connection;
-            $('#editForm').modal('show');
+        submit() {
+            this.apiPostMagento2msiConnection({...this.newConnection})
+                .then(() => {
+                    this.newConnection = {
+                        base_url: '',
+                        api_access_token: '',
+                    };
+                    this.show.create_new_connection_tab = false;
+                })
+                .catch((error) => {
+                    this.displayApiCallError(error);
+                })
+                .finally(() => {
+                    this.reloadConnections();
+                });
         },
 
         conncetionUpdatedEvent() {
-            this.getConnections();
+            this.reloadConnections();
         },
     },
 }

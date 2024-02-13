@@ -6,76 +6,33 @@
     >
         <ValidationObserver ref="form">
             <form class="form" @submit.prevent="submit" ref="loadingContainer">
-
                 <div class="form-group">
                     <label class="form-label" for="base_url">Base URL</label>
-                    <ValidationProvider vid="base_url" name="base_url" v-slot="{ errors }">
-                    <input v-model="config.base_url" :class="{
-                                'form-control': true,
-                                'is-invalid': errors.length > 0,
-                            }" id="create-base_url" type="url" required>
-                    <div class="invalid-feedback">
-                        {{ errors[0] }}
-                    </div>
-                    </ValidationProvider>
+                    <input v-model="config.base_url" class="form-control" id="create-base_url" type="url" required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="magento_store_id">Store ID</label>
-                    <ValidationProvider vid="magento_store_id" name="magento_store_id" v-slot="{ errors }">
-                        <input v-model="config.magento_store_id" :class="{
-                            'form-control': true,
-                            'is-invalid': errors.length > 0,
-                        }" id="create-magento_store_id" type="number" required>
-                        <div class="invalid-feedback">
-                            {{ errors[0] }}
-                        </div>
-                    </ValidationProvider>
+                    <input v-model="config.magento_store_id" class="form-control" id="create-magento_store_id" type="number" required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="tag">Inventory source warehouse tag</label>
-                    <ValidationProvider vid="tag" name="tag" v-slot="{ errors }">
-                        <input v-model="config.tag" :class="{
-                            'form-control': true,
-                            'is-invalid': errors.length > 0,
-                        }" id="create-tag" required>
-                        <div class="invalid-feedback">
-                            {{ errors[0] }}
-                        </div>
-                    </ValidationProvider>
+                    <input v-model="config.tag" class="form-control" id="create-tag" required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="pricing_source_warehouse_id">Pricing source warehouse</label>
-                    <ValidationProvider vid="pricing_source_warehouse_id" name="pricing_source_warehouse_id" v-slot="{ errors }">
-                        <select v-model="config.pricing_source_warehouse_id" :class="{
-                            'form-control': true,
-                            'is-invalid': errors.length > 0,
-                        }" id="create-pricing_source_warehouse_id" required>
-                            <option v-for="warehouse in warehouses"
-                                :value="warehouse.id" :key="warehouse.id"
-                            >
-                                {{ warehouse.name }}
-                            </option>
-                        </select>
-                        <div class="invalid-feedback">
-                            {{ errors[0] }}
-                        </div>
-                    </ValidationProvider>
+                    <select v-model="config.pricing_source_warehouse_id" class="form-control" id="create-pricing_source_warehouse_id" required>
+                        <option v-for="warehouse in warehouses" :value="warehouse.id" :key="warehouse.id">
+                            {{ warehouse.name }}
+                        </option>
+                    </select>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="api_access_token">Access Token</label>
-                    <ValidationProvider vid="api_access_token" name="api_access_token" v-slot="{ errors }">
-                        <input v-model="config.api_access_token" :class="{
-                            'form-control': true,
-                            'is-invalid': errors.length > 0,
-                        }" id="api_access_token" required>
-                        <div class="invalid-feedback">
-                            {{ errors[0] }}
-                        </div>
-                    </ValidationProvider>
+                    <input v-model="config.api_access_token" class="form-control" id="api_access_token" required>
                 </div>
             </form>
         </ValidationObserver>

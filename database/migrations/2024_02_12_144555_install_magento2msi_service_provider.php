@@ -10,9 +10,9 @@ return new class extends Migration
         \Illuminate\Support\Facades\Schema::create('modules_magento2msi_connections', function (\Illuminate\Database\Schema\Blueprint $table) {
             $table->id();
             $table->string('base_url');
-            $table->string('api_access_token');
-            $table->string('store_code');
+            $table->string('store_code')->nullable();
             $table->unsignedBigInteger('inventory_source_warehouse_tag_id')->nullable();
+            $table->longText('api_access_token');
             $table->timestamps();
         });
 
