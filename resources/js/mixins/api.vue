@@ -396,6 +396,10 @@ export default {
                 return axios.get('/api/modules/magento2msi/connections/', {params})
             },
 
+            apiPutMagento2msiConnection(id, params) {
+                return axios.put(`/api/modules/magento2msi/connections/${id}`, params)
+            },
+
             apiGetInventoryReservationsConfig: function () { return axios.get('/api/modules/inventory-reservations/configuration') },
             apiUpdateInventoryReservationsConfig: function (id, params) { return axios.put('/api/modules/inventory-reservations/configuration/' + id, params) },
         }

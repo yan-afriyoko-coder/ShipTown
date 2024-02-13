@@ -124,8 +124,7 @@ class MagentoApi
                         'filters' => [
                             [
                                 'field' => 'source_code',
-                                'value' => $connection->store_code,
-                                'condition_type' => 'in'
+                                'value' => $connection->magento_source_code,
                             ]
                         ]
                     ]

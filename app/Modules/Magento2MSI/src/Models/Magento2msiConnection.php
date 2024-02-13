@@ -9,8 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
- * @property mixed $api_access_token
- * @property mixed $base_url
+ * @property string $api_access_token
+ * @property string $base_url
+ * @property string $magento_source_code
  */
 class Magento2msiConnection extends BaseModel
 {
@@ -20,9 +21,9 @@ class Magento2msiConnection extends BaseModel
 
     protected $fillable = [
         'base_url',
-        'api_access_token',
-        'store_code',
+        'magento_source_code',
         'inventory_source_warehouse_tag_id',
+        'api_access_token',
     ];
 
     protected $casts = [

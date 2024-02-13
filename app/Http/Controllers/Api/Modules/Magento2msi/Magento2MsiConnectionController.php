@@ -28,4 +28,13 @@ class Magento2MsiConnectionController extends Controller
     {
         return Magento2msiConnection::create($request->all());
     }
+
+    public function update(Request $request, $connection_id): JsonResource
+    {
+        $connection = Magento2msiConnection::findOrFail($connection_id);
+
+        $connection->update($request->all());
+
+        return JsonResource::make($connection);
+    }
 }
