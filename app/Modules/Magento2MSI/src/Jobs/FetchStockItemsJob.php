@@ -60,12 +60,13 @@ class FetchStockItemsJob extends UniqueJob
 
                             Magento2msiProduct::query()
                                 ->whereIn('id', $products->pluck('id'))
-                                ->update(['inventory_source_items_fetched_at' => now(), 'inventory_source_items' => null]);
+                                ->update(['inventory_source_items_fetched_at' => now(), 'inventory_source_items' => null, 'sync_required' => null]);
 
                             $map = collect($response->json('items'))
                                 ->map(function ($item) use ($connection) {
                                     return [
                                         'connection_id' => $connection->getKey(),
+                                        'sync_required' => null,
                                         'custom_uuid' => $item['sku'] . '-' . $item['source_code'],
                                         'sku' => $item['sku'],
                                         'source_code' => $item['source_code'],
@@ -79,6 +80,7 @@ class FetchStockItemsJob extends UniqueJob
                                 });
 
                             Magento2msiProduct::query()->upsert($map->toArray(), ['custom_uuid'], [
+                                'sync_required',
                                 'sku',
                                 'source_code',
                                 'quantity',

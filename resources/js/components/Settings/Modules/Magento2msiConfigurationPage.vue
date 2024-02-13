@@ -75,6 +75,7 @@
         </table>
 
         <button class="btn btn-primary" @click.prevent="runJob('MODULE_Magento2msi_FetchStockItemsJob')">MODULE_Magento2msi_FetchStockItemsJob</button>
+        <button class="btn btn-primary" @click.prevent="runJob('MODULE_Magento2msi_CheckIfSyncIsRequired')">MODULE_Magento2msi_CheckIfSyncIsRequired</button>
 
 <!--        <create-modal @onCreated="reloadConnections"></create-modal>-->
 <!--        <edit-modal :connection="selectedConnection" id="editForm" @onUpdated="conncetionUpdatedEvent"></edit-modal>-->

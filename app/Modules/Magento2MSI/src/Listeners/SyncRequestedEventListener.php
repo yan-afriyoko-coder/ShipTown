@@ -8,6 +8,7 @@ use App\Modules\Integrations\Magento2MSI\src\Jobs\FetchSpecialPricesJob;
 use App\Modules\Integrations\Magento2MSI\src\Jobs\SyncProductBasePricesJob;
 use App\Modules\Integrations\Magento2MSI\src\Jobs\SyncProductSalePricesJob;
 use App\Modules\Magento2MSI\src\Jobs\EnsureProductRecordsExistJob;
+use App\Modules\Magento2MSI\src\Jobs\CheckIfSyncIsRequiredJob;
 use App\Modules\Magento2MSI\src\Jobs\FetchStockItemsJob;
 use App\Modules\Magento2MSI\src\Jobs\SyncProductInventoryJob;
 
@@ -24,12 +25,7 @@ class SyncRequestedEventListener
     {
         EnsureProductRecordsExistJob::dispatch();
 
+        CheckIfSyncIsRequiredJob::dispatch();
         FetchStockItemsJob::dispatch();
-        FetchBasePricesJob::dispatch();
-        FetchSpecialPricesJob::dispatch();
-
-        SyncProductInventoryJob::dispatch();
-        SyncProductBasePricesJob::dispatch();
-        SyncProductSalePricesJob::dispatch();
     }
 }

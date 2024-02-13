@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Modules\Magento2msi;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Magento2MSI\src\Api\MagentoApi;
+use App\Modules\Magento2MSI\src\Jobs\CheckIfSyncIsRequiredJob;
 use App\Modules\Magento2MSI\src\Jobs\FetchStockItemsJob;
 use App\Modules\Magento2MSI\src\Models\Magento2msiConnection;
 use App\Modules\Magento2MSI\src\Models\Magento2msiProduct;

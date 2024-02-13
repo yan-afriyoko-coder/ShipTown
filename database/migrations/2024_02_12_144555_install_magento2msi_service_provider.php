@@ -28,6 +28,7 @@ return new class extends Migration
             $table->foreignId('connection_id')->constrained('modules_magento2msi_connections')->cascadeOnDelete();
             $table->unsignedBigInteger('product_id')->nullable();
             $table->unsignedBigInteger('inventory_totals_by_warehouse_tag_id')->nullable();
+            $table->boolean('sync_required')->nullable();
             $table->string('custom_uuid')->nullable()->unique();
             $table->string('sku')->nullable();
             $table->string('source_code')->nullable();

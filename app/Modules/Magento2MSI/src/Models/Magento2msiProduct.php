@@ -18,6 +18,7 @@ class Magento2msiProduct extends BaseModel
         'connection_id',
         'product_id',
         'inventory_totals_by_warehouse_tag_id',
+        'sync_required',
         'custom_uuid',
         'sku',
         'source_code',
