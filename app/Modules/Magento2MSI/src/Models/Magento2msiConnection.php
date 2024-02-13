@@ -8,6 +8,10 @@ use App\Traits\HasTagsTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\QueryBuilder\QueryBuilder;
 
+/**
+ * @property mixed $api_access_token
+ * @property mixed $base_url
+ */
 class Magento2msiConnection extends BaseModel
 {
     use HasTagsTrait;

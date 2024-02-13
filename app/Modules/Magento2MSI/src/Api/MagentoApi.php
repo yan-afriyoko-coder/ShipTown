@@ -10,7 +10,7 @@ class MagentoApi
 {
     public static function getModules(Magento2msiConnection $connection): ?Response
     {
-        return Client::get($connection->api_access_token, $connection->base_url . '/modules', [
+        return Client::get($connection->api_access_token, $connection->base_url . '/rest/all/V1/modules', [
             'searchCriteria' => [
                 'filterGroups' => [
                     [
@@ -29,7 +29,7 @@ class MagentoApi
 
     public static function getInventorySources(Magento2msiConnection $connection): ?Response
     {
-        return Client::get($connection->api_access_token, $connection->base_url . '/inventory/sources', [
+        return Client::get($connection->api_access_token, $connection->base_url . '/rest/all/V1/inventory/sources', [
             'searchCriteria' => [
                 'filterGroups' => [
                     [
@@ -48,12 +48,12 @@ class MagentoApi
 
     public static function getOrders($token, $parameters = []): ?Response
     {
-        return Client::get($token, '/orders', $parameters);
+        return Client::get($token, '/rest/all/V1/orders', $parameters);
     }
 
     public static function postProducts($token, $sku, $name): ?Response
     {
-        return Client::post($token, '/products', [
+        return Client::post($token, '/rest/all/V1/products', [
             'products' => [
                 [
                     'sku' => $sku,
@@ -65,7 +65,7 @@ class MagentoApi
 
     public static function postProductsSpecialPrice($token, $sku, $store_id, $price, $price_from, $price_to): ?Response
     {
-        return Client::post($token, '/products/special-price', [
+        return Client::post($token, '/rest/all/V1/products/special-price', [
             'prices' => [
                 [
                     'sku' => $sku,
@@ -80,35 +80,35 @@ class MagentoApi
 
     public static function postProductsSpecialPriceInformation($token, $sku): ?Response
     {
-        return Client::post($token, '/products/special-price-information', [
+        return Client::post($token, '/rest/all/V1/products/special-price-information', [
             'skus' => Arr::wrap($sku)
         ]);
     }
 
     public static function postProductsBasePricesInformation($token, $sku): ?Response
     {
-        return Client::post($token, '/products/base-prices-information', [
+        return Client::post($token, '/rest/all/V1/products/base-prices-information', [
             'skus' => Arr::wrap($sku)
         ]);
     }
 
     public static function putStockItems($token, $sku, $params): ?Response
     {
-        return Client::put($token, '/products/'.$sku.'/stockItems/0', [
+        return Client::put($token, '/rest/all/V1/products/'.$sku.'/stockItems/0', [
             'stockItem' => $params,
         ]);
     }
 
     public static function getStockItems($token, $sku): ?Response
     {
-        return Client::get($token, '/stockItems/'.$sku);
+        return Client::get($token, '/rest/all/V1/stockItems/'.$sku);
     }
 
     public static function getInventorySourceItems(Magento2msiConnection $connection, $skuList): ?Response
     {
         $skus = collect($skuList)->implode(',');
 
-        return Client::get($connection->api_access_token, $connection->base_url . '/inventory/source-items', [
+        return Client::get($connection->api_access_token, $connection->base_url . '/rest/all/V1/inventory/source-items', [
             'searchCriteria' => [
                 'filterGroups' => [
                     [
@@ -137,7 +137,7 @@ class MagentoApi
 //    public static function postInventorySourceItems($token, $sku, $storeCode, $quantity): ?Response
     public static function postInventorySourceItems($token, $sourceItems): ?Response
     {
-        return Client::post($token, '/inventory/source-items', [
+        return Client::post($token, '/rest/all/V1/inventory/source-items', [
             'sourceItems' => [
                 [
                     'source_code' => $storeCode,
@@ -151,7 +151,7 @@ class MagentoApi
 
     public static function postProductsBasePrices($token, string $sku, float $price, int $store_id): ?Response
     {
-        return Client::post($token, '/products/base-prices', [
+        return Client::post($token, '/rest/all/V1/products/base-prices', [
             'prices' => [
                 [
                 'sku' => $sku,

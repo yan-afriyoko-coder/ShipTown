@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\BaseModel;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Tags\Tag;
 
 /**
  * @property int $id
@@ -20,4 +22,9 @@ class Taggable extends BaseModel
         'taggable_type',
         'taggable_id',
     ];
+
+    public function tag(): BelongsTo
+    {
+        return $this->belongsTo(Tag::class);
+    }
 }

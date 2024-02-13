@@ -21,7 +21,7 @@
 
                     <div class="form-group">
                         <label class="form-label" for="api_access_token">Access Token</label>
-                        <input v-model="newConnection.api_access_token" class="form-control" id="api_access_token" required>
+                        <input v-model="newConnection.api_access_token" class="form-control" id="api_access_token" type="password" required>
                     </div>
 
                     <div class="form-group">
@@ -33,21 +33,44 @@
 
         <table style="width: 100%" class="table table-fit table-hover table-borderless table-responsive mb-0 rounded">
             <thead>
-                <tr class="small table-active w-auto">
-                    <th class="">URL</th>
-                    <th class="w-100"></th>
+                <tr class="small table-active w-auto w-100">
+                    <th class="w-100 w-auto">URL</th>
+                    <th style="min-width: 150px !important;">INVENTORY SOURCE</th>
+                    <th style="min-width: 200px !important;">WAREHOUSE TAG</th>
                 </tr>
             </thead>
             <tbody>
+                <template v-for="connection in connections">
+                    <tr class="w-100 w-auto">
+                        <td class="w-auto text-nowrap" colspan="3">{{ connection.base_url }}</td>
+                    </tr>
+                    <tr>
+                        <td class="w-auto w-100">&nbsp;</td>
+                        <td class="fa-pull-right">
+                            <select class="form-control">
+                                <option value="">--- DO NOT SYNC ---</option>
+                                <template v-for="inventory_source in connection['inventory_sources']">
+                                    <option :value="inventory_source['source_code']">{{ inventory_source['source_code'] }}</option>
+                                </template>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control">
+                                <option value="">--- DO NOT SYNC ---</option>
+                                <template v-for="warehouse_tag in warehouse_tags">
+                                    <option :value="warehouse_tag['tag_id']">{{ warehouse_tag['tag_name'].toUpperCase() }}</option>
+                                </template>
+                            </select>
+                        </td>
+                    </tr>
+                </template>
+
                 <tr v-if="(!connections) || connections.length === 0">
                     <td colspan="2">
                         You have not created any Magento Api connections.
                     </td>
                 </tr>
-                <tr v-for="connection in connections" :key="connection.id" @click.prevent="">
-                    <td class="w-auto">{{ connection.base_url }}</td>
-                    <td></td>
-                </tr>
+
             </tbody>
         </table>
 
@@ -81,10 +104,29 @@ export default {
         },
         selectedConnection: null,
         connections: [],
+        warehouse_tags: [],
     }),
 
     mounted() {
         this.reloadConnections();
+
+        this.apiGetProductTags({
+                'filter[taggable_type]': 'App\\Models\\Warehouse',
+                'include': 'tag'
+            })
+            .then(({ data }) => {
+                console.log(data);
+                this.warehouse_tags = data.data.map((tag) => {
+                    return {
+                        'tag_name': tag.tag.name.en,
+                        'tag_id': tag.tag.id
+                    }
+                });
+                console.log(this.warehouse_tags);
+            })
+            .catch((error) => {
+                this.displayApiCallError(error);
+            });
     },
 
     methods: {

@@ -75,6 +75,10 @@ export default {
                 return axios.get('/api/products-prices', {params: params});
             },
 
+            apiGetProductTags: function(params) {
+                return axios.get('/api/product/tags', {params: params});
+            },
+
             apiGetStocktakeSuggestions: function(params) {
                 return this.apiGet('/api/stocktake-suggestions', {params: params});
             },
