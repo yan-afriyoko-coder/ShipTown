@@ -6,7 +6,7 @@ use App\Modules\Magento2MSI\src\Jobs\CheckIfSyncIsRequiredJob;
 use App\Modules\Magento2MSI\src\Jobs\FetchStockItemsJob;
 use App\Modules\Magento2MSI\src\Jobs\SyncProductInventoryJob;
 
-class EveryMinuteEventListener
+class EveryFiveMinuteEventListener
 {
     public function handle()
     {
