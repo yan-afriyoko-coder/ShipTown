@@ -47,9 +47,6 @@ class FetchStockItemsJob extends UniqueJob
         Magento2msiConnection::query()
             ->get()
             ->each(function (Magento2msiConnection $connection) {
-                MagentoApi::getModules($connection);
-                MagentoApi::getInventorySources($connection);
-
                 Magento2msiProduct::query()
                     ->with('product')
                     ->where('connection_id', $connection->getKey())

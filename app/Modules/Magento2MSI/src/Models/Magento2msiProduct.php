@@ -4,11 +4,13 @@ namespace App\Modules\Magento2MSI\src\Models;
 
 use App\BaseModel;
 use App\Models\Product;
+use App\Modules\InventoryTotals\src\Models\InventoryTotalByWarehouseTag;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  *
  * @property Product $product
+ * @property InventoryTotalByWarehouseTag $inventoryTotalByWarehouseTag
  */
 class Magento2msiProduct extends BaseModel
 {
@@ -43,5 +45,10 @@ class Magento2msiProduct extends BaseModel
     public function magento2msiConnection(): BelongsTo
     {
         return $this->belongsTo(Magento2msiConnection::class, 'connection_id');
+    }
+
+    public function inventoryTotalByWarehouseTag(): BelongsTo
+    {
+        return $this->belongsTo(InventoryTotalByWarehouseTag::class, 'inventory_totals_by_warehouse_tag_id', 'id');
     }
 }

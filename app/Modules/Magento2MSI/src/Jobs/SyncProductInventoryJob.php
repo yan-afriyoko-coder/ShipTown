@@ -16,17 +16,23 @@ class SyncProductInventoryJob extends UniqueJob
             ->get()
             ->each(function (Magento2msiConnection $magentoConnection) {
                 Magento2msiProduct::query()
+                    ->with(['inventoryTotalByWarehouseTag', 'product'])
+                    ->where('sync_required', true)
                     ->chunkById(10, function (Collection $chunk) use ($magentoConnection) {
                         $sourceItems = $chunk->map(function (Magento2msiProduct $magentoProduct) use ($magentoConnection) {
                             return [
-                                'source_code' => $magentoConnection->magento_store_code,
+                                'source_code' => $magentoConnection->magento_source_code,
                                 'sku' => $magentoProduct->product->sku,
-                                'quantity' => $magentoProduct->product->quantity,
+                                'quantity' => $magentoProduct->inventoryTotalByWarehouseTag->quantity_available,
                                 'status' => 1,
                             ];
                         });
 
-                        MagentoApi::postInventorySourceItems($magentoConnection->api_access_token, $sourceItems);
+                        MagentoApi::postInventorySourceItems($magentoConnection, $sourceItems);
+
+                        Magento2msiProduct::query()
+                            ->whereIn('id', $chunk->pluck('id'))
+                            ->update(['sync_required' => false, 'inventory_source_items_fetched_at' => null]);
                     });
             });
     }

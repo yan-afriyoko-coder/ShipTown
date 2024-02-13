@@ -18,7 +18,11 @@ class CheckIfSyncIsRequiredJob extends UniqueJob
         DB::affectingStatement("
             UPDATE modules_magento2msi_inventory_source_items
 
-            SET sync_required = 1
+            LEFT JOIN inventory_totals_by_warehouse_tag
+              ON inventory_totals_by_warehouse_tag.id = modules_magento2msi_inventory_source_items.inventory_totals_by_warehouse_tag_id
+
+            SET modules_magento2msi_inventory_source_items.sync_required = (modules_magento2msi_inventory_source_items.quantity != inventory_totals_by_warehouse_tag.quantity_available),
+                modules_magento2msi_inventory_source_items.updated_at = NOW()
 
             WHERE modules_magento2msi_inventory_source_items.id in (
                 SELECT ID FROM (
@@ -26,11 +30,7 @@ class CheckIfSyncIsRequiredJob extends UniqueJob
 
                     FROM modules_magento2msi_inventory_source_items
 
-                    LEFT JOIN inventory_totals_by_warehouse_tag
-                      ON inventory_totals_by_warehouse_tag.id = modules_magento2msi_inventory_source_items.inventory_totals_by_warehouse_tag_id
-
                     WHERE modules_magento2msi_inventory_source_items.sync_required IS NULL
-                     AND modules_magento2msi_inventory_source_items.quantity != inventory_totals_by_warehouse_tag.quantity_available
 
                     LIMIT 500
                 ) as tbl

@@ -3,14 +3,9 @@
 namespace App\Modules\Magento2MSI\src\Listeners;
 
 use App\Events\SyncRequestedEvent;
-use App\Modules\Integrations\Magento2MSI\src\Jobs\FetchBasePricesJob;
-use App\Modules\Integrations\Magento2MSI\src\Jobs\FetchSpecialPricesJob;
-use App\Modules\Integrations\Magento2MSI\src\Jobs\SyncProductBasePricesJob;
-use App\Modules\Integrations\Magento2MSI\src\Jobs\SyncProductSalePricesJob;
-use App\Modules\Magento2MSI\src\Jobs\EnsureProductRecordsExistJob;
 use App\Modules\Magento2MSI\src\Jobs\CheckIfSyncIsRequiredJob;
+use App\Modules\Magento2MSI\src\Jobs\EnsureProductRecordsExistJob;
 use App\Modules\Magento2MSI\src\Jobs\FetchStockItemsJob;
-use App\Modules\Magento2MSI\src\Jobs\SyncProductInventoryJob;
 
 class SyncRequestedEventListener
 {
@@ -24,7 +19,6 @@ class SyncRequestedEventListener
     public function handle(SyncRequestedEvent $event)
     {
         EnsureProductRecordsExistJob::dispatch();
-
         CheckIfSyncIsRequiredJob::dispatch();
         FetchStockItemsJob::dispatch();
     }

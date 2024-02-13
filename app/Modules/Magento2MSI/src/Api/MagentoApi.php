@@ -134,17 +134,19 @@ class MagentoApi
     }
 
 //    public static function postInventorySourceItems($token, $sku, $storeCode, $quantity): ?Response
-    public static function postInventorySourceItems($token, $sourceItems): ?Response
+    public static function postInventorySourceItems(Magento2msiConnection $connection, $sourceItems): ?Response
     {
-        return Client::post($token, '/rest/all/V1/inventory/source-items', [
-            'sourceItems' => [
-                [
-                    'source_code' => $storeCode,
-                    'sku' => $sku,
-                    'quantity' => $quantity,
-                    'status' => 1,
-                ]
-            ],
+        return Client::post($connection->api_access_token, $connection->base_url . '/rest/all/V1/inventory/source-items', [
+            'sourceItems' =>
+//                [
+                $sourceItems
+//                [
+//                    'source_code' => $storeCode,
+//                    'sku' => $sku,
+//                    'quantity' => $quantity,
+//                    'status' => 1,
+//                ]
+//            ],
         ]);
     }
 
