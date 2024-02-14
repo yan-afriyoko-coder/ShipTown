@@ -6,12 +6,6 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-12">
-            @if (session('status'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('status') }}
-                </div>
-            @endif
-
             <magento2msi-configuration-page></magento2msi-configuration-page>
     </div>
 </div>

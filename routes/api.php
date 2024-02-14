@@ -58,6 +58,7 @@ Route::prefix('modules')->name('api.modules.')->group(function () {
     Route::apiResource('stocktake-suggestions/configuration', Api\Modules\StocktakeSuggestions\ConfigurationController::class)->only(['index', 'store']);
     Route::apiResource('webhooks/subscriptions', Api\Modules\Webhooks\SubscriptionController::class, ['as' => 'webhooks'])->only(['index', 'store']);
     Route::apiResource('magento-api/connections', Api\Modules\MagentoApi\MagentoApiConnectionController::class, ['as' => 'magento-api'])->except(['show']);
+    Route::apiResource('magento2msi/connections', Api\Modules\Magento2msi\Magento2MsiConnectionController::class)->except(['show']);
     Route::apiResource('inventory-reservations/configuration', Api\Modules\InventoryReservation\InventoryReservationController::class, ['as' => 'inventory-reservations'])->only(['index', 'update']);
 });
 

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TagResource;
+use App\Models\Taggable;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\Tags\Tag;
 
@@ -18,8 +20,10 @@ class ProductTagController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        $query = QueryBuilder::for(Tag::class);
+        $query = QueryBuilder::for(Taggable::class)
+            ->allowedFilters(['taggable_type', 'taggable_id'])
+            ->allowedIncludes(['tag']);
 
-        return TagResource::collection($this->getPaginatedResult($query));
+        return JsonResource::collection($this->getPaginatedResult($query));
     }
 }

@@ -12,7 +12,9 @@ use App\Jobs\DispatchEveryTenMinutesEventJob;
 use App\Jobs\DispatchMonthlyEventJob;
 use App\Jobs\DispatchWeeklyEventJob;
 use App\Jobs\SyncRequestJob;
+use App\Modules\Magento2MSI\src\Jobs\CheckIfSyncIsRequiredJob;
 use App\Modules\Magento2MSI\src\Jobs\FetchStockItemsJob;
+use App\Modules\Magento2MSI\src\Jobs\SyncProductInventoryJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 
 class RunScheduledJobsController extends Controller
@@ -22,6 +24,8 @@ class RunScheduledJobsController extends Controller
         $runnableJobs = collect([
             'MODULE_RMSAPI_ProcessImportedProductRecordsJob' => ProcessImportedProductRecordsJob::class,
             'MODULE_Magento2msi_FetchStockItemsJob' => FetchStockItemsJob::class,
+            'MODULE_Magento2msi_CheckIfSyncIsRequired' => CheckIfSyncIsRequiredJob::class,
+            'MODULE_Magento2msi_SyncProductInventoryJob' => SyncProductInventoryJob::class,
         ]);
 
         if ($runnableJobs->has($request->validated('job'))) {

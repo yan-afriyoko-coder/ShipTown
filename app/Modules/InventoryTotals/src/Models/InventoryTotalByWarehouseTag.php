@@ -4,6 +4,12 @@ namespace App\Modules\InventoryTotals\src\Models;
 
 use App\BaseModel;
 
+/**
+ * @property double $quantity
+ * @property double $quantity_reserved
+ * @property double $quantity_incoming
+ * @property double $quantity_available
+ */
 class InventoryTotalByWarehouseTag extends BaseModel
 {
     protected $table = 'inventory_totals_by_warehouse_tag';

@@ -2,9 +2,11 @@
 
 namespace App\Modules\Magento2MSI\src;
 
-use App\Events\EveryTenMinutesEvent;
+use App\Events\EveryDayEvent;
+use App\Events\EveryFiveMinutesEvent;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
+use App\Events\RecalculateInventoryRequestEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
@@ -23,8 +25,12 @@ class Magento2MsiServiceProvider extends BaseModuleServiceProvider
             \App\Modules\Magento2MSI\src\Listeners\SyncRequestedEventListener::class,
         ],
 
-        EveryTenMinutesEvent::class => [
-            \App\Modules\Magento2MSI\src\Listeners\EveryTenMinutesEventListener::class
+        RecalculateInventoryRequestEvent::class => [
+            \App\Modules\Magento2MSI\src\Listeners\RecalculateInventoryRequestEventListener::class,
+        ],
+
+        EveryFiveMinutesEvent::class => [
+            \App\Modules\Magento2MSI\src\Listeners\EveryFiveMinuteEventListener::class
         ],
 
         ProductTagAttachedEvent::class => [
@@ -33,6 +39,10 @@ class Magento2MsiServiceProvider extends BaseModuleServiceProvider
 
         ProductTagDetachedEvent::class => [
             \App\Modules\Magento2MSI\src\Listeners\ProductTagDetachedEventListener::class,
+        ],
+
+        EveryDayEvent::class => [
+            \App\Modules\Magento2MSI\src\Listeners\EveryDayEventListener::class
         ],
     ];
 }

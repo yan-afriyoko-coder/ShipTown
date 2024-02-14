@@ -4,54 +4,37 @@ namespace App\Modules\Magento2MSI\src\Models;
 
 use App\BaseModel;
 use App\Models\Product;
+use App\Modules\InventoryTotals\src\Models\InventoryTotalByWarehouseTag;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Carbon;
 
 /**
- * @property boolean $is_in_stock
- * @property double $quantity
- * @property Carbon $stock_items_fetched_at
- * @property array $stock_items_raw_import
- * @property Carbon $base_prices_fetched_at
- * @property array $base_prices_raw_import
- * @property Magento2msiConnection $magentoConnection
- * @property double $magento_price
- * @property Carbon $special_prices_fetched_at
- * @property array $special_prices_raw_import
- * @property double $magento_sale_price
- * @property Carbon $magento_sale_price_start_date
- * @property Carbon $magento_sale_price_end_date
  *
  * @property Product $product
+ * @property InventoryTotalByWarehouseTag $inventoryTotalByWarehouseTag
  */
 class Magento2msiProduct extends BaseModel
 {
-    protected $table = 'modules_magento2msi_products';
+    protected $table = 'modules_magento2msi_inventory_source_items';
 
     protected $fillable = [
-        'product_id',
-        'exists_in_magento',
         'connection_id',
-        'is_in_stock',
+        'product_id',
+        'inventory_totals_by_warehouse_tag_id',
+        'sync_required',
+        'custom_uuid',
+        'sku',
+        'source_code',
         'quantity',
-        'magento_price',
-        'magento_sale_price',
-        'stock_items_fetched_at',
-        'stock_items_raw_import',
-        'base_prices_fetched_at',
-        'base_prices_raw_import',
-        'special_prices_fetched_at',
-        'special_prices_raw_import',
+        'status',
+        'inventory_source_items_fetched_at',
+        'inventory_source_items',
+        'created_at',
+        'updated_at',
     ];
+
     protected $casts = [
-        'magento_sale_price_start_date' => 'datetime',
-        'magento_sale_price_end_date' => 'datetime',
-        'stock_items_fetched_at' => 'datetime',
-        'base_prices_fetched_at' => 'datetime',
-        'special_prices_fetched_at' => 'datetime',
-        'stock_items_raw_import'    => 'array',
-        'base_prices_raw_import'    => 'array',
-        'special_prices_raw_import'    => 'array',
+        'inventory_source_items_fetched_at' => 'datetime',
+        'inventory_source_items'            => 'array',
     ];
 
     public function product(): BelongsTo
@@ -62,5 +45,10 @@ class Magento2msiProduct extends BaseModel
     public function magento2msiConnection(): BelongsTo
     {
         return $this->belongsTo(Magento2msiConnection::class, 'connection_id');
+    }
+
+    public function inventoryTotalByWarehouseTag(): BelongsTo
+    {
+        return $this->belongsTo(InventoryTotalByWarehouseTag::class, 'inventory_totals_by_warehouse_tag_id', 'id');
     }
 }
