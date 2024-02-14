@@ -1,25 +1,23 @@
 <?php
 
-namespace App\Modules\Magento2MSI\src\Listeners;
+namespace App\Modules\InventoryTotals\src\Listeners;
 
-use App\Events\SyncRequestedEvent;
-use App\Modules\Magento2MSI\src\Jobs\CheckIfSyncIsRequiredJob;
-use App\Modules\Magento2MSI\src\Jobs\EnsureProductRecordsExistJob;
-use App\Modules\Magento2MSI\src\Jobs\FetchStockItemsJob;
+use App\Modules\InventoryTotals\src\Jobs\EnsureTotalsByWarehouseTagRecordsExistJob;
+use App\Modules\InventoryTotals\src\Jobs\EnsureTotalsRecordsExistJob;
+use App\Modules\InventoryTotals\src\Jobs\LastCountedAtJob;
+use App\Modules\InventoryTotals\src\Jobs\UpdateTotalsByWarehouseTagTableJob;
+use App\Modules\InventoryTotals\src\Jobs\UpdateTotalsTableJob;
 
 class SyncRequestedEventListener
 {
-    /**
-     * Handle the event.
-     *
-     * @param SyncRequestedEvent $event
-     *
-     * @return void
-     */
-    public function handle(SyncRequestedEvent $event)
+    public function handle()
     {
-        EnsureProductRecordsExistJob::dispatch();
-        CheckIfSyncIsRequiredJob::dispatch();
-        FetchStockItemsJob::dispatch();
+        LastCountedAtJob::dispatch();
+
+        EnsureTotalsRecordsExistJob::dispatch();
+        UpdateTotalsTableJob::dispatch();
+
+        EnsureTotalsByWarehouseTagRecordsExistJob::dispatch();
+        UpdateTotalsByWarehouseTagTableJob::dispatch();
     }
 }

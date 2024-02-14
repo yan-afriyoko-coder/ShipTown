@@ -6,6 +6,7 @@ use App\Events\EveryDayEvent;
 use App\Events\EveryFiveMinutesEvent;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
+use App\Events\RecalculateInventoryRequestEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
@@ -22,6 +23,10 @@ class Magento2MsiServiceProvider extends BaseModuleServiceProvider
     protected $listen = [
         SyncRequestedEvent::class => [
             \App\Modules\Magento2MSI\src\Listeners\SyncRequestedEventListener::class,
+        ],
+
+        RecalculateInventoryRequestEvent::class => [
+            \App\Modules\Magento2MSI\src\Listeners\RecalculateInventoryRequestEventListener::class,
         ],
 
         EveryFiveMinutesEvent::class => [

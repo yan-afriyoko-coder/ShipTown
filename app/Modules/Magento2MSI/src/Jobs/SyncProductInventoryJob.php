@@ -21,8 +21,8 @@ class SyncProductInventoryJob extends UniqueJob
                     ->chunkById(10, function (Collection $chunk) use ($magentoConnection) {
                         $sourceItems = $chunk->map(function (Magento2msiProduct $magentoProduct) use ($magentoConnection) {
                             return [
-                                'source_code' => $magentoConnection->magento_source_code,
                                 'sku' => $magentoProduct->product->sku,
+                                'source_code' => $magentoConnection->magento_source_code,
                                 'quantity' => $magentoProduct->inventoryTotalByWarehouseTag->quantity_available,
                                 'status' => 1,
                             ];
