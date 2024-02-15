@@ -11,7 +11,6 @@ use App\Modules\Magento2MSI\src\Api\MagentoApi;
 use App\Modules\Magento2MSI\src\Jobs\FetchStockItemsJob;
 use App\Modules\Magento2MSI\src\Models\Magento2msiConnection;
 use App\Modules\Magento2MSI\src\Models\Magento2msiProduct;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,7 +18,12 @@ class Magento2MsiConnectionController extends Controller
 {
     public function index(Magento2MsiConnectionIndexRequest $request): AnonymousResourceCollection
     {
-        $connections = Magento2msiConnection::getSpatieQueryBuilder()->get()->collect();
+        $connections = Magento2msiConnection::getSpatieQueryBuilder()
+            ->allowedSorts([
+                'tag.name.en'
+            ])
+            ->get()
+            ->collect();
 
         $connections = $connections->map(function ($connection) {
             $sourceCodes = MagentoApi::getInventorySources($connection);
