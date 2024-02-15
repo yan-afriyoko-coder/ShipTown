@@ -13,6 +13,7 @@ class SyncProductInventoryJob extends UniqueJob
     public function handle(): void
     {
         Magento2msiConnection::query()
+            ->where('enabled', true)
             ->get()
             ->each(function (Magento2msiConnection $magentoConnection) {
                 Magento2msiProduct::query()
