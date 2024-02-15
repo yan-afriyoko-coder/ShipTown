@@ -31,7 +31,7 @@ class FetchStockItemsJob extends UniqueJob
                                     'connection_id' => $connection->getKey(),
                                     'response' => $response->json(),
                                 ]);
-                                return;
+                                return false;
                             }
 
                             Magento2msiProduct::query()
