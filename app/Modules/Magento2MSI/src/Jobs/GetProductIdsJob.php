@@ -10,7 +10,7 @@ use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
-class FetchStockItemsJob extends UniqueJob
+class GetProductIdsJob extends UniqueJob
 {
     public function handle(): void
     {
@@ -21,10 +21,13 @@ class FetchStockItemsJob extends UniqueJob
                 Magento2msiProduct::query()
                     ->with('product')
                     ->where('connection_id', $connection->getKey())
-                    ->whereNull('inventory_source_items_fetched_at')
+                    ->whereNull('source_assigned')
                     ->chunkById(50, function (Collection $products) use ($connection) {
                         try {
-                            $response = MagentoApi::getInventorySourceItems($connection, $products->pluck('product.sku'));
+                            $response = MagentoApi::getProducts(
+                                $connection,
+                                $products->pluck('product.sku')
+                            );
 
                             if ($response->failed()) {
                                 Log::error('Failed to fetch stock items', [
@@ -34,20 +37,10 @@ class FetchStockItemsJob extends UniqueJob
                                 return false;
                             }
 
-                            Magento2msiProduct::query()
-                                ->whereIn('id', $products->pluck('id'))
-                                ->update([
-                                    'source_assigned' => 0,
-                                    'inventory_source_items_fetched_at' => now(),
-                                    'inventory_source_items' => null,
-                                    'sync_required' => null
-                                ]);
-
                             $map = collect($response->json('items'))
                                 ->map(function ($item) use ($connection) {
                                     return [
-                                        'connection_id' => $connection->getKey(),
-                                        'source_assigned' => 1,
+                                        'magento_product_id' => $item['id'],
                                         'sync_required' => null,
                                         'custom_uuid' => $item['sku'] . '-' . $item['source_code'],
                                         'sku' => $item['sku'],
@@ -63,7 +56,6 @@ class FetchStockItemsJob extends UniqueJob
 
                             Magento2msiProduct::query()->upsert($map->toArray(), ['custom_uuid'], [
                                 'sync_required',
-                                'source_assigned',
                                 'sku',
                                 'source_code',
                                 'quantity',
@@ -81,6 +73,8 @@ class FetchStockItemsJob extends UniqueJob
                             report($exception);
                             throw $exception;
                         }
+
+                        return true;
                     });
             });
     }

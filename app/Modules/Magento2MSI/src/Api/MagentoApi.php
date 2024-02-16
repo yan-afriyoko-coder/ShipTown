@@ -8,6 +8,13 @@ use Illuminate\Support\Arr;
 
 class MagentoApi
 {
+    public static function postInventoryBulkProductSourceAssign(Magento2msiConnection $connection, array $productSkus, array $sourceCodes): ?Response
+    {
+        return Client::post($connection->api_access_token, $connection->base_url . 'rest/all/V1/inventory/bulk-product-source-assign', [
+            "skus" => $productSkus,
+            'sourceCodes' => $sourceCodes
+        ]);
+    }
     public static function getModules(Magento2msiConnection $connection): ?Response
     {
         return Client::get($connection->api_access_token, $connection->base_url . '/rest/all/V1/modules', [
@@ -104,6 +111,26 @@ class MagentoApi
         return Client::get($token, '/rest/all/V1/stockItems/'.$sku);
     }
 
+    public static function getProducts(Magento2msiConnection $connection, $skuList): ?Response
+    {
+        $skus = collect($skuList)->implode(',');
+
+        return Client::get($connection->api_access_token, $connection->base_url . '/rest/all/V1/products', [
+            'searchCriteria' => [
+                'filterGroups' => [
+                    [
+                        'filters' => [
+                            [
+                                'field' => 'sku',
+                                'value' => $skus,
+                                'condition_type' => 'in'
+                            ]
+                        ]
+                    ],
+                ]
+            ],
+        ]);
+    }
     public static function getInventorySourceItems(Magento2msiConnection $connection, $skuList): ?Response
     {
         $skus = collect($skuList)->implode(',');
