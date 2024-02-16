@@ -60,8 +60,10 @@ class EnsureProductRecordsExistJob extends UniqueJob
 
                 WHERE modules_magento2msi_inventory_source_items.id IS NULL
 
-                LIMIT 300) as tbl
+                LIMIT 5000) as tbl
            ");
+
+            usleep(100000); // 0.1 second
         } while ($recordsUpdated > 0);
     }
 }
