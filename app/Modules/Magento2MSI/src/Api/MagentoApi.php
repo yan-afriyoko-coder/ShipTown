@@ -10,7 +10,7 @@ class MagentoApi
 {
     public static function postInventoryBulkProductSourceAssign(Magento2msiConnection $connection, array $productSkus, array $sourceCodes): ?Response
     {
-        return Client::post($connection->api_access_token, $connection->base_url . 'rest/all/V1/inventory/bulk-product-source-assign', [
+        return Client::post($connection->api_access_token, $connection->base_url . '/rest/all/V1/inventory/bulk-product-source-assign', [
             "skus" => $productSkus,
             'sourceCodes' => $sourceCodes
         ]);

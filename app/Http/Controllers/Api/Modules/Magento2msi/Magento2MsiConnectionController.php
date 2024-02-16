@@ -12,6 +12,7 @@ use App\Modules\Magento2MSI\src\Jobs\AssignInventorySourceJob;
 use App\Modules\Magento2MSI\src\Jobs\CheckIfSyncIsRequiredJob;
 use App\Modules\Magento2MSI\src\Jobs\EnsureProductRecordsExistJob;
 use App\Modules\Magento2MSI\src\Jobs\FetchStockItemsJob;
+use App\Modules\Magento2MSI\src\Jobs\GetProductIdsJob;
 use App\Modules\Magento2MSI\src\Jobs\SyncProductInventoryJob;
 use App\Modules\Magento2MSI\src\Models\Magento2msiConnection;
 use App\Modules\Magento2MSI\src\Models\Magento2msiProduct;
@@ -45,6 +46,7 @@ class Magento2MsiConnectionController extends Controller
         $connection = Magento2msiConnection::create($request->all());
 
         EnsureProductRecordsExistJob::dispatchAfterResponse();
+        GetProductIdsJob::dispatchAfterResponse();
         CheckIfSyncIsRequiredJob::dispatchAfterResponse();
         FetchStockItemsJob::dispatchAfterResponse();
         SyncProductInventoryJob::dispatchAfterResponse();

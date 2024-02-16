@@ -19,12 +19,12 @@ class FetchStockItemsJob extends UniqueJob
             ->get()
             ->each(function (Magento2msiConnection $connection) {
                 Magento2msiProduct::query()
-                    ->with('product')
                     ->where('connection_id', $connection->getKey())
+                    ->whereNotNull('magento_product_id')
                     ->whereNull('inventory_source_items_fetched_at')
                     ->chunkById(50, function (Collection $products) use ($connection) {
                         try {
-                            $response = MagentoApi::getInventorySourceItems($connection, $products->pluck('product.sku'));
+                            $response = MagentoApi::getInventorySourceItems($connection, $products->pluck('sku'));
 
                             if ($response->failed()) {
                                 Log::error('Failed to fetch stock items', [
@@ -49,8 +49,8 @@ class FetchStockItemsJob extends UniqueJob
                                         'connection_id' => $connection->getKey(),
                                         'source_assigned' => 1,
                                         'sync_required' => null,
-                                        'custom_uuid' => $item['sku'] . '-' . $item['source_code'],
                                         'sku' => $item['sku'],
+                                        'custom_uuid' => $item['sku'] . '-' . $item['source_code'],
                                         'source_code' => $item['source_code'],
                                         'quantity' => $item['quantity'],
                                         'status' => $item['status'],
@@ -61,10 +61,9 @@ class FetchStockItemsJob extends UniqueJob
                                     ];
                                 });
 
-                            Magento2msiProduct::query()->upsert($map->toArray(), ['custom_uuid'], [
+                            Magento2msiProduct::query()->upsert($map->toArray(), ['connection_id', 'sku'], [
                                 'sync_required',
                                 'source_assigned',
-                                'sku',
                                 'source_code',
                                 'quantity',
                                 'status',

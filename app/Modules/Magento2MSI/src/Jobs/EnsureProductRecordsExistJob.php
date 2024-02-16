@@ -34,11 +34,12 @@ class EnsureProductRecordsExistJob extends UniqueJob
 
         do {
             $recordsUpdated = DB::affectingStatement("
-                INSERT INTO modules_magento2msi_inventory_source_items (connection_id, product_id, inventory_totals_by_warehouse_tag_id, custom_uuid, created_at, updated_at)
+                INSERT INTO modules_magento2msi_inventory_source_items (connection_id, product_id, inventory_totals_by_warehouse_tag_id, sku, custom_uuid, created_at, updated_at)
                 SELECT * FROM (SELECT
                     modules_magento2msi_connections.id as connection_id,
                     inventory_totals_by_warehouse_tag.product_id as product_id,
                     inventory_totals_by_warehouse_tag.id as inventory_totals_by_warehouse_tag_id,
+                    products.sku as sku,
                     CONCAT(products.sku, '-', modules_magento2msi_connections.magento_source_code) as custom_uuid,
                     NOW() as created_at,
                     NOW() as updated_at

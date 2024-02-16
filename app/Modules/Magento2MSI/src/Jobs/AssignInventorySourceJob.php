@@ -19,14 +19,14 @@ class AssignInventorySourceJob extends UniqueJob
             ->get()
             ->each(function (Magento2msiConnection $connection) {
                 Magento2msiProduct::query()
-                    ->with('product')
                     ->where('connection_id', $connection->getKey())
+                    ->whereNotNull('magento_product_id')
                     ->whereNull('source_assigned')
                     ->chunkById(50, function (Collection $products) use ($connection) {
                         try {
                             $response = MagentoApi::postInventoryBulkProductSourceAssign(
                                 $connection,
-                                $products->pluck('product.sku')->toArray(),
+                                $products->pluck('sku')->toArray(),
                                 [
                                     'source_belfast',
                                     'source_dublin'
@@ -44,7 +44,8 @@ class AssignInventorySourceJob extends UniqueJob
                             Magento2msiProduct::query()
                                 ->whereIn('id', $products->pluck('id'))
                                 ->update([
-                                    'inventory_source_items_fetched_at' => now(),
+                                    'source_assigned' => 1,
+                                    'inventory_source_items_fetched_at' => null,
                                 ]);
 
                             Log::info('Fetched stock items', [

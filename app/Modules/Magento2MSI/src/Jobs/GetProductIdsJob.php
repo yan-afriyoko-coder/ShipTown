@@ -21,7 +21,7 @@ class GetProductIdsJob extends UniqueJob
                 Magento2msiProduct::query()
                     ->with('product')
                     ->where('connection_id', $connection->getKey())
-                    ->whereNull('source_assigned')
+                    ->whereNull('magento_product_id')
                     ->chunkById(50, function (Collection $products) use ($connection) {
                         try {
                             $response = MagentoApi::getProducts(
@@ -30,7 +30,7 @@ class GetProductIdsJob extends UniqueJob
                             );
 
                             if ($response->failed()) {
-                                Log::error('Failed to fetch stock items', [
+                                Log::error('Failed to fetch product IDs', [
                                     'connection_id' => $connection->getKey(),
                                     'response' => $response->json(),
                                 ]);
@@ -40,32 +40,22 @@ class GetProductIdsJob extends UniqueJob
                             $map = collect($response->json('items'))
                                 ->map(function ($item) use ($connection) {
                                     return [
+                                        'connection_id' => $connection->getKey(),
                                         'magento_product_id' => $item['id'],
                                         'sync_required' => null,
-                                        'custom_uuid' => $item['sku'] . '-' . $item['source_code'],
                                         'sku' => $item['sku'],
-                                        'source_code' => $item['source_code'],
-                                        'quantity' => $item['quantity'],
-                                        'status' => $item['status'],
-                                        'inventory_source_items_fetched_at' => now(),
-                                        'inventory_source_items' => json_encode($item),
                                         'created_at' => now(),
                                         'updated_at' => now(),
                                     ];
                                 });
 
-                            Magento2msiProduct::query()->upsert($map->toArray(), ['custom_uuid'], [
+                            Magento2msiProduct::query()->upsert($map->toArray(), ['connection_id', 'sku'], [
+                                'magento_product_id',
                                 'sync_required',
-                                'sku',
-                                'source_code',
-                                'quantity',
-                                'status',
-                                'inventory_source_items_fetched_at',
-                                'inventory_source_items',
                                 'updated_at'
                             ]);
 
-                            Log::info('Fetched stock items', [
+                            Log::info('Fetched ProductIDs', [
                                 'connection' => $connection->getKey(),
                                 'response' => $response->json('items'),
                             ]);
