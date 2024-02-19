@@ -24,63 +24,72 @@ class FetchStockItemsJob extends UniqueJob
                     ->whereNull('inventory_source_items_fetched_at')
                     ->chunkById(50, function (Collection $products) use ($connection) {
                         try {
-                            $response = MagentoApi::getInventorySourceItems($connection, $products->pluck('sku'));
+                            sleep(1); // Sleep for 1 second to avoid rate limiting
 
-                            if ($response->failed()) {
-                                Log::error('Failed to fetch stock items', [
-                                    'connection_id' => $connection->getKey(),
-                                    'response' => $response->json(),
-                                ]);
-                                return false;
-                            }
-
-                            Magento2msiProduct::query()
-                                ->whereIn('id', $products->pluck('id'))
-                                ->update([
-                                    'source_assigned' => 0,
-                                    'inventory_source_items_fetched_at' => now(),
-                                    'inventory_source_items' => null,
-                                    'sync_required' => null
-                                ]);
-
-                            $map = collect($response->json('items'))
-                                ->map(function ($item) use ($connection) {
-                                    return [
-                                        'connection_id' => $connection->getKey(),
-                                        'source_assigned' => 1,
-                                        'sync_required' => null,
-                                        'sku' => $item['sku'],
-                                        'custom_uuid' => $item['sku'] . '-' . $item['source_code'],
-                                        'source_code' => $item['source_code'],
-                                        'quantity' => $item['quantity'],
-                                        'status' => $item['status'],
-                                        'inventory_source_items_fetched_at' => now(),
-                                        'inventory_source_items' => json_encode($item),
-                                        'created_at' => now(),
-                                        'updated_at' => now(),
-                                    ];
-                                });
-
-                            Magento2msiProduct::query()->upsert($map->toArray(), ['connection_id', 'sku'], [
-                                'sync_required',
-                                'source_assigned',
-                                'source_code',
-                                'quantity',
-                                'status',
-                                'inventory_source_items_fetched_at',
-                                'inventory_source_items',
-                                'updated_at'
-                            ]);
-
-                            Log::info('Fetched stock items', [
-                                'connection' => $connection->getKey(),
-                                'response' => $response->json('items'),
-                            ]);
+                            return $this->fetchStockItems($connection, $products);
                         } catch (Exception $exception) {
                             report($exception);
                             throw $exception;
                         }
                     });
             });
+    }
+
+    private function fetchStockItems(Magento2msiConnection $connection, Collection $products): bool
+    {
+        $response = MagentoApi::getInventorySourceItems($connection, $products->pluck('sku'));
+
+        if ($response->failed()) {
+            Log::error('Failed to fetch stock items', [
+                'connection_id' => $connection->getKey(),
+                'response' => $response->json(),
+            ]);
+            return false;
+        }
+
+        Magento2msiProduct::query()
+            ->whereIn('id', $products->pluck('id'))
+            ->update([
+                'source_assigned' => 0,
+                'inventory_source_items_fetched_at' => now(),
+                'inventory_source_items' => null,
+                'sync_required' => null
+            ]);
+
+        $map = collect($response->json('items'))
+            ->map(function ($item) use ($connection) {
+                return [
+                    'connection_id' => $connection->getKey(),
+                    'source_assigned' => 1,
+                    'sync_required' => null,
+                    'sku' => $item['sku'],
+                    'custom_uuid' => $item['sku'] . '-' . $item['source_code'],
+                    'source_code' => $item['source_code'],
+                    'quantity' => $item['quantity'],
+                    'status' => $item['status'],
+                    'inventory_source_items_fetched_at' => now(),
+                    'inventory_source_items' => json_encode($item),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            });
+
+        Magento2msiProduct::query()->upsert($map->toArray(), ['connection_id', 'sku'], [
+            'sync_required',
+            'source_assigned',
+            'source_code',
+            'quantity',
+            'status',
+            'inventory_source_items_fetched_at',
+            'inventory_source_items',
+            'updated_at'
+        ]);
+
+        Log::info('Fetched stock items', [
+            'connection' => $connection->getKey(),
+            'response' => $response->json('items'),
+        ]);
+
+        return true;
     }
 }
