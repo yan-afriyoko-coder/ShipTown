@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::table('modules_magento2msi_inventory_source_items', function (Blueprint $table) {
             $table->boolean('exist_in_magento')->nullable()->after('inventory_totals_by_warehouse_tag_id');
 
-            $table->index(['exist_in_magento']);
+            $table->index(['exist_in_magento'], 'exist_in_magento_index');
         });
     }
 };
