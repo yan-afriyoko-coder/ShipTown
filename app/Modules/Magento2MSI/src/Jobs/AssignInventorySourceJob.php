@@ -24,41 +24,48 @@ class AssignInventorySourceJob extends UniqueJob
                     ->whereNull('source_assigned')
                     ->chunkById(50, function (Collection $products) use ($connection) {
                         try {
-                            $response = MagentoApi::postInventoryBulkProductSourceAssign(
-                                $connection,
-                                $products->pluck('sku')->toArray(),
-                                [
-                                    'source_belfast',
-                                    'source_dublin'
-                                ]
-                            );
+                            sleep(1); // Sleep for 1 second to avoid rate limiting
 
-                            if ($response->failed()) {
-                                Log::error('Failed to fetch stock items', [
-                                    'connection_id' => $connection->getKey(),
-                                    'response' => $response->json(),
-                                ]);
-                                return false;
-                            }
-
-                            Magento2msiProduct::query()
-                                ->whereIn('id', $products->pluck('id'))
-                                ->update([
-                                    'source_assigned' => 1,
-                                    'inventory_source_items_fetched_at' => null,
-                                ]);
-
-                            Log::info('Fetched stock items', [
-                                'connection' => $connection->getKey(),
-                                'response' => $response->json('items'),
-                            ]);
+                            return $this->assignInventorySource($connection, $products);
                         } catch (Exception $exception) {
                             report($exception);
                             throw $exception;
                         }
-
-                        return true;
                     });
             });
+    }
+
+    private function assignInventorySource(Magento2msiConnection $connection, Collection $products)
+    {
+        $response = MagentoApi::postInventoryBulkProductSourceAssign(
+            $connection,
+            $products->pluck('sku')->toArray(),
+            [
+                'source_belfast',
+                'source_dublin'
+            ]
+        );
+
+        if ($response->failed()) {
+            Log::error('Failed to fetch stock items', [
+                'connection_id' => $connection->getKey(),
+                'response' => $response->json(),
+            ]);
+            return false;
+        }
+
+        Magento2msiProduct::query()
+            ->whereIn('id', $products->pluck('id'))
+            ->update([
+                'source_assigned' => 1,
+                'inventory_source_items_fetched_at' => null,
+            ]);
+
+        Log::info('Fetched stock items', [
+            'connection' => $connection->getKey(),
+            'response' => $response->json('items'),
+        ]);
+
+        return true;
     }
 }

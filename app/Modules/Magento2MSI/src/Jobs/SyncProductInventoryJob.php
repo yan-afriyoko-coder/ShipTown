@@ -20,21 +20,30 @@ class SyncProductInventoryJob extends UniqueJob
                     ->with(['inventoryTotalByWarehouseTag', 'product'])
                     ->where('sync_required', true)
                     ->chunkById(10, function (Collection $chunk) use ($magentoConnection) {
-                        $sourceItems = $chunk->map(function (Magento2msiProduct $magentoProduct) use ($magentoConnection) {
-                            return [
-                                'sku' => $magentoProduct->product->sku,
-                                'source_code' => $magentoConnection->magento_source_code,
-                                'quantity' => $magentoProduct->inventoryTotalByWarehouseTag->quantity_available,
-                                'status' => 1,
-                            ];
-                        });
+                        sleep(1); // Sleep for 1 second to avoid rate limiting
 
-                        MagentoApi::postInventorySourceItems($magentoConnection, $sourceItems);
-
-                        Magento2msiProduct::query()
-                            ->whereIn('id', $chunk->pluck('id'))
-                            ->update(['sync_required' => false, 'inventory_source_items_fetched_at' => null]);
+                        return $this->syncInventory($chunk, $magentoConnection);
                     });
             });
+    }
+
+    private function syncInventory(Collection $chunk, Magento2msiConnection $magentoConnection): bool
+    {
+        $sourceItems = $chunk->map(function (Magento2msiProduct $magentoProduct) use ($magentoConnection) {
+            return [
+                'sku' => $magentoProduct->product->sku,
+                'source_code' => $magentoConnection->magento_source_code,
+                'quantity' => $magentoProduct->inventoryTotalByWarehouseTag->quantity_available,
+                'status' => 1,
+            ];
+        });
+
+        MagentoApi::postInventorySourceItems($magentoConnection, $sourceItems);
+
+        Magento2msiProduct::query()
+            ->whereIn('id', $chunk->pluck('id'))
+            ->update(['sync_required' => false, 'inventory_source_items_fetched_at' => null]);
+
+        return true;
     }
 }
