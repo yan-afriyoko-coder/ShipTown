@@ -60,12 +60,10 @@ class Magento2MsiConnectionController extends Controller
 
         $connection->update($request->all());
 
-        Magento2msiProduct::query()->where('connection_id', $connection_id)->delete();
+        Magento2msiProduct::query()->where('connection_id', $connection_id)->forceDelete();
 
-        Magento2msiProduct::query()->forceDelete();
-
-        AssignInventorySourceJob::dispatchAfterResponse();
         EnsureProductRecordsExistJob::dispatchAfterResponse();
+        AssignInventorySourceJob::dispatchAfterResponse();
         CheckIfSyncIsRequiredJob::dispatchAfterResponse();
         FetchStockItemsJob::dispatchAfterResponse();
         SyncProductInventoryJob::dispatchAfterResponse();
