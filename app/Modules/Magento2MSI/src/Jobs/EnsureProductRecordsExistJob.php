@@ -21,7 +21,7 @@ class EnsureProductRecordsExistJob extends UniqueJob
                         inventory_totals_by_warehouse_tag.product_id as product_id,
                         inventory_totals_by_warehouse_tag.id as inventory_totals_by_warehouse_tag_id,
                         products.sku as sku,
-                        modules_magento2msi_connections.source_code as sku,
+                        modules_magento2msi_connections.magento_source_code as source_code,
                         CONCAT(products.sku, '-', modules_magento2msi_connections.magento_source_code) as custom_uuid,
                         NOW() as created_at,
                         NOW() as updated_at
