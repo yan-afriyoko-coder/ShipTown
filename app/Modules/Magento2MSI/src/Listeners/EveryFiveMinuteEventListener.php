@@ -12,10 +12,10 @@ class EveryFiveMinuteEventListener
 {
     public function handle()
     {
-//        GetProductIdsJob::dispatch();
-//        AssignInventorySourceJob::dispatch();
-//        FetchStockItemsJob::dispatch();
-//        CheckIfSyncIsRequiredJob::dispatch();
-//        SyncProductInventoryJob::dispatch();
+        GetProductIdsJob::dispatch();
+        AssignInventorySourceJob::dispatch();
+        FetchStockItemsJob::dispatch();
+        CheckIfSyncIsRequiredJob::dispatch();
+        SyncProductInventoryJob::dispatch();
     }
 }
