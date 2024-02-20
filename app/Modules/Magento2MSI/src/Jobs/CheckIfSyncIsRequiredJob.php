@@ -15,26 +15,34 @@ class CheckIfSyncIsRequiredJob extends UniqueJob
 {
     public function handle(): void
     {
-        DB::affectingStatement("
-            UPDATE modules_magento2msi_inventory_source_items
+        do {
+            $recordsAffected = DB::affectingStatement("
+                UPDATE modules_magento2msi_inventory_source_items
 
-            LEFT JOIN inventory_totals_by_warehouse_tag
-              ON inventory_totals_by_warehouse_tag.id = modules_magento2msi_inventory_source_items.inventory_totals_by_warehouse_tag_id
+                LEFT JOIN inventory_totals_by_warehouse_tag
+                  ON inventory_totals_by_warehouse_tag.id = modules_magento2msi_inventory_source_items.inventory_totals_by_warehouse_tag_id
 
-            SET modules_magento2msi_inventory_source_items.sync_required = (modules_magento2msi_inventory_source_items.quantity != inventory_totals_by_warehouse_tag.quantity_available),
-                modules_magento2msi_inventory_source_items.updated_at = NOW()
+                SET modules_magento2msi_inventory_source_items.sync_required = (modules_magento2msi_inventory_source_items.quantity != inventory_totals_by_warehouse_tag.quantity_available),
+                    modules_magento2msi_inventory_source_items.updated_at = NOW()
 
-            WHERE modules_magento2msi_inventory_source_items.id in (
-                SELECT ID FROM (
-                    SELECT modules_magento2msi_inventory_source_items.id
+                WHERE modules_magento2msi_inventory_source_items.id in (
+                    SELECT ID FROM (
+                        SELECT modules_magento2msi_inventory_source_items.id
 
-                    FROM modules_magento2msi_inventory_source_items
+                        FROM modules_magento2msi_inventory_source_items
 
-                    WHERE modules_magento2msi_inventory_source_items.sync_required IS NULL
+                        WHERE modules_magento2msi_inventory_source_items.sync_required IS NULL
 
-                    LIMIT 500
-                ) as tbl
-            );
-       ");
+                        LIMIT 500
+                    ) as tbl
+                );
+           ");
+
+            usleep(100000); // 0.1 second
+            Log::info('Magento2msi - Job processing', [
+                'job' => self::class,
+                'recordsAffected' => $recordsAffected,
+            ]);
+        } while ($recordsAffected > 0);
     }
 }
