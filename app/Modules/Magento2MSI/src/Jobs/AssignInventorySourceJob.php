@@ -44,7 +44,7 @@ class AssignInventorySourceJob extends UniqueJob
         );
 
         if ($response->failed()) {
-            Log::error('Failed to fetch stock items', [
+            Log::error('Failed to assign inventory source', [
                 'connection_id' => $magento2msiConnection->getKey(),
                 'response' => $response->json(),
             ]);
@@ -58,7 +58,7 @@ class AssignInventorySourceJob extends UniqueJob
                 'inventory_source_items_fetched_at' => null,
             ]);
 
-        Log::info('Fetched stock items', [
+        Log::info('Magento2msi - Assigned inventory source', [
             'connection' => $magento2msiConnection->getKey(),
             'response' => $response->json('items'),
         ]);
