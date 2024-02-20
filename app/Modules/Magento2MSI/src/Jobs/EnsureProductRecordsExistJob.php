@@ -17,7 +17,7 @@ class EnsureProductRecordsExistJob extends UniqueJob
         $maxId = DB::table('products')->max('id') ?? 0;
 
         do {
-            $minId = max($maxId - 1000, 0);
+            $minId = max($maxId - 5000, 0);
 
             $recordsUpdated = DB::affectingStatement("
                 INSERT INTO modules_magento2msi_inventory_source_items (connection_id, product_id, inventory_totals_by_warehouse_tag_id, sku, source_code, custom_uuid, created_at, updated_at)
@@ -31,10 +31,14 @@ class EnsureProductRecordsExistJob extends UniqueJob
                         NOW() as created_at,
                         NOW() as updated_at
 
-                FROM `modules_magento2msi_connections`
+                FROM products
+
+                LEFT JOIN `modules_magento2msi_connections`
+                    ON modules_magento2msi_connections.enabled = 1
 
                 INNER JOIN inventory_totals_by_warehouse_tag
-                    ON modules_magento2msi_connections.inventory_source_warehouse_tag_id = inventory_totals_by_warehouse_tag.tag_id
+                    ON inventory_totals_by_warehouse_tag.tag_id = modules_magento2msi_connections.inventory_source_warehouse_tag_id
+                    AND inventory_totals_by_warehouse_tag.product_id = products.id
 
                 LEFT JOIN modules_magento2msi_inventory_source_items
                     ON modules_magento2msi_inventory_source_items.connection_id = modules_magento2msi_connections.id
@@ -45,15 +49,9 @@ class EnsureProductRecordsExistJob extends UniqueJob
                     AND available_online_tag.taggable_type = ?
                     AND available_online_tag.taggable_id = inventory_totals_by_warehouse_tag.product_id
 
-                LEFT JOIN products
-                    ON products.id = inventory_totals_by_warehouse_tag.product_id
-
                 WHERE products.id BETWEEN ? AND ?
                   AND modules_magento2msi_connections.enabled = 1
                   AND modules_magento2msi_inventory_source_items.id IS NULL
-                  AND modules_magento2msi_connections.id != 3
-
-                LIMIT 5000
            ", ['Available Online', Product::class, $minId, $maxId]);
 
             $maxId = $minId;
