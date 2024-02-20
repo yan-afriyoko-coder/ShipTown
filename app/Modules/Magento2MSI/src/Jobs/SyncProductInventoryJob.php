@@ -20,7 +20,7 @@ class SyncProductInventoryJob extends UniqueJob
                 Magento2msiProduct::query()
                     ->with(['inventoryTotalByWarehouseTag', 'product'])
                     ->where('sync_required', true)
-                    ->chunkById(10, function (Collection $chunk) use ($magentoConnection) {
+                    ->chunkById(50, function (Collection $chunk) use ($magentoConnection) {
                         usleep(100000); // Sleep for 0.1 seconds to avoid rate limiting
 
                         return $this->syncInventory($chunk, $magentoConnection);
