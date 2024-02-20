@@ -8,7 +8,7 @@ use App\Modules\Magento2MSI\src\Jobs\FetchStockItemsJob;
 use App\Modules\Magento2MSI\src\Jobs\GetProductIdsJob;
 use App\Modules\Magento2MSI\src\Jobs\SyncProductInventoryJob;
 
-class EveryFiveMinuteEventListener
+class EveryMinuteEventListener
 {
     public function handle()
     {
