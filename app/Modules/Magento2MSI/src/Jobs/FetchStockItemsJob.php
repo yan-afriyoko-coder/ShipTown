@@ -40,7 +40,7 @@ class FetchStockItemsJob extends UniqueJob
         $response = MagentoApi::getInventorySourceItems($connection, $products->pluck('sku'));
 
         if ($response->failed()) {
-            Log::error('Failed to fetch stock items', [
+            Log::error('Magento2msi - Failed to fetch stock items', [
                 'connection_id' => $connection->getKey(),
                 'response' => $response->json(),
             ]);
@@ -56,7 +56,7 @@ class FetchStockItemsJob extends UniqueJob
                 'sync_required' => null
             ]);
 
-        $map = collect($response->json('items'))
+        $map = collect($response->json('items', []))
             ->map(function ($item) use ($connection) {
                 return [
                     'connection_id' => $connection->getKey(),
@@ -85,7 +85,7 @@ class FetchStockItemsJob extends UniqueJob
             'updated_at'
         ]);
 
-        Log::info('Fetched stock items', [
+        Log::info('Magento2msi - Fetched stock items', [
             'connection' => $connection->getKey(),
             'count' => $map->count(),
         ]);

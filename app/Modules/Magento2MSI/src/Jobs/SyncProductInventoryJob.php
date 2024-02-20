@@ -7,6 +7,7 @@ use App\Modules\Magento2MSI\src\Api\MagentoApi;
 use App\Modules\Magento2MSI\src\Models\Magento2msiConnection;
 use App\Modules\Magento2MSI\src\Models\Magento2msiProduct;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class SyncProductInventoryJob extends UniqueJob
 {
@@ -43,6 +44,11 @@ class SyncProductInventoryJob extends UniqueJob
         Magento2msiProduct::query()
             ->whereIn('id', $chunk->pluck('id'))
             ->update(['sync_required' => false, 'inventory_source_items_fetched_at' => null]);
+
+        Log::info('Magento2msi - Inventory synced', [
+            'connection_id' => $magentoConnection->getKey(),
+            'count' => $sourceItems->count(),
+        ]);
 
         return true;
     }

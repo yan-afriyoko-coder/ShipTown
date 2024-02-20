@@ -43,7 +43,7 @@ class GetProductIdsJob extends UniqueJob
         );
 
         if ($response->failed()) {
-            Log::error('Failed to fetch product IDs', [
+            Log::error('Magento2msi - Failed to fetch product IDs', [
                 'connection_id' => $connection->getKey(),
                 'response' => $response->json(),
             ]);
@@ -79,9 +79,9 @@ class GetProductIdsJob extends UniqueJob
                 'sync_required' => null,
             ]);
 
-        Log::info('Fetched ProductIDs', [
+        Log::info('Magento2msi - Fetched ProductIDs', [
             'connection' => $connection->getKey(),
-            'response' => $response->json('items'),
+            'count' => $map->count(),
         ]);
 
         return true;

@@ -56,7 +56,7 @@ class EnsureProductRecordsExistJob extends UniqueJob
 
             $maxId = $minId;
 
-            Log::info('Job processing', [
+            Log::info('Magento2msi - Job processing', [
                 'job' => self::class,
                 'recordsUpdated' => $recordsUpdated,
                 'maxId' => $maxId,
