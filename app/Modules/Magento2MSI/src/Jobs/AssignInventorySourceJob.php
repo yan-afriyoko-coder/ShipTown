@@ -35,20 +35,17 @@ class AssignInventorySourceJob extends UniqueJob
             });
     }
 
-    private function assignInventorySource(Magento2msiConnection $connection, Collection $products)
+    private function assignInventorySource(Magento2msiConnection $magento2msiConnection, Collection $products)
     {
         $response = MagentoApi::postInventoryBulkProductSourceAssign(
-            $connection,
+            $magento2msiConnection,
             $products->pluck('sku')->toArray(),
-            [
-                'source_belfast',
-                'source_dublin'
-            ]
+            [$magento2msiConnection->magento_source_code]
         );
 
         if ($response->failed()) {
             Log::error('Failed to fetch stock items', [
-                'connection_id' => $connection->getKey(),
+                'connection_id' => $magento2msiConnection->getKey(),
                 'response' => $response->json(),
             ]);
             return false;
@@ -62,7 +59,7 @@ class AssignInventorySourceJob extends UniqueJob
             ]);
 
         Log::info('Fetched stock items', [
-            'connection' => $connection->getKey(),
+            'connection' => $magento2msiConnection->getKey(),
             'response' => $response->json('items'),
         ]);
 
