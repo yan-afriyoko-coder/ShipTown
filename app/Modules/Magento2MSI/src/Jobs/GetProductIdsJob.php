@@ -19,9 +19,9 @@ class GetProductIdsJob extends UniqueJob
             ->get()
             ->each(function (Magento2msiConnection $connection) {
                 Magento2msiProduct::query()
-                    ->with('product')
                     ->where('connection_id', $connection->getKey())
                     ->whereNull('exists_in_magento')
+                    ->with('product')
                     ->chunkById(50, function (Collection $products) use ($connection) {
                         try {
                             usleep(100000); // Sleep for 0.1 seconds to avoid rate limiting
