@@ -24,7 +24,7 @@ class AssignInventorySourceJob extends UniqueJob
                     ->whereNull('source_assigned')
                     ->chunkById(50, function (Collection $products) use ($connection) {
                         try {
-                            sleep(1); // Sleep for 1 second to avoid rate limiting
+                            usleep(100000); // Sleep for 0.1 seconds to avoid rate limiting
 
                             return $this->assignInventorySource($connection, $products);
                         } catch (Exception $exception) {

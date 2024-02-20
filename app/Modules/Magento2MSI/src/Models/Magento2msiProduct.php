@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property Product $product
  * @property InventoryTotalByWarehouseTag $inventoryTotalByWarehouseTag
+ * @property string $sku
  */
 class Magento2msiProduct extends BaseModel
 {

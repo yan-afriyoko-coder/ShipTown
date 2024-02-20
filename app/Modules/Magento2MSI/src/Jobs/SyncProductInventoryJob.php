@@ -21,7 +21,7 @@ class SyncProductInventoryJob extends UniqueJob
                     ->with(['inventoryTotalByWarehouseTag', 'product'])
                     ->where('sync_required', true)
                     ->chunkById(10, function (Collection $chunk) use ($magentoConnection) {
-                        sleep(1); // Sleep for 1 second to avoid rate limiting
+                        usleep(100000); // Sleep for 0.1 seconds to avoid rate limiting
 
                         return $this->syncInventory($chunk, $magentoConnection);
                     });
@@ -32,7 +32,7 @@ class SyncProductInventoryJob extends UniqueJob
     {
         $sourceItems = $chunk->map(function (Magento2msiProduct $magentoProduct) use ($magentoConnection) {
             return [
-                'sku' => $magentoProduct->product->sku,
+                'sku' => $magentoProduct->sku,
                 'source_code' => $magentoConnection->magento_source_code,
                 'quantity' => $magentoProduct->inventoryTotalByWarehouseTag->quantity_available,
                 'status' => 1,
