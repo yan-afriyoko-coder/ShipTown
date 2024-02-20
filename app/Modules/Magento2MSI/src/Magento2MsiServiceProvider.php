@@ -8,6 +8,7 @@ use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
 use App\Events\RecalculateInventoryRequestEvent;
 use App\Events\SyncRequestedEvent;
+use App\Models\ManualRequestJob;
 use App\Modules\BaseModuleServiceProvider;
 
 class Magento2MsiServiceProvider extends BaseModuleServiceProvider
@@ -42,7 +43,42 @@ class Magento2MsiServiceProvider extends BaseModuleServiceProvider
         ],
 
         ProductTagDetachedEvent::class => [
-            \App\Modules\Magento2MSI\src\Listeners\ProductTagDetachedEventListener::class,
+            Listeners\ProductTagDetachedEventListener::class,
         ],
     ];
+
+    public static function enabling(): bool
+    {
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2 MSI - AssignInventorySourceJob',
+            'job_class' => \App\Modules\Magento2MSI\src\Jobs\AssignInventorySourceJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2 MSI - CheckIfSyncIsRequiredJob',
+            'job_class' => \App\Modules\Magento2MSI\src\Jobs\CheckIfSyncIsRequiredJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2 MSI - EnsureProductRecordsExistJob',
+            'job_class' => \App\Modules\Magento2MSI\src\Jobs\EnsureProductRecordsExistJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2 MSI - FetchStockItemsJob',
+            'job_class' => \App\Modules\Magento2MSI\src\Jobs\FetchStockItemsJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2 MSI - GetProductIdsJob',
+            'job_class' => \App\Modules\Magento2MSI\src\Jobs\GetProductIdsJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2 MSI - SyncProductInventoryJob',
+            'job_class' => \App\Modules\Magento2MSI\src\Jobs\SyncProductInventoryJob::class,
+        ], ['job_class'], ['job_name']);
+
+        return parent::enabling();
+    }
 }
