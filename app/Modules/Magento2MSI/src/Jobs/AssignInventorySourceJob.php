@@ -21,7 +21,7 @@ class AssignInventorySourceJob extends UniqueJob
                 Magento2msiProduct::query()
                     ->where('connection_id', $connection->getKey())
                     ->whereNotNull('magento_product_id')
-                    ->whereNull('source_assigned')
+                    ->whereRaw('(source_assigned IS NULL OR source_assigned = 0)')
                     ->chunkById(50, function (Collection $products) use ($connection) {
                         try {
                             usleep(100000); // Sleep for 0.1 seconds to avoid rate limiting
