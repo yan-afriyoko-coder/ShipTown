@@ -87,7 +87,7 @@ class FetchStockItemsJob extends UniqueJob
 
         Log::info('Fetched stock items', [
             'connection' => $connection->getKey(),
-            'response' => $response->json('items'),
+            'count' => $map->count(),
         ]);
 
         return true;
