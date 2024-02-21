@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\JobStoreRequest;
 use App\Http\Resources\ManualRequestJobResource;
 use App\Models\ManualRequestJob;
 use Illuminate\Http\JsonResponse;
@@ -16,12 +17,8 @@ class JobsController extends Controller
         return ManualRequestJobResource::collection(ManualRequestJob::query()->get());
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(JobStoreRequest $request): JsonResponse
     {
-        $request->validate([
-            'job_id' => 'required|numeric|exists:manual_request_jobs,id',
-        ]);
-
         $job = ManualRequestJob::findOrFail($request->get('job_id'));
         dispatch(new $job->job_class);
 

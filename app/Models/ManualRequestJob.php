@@ -6,9 +6,20 @@ use App\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * @property string $name
+ * Class ManualRequestJob
+ * @package App\Models
+ *
+ * @property int $id
+ * @property string $job_name
+ * @property string $job_class
+ *
  */
 class ManualRequestJob extends BaseModel
 {
     use HasFactory;
+
+    protected $fillable = [
+        'job_name',
+        'job_class',
+    ];
 }
