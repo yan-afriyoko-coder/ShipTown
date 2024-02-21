@@ -35,7 +35,7 @@ class UpdateTotalsByWarehouseTagTableJob extends UniqueJob
 
                 WHERE recalc_required = 1
 
-                LIMIT 500;
+                LIMIT 1000;
         ");
 
         DB::statement("
