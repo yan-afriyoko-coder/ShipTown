@@ -43,11 +43,11 @@ class UpdateTotalsByWarehouseTagTableJob extends UniqueJob
                 SELECT
                      tempTable.tag_id as tag_id,
                      tempTable.product_id as product_id,
-                     ROUND(inventory.quantity, 2) as quantity,
-                     ROUND(inventory.quantity_reserved, 2) as quantity_reserved,
-                     ROUND(inventory.quantity_incoming, 2) as quantity_incoming,
+                     ROUND(SUM(inventory.quantity), 2) as quantity,
+                     ROUND(SUM(inventory.quantity_reserved), 2) as quantity_reserved,
+                     ROUND(SUM(inventory.quantity_incoming), 2) as quantity_incoming,
                      MAX(inventory.updated_at) as max_inventory_updated_at,
-                     tempTable.calculated_at as calculated_at,
+                     NOW() as calculated_at,
                      NOW() as created_at,
                      NOW() as updated_at
 
@@ -61,7 +61,7 @@ class UpdateTotalsByWarehouseTagTableJob extends UniqueJob
                     ON inventory.product_id = tempTable.product_id
                     AND inventory.warehouse_id = taggables.taggable_id
 
-                GROUP BY tempTable.tag_id, tempTable.product_id, tempTable.calculated_at;
+                GROUP BY tempTable.tag_id, tempTable.product_id;
         ");
 
         return DB::update("
