@@ -125,7 +125,8 @@ export default {
         reloadWarehouseTags: function () {
             this.apiGetProductTags({
                 'filter[taggable_type]': 'App\\Models\\Warehouse',
-                'include': 'tag'
+                'include': 'tag',
+                'per_page': 999
             })
             .then(({data}) => {
                 this.warehouse_tags = data.data.map((tag) => {

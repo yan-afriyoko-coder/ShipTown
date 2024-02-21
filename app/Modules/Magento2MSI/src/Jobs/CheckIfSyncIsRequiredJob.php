@@ -15,26 +15,35 @@ class CheckIfSyncIsRequiredJob extends UniqueJob
 {
     public function handle(): void
     {
-        DB::affectingStatement("
-            UPDATE modules_magento2msi_inventory_source_items
+        do {
+            $recordsAffected = DB::affectingStatement("
+                WITH tempTable AS (
+                        SELECT modules_magento2msi_inventory_source_items.id
 
-            LEFT JOIN inventory_totals_by_warehouse_tag
-              ON inventory_totals_by_warehouse_tag.id = modules_magento2msi_inventory_source_items.inventory_totals_by_warehouse_tag_id
+                        FROM modules_magento2msi_inventory_source_items
 
-            SET modules_magento2msi_inventory_source_items.sync_required = (modules_magento2msi_inventory_source_items.quantity != inventory_totals_by_warehouse_tag.quantity_available),
-                modules_magento2msi_inventory_source_items.updated_at = NOW()
+                        WHERE modules_magento2msi_inventory_source_items.sync_required IS NULL
+                            AND modules_magento2msi_inventory_source_items.quantity IS NOT NULL
 
-            WHERE modules_magento2msi_inventory_source_items.id in (
-                SELECT ID FROM (
-                    SELECT modules_magento2msi_inventory_source_items.id
+                        LIMIT 500
+                )
 
-                    FROM modules_magento2msi_inventory_source_items
+                UPDATE modules_magento2msi_inventory_source_items
 
-                    WHERE modules_magento2msi_inventory_source_items.sync_required IS NULL
+                INNER JOIN tempTable ON tempTable.id = modules_magento2msi_inventory_source_items.id
 
-                    LIMIT 500
-                ) as tbl
-            );
-       ");
+                LEFT JOIN inventory_totals_by_warehouse_tag
+                  ON inventory_totals_by_warehouse_tag.id = modules_magento2msi_inventory_source_items.inventory_totals_by_warehouse_tag_id
+
+                SET modules_magento2msi_inventory_source_items.sync_required = (modules_magento2msi_inventory_source_items.quantity != inventory_totals_by_warehouse_tag.quantity_available),
+                    modules_magento2msi_inventory_source_items.updated_at = NOW()
+           ");
+
+            usleep(100000); // 0.1 second
+            Log::info('Magento2msi - Job processing', [
+                'job' => self::class,
+                'recordsAffected' => $recordsAffected,
+            ]);
+        } while ($recordsAffected > 0);
     }
 }

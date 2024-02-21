@@ -2,12 +2,13 @@
 
 namespace App\Modules\Magento2MSI\src;
 
-use App\Events\EveryDayEvent;
-use App\Events\EveryFiveMinutesEvent;
+use App\Events\EveryHourEvent;
+use App\Events\EveryMinuteEvent;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
 use App\Events\RecalculateInventoryRequestEvent;
 use App\Events\SyncRequestedEvent;
+use App\Models\ManualRequestJob;
 use App\Modules\BaseModuleServiceProvider;
 
 class Magento2MsiServiceProvider extends BaseModuleServiceProvider
@@ -22,27 +23,62 @@ class Magento2MsiServiceProvider extends BaseModuleServiceProvider
 
     protected $listen = [
         SyncRequestedEvent::class => [
-            \App\Modules\Magento2MSI\src\Listeners\SyncRequestedEventListener::class,
+            Listeners\SyncRequestedEventListener::class,
         ],
 
         RecalculateInventoryRequestEvent::class => [
-            \App\Modules\Magento2MSI\src\Listeners\RecalculateInventoryRequestEventListener::class,
+            Listeners\RecalculateInventoryRequestEventListener::class,
         ],
 
-        EveryFiveMinutesEvent::class => [
-            \App\Modules\Magento2MSI\src\Listeners\EveryFiveMinuteEventListener::class
+        EveryMinuteEvent::class => [
+            Listeners\EveryMinuteEventListener::class
+        ],
+
+        EveryHourEvent::class => [
+            Listeners\EveryHourEventListener::class
         ],
 
         ProductTagAttachedEvent::class => [
-            \App\Modules\Magento2MSI\src\Listeners\ProductTagAttachedEventListener::class,
+            Listeners\ProductTagAttachedEventListener::class,
         ],
 
         ProductTagDetachedEvent::class => [
-            \App\Modules\Magento2MSI\src\Listeners\ProductTagDetachedEventListener::class,
-        ],
-
-        EveryDayEvent::class => [
-            \App\Modules\Magento2MSI\src\Listeners\EveryDayEventListener::class
+            Listeners\ProductTagDetachedEventListener::class,
         ],
     ];
+
+    public static function enabling(): bool
+    {
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2 MSI - AssignInventorySourceJob',
+            'job_class' => Jobs\AssignInventorySourceJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2 MSI - CheckIfSyncIsRequiredJob',
+            'job_class' => Jobs\CheckIfSyncIsRequiredJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2 MSI - EnsureProductRecordsExistJob',
+            'job_class' => Jobs\EnsureProductRecordsExistJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2 MSI - FetchStockItemsJob',
+            'job_class' => Jobs\FetchStockItemsJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2 MSI - GetProductIdsJob',
+            'job_class' => Jobs\GetProductIdsJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2 MSI - SyncProductInventoryJob',
+            'job_class' => Jobs\SyncProductInventoryJob::class,
+        ], ['job_class'], ['job_name']);
+
+        return parent::enabling();
+    }
 }

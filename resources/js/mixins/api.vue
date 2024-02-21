@@ -284,6 +284,14 @@ export default {
                 return axios.post('/api/run-scheduled-jobs', data);
             },
 
+            apiGetJobsRequest: function (params) {
+                return axios.get('/api/jobs', {params: params});
+            },
+
+            apiPostJobsRequest: function (data) {
+                return axios.post('/api/jobs', data);
+            },
+
             apiGetPrintNodePrinters: function () {
                 return axios.get('/api/modules/printnode/printers');
             },

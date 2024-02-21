@@ -34,10 +34,8 @@ class Report extends Model
     public array $fields = [];
 
     public array $initial_data = [];
-    /**
-     * @var mixed
-     */
-    public $baseQuery;
+
+    public mixed $baseQuery;
 
     private array $allowedFilters = [];
     public array $allowedIncludes = [];

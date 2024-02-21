@@ -21,6 +21,7 @@ class ProductTagController extends Controller
     public function index(): AnonymousResourceCollection
     {
         $query = QueryBuilder::for(Taggable::class)
+            ->allowedSorts(['created_at', 'updated_at', 'tag.name'])
             ->allowedFilters(['taggable_type', 'taggable_id'])
             ->allowedIncludes(['tag']);
 
