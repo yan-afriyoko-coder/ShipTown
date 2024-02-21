@@ -3,6 +3,7 @@
 namespace App\Modules\InventoryTotals\src\Jobs;
 
 use App\Abstracts\UniqueJob;
+use App\Modules\InventoryTotals\src\Models\InventoryTotalByWarehouseTag;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -32,9 +33,9 @@ class UpdateTotalsByWarehouseTagTableJob extends UniqueJob
                     NOW() as calculated_at
                 FROM inventory_totals_by_warehouse_tag
 
-                WHERE (calculated_at IS NULL OR calculated_at < max_inventory_updated_at)
+                WHERE recalc_required = 1
 
-                LIMIT 500;
+                LIMIT 100;
         ");
 
         DB::statement("
@@ -42,9 +43,9 @@ class UpdateTotalsByWarehouseTagTableJob extends UniqueJob
                 SELECT
                      tempTable.tag_id as tag_id,
                      tempTable.product_id as product_id,
-                     GREATEST(0, FLOOR(SUM(inventory.quantity))) as quantity,
-                     GREATEST(0, FLOOR(SUM(inventory.quantity_reserved))) as quantity_reserved,
-                     GREATEST(0, FLOOR(SUM(inventory.quantity_incoming))) as quantity_incoming,
+                     ROUND(inventory.quantity, 2) as quantity,
+                     ROUND(inventory.quantity_reserved, 2) as quantity_reserved,
+                     ROUND(inventory.quantity_incoming, 2) as quantity_incoming,
                      MAX(inventory.updated_at) as max_inventory_updated_at,
                      tempTable.calculated_at as calculated_at,
                      NOW() as created_at,
@@ -71,6 +72,7 @@ class UpdateTotalsByWarehouseTagTableJob extends UniqueJob
                 AND tempInventoryTotalsByWarehouseTag.product_id = inventory_totals_by_warehouse_tag.product_id
 
             SET
+                inventory_totals_by_warehouse_tag.recalc_required = 0,
                 inventory_totals_by_warehouse_tag.quantity = tempInventoryTotalsByWarehouseTag.quantity,
                 inventory_totals_by_warehouse_tag.quantity_reserved = tempInventoryTotalsByWarehouseTag.quantity_reserved,
                 inventory_totals_by_warehouse_tag.quantity_incoming = tempInventoryTotalsByWarehouseTag.quantity_incoming,
