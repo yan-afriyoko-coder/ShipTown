@@ -3,16 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\JobIndexRequest;
 use App\Http\Requests\JobStoreRequest;
 use App\Http\Resources\ManualRequestJobResource;
 use App\Models\ManualRequestJob;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class JobsController extends Controller
 {
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(JobIndexRequest $request): AnonymousResourceCollection
     {
         return ManualRequestJobResource::collection(ManualRequestJob::query()->get());
     }
