@@ -46,7 +46,7 @@ class UpdateTotalsByWarehouseTagTableJob extends UniqueJob
                      ROUND(SUM(inventory.quantity), 2) as quantity,
                      ROUND(SUM(inventory.quantity_reserved), 2) as quantity_reserved,
                      ROUND(SUM(inventory.quantity_incoming), 2) as quantity_incoming,
-                     MAX(inventory.updated_at) as max_inventory_updated_at,
+                     MAX(IFNULL(inventory.updated_at, '2001-01-01 00:00:00')) as max_inventory_updated_at,
                      NOW() as calculated_at,
                      NOW() as created_at,
                      NOW() as updated_at
