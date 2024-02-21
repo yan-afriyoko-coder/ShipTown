@@ -11,7 +11,7 @@ class RecalculateInventoryRequestEventListener
     {
         DB::affectingStatement("
             UPDATE inventory_totals_by_warehouse_tag
-            SET inventory_totals_by_warehouse_tag.calculated_at = null
+            SET inventory_totals_by_warehouse_tag.recalc_required = 1
             WHERE inventory_totals_by_warehouse_tag.product_id IN (SELECT DISTINCT product_id FROM inventory WHERE id IN (
                 ".$event->inventoryRecordsIds->implode(',') ."
             ))

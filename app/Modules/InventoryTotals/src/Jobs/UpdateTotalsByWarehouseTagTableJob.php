@@ -3,6 +3,7 @@
 namespace App\Modules\InventoryTotals\src\Jobs;
 
 use App\Abstracts\UniqueJob;
+use App\Modules\InventoryTotals\src\Models\InventoryTotalByWarehouseTag;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -32,9 +33,9 @@ class UpdateTotalsByWarehouseTagTableJob extends UniqueJob
                     NOW() as calculated_at
                 FROM inventory_totals_by_warehouse_tag
 
-                WHERE (calculated_at IS NULL OR calculated_at < max_inventory_updated_at)
+                WHERE recalc_required = 1
 
-                LIMIT 500;
+                LIMIT 5000;
         ");
 
         DB::statement("
@@ -42,11 +43,11 @@ class UpdateTotalsByWarehouseTagTableJob extends UniqueJob
                 SELECT
                      tempTable.tag_id as tag_id,
                      tempTable.product_id as product_id,
-                     GREATEST(0, FLOOR(SUM(inventory.quantity))) as quantity,
-                     GREATEST(0, FLOOR(SUM(inventory.quantity_reserved))) as quantity_reserved,
-                     GREATEST(0, FLOOR(SUM(inventory.quantity_incoming))) as quantity_incoming,
-                     MAX(inventory.updated_at) as max_inventory_updated_at,
-                     tempTable.calculated_at as calculated_at,
+                     ROUND(SUM(IFNULL(inventory.quantity, 0)), 2) as quantity,
+                     ROUND(SUM(IFNULL(inventory.quantity_reserved, 0)), 2) as quantity_reserved,
+                     ROUND(SUM(IFNULL(inventory.quantity_incoming, 0)), 2) as quantity_incoming,
+                     MAX(IFNULL(inventory.updated_at, '2001-01-01 00:00:00')) as max_inventory_updated_at,
+                     NOW() as calculated_at,
                      NOW() as created_at,
                      NOW() as updated_at
 
@@ -60,7 +61,7 @@ class UpdateTotalsByWarehouseTagTableJob extends UniqueJob
                     ON inventory.product_id = tempTable.product_id
                     AND inventory.warehouse_id = taggables.taggable_id
 
-                GROUP BY tempTable.tag_id, tempTable.product_id, tempTable.calculated_at;
+                GROUP BY tempTable.tag_id, tempTable.product_id;
         ");
 
         return DB::update("
@@ -71,6 +72,7 @@ class UpdateTotalsByWarehouseTagTableJob extends UniqueJob
                 AND tempInventoryTotalsByWarehouseTag.product_id = inventory_totals_by_warehouse_tag.product_id
 
             SET
+                inventory_totals_by_warehouse_tag.recalc_required = 0,
                 inventory_totals_by_warehouse_tag.quantity = tempInventoryTotalsByWarehouseTag.quantity,
                 inventory_totals_by_warehouse_tag.quantity_reserved = tempInventoryTotalsByWarehouseTag.quantity_reserved,
                 inventory_totals_by_warehouse_tag.quantity_incoming = tempInventoryTotalsByWarehouseTag.quantity_incoming,

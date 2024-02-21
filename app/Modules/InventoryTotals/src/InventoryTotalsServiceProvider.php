@@ -3,6 +3,7 @@
 namespace App\Modules\InventoryTotals\src;
 
 use App\Events\EveryDayEvent;
+use App\Events\EveryFiveMinutesEvent;
 use App\Events\EveryMinuteEvent;
 use App\Events\EveryTenMinutesEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
@@ -48,6 +49,10 @@ class InventoryTotalsServiceProvider extends BaseModuleServiceProvider
 
         EveryMinuteEvent::class => [
             Listeners\EveryMinuteEventListener::class,
+        ],
+
+        EveryFiveMinutesEvent::class => [
+            Listeners\EveryFiveMinutesEventListener::class,
         ],
 
         EveryTenMinutesEvent::class => [

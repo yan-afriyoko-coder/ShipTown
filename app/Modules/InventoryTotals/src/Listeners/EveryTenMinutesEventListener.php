@@ -4,7 +4,6 @@ namespace App\Modules\InventoryTotals\src\Listeners;
 
 use App\Modules\InventoryTotals\src\Jobs\EnsureTotalsByWarehouseTagRecordsExistJob;
 use App\Modules\InventoryTotals\src\Jobs\EnsureTotalsRecordsExistJob;
-use App\Modules\InventoryTotals\src\Jobs\UpdateTotalsByWarehouseTagTableJob;
 use App\Modules\InventoryTotals\src\Jobs\UpdateTotalsTableJob;
 
 class EveryTenMinutesEventListener
@@ -15,6 +14,5 @@ class EveryTenMinutesEventListener
         UpdateTotalsTableJob::dispatch();
 
         EnsureTotalsByWarehouseTagRecordsExistJob::dispatch();
-        UpdateTotalsByWarehouseTagTableJob::dispatch();
     }
 }
