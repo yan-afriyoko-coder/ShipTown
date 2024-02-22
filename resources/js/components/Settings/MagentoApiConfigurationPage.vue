@@ -31,7 +31,7 @@
                                 <a class="badge text-uppercase" :key="tag.id"> {{ tag.name }} </a>
                             </template>
                         </td>
-                        <td>{{ connection.warehouse?.name }}</td>
+                        <td>{{ connection.warehouse.name ? connection.warehouse.name : '' }}</td>
                     </tr>
                     </tbody>
                 </table>
