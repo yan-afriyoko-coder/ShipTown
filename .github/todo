@@ -1,0 +1,28 @@
+// todo: Add comment to /packsheet page
+// todo: Merge migrations into core_v1 migration (up to Jan 31 2024)
+// todo: Add comment option to Tools > Data Collector (similar to orders page)
+// todo: Settings > General - Remove "first" Maintenance section and route /api/run-scheduled-job, and anything related to it as this was now replaced by /api/jobs
+// todo: Inventory - Quantity Reserved - Allow multiple reservations for inventory record product
+This should allow multiple systems to reserve inventory for a product, and then when the product is packed, it will remove the reservation from the inventory record.
+
+Example: (inventory_reservations (id, inventory_id, product_sku, warehouse_code, quantity_reserved, reason))
+Web Orders reserves 2 units,
+POS reserves 1 unit,
+Warehouse reserves 10 units for a special customer order
+
+In InventoryTotals module, update inventory totals in RecalculateInventoryRecordsJob
+
+inventory.quantity_reserved = 13
+
+// todo: Products Automations Module
+
+// todo: Marketing
+// todo: DEMO LOGIN PAGE as sales/landing page
+Create a new page for sales, where they can login and see the live demo with One Click login.
+This will then replace /login when in DEMO MODE and use it for marketing purposes
+
+// todo: Video - Introduction to handheld scanners, how they work?
+scanner = keyboard,
+swipe vs scan,
+show mistake when product swiped vs scanned,
+show speed packing and scanning vs swiping and no shelf locations
