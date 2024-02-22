@@ -10,7 +10,7 @@
 
                     <div class="small font-weight-bold">{{ formatDateTime(order['order_placed_at']) }}</div>
                     <div class="small font-weight-bold">{{ order['status_code'] }}</div>
-                    <div class="small">{{ order['label_template'] ?? '&nbsp;' }}</div>
+                    <div class="small">{{ order['label_template'] ? order['label_template'] : '&nbsp;' }}</div>
 
                     <div class="small">Shipping Numbers:
                         <template v-for="shipment in order['order_shipments']">
