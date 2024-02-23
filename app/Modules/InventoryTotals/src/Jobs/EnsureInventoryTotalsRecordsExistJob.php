@@ -24,7 +24,7 @@ class EnsureInventoryTotalsRecordsExistJob extends UniqueJob
         $this->productsMaxId = Product::query()->max('id');
     }
 
-    public function handle()
+    public function handle(): void
     {
         do {
             $minID = $maxID ?? $this->config->totals_max_product_id_checked;

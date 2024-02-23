@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class RecalculateInventoryTotalsTableJob extends UniqueJob
 {
-    public function handle()
+    public function handle(): void
     {
         do {
             $recordsUpdated = $this->recalculateTotals();
