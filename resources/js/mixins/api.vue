@@ -27,18 +27,6 @@ export default {
                 return axios.post(url, data)
             },
 
-            runJob(jobName) {
-                this.apiPostRunScheduledJobsRequest({"job": jobName})
-                    .then((response) => {
-                            this.$snotify.success(response.data['message']);
-                        }
-                    )
-                    .catch((error) => {
-                            this.$snotify.error(error.response.data.message);
-                        }
-                    );
-            },
-
             displayApiCallError: function (error) {
                 console.log('API failed call response', error);
 
@@ -278,10 +266,6 @@ export default {
 
             apiSetModuleAutoStatusPickingConfiguration: function (configuration) {
                 return axios.post(`/api/modules/autostatus/picking/configuration`, configuration);
-            },
-
-            apiPostRunScheduledJobsRequest: function (data) {
-                return axios.post('/api/run-scheduled-jobs', data);
             },
 
             apiGetJobsRequest: function (params) {

@@ -1,0 +1,15 @@
+// todo: Settings > General - Remove "first" Maintenance section and route /api/run-scheduled-job, and anything related to it as this was now replaced by /api/jobs
+
+// Maybe ?????????
+// ---------
+// todo: Products Automations Module
+// todo: Marketing
+// todo: DEMO LOGIN PAGE as sales/landing page
+Create a new page for sales, where they can login and see the live demo with One Click login.
+This will then replace /login when in DEMO MODE and use it for marketing purposes
+
+// todo: Video - Introduction to handheld scanners, how they work?
+scanner = keyboard,
+swipe vs scan,
+show mistake when product swiped vs scanned,
+show speed packing and scanning vs swiping and no shelf locations
