@@ -2,19 +2,19 @@
 
 namespace App\Modules\InventoryTotals\src\Listeners;
 
-use App\Modules\InventoryTotals\src\Jobs\EnsureTotalsByWarehouseTagRecordsExistJob;
-use App\Modules\InventoryTotals\src\Jobs\EnsureTotalsRecordsExistJob;
-use App\Modules\InventoryTotals\src\Jobs\UpdateTotalsByWarehouseTagTableJob;
-use App\Modules\InventoryTotals\src\Jobs\UpdateTotalsTableJob;
+use App\Modules\InventoryTotals\src\Jobs\EnsureInventoryTotalsByWarehouseTagRecordsExistJob;
+use App\Modules\InventoryTotals\src\Jobs\EnsureInventoryTotalsRecordsExistJob;
+use App\Modules\InventoryTotals\src\Jobs\RecalculateInventoryTotalsByWarehouseTagJob;
+use App\Modules\InventoryTotals\src\Jobs\RecalculateInventoryTotalsTableJob;
 
 class SyncRequestedEventListener
 {
     public function handle()
     {
-        EnsureTotalsRecordsExistJob::dispatch();
-        UpdateTotalsTableJob::dispatch();
+        EnsureInventoryTotalsRecordsExistJob::dispatch();
+        RecalculateInventoryTotalsTableJob::dispatch();
 
-        EnsureTotalsByWarehouseTagRecordsExistJob::dispatch();
-        UpdateTotalsByWarehouseTagTableJob::dispatch();
+        EnsureInventoryTotalsByWarehouseTagRecordsExistJob::dispatch();
+        RecalculateInventoryTotalsByWarehouseTagJob::dispatch();
     }
 }

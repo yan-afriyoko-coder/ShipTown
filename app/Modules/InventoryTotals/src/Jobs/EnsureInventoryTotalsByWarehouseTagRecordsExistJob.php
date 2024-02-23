@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class EnsureTotalsByWarehouseTagRecordsExistJob extends UniqueJob
+class EnsureInventoryTotalsByWarehouseTagRecordsExistJob extends UniqueJob
 {
     private int $batchSize;
     private Configuration|Model $config;

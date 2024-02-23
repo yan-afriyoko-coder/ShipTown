@@ -6,8 +6,8 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryTotals\src\InventoryTotalsServiceProvider;
-use App\Modules\InventoryTotals\src\Jobs\EnsureTotalsByWarehouseTagRecordsExistJob;
-use App\Modules\InventoryTotals\src\Jobs\UpdateTotalsByWarehouseTagTableJob;
+use App\Modules\InventoryTotals\src\Jobs\EnsureInventoryTotalsByWarehouseTagRecordsExistJob;
+use App\Modules\InventoryTotals\src\Jobs\RecalculateInventoryTotalsByWarehouseTagJob;
 use App\Modules\InventoryTotals\src\Models\Configuration;
 use App\Modules\InventoryTotals\src\Models\InventoryTotalByWarehouseTag;
 use App\Services\InventoryService;
@@ -55,7 +55,7 @@ class TotalsByWarehouseTagTest extends TestCase
             'max_inventory_updated_at' => '2000-01-01 00:00:00',
         ]);
 
-        UpdateTotalsByWarehouseTagTableJob::dispatch();
+        RecalculateInventoryTotalsByWarehouseTagJob::dispatch();
 
         ray('inventory_totals_by_warehouse_tag', InventoryTotalByWarehouseTag::query()->first()->toArray());
 
@@ -83,7 +83,7 @@ class TotalsByWarehouseTagTest extends TestCase
         InventoryTotalByWarehouseTag::query()->forceDelete();
         Configuration::query()->forceDelete();
 
-        EnsureTotalsByWarehouseTagRecordsExistJob::dispatch();
+        EnsureInventoryTotalsByWarehouseTagRecordsExistJob::dispatch();
 
         $this->assertDatabaseHas('inventory_totals_by_warehouse_tag', [
             'tag_id' => Tag::findFromString('test_tag')->getKey(),
