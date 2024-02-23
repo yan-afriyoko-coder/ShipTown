@@ -51,16 +51,8 @@ class InventoryTotalsServiceProvider extends BaseModuleServiceProvider
             Listeners\EveryMinuteEventListener::class,
         ],
 
-        EveryFiveMinutesEvent::class => [
-            Listeners\EveryFiveMinutesEventListener::class,
-        ],
-
         EveryTenMinutesEvent::class => [
             Listeners\EveryTenMinutesEventListener::class,
-        ],
-
-        EveryDayEvent::class => [
-            Listeners\DailyEventListener::class,
         ],
 
         ProductCreatedEvent::class => [
