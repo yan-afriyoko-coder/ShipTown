@@ -7,7 +7,7 @@ The Management Products API is a Laravel-based web application that allows users
 To get started with the Management Products API, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/codingcab/ShipTown.git`
-2. Navigate to the project directory: `cd management.products.api`
+2. Navigate to the project directory: `cd ShipTown`
 3. Install dependencies: `composer install`
 4. Copy the `.env.example` file to `.env`: `cp .env.example .env`
 5. Generate a new application key: `php artisan key:generate`
