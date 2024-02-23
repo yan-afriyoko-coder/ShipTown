@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Schema;
 
 class RecalculateInventoryRecordsJob extends UniqueJob
 {
-    public function handle()
+    public function handle(): void
     {
         do {
             Schema::dropIfExists('inventory_movements_to_recalculate');

@@ -6,9 +6,9 @@ use App\Abstracts\UniqueJob;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class UpdateTotalsTableJob extends UniqueJob
+class RecalculateInventoryTotalsTableJob extends UniqueJob
 {
-    public function handle()
+    public function handle(): void
     {
         do {
             $recordsUpdated = $this->recalculateTotals();

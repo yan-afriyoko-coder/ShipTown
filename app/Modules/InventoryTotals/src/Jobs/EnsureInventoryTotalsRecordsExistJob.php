@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class EnsureTotalsRecordsExistJob extends UniqueJob
+class EnsureInventoryTotalsRecordsExistJob extends UniqueJob
 {
     private int $batchSize;
     private Configuration|Model $config;
@@ -24,7 +24,7 @@ class EnsureTotalsRecordsExistJob extends UniqueJob
         $this->productsMaxId = Product::query()->max('id');
     }
 
-    public function handle()
+    public function handle(): void
     {
         do {
             $minID = $maxID ?? $this->config->totals_max_product_id_checked;

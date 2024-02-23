@@ -3,13 +3,12 @@
 namespace App\Modules\InventoryTotals\src\Jobs;
 
 use App\Abstracts\UniqueJob;
-use App\Modules\InventoryTotals\src\Models\InventoryTotalByWarehouseTag;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class UpdateTotalsByWarehouseTagTableJob extends UniqueJob
+class RecalculateInventoryTotalsByWarehouseTagJob extends UniqueJob
 {
-    public function handle()
+    public function handle(): void
     {
         do {
             $recordsUpdated = $this->recalculateTotals();
