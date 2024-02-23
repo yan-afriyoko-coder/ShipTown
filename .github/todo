@@ -1,24 +1,3 @@
-// todo: Add comment to /packsheet page
-// todo: Merge migrations into core_v1 migration (up to Jan 31 2024)
-// todo: Add comment option to Tools > Data Collector (similar to orders page)
-// todo: Inventory - Quantity Reserved - Allow multiple reservations for inventory record product
-This should allow multiple systems to reserve inventory for a product, and then when the product is packed, it will remove the reservation from the inventory record.
-
-Example: (inventory_reservations (id, inventory_id, product_sku, warehouse_code, quantity_reserved, reason, custom_uuid))
-Web Orders reserves 2 units,
-POS reserves 1 unit,
-Warehouse reserves 10 units for a special customer order
-
-In InventoryTotals module, update inventory totals in RecalculateInventoryRecordsJob
-
-inventory.quantity_reserved = 13
-
-// todo: RMSAPI module - Import quantity reserved from RMSAPI to inventory_reservations table
-
-// todo: https://dev.myshiptown.com/reports/inventory - Add option to click on column to sort by that column (report-default.blade.php)
-// todo: https://dev.myshiptown.com/reports/inventory - display applied url filters in form of outline button (&filter[sku]=45) (report-default.blade.php)
-// todo: https://dev.myshiptown.com/reports/inventory - Add option to filter by each column (equals, between, contains) (report-default.blade.php)
-
 // todo: Settings > General - Remove "first" Maintenance section and route /api/run-scheduled-job, and anything related to it as this was now replaced by /api/jobs
 
 // Maybe ?????????
