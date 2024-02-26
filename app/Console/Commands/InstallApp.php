@@ -15,6 +15,7 @@ use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\AutoRestockLevels\src\AutoRestockLevelsServiceProvider;
 use App\Modules\DataCollector\src\DataCollectorServiceProvider;
+use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
 use App\Modules\InventoryMovementsStatistics\src\InventoryMovementsStatisticsServiceProvider;
 use App\Modules\InventoryQuantityIncoming\src\InventoryQuantityIncomingServiceProvider;
 use App\Modules\InventoryReservations\src\EventServiceProviderBase;
@@ -88,10 +89,14 @@ class InstallApp extends Command
         InventoryMovementsStatisticsServiceProvider::installModule();
         SlackServiceProvider::installModule();
         EventServiceProviderBase::installModule();
+        InventoryMovementsServiceProvider::installModule();
+
 
         StocktakeSuggestionsServiceProvider::enableModule();
         InventoryMovementsStatisticsServiceProvider::enableModule();
         EventServiceProviderBase::enableModule();
+        InventoryMovementsServiceProvider::enableModule();
+
         return 0;
     }
 
