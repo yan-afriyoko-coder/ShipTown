@@ -17,21 +17,36 @@
         </div>
 
         <div v-if="!isLoading">
-            <div class="row-col mb-3">
+            <div class="row-col mb-2">
                 <order-details :order="order" />
-            </div>
 
-            <template v-for="order_comment in order['order_comments']">
-                <div class="row mb-2">
+                <div v-show="manuallyExpandComments" class="row mb-2 mt-1">
+                    <input id="comment-input" ref="newCommentInput" v-model="input_comment" class="form-control" placeholder="Add comment here" @keypress.enter="addComment"/>
+                </div>
+
+                <div class="row" v-if="manuallyExpandComments" v-for="order_comment in order['order_comments']">
                     <div class="col">
                         <b>{{ order_comment['user'] ? order_comment['user']['name'] : 'AutoPilot' }}: </b>{{ order_comment['comment'] }}
                     </div>
                 </div>
-            </template>
+
+                <div class="row" v-if="!manuallyExpandComments && order['order_comments'].length">
+                    <div class="col">
+                        <b>{{ order['order_comments'][0]['user'] ? order['order_comments'][0]['user']['name'] : 'AutoPilot' }}: </b>{{ order['order_comments'][0]['comment'] }}
+                    </div>
+                </div>
+
+                <div class="row text-center text-secondary" @click="toggleExpandComments">
+                    <div class="col">
+                        <font-awesome-icon v-if="manuallyExpandComments" icon="chevron-up" class="fa fa-xs"></font-awesome-icon>
+                        <font-awesome-icon v-if="!manuallyExpandComments" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
+                    </div>
+                </div>
+            </div>
 
             <div class="row m-1 pb-2 sticky-top bg-light" style="z-index: 10;">
                 <div class="flex-fill">
-                    <barcode-input-field @barcodeScanned="packBarcode" placeholder="Enter sku or alias to ship 1 piece" ref="barcode"/>
+                    <barcode-input-field :input_id="'barcode-input'" @barcodeScanned="packBarcode" placeholder="Enter sku or alias to ship 1 piece" ref="barcode"/>
                 </div>
 
                 <button type="button" v-b-modal="'filtersModal'" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
@@ -154,6 +169,7 @@
                     orderStatuses: [],
                     shippingCouriers: [],
 
+                    input_comment: '',
                     shippingNumberInput: '',
 
                     packlist: null,
@@ -162,6 +178,8 @@
                     canClose: true,
                     somethingHasBeenPackedDuringThisSession: false,
                     autoLabelAlreadyPrinted: false,
+
+                    manuallyExpandComments: false,
                 };
             },
             watch: {
@@ -208,7 +226,7 @@
 
             methods: {
                 modalHidden() {
-                    this.setFocusOnBarcodeInput();
+                    this.setFocusElementById('barcode-input');
                     this.reloadData();
                 },
 
@@ -232,6 +250,35 @@
                     document.body.addEventListener("focus", setActivityTime);
                     document.body.addEventListener("mousemove", setActivityTime);
                     document.body.addEventListener("keypress", setActivityTime);
+                },
+
+                addComment() {
+
+                    let data = {
+                        "order_id": this.order['id'],
+                        "comment": this.input_comment
+                    };
+
+                    // quick hack to immediately display comment
+                    this.order['order_comments'].unshift(data);
+
+                    this.apiPostOrderComment(data)
+                        .then(() => {
+                            this.loadOrder();
+                            this.input_comment = '';
+                            this.manuallyExpandComments = false;
+                            this.setFocusElementById('barcode-input');
+
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                            this.displayApiCallError(error);
+                        });
+                },
+
+                toggleExpandComments() {
+                    this.manuallyExpandComments = !this.manuallyExpandComments;
+                    this.setFocusElementById(this.manuallyExpandComments ? 'comment-input': 'barcode-input');
                 },
 
                 checkIfPacker: async function() {
@@ -366,14 +413,14 @@
 
                                     this.$snotify.remove(toast.id);
                                     this.shipOrderProduct(orderProduct, Number(toast.value));
-                                    this.setFocusOnBarcodeInput();
+                                    this.setFocusElementById('barcode-input');
                                 }
                             },
                             {
                                 text: 'Cancel',
                                 action: (toast) => {
                                     this.$snotify.remove(toast.id);
-                                    this.setFocusOnBarcodeInput();
+                                    this.setFocusElementById('barcode-input');
                                 }
                             },
                         ],
@@ -382,7 +429,7 @@
 
                 changeStatus() {
                     this.$refs.filtersModal.hide();
-                    this.setFocusOnBarcodeInput();
+                    this.setFocusElementById('barcode-input');
 
                     this.apiUpdateOrder(this.order['id'], {'status_code': this.order.status_code})
                         .then(() => {
@@ -498,7 +545,7 @@
 
                 shipAll(orderProduct) {
                     this.shipOrderProduct(orderProduct, orderProduct['quantity_to_ship']);
-                    this.setFocusOnBarcodeInput();
+                    this.setFocusElementById('barcode-input');
                 },
 
                 findEntry: function (barcode) {
@@ -552,7 +599,7 @@
                     }
 
                     this.shipOrderProduct(pickItem, 1);
-                    this.setFocusOnBarcodeInput();
+                    this.setFocusElementById('barcode-input');
                 },
 
                 getAddressLabelTemplateName: function () {
@@ -587,7 +634,7 @@
 
                 printExtraLabelClick: function () {
                     this.$refs.filtersModal.hide();
-                    this.setFocusOnBarcodeInput();
+                    this.setFocusElementById('barcode-input');
 
                     this.printShippingLabel();
                 },
@@ -635,7 +682,7 @@
 
                 openPreviousOrder: function (){
                     this.$refs.filtersModal.hide();
-                    this.setFocusOnBarcodeInput();
+                    this.setFocusElementById('barcode-input');
 
                     if (! this.previous_order_id) {
                         this.notifyError('Not Available');
@@ -667,7 +714,7 @@
                     }
 
                     return (this.order['packer_user_id']  && this.order['packer_user_id'] !== Vue.prototype.$currentUser['id']);
-                }
+                },
             },
     }
     </script>
