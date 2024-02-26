@@ -1018,10 +1018,15 @@ return new class extends Migration
                 ->references('id')
                 ->on('warehouses')
                 ->onDelete('cascade');
+            $table->unsignedBigInteger('destination_warehouse_id')->nullable();
             $table->string('name');
             $table->string('currently_running_task')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('destination_warehouse_id')
+                ->references('id')
+                ->on('warehouses');
         });
 
         Schema::create('data_collection_records', function (Blueprint $table) {
