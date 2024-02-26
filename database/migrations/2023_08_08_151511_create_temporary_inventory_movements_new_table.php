@@ -8,6 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // do not merge - to be deleted
         Schema::create('inventory_movements_temp', function (Blueprint $table) {
             $table->id();
             $table->boolean('is_first_movement')->nullable();
