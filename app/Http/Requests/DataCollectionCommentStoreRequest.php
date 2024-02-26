@@ -24,7 +24,7 @@ class DataCollectionCommentStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'data_collection_id' => ['required', 'numeric', 'exists:orders,id'],
+            'data_collection_id' => ['required', 'numeric', 'exists:data_collections,id'],
             'comment'  => ['required', 'string'],
         ];
     }

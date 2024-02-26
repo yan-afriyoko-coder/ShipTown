@@ -12,7 +12,7 @@ class IndexTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('comments.index'));
+        $response = $this->actingAs($user, 'api')->get('api/data-collector/comments');
 
         $response->assertOk();
         $response->assertJsonStructure([

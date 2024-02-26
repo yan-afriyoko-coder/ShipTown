@@ -13,12 +13,13 @@ class StoreTest extends TestCase
     {
         $user = User::factory()->create();
         $dataCollection = DataCollection::factory()->create();
+
         $attributes = [
             'data_collection_id' => $dataCollection->getKey(),
             'comment'  => 'Test comment',
         ];
 
-        $response = $this->actingAs($user, 'api')->postJson(route('comments.store'), $attributes);
+        $response = $this->actingAs($user, 'api')->postJson('api/data-collector/comments', $attributes);
 
         $response->assertOk();
 

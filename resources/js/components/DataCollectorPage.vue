@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="dataCollection">
         <template v-if="dataCollection && dataCollection['currently_running_task'] != null">
             <div class="alert alert-danger">Please wait while stock being updated</div>
         </template>
@@ -17,6 +17,29 @@
                     </div>
             </template>
         </swiping-card>
+
+        <div v-show="manuallyExpandComments" class="row mb-2 mt-1">
+            <input id="comment-input" ref="newCommentInput" v-model="input_comment" class="form-control" placeholder="Add comment here" @keypress.enter="addComment"/>
+        </div>
+
+        <div class="row" v-if="manuallyExpandComments" v-for="comment in dataCollection.comments">
+            <div class="col">
+                <b>{{ comment.user ? comment.user.name : 'AutoPilot' }}: </b>{{ comment.comment }}
+            </div>
+        </div>
+
+        <div class="row" v-if="!manuallyExpandComments && dataCollection.comments.length">
+            <div class="col">
+                <b>{{ dataCollection.comments[0].user ? dataCollection.comments[0].user.name: 'AutoPilot' }}: </b>{{ dataCollection.comments[0].comment }}
+            </div>
+        </div>
+
+        <div class="row text-center text-secondary" @click="toggleExpandComments">
+            <div class="col">
+                <font-awesome-icon v-if="manuallyExpandComments" icon="chevron-up" class="fa fa-xs"></font-awesome-icon>
+                <font-awesome-icon v-if="!manuallyExpandComments" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
+            </div>
+        </div>
 
         <div class="row mb-1 pb-2 p-1 mt-0 sticky-top bg-light flex-nowrap" style="z-index: 10;">
             <div class="flex-fill">
@@ -203,7 +226,9 @@
                 csv: null,
                 warehouses: [],
                 buttonsEnabled: false,
-                selectedInventoryId: null
+                selectedInventoryId: null,
+                manuallyExpandComments: false,
+                input_comment: '',
             };
         },
 
@@ -286,7 +311,14 @@
             },
 
             loadDataCollectorDetails: function () {
-                this.apiGetDataCollector({'filter[id]': this.data_collection_id, 'filter[with_archived]': true})
+
+                let params = {
+                    'filter[id]': this.data_collection_id,
+                    'filter[with_archived]': true,
+                    'include': 'comments,comments.user'
+                }
+
+                this.apiGetDataCollector(params)
                     .then(response => {
                         this.dataCollection = response.data.data[0];
                     });
@@ -537,6 +569,40 @@
             hideBvModal(ref) {
                 this.$bvModal.hide(ref);
             },
+
+            addComment() {
+
+                let data = {
+                    "data_collection_id": this.dataCollection.id,
+                    "comment": this.input_comment
+                };
+
+                // quick hack to immediately display comment
+                this.dataCollection.comments.unshift(data);
+
+                this.apiPostDataCollectionComment(data)
+                    .then(() => {
+                        this.loadDataCollectorDetails();
+                        this.input_comment = '';
+                        this.manuallyExpandComments = false;
+                        this.setFocusElementById('barcode_input');
+
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        this.displayApiCallError(error);
+                    });
+            },
+
+            toggleExpandComments() {
+                this.manuallyExpandComments = !this.manuallyExpandComments;
+                if(this.manuallyExpandComments){
+                    this.setFocusElementById('comment-input', true);
+                } else {
+                    this.setFocusElementById('barcode_input', false);
+                }
+            },
+
         },
 
         computed: {
