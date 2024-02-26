@@ -78,17 +78,20 @@ class InstallApp extends Command
             'warehouse_id' => Warehouse::query()->firstOrCreate(['code' => '999'], ['name' => '999'])->id,
         ]);
 
-        StocktakeSuggestionsServiceProvider::enableModule();
+        StocktakeSuggestionsServiceProvider::installModule();
         AutoRestockLevelsServiceProvider::installModule();
         InventoryQuantityIncomingServiceProvider::installModule();
         DataCollectorServiceProvider::installModule();
         NonInventoryProductTagServiceProvider::installModule();
         QueueMonitorServiceProvider::installModule();
         TelescopeModuleServiceProvider::installModule();
-        InventoryMovementsStatisticsServiceProvider::enableModule();
+        InventoryMovementsStatisticsServiceProvider::installModule();
         SlackServiceProvider::installModule();
-        EventServiceProviderBase::enableModule();
+        EventServiceProviderBase::installModule();
 
+        StocktakeSuggestionsServiceProvider::enableModule();
+        InventoryMovementsStatisticsServiceProvider::enableModule();
+        EventServiceProviderBase::enableModule();
         return 0;
     }
 
