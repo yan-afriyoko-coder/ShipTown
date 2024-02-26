@@ -9,6 +9,7 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // do not merge - to be deleted
         DB::statement("
         CREATE OR REPLACE VIEW view_key_dates AS
         SELECT
