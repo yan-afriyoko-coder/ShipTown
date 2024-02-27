@@ -18,30 +18,7 @@
             </template>
         </swiping-card>
 
-        <div v-show="manuallyExpandComments" class="row mb-2 mt-1">
-            <input id="comment-input" ref="newCommentInput" v-model="input_comment" class="form-control" placeholder="Add comment here" @keypress.enter="addComment"/>
-        </div>
-
-        <div class="row" v-if="manuallyExpandComments" v-for="comment in dataCollection.comments">
-            <div class="col">
-                <b>{{ comment.user ? comment.user.name : 'AutoPilot' }}: </b>{{ comment.comment }}
-            </div>
-        </div>
-
-        <div class="row" v-if="!manuallyExpandComments && dataCollection.comments.length">
-            <div class="col">
-                <b>{{ dataCollection.comments[0].user ? dataCollection.comments[0].user.name: 'AutoPilot' }}: </b>{{ dataCollection.comments[0].comment }}
-            </div>
-        </div>
-
-        <div class="row text-center text-secondary" @click="toggleExpandComments">
-            <div class="col">
-                <font-awesome-icon v-if="manuallyExpandComments" icon="chevron-up" class="fa fa-xs"></font-awesome-icon>
-                <font-awesome-icon v-if="!manuallyExpandComments" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
-            </div>
-        </div>
-
-        <div class="row mb-1 pb-2 p-1 mt-0 sticky-top bg-light flex-nowrap" style="z-index: 10;">
+        <div class="row pb-2 p-1 mt-0 sticky-top bg-light flex-nowrap" style="z-index: 10;">
             <div class="flex-fill">
                 <barcode-input-field :input_id="'barcode_input'" @barcodeScanned="onBarcodeScanned" placeholder="Scan sku or alias" class="text-center font-weight-bold"></barcode-input-field>
             </div>
@@ -52,6 +29,28 @@
                    @keyup.enter="setMinShelfLocation"/>
 
             <button id="showConfigurationButton" v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+        </div>
+
+        <div v-show="manuallyExpandComments" class="row mb-2 mt-1 my-1">
+            <input id="comment-input" ref="newCommentInput" v-model="input_comment" class="form-control" placeholder="Add comment here" @keypress.enter="addComment"/>
+        </div>
+
+        <div class="mb-1" v-if="commentsToShow.length">
+            <div class="d-flex mx-1" v-for="(comment, index) in commentsToShow" @click="toggleExpandComments">
+                <div>
+                    <b>{{ comment.user ? comment.user.name : 'AutoPilot' }}: </b>{{ comment.comment }}
+                </div>
+                <div class="ml-auto" v-if="index === 0">
+                    <font-awesome-icon v-if="manuallyExpandComments" icon="chevron-up" class="fa fa-xs"></font-awesome-icon>
+                    <font-awesome-icon v-if="!manuallyExpandComments" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
+                </div>
+            </div>
+        </div>
+        <div v-else class="row text-center text-secondary" @click="toggleExpandComments">
+            <div class="col">
+                <font-awesome-icon v-if="manuallyExpandComments" icon="chevron-up" class="fa fa-xs"></font-awesome-icon>
+                <font-awesome-icon v-if="!manuallyExpandComments" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
+            </div>
         </div>
 
         <data-collector-quantity-request-modal @hidden="onQuantityRequestModalHidden"></data-collector-quantity-request-modal>
@@ -321,6 +320,9 @@
                 this.apiGetDataCollector(params)
                     .then(response => {
                         this.dataCollection = response.data.data[0];
+                    }).catch(error => {
+                        console.log(error);
+                        this.displayApiCallError(error);
                     });
             },
 
@@ -618,6 +620,12 @@
 
                 return routeData.href;
             },
+
+            commentsToShow() {
+                return this.dataCollection.comments.length
+                    ? (this.manuallyExpandComments ? this.dataCollection.comments : [this.dataCollection.comments[0]])
+                    : [];
+            }
         },
     }
 </script>

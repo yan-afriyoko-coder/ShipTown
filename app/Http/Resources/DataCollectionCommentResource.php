@@ -20,6 +20,7 @@ class DataCollectionCommentResource extends JsonResource
             'user_id'  => $this->user_id,
             'comment'  => $this->comment,
             'user'     => new UserResource($this->whenLoaded('user')),
+            'created_at' => $this->created_at,
         ];
     }
 }
