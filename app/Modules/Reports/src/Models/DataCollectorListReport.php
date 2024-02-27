@@ -65,5 +65,8 @@ class DataCollectorListReport extends Report
                 }
             })
         );
+
+        $this->addAllowedInclude('comments');
+        $this->addAllowedInclude('comments.user');
     }
 }

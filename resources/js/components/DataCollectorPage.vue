@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="dataCollection">
         <template v-if="dataCollection && dataCollection['currently_running_task'] != null">
             <div class="alert alert-danger">Please wait while stock being updated</div>
         </template>
@@ -18,7 +18,7 @@
             </template>
         </swiping-card>
 
-        <div class="row mb-1 pb-2 p-1 mt-0 sticky-top bg-light flex-nowrap" style="z-index: 10;">
+        <div class="row pb-2 p-1 mt-0 sticky-top bg-light flex-nowrap" style="z-index: 10;">
             <div class="flex-fill">
                 <barcode-input-field :input_id="'barcode_input'" @barcodeScanned="onBarcodeScanned" placeholder="Scan sku or alias" class="text-center font-weight-bold"></barcode-input-field>
             </div>
@@ -29,6 +29,28 @@
                    @keyup.enter="setMinShelfLocation"/>
 
             <button id="showConfigurationButton" v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+        </div>
+
+        <div v-show="manuallyExpandComments" class="row mb-2 mt-1 my-1">
+            <input id="comment-input" ref="newCommentInput" v-model="input_comment" class="form-control" placeholder="Add comment here" @keypress.enter="addComment"/>
+        </div>
+
+        <div class="mb-1" v-if="commentsToShow.length">
+            <div class="d-flex mx-1" v-for="(comment, index) in commentsToShow" @click="toggleExpandComments">
+                <div>
+                    <b>{{ comment.user ? comment.user.name : 'AutoPilot' }}: </b>{{ comment.comment }}
+                </div>
+                <div class="ml-auto" v-if="index === 0">
+                    <font-awesome-icon v-if="manuallyExpandComments" icon="chevron-up" class="fa fa-xs"></font-awesome-icon>
+                    <font-awesome-icon v-if="!manuallyExpandComments" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
+                </div>
+            </div>
+        </div>
+        <div v-else class="row text-center text-secondary" @click="toggleExpandComments">
+            <div class="col">
+                <font-awesome-icon v-if="manuallyExpandComments" icon="chevron-up" class="fa fa-xs"></font-awesome-icon>
+                <font-awesome-icon v-if="!manuallyExpandComments" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
+            </div>
         </div>
 
         <data-collector-quantity-request-modal @hidden="onQuantityRequestModalHidden"></data-collector-quantity-request-modal>
@@ -203,7 +225,9 @@
                 csv: null,
                 warehouses: [],
                 buttonsEnabled: false,
-                selectedInventoryId: null
+                selectedInventoryId: null,
+                manuallyExpandComments: false,
+                input_comment: '',
             };
         },
 
@@ -286,9 +310,19 @@
             },
 
             loadDataCollectorDetails: function () {
-                this.apiGetDataCollector({'filter[id]': this.data_collection_id, 'filter[with_archived]': true})
+
+                let params = {
+                    'filter[id]': this.data_collection_id,
+                    'filter[with_archived]': true,
+                    'include': 'comments,comments.user'
+                }
+
+                this.apiGetDataCollector(params)
                     .then(response => {
                         this.dataCollection = response.data.data[0];
+                    }).catch(error => {
+                        console.log(error);
+                        this.displayApiCallError(error);
                     });
             },
 
@@ -537,6 +571,40 @@
             hideBvModal(ref) {
                 this.$bvModal.hide(ref);
             },
+
+            addComment() {
+
+                let data = {
+                    "data_collection_id": this.dataCollection.id,
+                    "comment": this.input_comment
+                };
+
+                // quick hack to immediately display comment
+                this.dataCollection.comments.unshift(data);
+
+                this.apiPostDataCollectionComment(data)
+                    .then(() => {
+                        this.loadDataCollectorDetails();
+                        this.input_comment = '';
+                        this.manuallyExpandComments = false;
+                        this.setFocusElementById('barcode_input');
+
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        this.displayApiCallError(error);
+                    });
+            },
+
+            toggleExpandComments() {
+                this.manuallyExpandComments = !this.manuallyExpandComments;
+                if(this.manuallyExpandComments){
+                    this.setFocusElementById('comment-input', true);
+                } else {
+                    this.setFocusElementById('barcode_input', false);
+                }
+            },
+
         },
 
         computed: {
@@ -552,6 +620,12 @@
 
                 return routeData.href;
             },
+
+            commentsToShow() {
+                return this.dataCollection.comments.length
+                    ? (this.manuallyExpandComments ? this.dataCollection.comments : [this.dataCollection.comments[0]])
+                    : [];
+            }
         },
     }
 </script>

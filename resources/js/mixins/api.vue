@@ -130,7 +130,11 @@ export default {
                 return axios.post('/api/data-collector-actions/add-product', data);
             },
 
-            apiGetDataCollector(params) {
+            apiPostDataCollectionComment(data) {
+                return axios.post('/api/data-collector/comments', data);
+            },
+
+             apiGetDataCollector(params) {
                 return axios.get('/api/data-collector', {params: params});
             },
 
