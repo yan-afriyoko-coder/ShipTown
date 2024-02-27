@@ -19,11 +19,9 @@
         <div v-if="!isLoading">
             <div class="row-col mb-2">
                 <order-details :order="order" />
-
                 <div v-show="manuallyExpandComments" class="row mx-1 my-2">
                     <input id="comment-input" ref="newCommentInput" v-model="input_comment" class="form-control" placeholder="Add comment here" @keypress.enter="addComment"/>
                 </div>
-
                 <div class="my-1" v-if="commentsToShow.length">
                     <div class="d-flex mx-1" v-for="(comment, index) in commentsToShow" @click="toggleExpandComments">
                         <div>
@@ -37,12 +35,10 @@
                 </div>
                 <div v-else class="row text-center text-secondary" @click="toggleExpandComments">
                     <div class="col">
-                        <font-awesome-icon v-if="showExpandedComments" icon="chevron-up" class="fa fa-xs"></font-awesome-icon>
-                        <font-awesome-icon v-if="!showExpandedComments" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
-                        {{ showExpandedComments ? 'hide' : 'expand' }} comments
+                        <font-awesome-icon v-if="manuallyExpandComments" icon="chevron-up" class="fa fa-xs"></font-awesome-icon>
+                        <font-awesome-icon v-if="!manuallyExpandComments" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
                     </div>
                 </div>
-
             </div>
 
             <div class="row m-1 pb-2 sticky-top bg-light" style="z-index: 10;">
@@ -272,6 +268,8 @@
 
                         })
                         .catch((error) => {
+                            // remove first comment if it was not saved
+                            this.order.order_comments.shift();
                             console.log(error)
                             this.displayApiCallError(error);
                         });
