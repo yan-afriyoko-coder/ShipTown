@@ -20,8 +20,10 @@
                     <table class="table-hover w-100 text-left small table-responsive text-nowrap">
                         <thead>
                         <tr>
-                            @foreach($fields as $field)
-                                <th class="small pr-3">{{ __($field) }}</th>
+                            @foreach($field_links as $field_link)
+                                <th class="small pr-3">
+                                    <a href="{{$field_link['url']}}">{{ __($field_link['name']) }}</a>
+                                </th>
                             @endforeach
                         </tr>
                         </thead>
