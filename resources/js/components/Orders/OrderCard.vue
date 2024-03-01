@@ -35,39 +35,37 @@
                             <div v-if="order['order_products_totals']" class="col text-center" @click="toggleOrderDetails">
                                 <div class="d-flex flex-nowrap justify-content-between">
                                     <div>
-                                        <number-card label="age" :number="order['age_in_days']"></number-card>
+                                        <number-card label="age" :number="order['age_in_days']" :min-width="'50px'"></number-card>
                                     </div>
                                     <div>
-                                        <number-card label="lines" :number="order['order_products_totals']['count']"></number-card>
+                                        <number-card label="lines" :number="order['order_products_totals']['count']" :min-width="'50px'"></number-card>
                                     </div>
-                                    <div class="d-none d-md-block text-right align-text-top" v-bind:class="{ 'bg-warning': order['total_paid'] < 0.01 }">
+                                    <div class="d-none d-md-block" v-bind:class="{ 'bg-warning': order['total_paid'] < 0.01 }">
                                         <div class="text-center w-100 text-secondary small">
                                             <small>total paid</small>
                                         </div>
-                                        <div class="h5">
-                                            <p class="text-center">
-                                                {{ financial(order.total_paid).split('.')[0] }}<!--
+                                        <h4 class="text-center">
+                                            {{ financial(order.total_paid).split('.')[0] }}<!--
                                                 --><span style="font-size: 8pt">.{{ financial(order.total_paid).split('.')[1] }}</span>
-                                            </p>
-                                        </div>
+                                        </h4>
                                     </div>
                                     <div class="d-none d-sm-block">
-                                        <number-card label="ordered" :number="order['order_products_totals']['quantity_ordered']"></number-card>
+                                        <number-card label="ordered" :number="order['order_products_totals']['quantity_ordered']" :min-width="'50px'"></number-card>
                                     </div>
                                     <div class="bg-warning" v-if="Number(order['order_products_totals']['quantity_split']) > 0">
-                                        <number-card label="split" :number="order['order_products_totals']['quantity_split']"></number-card>
+                                        <number-card label="split" :number="order['order_products_totals']['quantity_split']" :min-width="'50px'"></number-card>
                                     </div>
                                     <div>
-                                        <number-card label="picked" :number="order['order_products_totals']['quantity_picked']"></number-card>
+                                        <number-card label="picked" :number="order['order_products_totals']['quantity_picked']" :min-width="'50px'"></number-card>
                                     </div>
                                     <div class="bg-warning" v-if="Number(order['order_products_totals']['quantity_skipped_picking']) > 0">
-                                        <number-card label="skipped" :number="order['order_products_totals']['quantity_skipped_picking']"></number-card>
+                                        <number-card label="skipped" :number="order['order_products_totals']['quantity_skipped_picking']" :min-width="'50px'"></number-card>
                                     </div>
                                     <div class="d-none d-md-block">
-                                        <number-card label="shipped" :number="order['order_products_totals']['quantity_shipped']"></number-card>
+                                        <number-card label="shipped" :number="order['order_products_totals']['quantity_shipped']" :min-width="'50px'"></number-card>
                                     </div>
                                     <div>
-                                        <number-card label="to ship" :number="order['order_products_totals']['quantity_to_ship']"></number-card>
+                                        <number-card label="to ship" :number="order['order_products_totals']['quantity_to_ship']" :min-width="'50px'"></number-card>
                                     </div>
                                 </div>
                             </div>
