@@ -114,6 +114,8 @@ class Report extends Model
                 'name' => $field,
                 'url' => $url,
                 'is_current' => $isCurrent,
+                'is_desc' => $sortIsDesc,
+                'display_name' => str_replace('_', ' ', ucwords($field, '_'))
             ];
         });
 

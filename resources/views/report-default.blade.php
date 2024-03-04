@@ -22,7 +22,19 @@
                         <tr>
                             @foreach($field_links as $field_link)
                                 <th class="small pr-3">
-                                    <a href="{{$field_link['url']}}">{{ __($field_link['name']) }}</a>
+                                    <a class="text-dark pb-1"
+                                        href="{{$field_link['url']}}"
+                                        @style([
+                                            'text-decoration: underline' => $field_link['is_current'],
+                                        ])
+                                    >
+                                        @if($field_link['is_current'])
+                                            <span class="small">
+                                                {{ $field_link['is_desc'] ? '▼' : '▲' }}
+                                            </span>
+                                       @endif
+                                    {{ __($field_link['display_name']) }}
+                                    </a>
                                 </th>
                             @endforeach
                         </tr>
