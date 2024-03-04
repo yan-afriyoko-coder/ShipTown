@@ -37,24 +37,16 @@ export default {
             },
 
             toNumberOrDash(value, decimals = null) {
-                if (isNaN(value)) {
-                    return '-';
-                }
-                if (value === null) {
+
+                if (isNaN(value) || value === null || Number(value) === 0) {
                     return '-';
                 }
 
                 const numberValue = Number(value);
-
-                if (numberValue === 0) {
-                    return '-';
-                }
-
                 if (decimals || numberValue % 1 !== 0) {
-                    return numberValue.toFixed(decimals);
+                    return numberValue.toFixed(decimals ? decimals : 2);
                 }
-
-                return this.dashIfZero(Number(value)).toLocaleString().replace(',', ' ');
+                return this.dashIfZero(numberValue).toLocaleString().replace(',', ' ');
             },
 
             dashIfZero(value) {
