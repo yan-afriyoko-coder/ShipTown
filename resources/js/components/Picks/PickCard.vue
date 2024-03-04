@@ -24,7 +24,7 @@
                                         <div v-bind:class="{ 'bg-warning': Number(pick['inventory_source_quantity']) === 0 }">
                                             stock: <b> {{ Number(pick['inventory_source_quantity']) }} </b>
                                         </div>
-                                        <p class="text-danger">orders: {{ pick.order_product_ids.length }}</p>
+                                        <p class="">orders: {{ pick.order_product_ids.length }}</p>
                                     </div>
                                     <div class="col-2 text-center" v-bind:class="{ 'bg-warning': Number(pick['total_quantity_to_pick']) !== 1 }">
                                         <small>to pick</small>
