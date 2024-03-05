@@ -11,6 +11,11 @@ export default {
     mixins: [beep],
 
         methods: {
+
+            financial(decimal) {
+                return Number.parseFloat(decimal).toFixed(2);
+            },
+
             formatDateTime(datetime, format = "YYYY MMM D HH:mm", defaultValue = "-") {
                 return datetime ? moment(datetime).format(format) : defaultValue;
             },
