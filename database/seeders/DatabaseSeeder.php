@@ -40,8 +40,8 @@ class DatabaseSeeder extends Seeder
             Demo\ProductsSeeder::class,
             Demo\ProductsTagsSeeder::class,
 
+            // Orders Seeders
             Demo\TestOrdersSeeder::class,
-
             Demo\PaidOrdersSeeder::class,
 
             Demo\DataCollections\TransferToCorkBranchSeeder::class,
