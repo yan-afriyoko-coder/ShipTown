@@ -67,10 +67,6 @@ Route::put('print/order/{order_number}/{view}', [Api\PrintOrderController::class
 Route::apiResource('packlist/order', Api\PacklistOrderController::class, ['as' => 'packlist'])->only(['index']);
 
 Route::apiResource('csv-import/data-collections', Api\CsvImport\DataCollectionsImportController::class)->names('csv-import-data-collections')->only(['store']);
-Route::apiResource('run/sync', Api\Run\SyncController::class)->only('index');
-Route::apiResource('run/sync/api2cart', Api\Run\SyncApi2CartController::class)->only('index');
-Route::apiResource('run/hourly/jobs', Api\Run\HourlyJobsController::class, ['as' => 'run.hourly'])->only('index');
-Route::apiResource('run/daily/jobs', Api\Run\DailyJobsController::class, ['as' => 'run.daily'])->only('index');
 Route::apiResource('product/aliases', Api\ProductAliasController::class, ['as' => 'product'])->only(['index']);
 Route::apiResource('product/tags', Api\ProductTagController::class)->only(['index']);
 Route::apiResource('data-collector/comments', Api\DataCollectionCommentController::class)->only(['index', 'store']);
