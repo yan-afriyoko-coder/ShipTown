@@ -51,14 +51,14 @@ If you have any questions or issues with the Management Products API, please con
 - We can have multiple locations (warehouses)
 - Each product can be in multiple locations (inventory)
 - Each inventory can have multiple reservations (inventory_reservations)
-- We import orders from multiple sources (eCommerce, Retail, Click and Collect, Preorders)
+- We import orders from multiple sources (orders)
 - Each order can have multiple products (orders_products)
 - We automatically group orders by order_status to help with the most efficient shipment and delivery process
 - We help with stock management, restocking, reordering, and stock taking
 
 # Use cases
 
-### Own eCommerce Fulfillment Center
+### Small Web Store / eCommerce Fulfillment Center
 1. User logs in
 2. User connects Magento2 API or other sources
 3. Orders are fetched from eCommerce Store or other sources
