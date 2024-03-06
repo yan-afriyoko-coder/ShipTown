@@ -3,14 +3,14 @@
 namespace App\Jobs;
 
 use App\Abstracts\UniqueJob;
-use App\Events\MonthlyEvent;
+use App\Events\EveryMonthEvent;
 use App\Models\Heartbeat;
 
-class DispatchMonthlyEventJob extends UniqueJob
+class DispatchEveryMonthEventJob extends UniqueJob
 {
     public function handle()
     {
-        MonthlyEvent::dispatch();
+        EveryMonthEvent::dispatch();
 
         Heartbeat::query()->updateOrCreate([
             'code' => self::class,

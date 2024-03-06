@@ -40,10 +40,6 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        SyncRequestedEvent::class => [
-            Listeners\SyncRequestedEventListener::class,
-        ],
-
         EveryTenMinutesEvent::class => [
             Listeners\EveryTenMinutesEventListener::class
         ],

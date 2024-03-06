@@ -3,15 +3,9 @@
 namespace App\Modules\InventoryMovementsStatistics\src;
 
 use App\Events\EveryDayEvent;
-use App\Events\EveryTenMinutesEvent;
 use App\Events\InventoryMovement\InventoryMovementCreatedEvent;
-use App\Events\SyncRequestedEvent;
-use App\Modules\Api2cart\src\Listeners\DailyEventListener;
 use App\Modules\BaseModuleServiceProvider;
 
-/**
- * Class EventServiceProviderBase.
- */
 class InventoryMovementsStatisticsServiceProvider extends BaseModuleServiceProvider
 {
     /**
@@ -35,14 +29,6 @@ class InventoryMovementsStatisticsServiceProvider extends BaseModuleServiceProvi
      * @var array
      */
     protected $listen = [
-        SyncRequestedEvent::class => [
-            Listeners\SyncRequestedEventListener::class,
-        ],
-
-//        EveryTenMinutesEvent::class => [
-//            Listeners\EveryTenMinutesEventListener::class,
-//        ],
-
         InventoryMovementCreatedEvent::class => [
             Listeners\InventoryMovementCreatedEventListener::class,
         ],

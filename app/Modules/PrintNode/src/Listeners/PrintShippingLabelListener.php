@@ -2,7 +2,7 @@
 
 namespace App\Modules\PrintNode\src\Listeners;
 
-use App\Events\ShippingLabelCreatedEvent;
+use App\Events\ShippingLabel\ShippingLabelCreatedEvent;
 use App\Models\ShippingLabel;
 use App\Modules\PrintNode\src\PrintNode;
 use Exception;

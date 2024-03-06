@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Events\OrderProductShipmentCreatedEvent;
+use App\Events\OrderProduct\OrderProductShipmentCreatedEvent;
 use App\Models\OrderProductShipment;
 
 class OrderProductShipmentObserver

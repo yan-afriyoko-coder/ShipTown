@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\ShippingLabel;
 
 use App\Models\ShippingLabel;
 use Illuminate\Broadcasting\Channel;

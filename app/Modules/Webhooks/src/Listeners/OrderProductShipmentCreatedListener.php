@@ -2,9 +2,8 @@
 
 namespace App\Modules\Webhooks\src\Listeners;
 
-use App\Events\OrderProductShipmentCreatedEvent;
+use App\Events\OrderProduct\OrderProductShipmentCreatedEvent;
 use App\Models\OrderProductShipment;
-use App\Modules\Webhooks\src\Jobs\PublishOrderProductShipmentWebhooksJob;
 use App\Modules\Webhooks\src\Models\PendingWebhook;
 
 class OrderProductShipmentCreatedListener

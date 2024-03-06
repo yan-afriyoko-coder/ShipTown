@@ -7,7 +7,6 @@ use App\Events\EveryFiveMinutesEvent;
 use App\Events\EveryHourEvent;
 use App\Events\EveryMinuteEvent;
 use App\Events\EveryTenMinutesEvent;
-use App\Events\SyncRequestedEvent;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Models\Product;
@@ -83,7 +82,6 @@ class BasicModuleTest extends TestCase
     /** @test */
     public function testIfNoErrorsDuringEvents()
     {
-        SyncRequestedEvent::dispatch();
         EveryMinuteEvent::dispatch();
         EveryFiveMinutesEvent::dispatch();
         EveryTenMinutesEvent::dispatch();
