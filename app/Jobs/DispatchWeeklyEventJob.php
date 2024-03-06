@@ -3,14 +3,14 @@
 namespace App\Jobs;
 
 use App\Abstracts\UniqueJob;
-use App\Events\WeeklyEvent;
+use App\Events\EveryWeekEvent;
 use App\Models\Heartbeat;
 
 class DispatchWeeklyEventJob extends UniqueJob
 {
     public function handle()
     {
-        WeeklyEvent::dispatch();
+        EveryWeekEvent::dispatch();
 
         Heartbeat::query()->updateOrCreate([
             'code' => self::class,
