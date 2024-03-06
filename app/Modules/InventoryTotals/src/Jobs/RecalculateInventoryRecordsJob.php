@@ -3,7 +3,7 @@
 namespace App\Modules\InventoryTotals\src\Jobs;
 
 use App\Abstracts\UniqueJob;
-use App\Events\RecalculateInventoryRequestEvent;
+use App\Events\Inventory\RecalculateInventoryRequestEvent;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;

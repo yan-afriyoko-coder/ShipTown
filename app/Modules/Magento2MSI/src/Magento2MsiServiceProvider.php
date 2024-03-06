@@ -4,9 +4,9 @@ namespace App\Modules\Magento2MSI\src;
 
 use App\Events\EveryHourEvent;
 use App\Events\EveryMinuteEvent;
+use App\Events\Inventory\RecalculateInventoryRequestEvent;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
-use App\Events\RecalculateInventoryRequestEvent;
 use App\Events\SyncRequestedEvent;
 use App\Models\ManualRequestJob;
 use App\Modules\BaseModuleServiceProvider;

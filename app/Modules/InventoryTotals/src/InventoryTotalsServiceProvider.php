@@ -2,13 +2,11 @@
 
 namespace App\Modules\InventoryTotals\src;
 
-use App\Events\EveryDayEvent;
-use App\Events\EveryFiveMinutesEvent;
 use App\Events\EveryMinuteEvent;
 use App\Events\EveryTenMinutesEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
+use App\Events\Inventory\RecalculateInventoryRequestEvent;
 use App\Events\Product\ProductCreatedEvent;
-use App\Events\RecalculateInventoryRequestEvent;
 use App\Events\SyncRequestedEvent;
 use App\Events\Warehouse\WarehouseTagAttachedEvent;
 use App\Modules\BaseModuleServiceProvider;

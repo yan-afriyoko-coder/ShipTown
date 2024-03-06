@@ -2,7 +2,7 @@
 
 namespace App\Modules\Magento2MSI\src\Listeners;
 
-use App\Events\RecalculateInventoryRequestEvent;
+use App\Events\Inventory\RecalculateInventoryRequestEvent;
 use Illuminate\Support\Facades\DB;
 
 class RecalculateInventoryRequestEventListener
