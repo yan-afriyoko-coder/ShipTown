@@ -9,7 +9,6 @@ use App\Events\Order\OrderUpdatedEvent;
 use App\Events\Product\ProductPriceUpdatedEvent;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
-use App\Events\SyncRequestedEvent;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\Modules\Api2cart\src\Jobs\ProcessImportedOrdersJob;
 use App\Modules\BaseModuleServiceProvider;
@@ -46,10 +45,6 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        SyncRequestedEvent::class => [
-            Listeners\SyncRequestedEventListener::class,
-        ],
-
         EveryFiveMinutesEvent::class => [
             Listeners\EveryFiveMinutesEventListener::class
         ],

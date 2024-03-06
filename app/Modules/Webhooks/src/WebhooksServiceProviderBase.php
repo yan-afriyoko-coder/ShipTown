@@ -44,10 +44,6 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        SyncRequestedEvent::class => [
-            Listeners\SyncRequestedEventListener::class,
-        ],
-
         EveryMinuteEvent::class => [
             Listeners\DispatchEveryMinuteJobsListener::class,
         ],

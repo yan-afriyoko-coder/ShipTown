@@ -7,7 +7,6 @@ use App\Events\EveryFiveMinutesEvent;
 use App\Events\EveryHourEvent;
 use App\Events\EveryMinuteEvent;
 use App\Events\EveryTenMinutesEvent;
-use App\Events\SyncRequestedEvent;
 use App\Models\Module;
 use App\Modules\BaseModuleServiceProvider;
 use Exception;
@@ -34,7 +33,6 @@ class BasicModulesTest extends TestCase
             ray($service_provider_class);
         });
 
-        SyncRequestedEvent::dispatch();
         EveryMinuteEvent::dispatch();
         EveryFiveMinutesEvent::dispatch();
         EveryTenMinutesEvent::dispatch();

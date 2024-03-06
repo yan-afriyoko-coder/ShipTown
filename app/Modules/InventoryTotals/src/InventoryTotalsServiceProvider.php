@@ -7,7 +7,6 @@ use App\Events\EveryTenMinutesEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\Inventory\RecalculateInventoryRequestEvent;
 use App\Events\Product\ProductCreatedEvent;
-use App\Events\SyncRequestedEvent;
 use App\Events\Warehouse\WarehouseTagAttachedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
@@ -37,10 +36,6 @@ class InventoryTotalsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        SyncRequestedEvent::class => [
-            Listeners\SyncRequestedEventListener::class,
-        ],
-
         RecalculateInventoryRequestEvent::class => [
             Listeners\RecalculateInventoryRequestEventListener::class,
         ],
