@@ -7,7 +7,7 @@ use App\Events\EveryTenMinutesEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderShipment\OrderShipmentCreatedEvent;
-use App\Events\ShippingLabelCreatedEvent;
+use App\Events\ShippingLabel\ShippingLabelCreatedEvent;
 use App\Modules\Automations\src\Jobs\RunEnabledAutomationsJob;
 use App\Modules\BaseModuleServiceProvider;
 

@@ -3,7 +3,7 @@
 
 namespace App\Modules\PrintNode\src;
 
-use App\Events\ShippingLabelCreatedEvent;
+use App\Events\ShippingLabel\ShippingLabelCreatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**

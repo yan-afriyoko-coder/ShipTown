@@ -2,7 +2,7 @@
 
 namespace App\Modules\Automations\src\Listeners;
 
-use App\Events\ShippingLabelCreatedEvent;
+use App\Events\ShippingLabel\ShippingLabelCreatedEvent;
 use App\Modules\Automations\src\Jobs\RunEnabledAutomationsOnSpecificOrderJob;
 
 class ShippingLabelCreatedListener

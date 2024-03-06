@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Events\ShippingLabelCreatedEvent;
+use App\Events\ShippingLabel\ShippingLabelCreatedEvent;
 use App\Models\ShippingLabel;
 
 class ShippingLabelObserver
