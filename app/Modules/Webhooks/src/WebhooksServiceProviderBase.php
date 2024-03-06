@@ -6,7 +6,7 @@ use App\Events\EveryDayEvent;
 use App\Events\EveryMinuteEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\InventoryMovement\InventoryMovementCreatedEvent;
-use App\Events\OrderProductShipmentCreatedEvent;
+use App\Events\OrderProduct\OrderProductShipmentCreatedEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 use Exception;

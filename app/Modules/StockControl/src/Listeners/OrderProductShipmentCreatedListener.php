@@ -3,9 +3,8 @@
 
 namespace App\Modules\StockControl\src\Listeners;
 
-use App\Events\OrderProductShipmentCreatedEvent;
+use App\Events\OrderProduct\OrderProductShipmentCreatedEvent;
 use App\Models\InventoryMovement;
-use App\Services\InventoryService;
 use Exception;
 
 class OrderProductShipmentCreatedListener
