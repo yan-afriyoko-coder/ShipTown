@@ -6,7 +6,7 @@ use App\Abstracts\UniqueJob;
 use App\Events\EveryMonthEvent;
 use App\Models\Heartbeat;
 
-class DispatchMonthlyEventJob extends UniqueJob
+class DispatchEveryMonthEventJob extends UniqueJob
 {
     public function handle()
     {
