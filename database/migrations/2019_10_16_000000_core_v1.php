@@ -997,7 +997,9 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id');
             $table->decimal('quantity', 20)->default(0);
             $table->decimal('quantity_reserved', 20)->default(0);
-            $table->decimal('quantity_available', 20)->default(0);
+            $table->decimal('quantity_available', 20)
+                ->storedAs('quantity - quantity_reserved')
+                ->comment('quantity - quantity_reserved');
             $table->decimal('quantity_incoming', 20)->default(0);
             $table->timestamp('max_inventory_updated_at')->default('2000-01-01 00:00:00');
             $table->timestamp('calculated_at')->nullable();
@@ -1199,6 +1201,7 @@ return new class extends Migration
 
         Schema::create('modules_inventory_totals_configurations', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('totals_max_product_id_checked')->default(0);
             $table->unsignedBigInteger('totals_by_warehouse_tag_max_inventory_id_checked')->default(0);
             $table->timestamps();
         });
@@ -1209,7 +1212,9 @@ return new class extends Migration
             $table->unsignedInteger('tag_id');
             $table->decimal('quantity', 20)->default(0);
             $table->decimal('quantity_reserved', 20)->default(0);
-            $table->decimal('quantity_available', 20)->default(0);
+            $table->decimal('quantity_available', 20)
+                ->storedAs('quantity - quantity_reserved')
+                ->comment('quantity - quantity_reserved');
             $table->decimal('quantity_incoming', 20)->default(0);
             $table->timestamp('max_inventory_updated_at')->default('2000-01-01 00:00:00');
             $table->timestamp('calculated_at')->nullable();
