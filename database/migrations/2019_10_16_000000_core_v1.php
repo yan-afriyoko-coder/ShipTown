@@ -1074,6 +1074,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('connection_id');
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+            $table->boolean('exists_in_magento')->nullable();
             $table->decimal('magento_price', 20)->nullable();
             $table->decimal('magento_sale_price', 20)->nullable();
             $table->dateTime('magento_sale_price_start_date')->nullable();
