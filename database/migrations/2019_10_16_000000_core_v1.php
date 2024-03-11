@@ -940,6 +940,7 @@ return new class extends Migration
         Schema::create('inventory_movements', function (Blueprint $table) {
             $table->id();
             $table->dateTime('occurred_at')->nullable(false);
+            $table->unsignedInteger('sequence_number')->nullable()->comment('row_number() over (partition by inventory_id order by occurred_at asc, id asc)');
             $table->unsignedBigInteger('previous_movement_id')->nullable()->unique();
             $table->string('type', 50)->nullable(false);
             $table->string('custom_unique_reference_id')->nullable()->unique();
@@ -956,7 +957,10 @@ return new class extends Migration
 
             $table->index('type');
             $table->index('occurred_at');
+            $table->index(['occurred_at', 'id']);
+            $table->index(['sequence_number']);
             $table->index(['inventory_id', 'occurred_at']);
+            $table->unique(['inventory_id', 'sequence_number']);
 
             $table->foreign('inventory_id')
                 ->references('id')
