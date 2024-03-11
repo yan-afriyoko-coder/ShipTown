@@ -1017,9 +1017,11 @@ return new class extends Migration
             $table->foreignId('inventory_id');
             $table->foreignId('product_id')->index();
             $table->string('warehouse_code', 5)->index();
-            $table->double('last7days_quantity_delta', 10, 2)->default(0);
-            $table->double('last14days_quantity_delta', 10, 2)->default(0);
-            $table->double('last28days_quantity_delta', 10, 2)->default(0);
+
+            $table->decimal('last7days_quantity_delta', 13, 2)->default(0);
+            $table->decimal('last14days_quantity_delta', 13, 2)->default(0);
+            $table->decimal('last28days_quantity_delta', 13, 2)->default(0);
+
             $table->unsignedBigInteger('last7days_min_movement_id')->nullable();
             $table->unsignedBigInteger('last7days_max_movement_id')->nullable();
             $table->unsignedBigInteger('last14days_min_movement_id')->nullable();
