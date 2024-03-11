@@ -1142,14 +1142,30 @@ return new class extends Migration
             $table->double('total_transferred_out', 10)->default(0);
             $table->decimal('quantity_requested', 20)->nullable();
             $table->decimal('quantity_scanned', 20)->default(0);
+
             $table->decimal('quantity_to_scan', 20)
-                ->storedAs('CASE WHEN quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned < quantity_scanned THEN 0 ' .
-                    'ELSE quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned END')
-                ->comment('CASE WHEN quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned < quantity_scanned THEN 0 ' .
-                    'ELSE quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned - quantity_scanned END');
+                ->storedAs('GREATEST(0, IFNULL(quantity_requested, 0) - IFNULL(total_transferred_out, 0) - IFNULL(total_transferred_in, 0) - IFNULL(quantity_scanned, 0))')
+                ->comment('GREATEST(0, IFNULL(quantity_requested, 0) - IFNULL(total_transferred_out, 0) - IFNULL(total_transferred_in, 0) - IFNULL(quantity_scanned, 0))');
+
+            $table->boolean('is_requested')
+                ->storedAs('IFNULL(data_collection_records.quantity_requested, 0) = 0')
+                ->comment('IFNULL(data_collection_records.quantity_requested, 0) = 0');
+
+            $table->boolean('is_fully_scanned')
+                ->storedAs('quantity_to_scan <= 0')
+                ->comment('quantity_to_scan <= 0');
+
+            $table->boolean('is_over_scanned')
+                ->storedAs('IFNULL(data_collection_records.quantity_scanned, 0) > IFNULL(data_collection_records.quantity_requested, 0)')
+                ->comment('IFNULL(data_collection_records.quantity_scanned, 0) > IFNULL(data_collection_records.quantity_requested, 0)');
+
             $table->string('custom_uuid')->unique()->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index('is_requested');
+            $table->index('is_fully_scanned');
+            $table->index('is_over_scanned');
 
             $table->foreign('product_id')
                 ->references('id')
