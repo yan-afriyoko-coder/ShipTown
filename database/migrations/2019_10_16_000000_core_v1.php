@@ -898,7 +898,7 @@ return new class extends Migration
         Schema::create('inventory_movements', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('previous_movement_id')->nullable()->unique();
-            $table->string('type')->nullable();
+            $table->string('type', 50)->nullable(false);
             $table->string('custom_unique_reference_id')->nullable()->unique();
             $table->foreignId('inventory_id');
             $table->foreignId('product_id');
