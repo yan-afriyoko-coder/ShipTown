@@ -1265,6 +1265,15 @@ return new class extends Migration
                 ->cascadeOnDelete();
         });
 
+        Schema::create('modules_inventory_movements_configurations', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('totals_by_warehouse_tag_max_inventory_movement_id_checked')->default(0);
+            $table->unsignedBigInteger('quantity_before_job_last_movement_id_checked')->default(0);
+            $table->unsignedBigInteger('quantity_before_basic_job_last_movement_id_checked')->default(0);
+            $table->unsignedBigInteger('quantity_before_stocktake_job_last_movement_id_checked')->default(0);
+            $table->timestamps();
+        });
+
         $this->installSpatiePermissions();
 
         DB::statement('
