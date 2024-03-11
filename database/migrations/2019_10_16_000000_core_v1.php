@@ -406,6 +406,10 @@ return new class extends Migration
             $table->foreignId('product_id')->nullable();
             $table->string('sku_ordered');
             $table->string('name_ordered');
+            $table->boolean('is_shipped')
+                ->storedAs('quantity_ordered - quantity_split - quantity_shipped <= 0')
+                ->comment('quantity_ordered - quantity_split - quantity_shipped <= 0');
+
             $table->decimal('price', 10, 3)->default(0);
             $table->decimal('quantity_ordered', 10)->default(0);
             $table->decimal('quantity_split', 10)->default(0);
@@ -425,6 +429,8 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
             $table->string('custom_unique_reference_id')->unique()->nullable();
+
+            $table->index('is_shipped');
 
             $table->foreign('product_id')
                 ->on('products')
@@ -954,6 +960,7 @@ return new class extends Migration
 
         Schema::create('inventory_movements', function (Blueprint $table) {
             $table->id();
+            $table->string('warehouse_code', 5)->nullable();
             $table->dateTime('occurred_at')->nullable(false);
             $table->unsignedInteger('sequence_number')->nullable()->comment('row_number() over (partition by inventory_id order by occurred_at asc, id asc)');
             $table->unsignedBigInteger('previous_movement_id')->nullable()->unique();
@@ -976,6 +983,7 @@ return new class extends Migration
             $table->index(['sequence_number']);
             $table->index(['inventory_id', 'occurred_at']);
             $table->unique(['inventory_id', 'sequence_number']);
+            $table->index('warehouse_code');
 
             $table->foreign('inventory_id')
                 ->references('id')
@@ -995,6 +1003,11 @@ return new class extends Migration
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
+                ->cascadeOnDelete();
+
+            $table->foreign('warehouse_code')
+                ->references('code')
+                ->on('warehouses')
                 ->cascadeOnDelete();
         });
 
