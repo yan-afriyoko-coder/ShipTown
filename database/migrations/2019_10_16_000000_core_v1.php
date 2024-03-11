@@ -1196,6 +1196,7 @@ return new class extends Migration
         DB::statement('
             CREATE OR REPLACE VIEW modules_magento2api_products_prices_comparison_view AS
             SELECT
+                modules_magento2api_products.connection_id as modules_magento2api_connection_id,
                 modules_magento2api_products.id as modules_magento2api_products_id,
                 products.sku,
                 modules_magento2api_connections.magento_store_id,
@@ -1214,8 +1215,8 @@ return new class extends Migration
                 modules_magento2api_products.base_prices_fetched_at,
                 modules_magento2api_products.special_prices_fetched_at
 
-
             FROM modules_magento2api_products
+
             LEFT JOIN products ON products.id = modules_magento2api_products.product_id
 
             LEFT JOIN modules_magento2api_connections
@@ -1224,15 +1225,21 @@ return new class extends Migration
             LEFT JOIN products_prices
               ON products_prices.product_id = modules_magento2api_products.product_id
               AND products_prices.warehouse_id = modules_magento2api_connections.pricing_source_warehouse_id
+
+            WHERE
+                modules_magento2api_connections.pricing_source_warehouse_id IS NOT NULL
+                AND modules_magento2api_products.exists_in_magento = 1
         ');
 
         DB::statement("
             CREATE OR REPLACE VIEW modules_magento2api_products_inventory_comparison_view AS
-            SELECT modules_magento2api_products.id AS modules_magento2api_products_id,
-                   products.sku AS sku,
-                   floor(max(modules_magento2api_products.quantity)) AS magento_quantity,
-                   if((floor(sum(inventory.quantity_available)) < 0), 0, floor(sum(inventory.quantity_available))) AS expected_quantity,
-                   modules_magento2api_products.stock_items_fetched_at
+            SELECT
+               modules_magento2api_products.connection_id as modules_magento2api_connection_id,
+               modules_magento2api_products.id AS modules_magento2api_products_id,
+               products.sku AS sku,
+               floor(max(modules_magento2api_products.quantity)) AS magento_quantity,
+               if((floor(sum(inventory.quantity_available)) < 0), 0, floor(sum(inventory.quantity_available))) AS expected_quantity,
+               modules_magento2api_products.stock_items_fetched_at
 
             from modules_magento2api_products
 
@@ -1253,7 +1260,11 @@ return new class extends Migration
             left join products
               on products.id = modules_magento2api_products.product_id
 
-            group by modules_magento2api_products.id
+            WHERE
+                modules_magento2api_connections.inventory_source_warehouse_tag_id IS NOT NULL
+                AND modules_magento2api_products.exists_in_magento = 1
+
+            GROUP BY modules_magento2api_products.id
         ");
     }
 
