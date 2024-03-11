@@ -942,6 +942,8 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index('type');
+            $table->index('occurred_at');
+            $table->index(['inventory_id', 'occurred_at']);
 
             $table->foreign('inventory_id')
                 ->references('id')
