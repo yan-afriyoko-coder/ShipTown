@@ -906,6 +906,7 @@ return new class extends Migration
             $table->decimal('quantity_before', 20);
             $table->decimal('quantity_after', 20);
             $table->string('description', 50);
+            $table->boolean('is_first_movement')->nullable();
             $table->foreignId('user_id')->nullable();
             $table->timestamps();
 
