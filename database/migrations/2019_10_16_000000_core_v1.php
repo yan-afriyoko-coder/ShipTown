@@ -740,6 +740,7 @@ return new class extends Migration
             $table->unsignedBigInteger('warehouse_id')->nullable();
             $table->unsignedBigInteger('rms_product_id')->nullable();
             $table->string('sku')->nullable();
+            $table->string('name')->nullable();
             $table->boolean('is_web_item')->nullable();
             $table->decimal('quantity_on_hand', 20)->nullable();
             $table->decimal('quantity_committed', 20)->nullable();
@@ -880,9 +881,12 @@ return new class extends Migration
         Schema::create('heartbeats', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
+            $table->string('level')->default('error');
             $table->string('error_message', 255)->nullable();
             $table->timestamp('expires_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
+
+            $table->index('level');
         });
 
         Schema::create('modules_dpduk_connections', function (Blueprint $table) {
