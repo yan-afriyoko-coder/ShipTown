@@ -964,6 +964,19 @@ return new class extends Migration
                 ->cascadeOnDelete();
         });
 
+        // Todo - need to check the below two queries as not sure if they are needed
+        DB::statement('
+            UPDATE inventory_movements
+            SET occurred_at = created_at
+            WHERE occurred_at IS NULL
+        ');
+
+        DB::statement('
+            UPDATE inventory_movements
+            SET occurred_at = date_sub(occurred_at, INTERVAL 1 HOUR)
+            WHERE occurred_at > created_at
+        ');
+
         Schema::create('inventory_movements_statistics', function (Blueprint $table) {
             $table->id();
             $table->string('type')->nullable();
