@@ -255,15 +255,21 @@ return new class extends Migration
             $table->string('location_id')->default('');
             $table->string('warehouse_code', 5)->nullable(false);
             $table->string('shelve_location')->default('');
+            $table->boolean('recount_required')->default(false);
+
             $table->decimal('quantity_available', 20)
                 ->storedAs('quantity - quantity_reserved')
                 ->comment('quantity - quantity_reserved');
+
             $table->decimal('quantity', 20)->default(0);
+
             $table->boolean('is_in_stock')
                 ->storedAs('quantity_available > 0')
                 ->comment('quantity_available > 0');
+
             $table->decimal('quantity_reserved', 20)->default(0);
             $table->decimal('quantity_incoming', 20)->default(0);
+
             $table->decimal('quantity_required', 20)
                 ->storedAs('CASE WHEN (quantity - quantity_reserved + quantity_incoming) BETWEEN 0 AND reorder_point ' .
                     'THEN restock_level - (quantity - quantity_reserved + quantity_incoming)' .
@@ -271,8 +277,10 @@ return new class extends Migration
                 ->comment('CASE WHEN (quantity - quantity_reserved + quantity_incoming) BETWEEN 0 AND reorder_point ' .
                     'THEN restock_level - (quantity - quantity_reserved + quantity_incoming)' .
                     'ELSE 0 END');
+
             $table->decimal('reorder_point', 20)->default(0);
             $table->decimal('restock_level', 20)->default(0);
+            $table->unsignedBigInteger('last_sequence_number')->nullable();
             $table->timestamp('first_movement_at')->nullable();
             $table->dateTime('last_movement_at')->nullable();
             $table->dateTime('first_received_at')->nullable();
@@ -299,6 +307,13 @@ return new class extends Migration
             $table->index('last_sold_at');
             $table->index('last_counted_at');
             $table->index('first_counted_at');
+            $table->index('recount_required');
+
+            $table->index([DB::raw('last_sequence_number DESC')]);
+            $table->index([DB::raw('last_movement_at DESC')]);
+            $table->index([DB::raw('first_received_at DESC')]);
+            $table->index([DB::raw('last_received_at DESC')]);
+            $table->index([DB::raw('first_sold_at DESC')]);
 
             $table->foreign('product_id')
                 ->references('id')
