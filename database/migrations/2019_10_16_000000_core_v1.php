@@ -975,6 +975,7 @@ return new class extends Migration
             $table->string('model_class');
             $table->foreignId('model_id');
             $table->json('message');
+            $table->string('sns_message_id')->nullable();
             $table->timestamp('reserved_at')->nullable();
             $table->timestamp('available_at')->nullable();
             $table->timestamp('published_at')->nullable();
