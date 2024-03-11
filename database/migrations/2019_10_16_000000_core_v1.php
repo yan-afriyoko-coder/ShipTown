@@ -331,15 +331,25 @@ return new class extends Migration
             $table->boolean('is_active')->nullable(false)->default(0);
             $table->boolean('is_on_hold')->default(false);
             $table->boolean('is_editing')->default(0);
+
             $table->boolean('is_fully_paid')
-                ->storedAs('total_paid >= total - total_discounts')
-                ->comment('total_paid >= total - total_discounts');
-            $table->integer('product_line_count')->default(0);
-            $table->decimal('total', 10)->default(0);
-            $table->decimal('total_products')->default(0);
-            $table->decimal('total_shipping')->default(0);
-            $table->decimal('total_discounts', 10)->default(0);
-            $table->decimal('total_paid')->default(0);
+                ->storedAs('total_products + total_shipping - total_discounts - total_paid < 0.01')
+                ->comment('total_products + total_shipping - total_discounts - total_paid < 0.01');
+
+            $table->integer('product_line_count')->nullable()->default(null);
+
+            $table->decimal('total_products', 13)->nullable()->default(null);
+            $table->decimal('total_shipping', 13)->default(0);
+            $table->decimal('total_discounts', 13)->default(0);
+            $table->decimal('total_order', 13)
+                ->storedAs('total_products + total_shipping - total_discounts')
+                ->comment('total_products + total_shipping - total_discounts');
+
+            $table->decimal('total_paid', 13)->default(0);
+            $table->decimal('total_outstanding', 13)
+                ->storedAs('total_products + total_shipping - total_discounts - total_paid')
+                ->comment('total_products + total_shipping - total_discounts - total_paid');
+
             $table->foreignId('shipping_address_id')->nullable();
             $table->string('shipping_method_code')->default('')->nullable(true);
             $table->string('shipping_method_name')->default('')->nullable(true);
@@ -350,6 +360,7 @@ return new class extends Migration
             $table->timestamp('order_closed_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->string('custom_unique_reference_id')->unique()->nullable();
 
             $table->index('status_code');
             $table->index('is_active');
