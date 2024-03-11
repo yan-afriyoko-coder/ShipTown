@@ -654,7 +654,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('automation_id');
             $table->string('condition_class')->nullable();
-            $table->string('condition_value')->nullable()->default('');
+            $table->string('condition_value')->nullable(false)->default('');
             $table->timestamps();
 
             $table->unique(
@@ -1085,6 +1085,7 @@ return new class extends Migration
                     'ELSE quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned END')
                 ->comment('CASE WHEN quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned < quantity_scanned THEN 0 ' .
                     'ELSE quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned - quantity_scanned END');
+            $table->string('custom_uuid')->unique()->nullable();
             $table->timestamps();
             $table->softDeletes();
 
