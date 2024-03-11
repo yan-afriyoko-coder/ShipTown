@@ -1228,7 +1228,7 @@ return new class extends Migration
 
             WHERE
                 modules_magento2api_connections.pricing_source_warehouse_id IS NOT NULL
-                AND modules_magento2api_products.exists_in_magento = 1
+                AND IFNULL(modules_magento2api_products.exists_in_magento, 0) = 1
         ');
 
         DB::statement("
@@ -1262,7 +1262,7 @@ return new class extends Migration
 
             WHERE
                 modules_magento2api_connections.inventory_source_warehouse_tag_id IS NOT NULL
-                AND modules_magento2api_products.exists_in_magento = 1
+                AND IFNULL(modules_magento2api_products.exists_in_magento, 1) = 1
 
             GROUP BY modules_magento2api_products.id
         ");
