@@ -749,6 +749,7 @@ return new class extends Migration
             $table->decimal('reorder_point', 20)->nullable();
             $table->decimal('restock_level', 20)->nullable();
             $table->decimal('price', 20)->nullable();
+            $table->decimal('price_a', 20)->nullable();
             $table->decimal('cost', 20)->nullable();
             $table->decimal('sale_price', 20)->nullable();
             $table->timestamp('sale_price_start_date')->nullable();
@@ -925,6 +926,7 @@ return new class extends Migration
 
         Schema::create('inventory_movements', function (Blueprint $table) {
             $table->id();
+            $table->timestamp('occurred_at')->nullable();
             $table->unsignedBigInteger('previous_movement_id')->nullable()->unique();
             $table->string('type', 50)->nullable(false);
             $table->string('custom_unique_reference_id')->nullable()->unique();
