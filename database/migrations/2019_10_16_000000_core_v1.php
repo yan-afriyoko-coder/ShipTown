@@ -1362,6 +1362,7 @@ return new class extends Migration
                   modules_rmsapi_products_imports.quantity_on_hand as rms_quantity,
                   inventory.quantity as pm_quantity,
                   modules_rmsapi_products_imports.quantity_on_hand - inventory.quantity as quantity_delta,
+                  modules_rmsapi_products_imports.updated_at as modules_rmsapi_products_imports_updated_at,
                   inventory.id as inventory_id,
                   (
                       SELECT max(id)
