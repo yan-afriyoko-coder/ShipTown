@@ -994,24 +994,22 @@ return new class extends Migration
 
         Schema::create('inventory_totals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->unique();
+            $table->unsignedBigInteger('product_id');
             $table->decimal('quantity', 20)->default(0);
             $table->decimal('quantity_reserved', 20)->default(0);
+            $table->decimal('quantity_available', 20)->default(0);
             $table->decimal('quantity_incoming', 20)->default(0);
-            $table->decimal('quantity_available', 20)
-                ->storedAs('quantity - quantity_reserved')
-                ->comment('quantity - quantity_reserved');
-            $table->softDeletes();
+            $table->timestamp('max_inventory_updated_at')->default('2000-01-01 00:00:00');
+            $table->timestamp('calculated_at')->nullable();
             $table->timestamps();
 
-            $table->index('quantity');
-            $table->index('quantity_reserved');
-            $table->index('quantity_incoming');
+            $table->index('product_id');
+            $table->index('calculated_at');
 
             $table->foreign('product_id')
                 ->references('id')
                 ->on('products')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
         });
 
         Schema::create('data_collections', function (Blueprint $table) {
