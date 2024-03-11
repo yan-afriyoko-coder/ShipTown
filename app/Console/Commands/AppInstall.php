@@ -102,6 +102,7 @@ class AppInstall extends Command
         EventServiceProviderBase::enableModule();
         InventoryMovementsServiceProvider::enableModule();
         InventoryTotalsServiceProvider::enableModule();
+        InventoryMovementsServiceProvider::enableModule();
 
         return 0;
     }
