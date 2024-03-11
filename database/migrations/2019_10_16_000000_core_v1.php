@@ -280,6 +280,7 @@ return new class extends Migration
             $table->dateTime('first_sold_at')->nullable();
             $table->dateTime('last_sold_at')->nullable();
             $table->timestamp('last_counted_at')->nullable();
+            $table->dateTime('first_counted_at')->nullable();
             $table->unsignedBigInteger('last_movement_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
@@ -297,6 +298,7 @@ return new class extends Migration
             $table->index('reorder_point');
             $table->index('last_sold_at');
             $table->index('last_counted_at');
+            $table->index('first_counted_at');
 
             $table->foreign('product_id')
                 ->references('id')
