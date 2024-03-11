@@ -273,6 +273,7 @@ return new class extends Migration
                     'ELSE 0 END');
             $table->decimal('reorder_point', 20)->default(0);
             $table->decimal('restock_level', 20)->default(0);
+            $table->timestamp('first_movement_at')->nullable();
             $table->dateTime('last_movement_at')->nullable();
             $table->dateTime('first_received_at')->nullable();
             $table->dateTime('last_received_at')->nullable();
