@@ -484,6 +484,7 @@ return new class extends Migration
             $table->string('carrier')->default('');
             $table->string('service')->default('');
             $table->string('tracking_url')->default('');
+            $table->string('content_type')->default('');
             $table->longText('base64_pdf_labels');
             $table->timestamps();
 
@@ -617,12 +618,12 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('modules_dpd-ireland_configuration', function (Blueprint $table) {
+        Schema::create('modules_dpd_ireland_configuration', function (Blueprint $table) {
             $table->id();
             $table->boolean('live')->nullable(false)->default(false);
-            $table->string('token');
-            $table->string('user');
-            $table->string('password');
+            $table->longText('token');
+            $table->longText('user');
+            $table->longText('password');
             $table->string('contact')->nullable(false)->default('');
             $table->string('contact_telephone')->nullable(false)->default('');
             $table->string('contact_email')->nullable(false)->default('');
@@ -1350,6 +1351,12 @@ return new class extends Migration
             $table->unsignedBigInteger('quantity_before_job_last_movement_id_checked')->default(0);
             $table->unsignedBigInteger('quantity_before_basic_job_last_movement_id_checked')->default(0);
             $table->unsignedBigInteger('quantity_before_stocktake_job_last_movement_id_checked')->default(0);
+            $table->timestamps();
+        });
+
+        Schema::create('modules_stocktaking_suggestions_configurations', function (Blueprint $table) {
+            $table->id();
+            $table->date('min_count_date')->nullable();
             $table->timestamps();
         });
 
