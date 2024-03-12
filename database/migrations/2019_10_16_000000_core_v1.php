@@ -961,10 +961,9 @@ return new class extends Migration
 
         Schema::create('inventory_movements', function (Blueprint $table) {
             $table->id();
-            $table->string('warehouse_code', 5)->nullable();
+            $table->string('warehouse_code', 5)->nullable(false);
             $table->dateTime('occurred_at')->nullable(false);
             $table->unsignedInteger('sequence_number')->nullable()->comment('row_number() over (partition by inventory_id order by occurred_at asc, id asc)');
-            $table->unsignedBigInteger('previous_movement_id')->nullable()->unique();
             $table->string('type', 50)->nullable(false);
             $table->string('custom_unique_reference_id')->nullable()->unique();
             $table->foreignId('inventory_id');
@@ -974,7 +973,7 @@ return new class extends Migration
             $table->decimal('quantity_before', 20);
             $table->decimal('quantity_after', 20);
             $table->string('description', 50);
-            $table->boolean('is_first_movement')->nullable();
+
             $table->foreignId('user_id')->nullable();
             $table->timestamps();
 
@@ -1009,21 +1008,11 @@ return new class extends Migration
             $table->foreign('warehouse_code')
                 ->references('code')
                 ->on('warehouses')
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
         });
 
-        // Todo - need to check the below two queries as not sure if they are needed
-        DB::statement('
-            UPDATE inventory_movements
-            SET occurred_at = created_at
-            WHERE occurred_at IS NULL
-        ');
+        DB::statement('CREATE INDEX occurred_at_sequence_number_index ON inventory_movements (occurred_at DESC, sequence_number DESC)');
 
-        DB::statement('
-            UPDATE inventory_movements
-            SET occurred_at = date_sub(occurred_at, INTERVAL 1 HOUR)
-            WHERE occurred_at > created_at
-        ');
 
         Schema::create('inventory_movements_statistics', function (Blueprint $table) {
             $table->id();
