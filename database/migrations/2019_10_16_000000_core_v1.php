@@ -972,7 +972,7 @@ return new class extends Migration
             $table->decimal('quantity_delta', 20);
             $table->decimal('quantity_before', 20);
             $table->decimal('quantity_after', 20);
-            $table->string('description', 50);
+            $table->string('description', 255);
 
             $table->foreignId('user_id')->nullable();
             $table->timestamps();
@@ -1123,9 +1123,9 @@ return new class extends Migration
         Schema::create('data_collection_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('data_collection_id')->constrained()->onDelete('cascade');
-            $table->foreignId('inventory_id')->nullable()
-                ->references('id')
-                ->on('inventory');
+
+            $table->unsignedBigInteger('inventory_id')->nullable(false);
+
             $table->foreignId('product_id');
             $table->unsignedBigInteger('warehouse_id')->nullable();
             $table->double('total_transferred_in', 10)->default(0);
@@ -1174,6 +1174,7 @@ return new class extends Migration
 
             $table->index('reason');
             $table->index(['warehouse_id', 'reason']);
+            $table->unique(['inventory_id', 'reason']);
             $table->index(['inventory_id', 'reason']);
         });
 
