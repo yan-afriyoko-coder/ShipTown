@@ -255,6 +255,7 @@ return new class extends Migration
             $table->string('location_id')->default('');
             $table->string('warehouse_code', 5)->nullable(false);
             $table->string('shelve_location')->default('');
+            $table->timestamp('recalculated_at')->nullable();
             $table->boolean('recount_required')->default(false);
 
             $table->decimal('quantity_available', 20)
@@ -288,6 +289,7 @@ return new class extends Migration
             $table->dateTime('first_sold_at')->nullable();
             $table->dateTime('last_sold_at')->nullable();
             $table->timestamp('last_counted_at')->nullable();
+            $table->timestamp('in_stock_since')->nullable();
             $table->dateTime('first_counted_at')->nullable();
             $table->unsignedBigInteger('last_movement_id')->nullable();
             $table->softDeletes();
@@ -308,6 +310,8 @@ return new class extends Migration
             $table->index('last_counted_at');
             $table->index('first_counted_at');
             $table->index('recount_required');
+            $table->index('in_stock_since');
+            $table->index('recalculated_at');
 
             $table->index([DB::raw('last_sequence_number DESC')]);
             $table->index([DB::raw('last_movement_at DESC')]);
@@ -1128,6 +1132,7 @@ return new class extends Migration
 
             $table->foreignId('product_id');
             $table->unsignedBigInteger('warehouse_id')->nullable();
+            $table->boolean('is_processed')->nullable();
             $table->double('total_transferred_in', 10)->default(0);
             $table->double('total_transferred_out', 10)->default(0);
             $table->decimal('quantity_requested', 20)->nullable();
@@ -1227,6 +1232,7 @@ return new class extends Migration
             $table->string('type')->nullable()->index();
             $table->unsignedBigInteger('inventory_movement_id')->nullable();
             $table->foreignId('connection_id');
+            $table->unsignedBigInteger('inventory_id')->nullable();
             $table->foreignId('warehouse_id')->nullable();
             $table->foreignId('product_id')->nullable();
             $table->dateTime('reserved_at')->nullable();
@@ -1250,6 +1256,10 @@ return new class extends Migration
                 ->references('id')
                 ->on('modules_rmsapi_connections')
                 ->onDelete('cascade');
+
+            $table->foreign('inventory_id')
+                ->references('id')
+                ->on('inventory');
         });
 
         if (!Schema::hasColumn(config('activitylog.table_name'), 'event')) {
