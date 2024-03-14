@@ -26,6 +26,8 @@ use App\Modules\StocktakeSuggestions\src\StocktakeSuggestionsServiceProvider;
 use App\Modules\Telescope\src\TelescopeModuleServiceProvider;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
@@ -34,7 +36,7 @@ use Spatie\Permission\Models\Role;
 /**
  *
  */
-class InstallApp extends Command
+class AppInstall extends Command
 {
     /**
      * The name and signature of the console command.
@@ -52,11 +54,13 @@ class InstallApp extends Command
 
     public function handle(): int
     {
-        if (env('PASSPORT_PRIVATE_KEY') === '') {
+        $this->info('Generating passport keys');
+        if (env('PASSPORT_PRIVATE_KEY', '') === '') {
             $this->createPassportKeys();
         }
 
-        if (env('APP_KEY') === '') {
+        $this->info('Generating application key');
+        if (env('APP_KEY', '') === '') {
             $this->call('key:generate');
         }
 
