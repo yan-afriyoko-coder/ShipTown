@@ -255,15 +255,22 @@ return new class extends Migration
             $table->string('location_id')->default('');
             $table->string('warehouse_code', 5)->nullable(false);
             $table->string('shelve_location')->default('');
+            $table->timestamp('recalculated_at')->nullable();
+            $table->boolean('recount_required')->default(false);
+
             $table->decimal('quantity_available', 20)
                 ->storedAs('quantity - quantity_reserved')
                 ->comment('quantity - quantity_reserved');
+
             $table->decimal('quantity', 20)->default(0);
+
             $table->boolean('is_in_stock')
                 ->storedAs('quantity_available > 0')
                 ->comment('quantity_available > 0');
+
             $table->decimal('quantity_reserved', 20)->default(0);
             $table->decimal('quantity_incoming', 20)->default(0);
+
             $table->decimal('quantity_required', 20)
                 ->storedAs('CASE WHEN (quantity - quantity_reserved + quantity_incoming) BETWEEN 0 AND reorder_point ' .
                     'THEN restock_level - (quantity - quantity_reserved + quantity_incoming)' .
@@ -271,14 +278,19 @@ return new class extends Migration
                 ->comment('CASE WHEN (quantity - quantity_reserved + quantity_incoming) BETWEEN 0 AND reorder_point ' .
                     'THEN restock_level - (quantity - quantity_reserved + quantity_incoming)' .
                     'ELSE 0 END');
+
             $table->decimal('reorder_point', 20)->default(0);
             $table->decimal('restock_level', 20)->default(0);
+            $table->unsignedBigInteger('last_sequence_number')->nullable();
+            $table->timestamp('first_movement_at')->nullable();
             $table->dateTime('last_movement_at')->nullable();
             $table->dateTime('first_received_at')->nullable();
             $table->dateTime('last_received_at')->nullable();
             $table->dateTime('first_sold_at')->nullable();
             $table->dateTime('last_sold_at')->nullable();
             $table->timestamp('last_counted_at')->nullable();
+            $table->timestamp('in_stock_since')->nullable();
+            $table->dateTime('first_counted_at')->nullable();
             $table->unsignedBigInteger('last_movement_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
@@ -296,6 +308,16 @@ return new class extends Migration
             $table->index('reorder_point');
             $table->index('last_sold_at');
             $table->index('last_counted_at');
+            $table->index('first_counted_at');
+            $table->index('recount_required');
+            $table->index('in_stock_since');
+            $table->index('recalculated_at');
+
+            $table->index([DB::raw('last_sequence_number DESC')]);
+            $table->index([DB::raw('last_movement_at DESC')]);
+            $table->index([DB::raw('first_received_at DESC')]);
+            $table->index([DB::raw('last_received_at DESC')]);
+            $table->index([DB::raw('first_sold_at DESC')]);
 
             $table->foreign('product_id')
                 ->references('id')
@@ -328,15 +350,25 @@ return new class extends Migration
             $table->boolean('is_active')->nullable(false)->default(0);
             $table->boolean('is_on_hold')->default(false);
             $table->boolean('is_editing')->default(0);
+
             $table->boolean('is_fully_paid')
-                ->storedAs('total_paid >= total - total_discounts')
-                ->comment('total_paid >= total - total_discounts');
-            $table->integer('product_line_count')->default(0);
-            $table->decimal('total', 10)->default(0);
-            $table->decimal('total_products')->default(0);
-            $table->decimal('total_shipping')->default(0);
-            $table->decimal('total_discounts', 10)->default(0);
-            $table->decimal('total_paid')->default(0);
+                ->storedAs('total_products + total_shipping - total_discounts - total_paid < 0.01')
+                ->comment('total_products + total_shipping - total_discounts - total_paid < 0.01');
+
+            $table->integer('product_line_count')->nullable()->default(null);
+
+            $table->decimal('total_products', 13)->nullable()->default(null);
+            $table->decimal('total_shipping', 13)->default(0);
+            $table->decimal('total_discounts', 13)->default(0);
+            $table->decimal('total_order', 13)
+                ->storedAs('total_products + total_shipping - total_discounts')
+                ->comment('total_products + total_shipping - total_discounts');
+
+            $table->decimal('total_paid', 13)->default(0);
+            $table->decimal('total_outstanding', 13)
+                ->storedAs('total_products + total_shipping - total_discounts - total_paid')
+                ->comment('total_products + total_shipping - total_discounts - total_paid');
+
             $table->foreignId('shipping_address_id')->nullable();
             $table->string('shipping_method_code')->default('')->nullable(true);
             $table->string('shipping_method_name')->default('')->nullable(true);
@@ -347,6 +379,7 @@ return new class extends Migration
             $table->timestamp('order_closed_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->string('custom_unique_reference_id')->unique()->nullable();
 
             $table->index('status_code');
             $table->index('is_active');
@@ -377,6 +410,10 @@ return new class extends Migration
             $table->foreignId('product_id')->nullable();
             $table->string('sku_ordered');
             $table->string('name_ordered');
+            $table->boolean('is_shipped')
+                ->storedAs('quantity_ordered - quantity_split - quantity_shipped <= 0')
+                ->comment('quantity_ordered - quantity_split - quantity_shipped <= 0');
+
             $table->decimal('price', 10, 3)->default(0);
             $table->decimal('quantity_ordered', 10)->default(0);
             $table->decimal('quantity_split', 10)->default(0);
@@ -396,6 +433,8 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
             $table->string('custom_unique_reference_id')->unique()->nullable();
+
+            $table->index('is_shipped');
 
             $table->foreign('product_id')
                 ->on('products')
@@ -449,6 +488,7 @@ return new class extends Migration
             $table->string('carrier')->default('');
             $table->string('service')->default('');
             $table->string('tracking_url')->default('');
+            $table->string('content_type')->default('');
             $table->longText('base64_pdf_labels');
             $table->timestamps();
 
@@ -582,12 +622,12 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('modules_dpd-ireland_configuration', function (Blueprint $table) {
+        Schema::create('modules_dpd_ireland_configuration', function (Blueprint $table) {
             $table->id();
             $table->boolean('live')->nullable(false)->default(false);
-            $table->string('token');
-            $table->string('user');
-            $table->string('password');
+            $table->longText('token');
+            $table->longText('user');
+            $table->longText('password');
             $table->string('contact')->nullable(false)->default('');
             $table->string('contact_telephone')->nullable(false)->default('');
             $table->string('contact_email')->nullable(false)->default('');
@@ -653,7 +693,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('automation_id');
             $table->string('condition_class')->nullable();
-            $table->string('condition_value')->nullable()->default('');
+            $table->string('condition_value')->nullable(false)->default('');
             $table->timestamps();
 
             $table->unique(
@@ -733,32 +773,58 @@ return new class extends Migration
         Schema::create('modules_rmsapi_products_imports', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('connection_id');
-            $table->foreignId('warehouse_id')->nullable();
             $table->string('warehouse_code')->nullable();
-            $table->uuid('batch_uuid')->nullable();
-            $table->timestamp('reserved_at')->nullable();
-            $table->dateTime('when_processed')->nullable();
             $table->unsignedBigInteger('product_id')->nullable();
+            $table->unsignedBigInteger('inventory_id')->nullable();
+            $table->unsignedBigInteger('warehouse_id')->nullable();
+            $table->unsignedBigInteger('rms_product_id')->nullable();
             $table->string('sku')->nullable();
+            $table->string('name')->nullable();
+            $table->boolean('is_web_item')->nullable();
             $table->decimal('quantity_on_hand', 20)->nullable();
             $table->decimal('quantity_committed', 20)->nullable();
             $table->decimal('quantity_available', 20)->nullable();
             $table->decimal('quantity_on_order', 20)->nullable();
-            $table->json('raw_import');
+            $table->decimal('reorder_point', 20)->nullable();
+            $table->decimal('restock_level', 20)->nullable();
+            $table->decimal('price', 20)->nullable();
+            $table->decimal('price_a', 20)->nullable();
+            $table->decimal('cost', 20)->nullable();
+            $table->decimal('sale_price', 20)->nullable();
+            $table->timestamp('sale_price_start_date')->nullable();
+            $table->timestamp('sale_price_end_date')->nullable();
+            $table->string('department_name')->nullable();
+            $table->string('category_name')->nullable();
+            $table->string('sub_description_1')->nullable();
+            $table->string('sub_description_2')->nullable();
+            $table->string('sub_description_3')->nullable();
+            $table->string('supplier_name')->nullable();
+            $table->timestamp('reserved_at')->nullable();
+            $table->timestamp('processed_at')->nullable();
+            $table->uuid('batch_uuid')->nullable();
+            $table->json('raw_import')->nullable();
             $table->timestamps();
 
+            $table->index('connection_id');
+            $table->index('rms_product_id');
+            $table->index('reserved_at');
+            $table->index('processed_at');
+            $table->index('is_web_item');
 
-            $table->index('when_processed');
+            $table->foreign('inventory_id')
+                ->references('id')
+                ->on('inventory')
+                ->cascadeOnDelete();
 
             $table->foreign('product_id')
                 ->references('id')
                 ->on('products')
-                ->onDelete('SET NULL');
+                ->cascadeOnDelete();
 
             $table->foreign('connection_id')
                 ->references('id')
                 ->on('modules_rmsapi_connections')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
             $table->foreign('warehouse_id')
                 ->references('id')
@@ -855,9 +921,12 @@ return new class extends Migration
         Schema::create('heartbeats', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
+            $table->string('level')->default('error');
             $table->string('error_message', 255)->nullable();
             $table->timestamp('expires_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
+
+            $table->index('level');
         });
 
         Schema::create('modules_dpduk_connections', function (Blueprint $table) {
@@ -896,8 +965,10 @@ return new class extends Migration
 
         Schema::create('inventory_movements', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('previous_movement_id')->nullable()->unique();
-            $table->string('type')->nullable();
+            $table->string('warehouse_code', 5)->nullable(false);
+            $table->dateTime('occurred_at')->nullable(false);
+            $table->unsignedInteger('sequence_number')->nullable()->comment('row_number() over (partition by inventory_id order by occurred_at asc, id asc)');
+            $table->string('type', 50)->nullable(false);
             $table->string('custom_unique_reference_id')->nullable()->unique();
             $table->foreignId('inventory_id');
             $table->foreignId('product_id');
@@ -905,11 +976,18 @@ return new class extends Migration
             $table->decimal('quantity_delta', 20);
             $table->decimal('quantity_before', 20);
             $table->decimal('quantity_after', 20);
-            $table->string('description', 50);
+            $table->string('description', 255);
+
             $table->foreignId('user_id')->nullable();
             $table->timestamps();
 
             $table->index('type');
+            $table->index('occurred_at');
+            $table->index(['occurred_at', 'id']);
+            $table->index(['sequence_number']);
+            $table->index(['inventory_id', 'occurred_at']);
+            $table->unique(['inventory_id', 'sequence_number']);
+            $table->index('warehouse_code');
 
             $table->foreign('inventory_id')
                 ->references('id')
@@ -930,7 +1008,15 @@ return new class extends Migration
                 ->references('id')
                 ->on('users')
                 ->cascadeOnDelete();
+
+            $table->foreign('warehouse_code')
+                ->references('code')
+                ->on('warehouses')
+                ->restrictOnDelete();
         });
+
+        DB::statement('CREATE INDEX occurred_at_sequence_number_index ON inventory_movements (occurred_at DESC, sequence_number DESC)');
+
 
         Schema::create('inventory_movements_statistics', function (Blueprint $table) {
             $table->id();
@@ -938,9 +1024,11 @@ return new class extends Migration
             $table->foreignId('inventory_id');
             $table->foreignId('product_id')->index();
             $table->string('warehouse_code', 5)->index();
-            $table->double('last7days_quantity_delta', 10, 2)->default(0);
-            $table->double('last14days_quantity_delta', 10, 2)->default(0);
-            $table->double('last28days_quantity_delta', 10, 2)->default(0);
+
+            $table->decimal('last7days_quantity_delta', 13, 2)->default(0);
+            $table->decimal('last14days_quantity_delta', 13, 2)->default(0);
+            $table->decimal('last28days_quantity_delta', 13, 2)->default(0);
+
             $table->unsignedBigInteger('last7days_min_movement_id')->nullable();
             $table->unsignedBigInteger('last7days_max_movement_id')->nullable();
             $table->unsignedBigInteger('last14days_min_movement_id')->nullable();
@@ -973,6 +1061,7 @@ return new class extends Migration
             $table->string('model_class');
             $table->foreignId('model_id');
             $table->json('message');
+            $table->string('sns_message_id')->nullable();
             $table->timestamp('reserved_at')->nullable();
             $table->timestamp('available_at')->nullable();
             $table->timestamp('published_at')->nullable();
@@ -991,24 +1080,24 @@ return new class extends Migration
 
         Schema::create('inventory_totals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->unique();
+            $table->unsignedBigInteger('product_id');
             $table->decimal('quantity', 20)->default(0);
             $table->decimal('quantity_reserved', 20)->default(0);
-            $table->decimal('quantity_incoming', 20)->default(0);
             $table->decimal('quantity_available', 20)
                 ->storedAs('quantity - quantity_reserved')
                 ->comment('quantity - quantity_reserved');
-            $table->softDeletes();
+            $table->decimal('quantity_incoming', 20)->default(0);
+            $table->timestamp('max_inventory_updated_at')->default('2000-01-01 00:00:00');
+            $table->timestamp('calculated_at')->nullable();
             $table->timestamps();
 
-            $table->index('quantity');
-            $table->index('quantity_reserved');
-            $table->index('quantity_incoming');
+            $table->index('product_id');
+            $table->index('calculated_at');
 
             $table->foreign('product_id')
                 ->references('id')
                 ->on('products')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
         });
 
         Schema::create('data_collections', function (Blueprint $table) {
@@ -1018,11 +1107,17 @@ return new class extends Migration
                 ->references('id')
                 ->on('warehouses')
                 ->onDelete('cascade');
+            $table->unsignedBigInteger('destination_collection_id')->nullable();
             $table->unsignedBigInteger('destination_warehouse_id')->nullable();
             $table->string('name');
             $table->string('currently_running_task')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('destination_collection_id')
+                ->references('id')
+                ->on('data_collections')
+                ->restrictOnDelete();
 
             $table->foreign('destination_warehouse_id')
                 ->references('id')
@@ -1032,22 +1127,40 @@ return new class extends Migration
         Schema::create('data_collection_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('data_collection_id')->constrained()->onDelete('cascade');
-            $table->foreignId('inventory_id')->nullable()
-                ->references('id')
-                ->on('inventory');
+
+            $table->unsignedBigInteger('inventory_id')->nullable(false);
+
             $table->foreignId('product_id');
             $table->unsignedBigInteger('warehouse_id')->nullable();
+            $table->boolean('is_processed')->nullable();
             $table->double('total_transferred_in', 10)->default(0);
             $table->double('total_transferred_out', 10)->default(0);
             $table->decimal('quantity_requested', 20)->nullable();
             $table->decimal('quantity_scanned', 20)->default(0);
+
             $table->decimal('quantity_to_scan', 20)
-                ->storedAs('CASE WHEN quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned < quantity_scanned THEN 0 ' .
-                    'ELSE quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned END')
-                ->comment('CASE WHEN quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned < quantity_scanned THEN 0 ' .
-                    'ELSE quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned - quantity_scanned END');
+                ->storedAs('GREATEST(0, IFNULL(quantity_requested, 0) - IFNULL(total_transferred_out, 0) - IFNULL(total_transferred_in, 0) - IFNULL(quantity_scanned, 0))')
+                ->comment('GREATEST(0, IFNULL(quantity_requested, 0) - IFNULL(total_transferred_out, 0) - IFNULL(total_transferred_in, 0) - IFNULL(quantity_scanned, 0))');
+
+            $table->boolean('is_requested')
+                ->storedAs('IFNULL(data_collection_records.quantity_requested, 0) = 0')
+                ->comment('IFNULL(data_collection_records.quantity_requested, 0) = 0');
+
+            $table->boolean('is_fully_scanned')
+                ->storedAs('quantity_to_scan <= 0')
+                ->comment('quantity_to_scan <= 0');
+
+            $table->boolean('is_over_scanned')
+                ->storedAs('IFNULL(data_collection_records.quantity_scanned, 0) > IFNULL(data_collection_records.quantity_requested, 0)')
+                ->comment('IFNULL(data_collection_records.quantity_scanned, 0) > IFNULL(data_collection_records.quantity_requested, 0)');
+
+            $table->string('custom_uuid')->unique()->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index('is_requested');
+            $table->index('is_fully_scanned');
+            $table->index('is_over_scanned');
 
             $table->foreign('product_id')
                 ->references('id')
@@ -1066,6 +1179,7 @@ return new class extends Migration
 
             $table->index('reason');
             $table->index(['warehouse_id', 'reason']);
+            $table->unique(['inventory_id', 'reason']);
             $table->index(['inventory_id', 'reason']);
         });
 
@@ -1073,6 +1187,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('connection_id');
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+            $table->boolean('exists_in_magento')->nullable();
             $table->decimal('magento_price', 20)->nullable();
             $table->decimal('magento_sale_price', 20)->nullable();
             $table->dateTime('magento_sale_price_start_date')->nullable();
@@ -1117,6 +1232,7 @@ return new class extends Migration
             $table->string('type')->nullable()->index();
             $table->unsignedBigInteger('inventory_movement_id')->nullable();
             $table->foreignId('connection_id');
+            $table->unsignedBigInteger('inventory_id')->nullable();
             $table->foreignId('warehouse_id')->nullable();
             $table->foreignId('product_id')->nullable();
             $table->dateTime('reserved_at')->nullable();
@@ -1140,6 +1256,10 @@ return new class extends Migration
                 ->references('id')
                 ->on('modules_rmsapi_connections')
                 ->onDelete('cascade');
+
+            $table->foreign('inventory_id')
+                ->references('id')
+                ->on('inventory');
         });
 
         if (!Schema::hasColumn(config('activitylog.table_name'), 'event')) {
@@ -1189,11 +1309,63 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('modules_inventory_totals_configurations', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('totals_max_product_id_checked')->default(0);
+            $table->unsignedBigInteger('totals_by_warehouse_tag_max_inventory_id_checked')->default(0);
+            $table->timestamps();
+        });
+
+        Schema::create('inventory_totals_by_warehouse_tag', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('product_id');
+            $table->unsignedInteger('tag_id');
+            $table->decimal('quantity', 20)->default(0);
+            $table->decimal('quantity_reserved', 20)->default(0);
+            $table->decimal('quantity_available', 20)
+                ->storedAs('quantity - quantity_reserved')
+                ->comment('quantity - quantity_reserved');
+            $table->decimal('quantity_incoming', 20)->default(0);
+            $table->timestamp('max_inventory_updated_at')->default('2000-01-01 00:00:00');
+            $table->timestamp('calculated_at')->nullable();
+            $table->timestamps();
+
+            $table->unique(['product_id', 'tag_id'], 'uk_product_tag');
+            $table->index('calculated_at');
+            $table->index('product_id');
+
+            $table->foreign('product_id', 'fk_inventory_totals_by_warehouse_tag_product_id')
+                ->references('id')
+                ->on('products')
+                ->cascadeOnDelete();
+
+            $table->foreign('tag_id', 'fk_inventory_totals_by_warehouse_tag_tag_id')
+                ->references('id')
+                ->on('tags')
+                ->cascadeOnDelete();
+        });
+
+        Schema::create('modules_inventory_movements_configurations', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('totals_by_warehouse_tag_max_inventory_movement_id_checked')->default(0);
+            $table->unsignedBigInteger('quantity_before_job_last_movement_id_checked')->default(0);
+            $table->unsignedBigInteger('quantity_before_basic_job_last_movement_id_checked')->default(0);
+            $table->unsignedBigInteger('quantity_before_stocktake_job_last_movement_id_checked')->default(0);
+            $table->timestamps();
+        });
+
+        Schema::create('modules_stocktaking_suggestions_configurations', function (Blueprint $table) {
+            $table->id();
+            $table->date('min_count_date')->nullable();
+            $table->timestamps();
+        });
+
         $this->installSpatiePermissions();
 
         DB::statement('
             CREATE OR REPLACE VIEW modules_magento2api_products_prices_comparison_view AS
             SELECT
+                modules_magento2api_products.connection_id as modules_magento2api_connection_id,
                 modules_magento2api_products.id as modules_magento2api_products_id,
                 products.sku,
                 modules_magento2api_connections.magento_store_id,
@@ -1212,8 +1384,8 @@ return new class extends Migration
                 modules_magento2api_products.base_prices_fetched_at,
                 modules_magento2api_products.special_prices_fetched_at
 
-
             FROM modules_magento2api_products
+
             LEFT JOIN products ON products.id = modules_magento2api_products.product_id
 
             LEFT JOIN modules_magento2api_connections
@@ -1222,15 +1394,21 @@ return new class extends Migration
             LEFT JOIN products_prices
               ON products_prices.product_id = modules_magento2api_products.product_id
               AND products_prices.warehouse_id = modules_magento2api_connections.pricing_source_warehouse_id
+
+            WHERE
+                modules_magento2api_connections.pricing_source_warehouse_id IS NOT NULL
+                AND IFNULL(modules_magento2api_products.exists_in_magento, 0) = 1
         ');
 
         DB::statement("
             CREATE OR REPLACE VIEW modules_magento2api_products_inventory_comparison_view AS
-            SELECT modules_magento2api_products.id AS modules_magento2api_products_id,
-                   products.sku AS sku,
-                   floor(max(modules_magento2api_products.quantity)) AS magento_quantity,
-                   if((floor(sum(inventory.quantity_available)) < 0), 0, floor(sum(inventory.quantity_available))) AS expected_quantity,
-                   modules_magento2api_products.stock_items_fetched_at
+            SELECT
+               modules_magento2api_products.connection_id as modules_magento2api_connection_id,
+               modules_magento2api_products.id AS modules_magento2api_products_id,
+               products.sku AS sku,
+               floor(max(modules_magento2api_products.quantity)) AS magento_quantity,
+               if((floor(sum(inventory.quantity_available)) < 0), 0, floor(sum(inventory.quantity_available))) AS expected_quantity,
+               modules_magento2api_products.stock_items_fetched_at
 
             from modules_magento2api_products
 
@@ -1251,8 +1429,48 @@ return new class extends Migration
             left join products
               on products.id = modules_magento2api_products.product_id
 
-            group by modules_magento2api_products.id
+            WHERE
+                modules_magento2api_connections.inventory_source_warehouse_tag_id IS NOT NULL
+                AND IFNULL(modules_magento2api_products.exists_in_magento, 1) = 1
+
+            GROUP BY modules_magento2api_products.id
         ");
+
+        DB::statement('
+            CREATE OR REPLACE VIEW modules_rmsapi_products_quantity_comparison_view AS
+                SELECT
+                 modules_rmsapi_products_imports.id  as record_id,
+                  modules_rmsapi_products_imports.sku as product_sku,
+                  modules_rmsapi_products_imports.product_id as product_id,
+                  modules_rmsapi_products_imports.warehouse_id as warehouse_id,
+                  modules_rmsapi_products_imports.warehouse_code,
+                  modules_rmsapi_products_imports.quantity_on_hand as rms_quantity,
+                  inventory.quantity as pm_quantity,
+                  modules_rmsapi_products_imports.quantity_on_hand - inventory.quantity as quantity_delta,
+                  modules_rmsapi_products_imports.updated_at as modules_rmsapi_products_imports_updated_at,
+                  inventory.id as inventory_id,
+                  (
+                      SELECT max(id)
+                      FROM  inventory_movements
+                      WHERE inventory_movements.inventory_id = inventory.id
+                        AND inventory_movements.description = "stocktake"
+                        AND inventory_movements.user_id = 1
+                        AND inventory_movements.created_at > date_sub(now(), interval 7 day)
+                  ) as movement_id
+
+                FROM modules_rmsapi_products_imports
+                INNER JOIN inventory
+                   ON inventory.product_id = modules_rmsapi_products_imports.product_id
+                   AND inventory.warehouse_id = modules_rmsapi_products_imports.warehouse_id
+
+                WHERE modules_rmsapi_products_imports.id IN (
+                    SELECT MAX(ID)
+                    FROM modules_rmsapi_products_imports
+                    GROUP BY
+                        warehouse_id,
+                        product_id
+                );
+        ');
     }
 
     private function installSpatiePermissions(): void

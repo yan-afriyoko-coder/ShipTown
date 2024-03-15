@@ -19,6 +19,7 @@ use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
 use App\Modules\InventoryMovementsStatistics\src\InventoryMovementsStatisticsServiceProvider;
 use App\Modules\InventoryQuantityIncoming\src\InventoryQuantityIncomingServiceProvider;
 use App\Modules\InventoryReservations\src\EventServiceProviderBase;
+use App\Modules\InventoryTotals\src\InventoryTotalsServiceProvider;
 use App\Modules\NonInventoryProductTag\src\NonInventoryProductTagServiceProvider;
 use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
 use App\Modules\Slack\src\SlackServiceProvider;
@@ -99,6 +100,8 @@ class AppInstall extends Command
         StocktakeSuggestionsServiceProvider::enableModule();
         InventoryMovementsStatisticsServiceProvider::enableModule();
         EventServiceProviderBase::enableModule();
+        InventoryMovementsServiceProvider::enableModule();
+        InventoryTotalsServiceProvider::enableModule();
         InventoryMovementsServiceProvider::enableModule();
 
         return 0;
