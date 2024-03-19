@@ -4,11 +4,12 @@ namespace App\Modules\InventoryMovements\src;
 
 use App\Events\EveryHourEvent;
 use App\Events\EveryMinuteEvent;
+use App\Events\Inventory\RecalculateInventoryRequestEvent;
 use App\Events\InventoryMovement\InventoryMovementCreatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProviderBase.
+ * Class InventoryQuantityReservedServiceProvider.
  */
 class InventoryMovementsServiceProvider extends BaseModuleServiceProvider
 {
@@ -31,6 +32,11 @@ class InventoryMovementsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
+
+        RecalculateInventoryRequestEvent::class => [
+            Listeners\RecalculateInventoryRequestEventListener::class,
+        ],
+
         InventoryMovementCreatedEvent::class => [
             Listeners\InventoryMovementCreatedEventListener::class,
         ],
