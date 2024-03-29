@@ -131,7 +131,7 @@
                                                         </a>
                                                     </div>
                                                     <div class="small">
-                                                        {{ orderProduct['order']['order_placed_at'] | moment('MMM DD')  }}
+                                                        {{ formatDateTime(orderProduct['order']['order_placed_at'], 'MMM DD') }}
                                                     </div>
                                                     <div class="small">
                                                         {{ orderProduct['order']['status_code']}}

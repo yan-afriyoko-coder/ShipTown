@@ -49,11 +49,120 @@
                         </div>
                         <div class="col-3">
                         </div>
-                        <div class="col-3">
-                            <number-card label="sold 7 days" :number="record['quantity_sold_last_7_days']"></number-card>
+                        <div @click="expanded = !expanded">last counted at: <b>{{ formatDateTime(record['last_counted_at'],'D MMM HH:MM') }}</b></div>
+                        <div @click="expanded = !expanded">sale price: <b>{{ pricing['sale_price'] }} ({{ formatDateTime(pricing['sale_price_start_date'], 'D MMM Y') }} - {{ formatDateTime(pricing['sale_price_end_date'], 'D MMM Y') }})</b></div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="row-col text-right" @click="expanded = !expanded">
+                            <div class="row">
+                                <div class="col-3">
+                                    <text-card label="price" :text="pricing['price']" :class="{ 'text-secondary': isOnSale }" ></text-card>
+                                </div>
+                                <div class="col-3">
+                                    <text-card label="sale price" :text="pricing['sale_price']" v-if="isOnSale" class="bg-warning"></text-card>
+                                </div>
+                                <div class="col-3">
+                                    <number-card label="in stock" :number="record['quantity_in_stock']" v-bind:class="{'bg-warning' : record['quantity_in_stock'] < 0 }"></number-card>
+                                </div>
+                                <div class="col-3">
+                                    <number-card label="required" :number="record['quantity_required']" v-if="record['warehouse_quantity'] > 0"></number-card>
+                                    <text-card class="fa-pull-right" label="required" text="N/A" v-if="Number(record['warehouse_quantity']) === 0"></text-card>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <number-card label="weeks cover" :number="weeksCover"></number-card>
+                                </div>
+                                <div class="col-3">
+                                </div>
+                                <div class="col-3">
+                                    <number-card label="sold 7 days" :number="record['quantity_sold_last_7_days']"></number-card>
+                                </div>
+                                <div class="col-3">
+                                    <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
+                                </div>
+                            </div>
+
+                            <div class="text-left d-sm-flex d-md-inline">
+                            </div>
                         </div>
-                        <div class="col-3">
-                            <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
+
+                        <div @click="expanded = !expanded" class="text-center text-secondary">
+                            <font-awesome-icon v-if="expanded" icon="chevron-up" class="fa fa-xs"></font-awesome-icon>
+                            <font-awesome-icon v-if="!expanded" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
+                        </div>
+
+                        <div v-if="expanded">
+
+                            <div class="row-col text-center mt-3 small text-secondary">
+                                reorder point
+                            </div>
+
+                            <div class="row-col text-nowrap">
+                                <div class="input-group mb-3">
+                                    <button tabindex="-1" @click="minusReorderPoint" class="btn btn-danger mr-3" type="button" id="button-addon5" style="min-width: 45px">-</button>
+                                    <input tabindex="0"
+                                           @keyup="onUpdateReorderPointEvent"
+                                           v-model="newReorderPointValue"
+                                           @focus="simulateSelectAll"
+                                           type="number"
+                                           inputmode="numeric"
+                                           class="form-control text-center"
+                                           style="font-size: 24px"
+                                    >
+                                    <button tabindex="-1" @click="plusReorderPoint" class="btn btn-success ml-3" type="button" id="button-addon6" style="min-width: 45px">+</button>
+                                </div>
+                            </div>
+
+                            <div class="row-col text-center mt-3 small text-secondary">
+                                restock level
+                            </div>
+                            <div class="row-col text-nowrap">
+                                <div class="input-group mb-3">
+                                    <button tabindex="-1" @click="minusRestockLevel" class="btn btn-danger mr-3" type="button" id="button-addon3" style="min-width: 45px">-</button>
+                                    <input tabindex="0"
+                                           @keyup="onUpdateRestockLevelEvent"
+                                           v-model="newRestockLevelValue"
+                                           @focus="simulateSelectAll"
+                                           type="number"
+                                           inputmode="numeric"
+                                           class="form-control text-center"
+                                           v-bind:class="{ 'alert-danger': newRestockLevelValue < newReorderPointValue }"
+                                           style="font-size: 24px"
+                                    >
+                                    <button tabindex="-1" @click="plusRestockLevel" class="btn btn-success ml-3" type="button" id="button-addon4" style="min-width: 45px">+</button>
+                                </div>
+                            </div>
+                            <template @click="expanded = !expanded" v-if="expanded">
+                                <div @click="expanded = !expanded">last movement at: <b>{{ formatDateTime(record['last_movement_at'],'D MMM HH:MM') }}</b></div>
+                                <div @click="expanded = !expanded">first received at: <b>{{ formatDateTime(record['first_received_at'],'D MMM HH:MM') }}</b></div>
+                                <div @click="expanded = !expanded">location: <b>{{ record['warehouse_code'] }}</b></div>
+                            </template>
+                            <div class="row-col text-center align-bottom pb-2 m-0 font-weight-bold text-uppercase small text-secondary">
+                                Incoming
+                            </div>
+
+                            <div v-for="dataCollectionRecord in dataCollectorRecords" :key="dataCollectionRecord['id']">
+                                <div class="row col">
+                                    <div class="text-primary">
+                                        <a :href="'/data-collector/' + dataCollectionRecord['data_collection']['id']">
+                                            {{ dataCollectionRecord['data_collection']['name'] }}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="row col">
+                                    <div class="flex-fill">
+                                        <a class="text-secondary small" :href="'/data-collector/' + dataCollectionRecord['data_collection']['id']">
+                                            {{ formatDateTime(dataCollectionRecord['data_collection']['created_at']) }}
+                                        </a>
+                                    </div>
+                                    <div class="">
+                                        <number-card label="requested" :number="dataCollectionRecord['quantity_requested']"></number-card>
+                                        <number-card label="outstanding" :number="dataCollectionRecord['quantity_requested'] - dataCollectionRecord['total_transferred_in']"></number-card>
+                                    </div>
+                                </div>
+                                <hr />
+                            </div>
                         </div>
                     </div>
 
