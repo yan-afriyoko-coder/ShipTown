@@ -46,8 +46,8 @@
                        @keyup.enter="submitStocktake"
                 />
             </template>
-            <template #modal-footer="{ ok, cancel }" class="text-left">
-                <b-button style="width: 80px" class="btn mr-auto" variant="secondary" @click="cancel()">Cancel</b-button>
+            <template #modal-footer="{ ok, cancel }">
+                <b-button style="width: 80px" class="btn" variant="secondary" @click="cancel()">Cancel</b-button>
                 <b-button style="width: 80px" class="btn" variant="primary" @click="ok()">Update</b-button>
             </template>
         </b-modal>

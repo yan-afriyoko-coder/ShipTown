@@ -84,11 +84,15 @@
             </vue-csv-import>
 
             <button v-if="csv" type="button" @click.prevent="postCsvRecordsToApiAndCloseModal" class="col btn mb-1 btn-primary">Import Records</button>
-
         </b-modal>
 
-        <b-modal id="configuration-modal" autofocus centered no-fade hide-footer title="Data Collection">
+        <b-modal id="configuration-modal" autofocus centered no-fade title="Data Collection">
             <button type="button" @click.prevent="downloadFile" class="col btn mb-1 btn-primary">Download</button>
+            <template #modal-footer>
+                <b-button variant="secondary" class="float-right" @click="$bvModal.hide('configuration-modal');">
+                    Cancel
+                </b-button>
+            </template>
         </b-modal>
 
     </div>

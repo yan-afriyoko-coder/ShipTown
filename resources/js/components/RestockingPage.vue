@@ -17,12 +17,20 @@
             </div>
         </div>
 
-        <b-modal id="configuration-modal" no-fade hide-footer hide-header
+        <b-modal id="configuration-modal" no-fade hide-header
                  @shown="setFocusElementById('stocktake-input')"
                  @hidden="focusOnInputAndReload">
             <stocktake-input></stocktake-input>
             <hr>
             <button type="button" @click.prevent="downloadFileAndHideModal" class="col btn mb-1 btn-primary">Download</button>
+            <template #modal-footer>
+                <b-button variant="secondary" class="float-right" @click="$bvModal.hide('configuration-modal');">
+                    Cancel
+                </b-button>
+                <b-button variant="primary" class="float-right" @click="$bvModal.hide('configuration-modal');">
+                    OK
+                </b-button>
+            </template>
         </b-modal>
 
         <template v-for="record in data">

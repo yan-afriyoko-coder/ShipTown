@@ -90,7 +90,7 @@
             </div>
         </b-modal>
 
-        <b-modal id="filtersModal" ref="filtersModal" no-fade hide-footer hide-header
+        <b-modal id="filtersModal" ref="filtersModal" no-fade hide-header
                  @shown="setFocusElementById('stocktake-input')"
                  @hidden="modalHidden">
                 <stocktake-input></stocktake-input>
@@ -117,11 +117,15 @@
                 <br>
                 <br>
                 <button :disabled="previous_order_id === null" type="button" class="col btn btn-primary" @click.prevent="openPreviousOrder">Open Previous Order</button>
-                <hr>
-                <div class="text-right">
-                    <button @click="closeFilersModal" type="button" class="btn btn-secondary">Cancel</button>
-                    <button disabled type="button" class="btn btn-primary">OK</button>
-                </div>
+
+            <template #modal-footer>
+                <b-button variant="secondary" class="float-right" @click="$bvModal.hide('filtersModal');">
+                    Cancel
+                </b-button>
+                <b-button variant="primary" class="float-right" @click="$bvModal.hide('filtersModal');">
+                    OK
+                </b-button>
+            </template>
         </b-modal>
 
     </div>
@@ -453,10 +457,6 @@
 
                 closeAskForShippingNumberModal() {
                     this.$refs.shippingNumberModal2.hide();
-                },
-
-                closeFilersModal() {
-                    this.$refs.filtersModal.hide();
                 },
 
                 addShippingNumber() {

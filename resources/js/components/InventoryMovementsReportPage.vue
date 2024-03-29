@@ -9,7 +9,7 @@
                 />
             </div>
 
-            <button disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#configurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+            <button type="button" v-b-modal="'quick-actions-modal'" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
         <div class="row pl-2 p-0">
@@ -41,6 +41,17 @@
             </div>
         </div>
 
+        <b-modal id="quick-actions-modal" no-fade hide-header @hidden="setFocusElementById('barcode_input')">
+            <stocktake-input></stocktake-input>
+            <template #modal-footer>
+                <b-button variant="secondary" class="float-right" @click="$bvModal.hide('quick-actions-modal');">
+                    Cancel
+                </b-button>
+                <b-button variant="primary" class="float-right" @click="$bvModal.hide('quick-actions-modal');">
+                    OK
+                </b-button>
+            </template>
+        </b-modal>
     </div>
 </template>
 

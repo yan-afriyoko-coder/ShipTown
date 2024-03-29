@@ -9,7 +9,7 @@
                     </div>
                     <div class="modal-footer">
                         <slot name="footer"></slot>
-                        <button type="button" @click.prevent="handleSubmit" class="btn btn-primary">Close</button>
+                        <button type="button" @click.prevent="handleSubmit" class="btn btn-secondary">Cancel</button>
                     </div>
                 </div>
             </div>
