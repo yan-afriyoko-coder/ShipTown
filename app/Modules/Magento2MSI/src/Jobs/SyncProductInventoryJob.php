@@ -19,6 +19,7 @@ class SyncProductInventoryJob extends UniqueJob
             ->each(function (Magento2msiConnection $magentoConnection) {
                 Magento2msiProduct::query()
                     ->where('connection_id', $magentoConnection->getKey())
+                    ->where('magento_product_type', 'simple')
                     ->with(['inventoryTotalByWarehouseTag', 'product'])
                     ->where('sync_required', true)
                     ->chunkById(50, function (Collection $chunk) use ($magentoConnection) {

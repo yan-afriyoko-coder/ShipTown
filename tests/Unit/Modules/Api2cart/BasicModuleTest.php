@@ -3,6 +3,7 @@
 namespace Tests\Unit\Modules\Api2cart;
 
 use App\Jobs\DispatchEveryFiveMinutesEventJob;
+use App\Jobs\DispatchEveryMinuteEventJob;
 use App\Modules\Api2cart\src\Api2cartServiceProvider;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use Illuminate\Foundation\Testing\RefreshDatabase;

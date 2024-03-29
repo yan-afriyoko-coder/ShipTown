@@ -20,6 +20,7 @@ class FetchStockItemsJob extends UniqueJob
             ->each(function (Magento2msiConnection $connection) {
                 Magento2msiProduct::query()
                     ->where('connection_id', $connection->getKey())
+                    ->where('magento_product_type', 'simple')
                     ->whereNotNull('magento_product_id')
                     ->whereNull('inventory_source_items_fetched_at')
                     ->chunkById(50, function (Collection $products) use ($connection) {
