@@ -300,8 +300,12 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="text-nowrap"> shipping method:</td>
+                                                    <td class="text-nowrap"> shipping method code:</td>
                                                     <td class="text-right"><b> {{ order['shipping_method_code'] }} </b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap"> shipping method name:</td>
+                                                    <td class="text-right"><b> {{ order['shipping_method_name'] }} </b></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-nowrap"> label template:</td>
