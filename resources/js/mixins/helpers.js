@@ -54,38 +54,40 @@ export default {
             },
 
             setFocusElementById(elementId, showKeyboard = false, autoSelectAll = true, delay = 100) {
-                const element = document.getElementById(elementId);
+                process.nextTick(() => {
+                    const element = document.getElementById(elementId);
 
-                if (element === null) {
-                    return;
-                }
-
-                element.blur();
-
-                const isIos = () => !!window.navigator.userAgent.match(/Mac OS|iPad|iPhone/i);
-
-                if (isIos()) {
-                    this.focusAndOpenKeyboard(element, delay, showKeyboard);
-                    return;
-                }
-
-                if (showKeyboard === false) {
-                    // this simple hack of setting focus when field is read only will
-                    // prevent showing on screen keyboard on mobile devices
-                    element.readOnly = true;
-                }
-
-                setTimeout(() => {
-                    element.focus();
-                    element.click();
-
-                    element.readOnly = false;
-
-                    if (autoSelectAll) {
-                        element.select();
+                    if (element === null) {
+                        return;
                     }
 
-                }, delay);
+                    element.blur();
+
+                    const isIos = () => !!window.navigator.userAgent.match(/Mac OS|iPad|iPhone/i);
+
+                    if (isIos()) {
+                        this.focusAndOpenKeyboard(element, delay, showKeyboard);
+                        return;
+                    }
+
+                    if (showKeyboard === false) {
+                        // this simple hack of setting focus when field is read only will
+                        // prevent showing on screen keyboard on mobile devices
+                        element.readOnly = true;
+                    }
+
+                    setTimeout(() => {
+                        element.focus();
+                        element.click();
+
+                        element.readOnly = false;
+
+                        if (autoSelectAll) {
+                            element.select();
+                        }
+
+                    }, delay);
+                })
             },
 
             focusAndOpenKeyboard(element, delay= 100, showKeyboard = false, autoSelectAll = true) {

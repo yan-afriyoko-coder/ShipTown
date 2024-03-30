@@ -4,6 +4,7 @@
 
 <script>
     import VueRouter from "vue-router";
+    import {History} from "swiper";
 
     Vue.use(VueRouter);
 
@@ -51,9 +52,24 @@
                 return this;
             },
 
+            removeUrlParameter: function(param) {
+                this.$router.currentRoute.query[param] = null;
+                this.updateUrl(this.$router.currentRoute.query);
+
+                return this;
+            },
+
+            removeUrlParameterAndGo: function(param) {
+                this.removeUrlParameter(param);
+                window.location.reload();
+
+                return this;
+            },
+
             setUrlParameterAngGo: function(param, value) {
                 this.setUrlParameter(param, value);
                 window.location.reload();
+
                 return this;
             },
 
@@ -89,7 +105,7 @@
 
                 // we setting url twice because sometimes when only parameter is updated
                 // but path stays NavigationDuplicated error might occur
-                this.pushUrl('/');
+                // this.pushUrl('/');
                 this.pushUrl(url);
 
                 return this;

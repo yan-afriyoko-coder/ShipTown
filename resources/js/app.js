@@ -49,7 +49,7 @@ import {
     faArchive,
     faCopy,
     faCartPlus, faAtom, faChartBar, faChartLine, faBox, faBars, faArrowRight,
-    faFileDownload
+    faFileDownload, faCaretDown, faCaretUp
 } from '@fortawesome/free-solid-svg-icons';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -95,6 +95,8 @@ library.add(faArchive);
 library.add(faCopy);
 library.add(faCartPlus);
 library.add(faArrowRight);
+library.add(faCaretDown);
+library.add(faCaretUp);
 library.add(faFileDownload);
 
 Vue.config.productionTip = false;
@@ -199,6 +201,10 @@ Vue.component('user-courier-integration-select', require('./components/Settings/
 Vue.component('user-table', require('./components/UsersPage.vue').default);
 Vue.component('warehouses-page', require('./components/Settings/WarehousesPage.vue').default);
 Vue.component('webhooks-subscription-page', require('../../app/Modules/Webhooks/resources/js/WebhooksSubscriptionsPage.vue').default);
+Vue.component('report', require('./components/Reports/Report.vue').default);
+Vue.component('card', require('./components/UI/Card.vue').default);
+Vue.component('container', require('./components/UI/Container.vue').default);
+Vue.component('top-nav-bar', require('./components/UI/TopNavBar.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

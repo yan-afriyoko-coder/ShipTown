@@ -12,7 +12,7 @@ class InventoryReport extends Report
     {
         parent::__construct($attributes);
 
-        $this->report_name = 'Inventory Report';
+        $this->report_name = 'Inventory';
 
         $this->baseQuery = Inventory::query()
             ->leftJoin('products as product', 'inventory.product_id', '=', 'product.id')
