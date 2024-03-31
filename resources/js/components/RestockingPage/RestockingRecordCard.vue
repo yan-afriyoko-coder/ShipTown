@@ -4,23 +4,19 @@
             <div class="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
                 <product-info-card :product="record['product']"/>
             </div>
-            <div class="small col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
-                <div class="sd-block lg:sd-none">
-                    Warehouse: <b>{{ record['warehouse_code'] }}</b>
+            <div class="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+                <div @click="toggleExpanded()" class="pt-2 pt-md-0 small">
+                    warehouse: <b>{{ record['warehouse_code'] }}</b><br>
+                    <span :class="{'bg-warning': record['warehouse_quantity'] <= 0 }">warehouse quantity: <b>{{ record['warehouse_quantity'] }}</b></span><br>
+                    reorder point: <b>{{ record['reorder_point'] }}</b><br>
+                    restock level: <b>{{ record['restock_level'] }}</b><br>
                 </div>
-                <div :class="{'bg-warning': record['warehouse_quantity'] <= 0 }" @click="expanded = !expanded">warehouse quantity: <b>{{ record['warehouse_quantity'] }}</b></div>
-                <div @click="expanded = !expanded">reorder point: <b>{{ record['reorder_point'] }}</b></div>
-                <div @click="expanded = !expanded">restock level: <b>{{ record['restock_level'] }}</b></div>
-                <div class="mt-1">
-                    <div @click="expanded = !expanded" class="d-inline">last sold at: </div>
-                    <strong @click="showInventoryMovementModal" class="text-primary cursor-pointer">{{ formatDateTime(record['last_sold_at']) }}</strong>
+                <div class="my-2 small">
+                    last sold at: <b @click.prevent="showInventoryMovementsModal" class="text-primary cursor-pointer">{{ formatDateTime(record['last_sold_at']) }}</b><br>
+                    last received at: <b @click.prevent="showInventoryMovementsModal" class="text-primary cursor-pointer">{{ formatDateTime(record['last_received_at']) }}</b><br>
+                    last counted at: <b>{{ formatDateTime(record['last_counted_at']) }}</b><br>
+                    sale price: <b>{{ pricing['sale_price'] }} ({{ formatDateTime(pricing['sale_price_start_date'], 'D MMM Y') }} - {{ formatDateTime(pricing['sale_price_end_date'], 'D MMM Y') }})</b><br>
                 </div>
-                <div>
-                    <div @click="expanded = !expanded" class="d-inline">last received at:</div>
-                    <strong @click="showInventoryMovementModal" class="text-primary cursor-pointer">{{ formatDateTime(record['last_received_at']) }}</strong>
-                </div>
-                <div @click="expanded = !expanded">last counted at: <b>{{ formatDateTime(record['last_counted_at'],'D MMM HH:MM') }}</b></div>
-                <div @click="expanded = !expanded">sale price: <b>{{ pricing['sale_price'] }} ({{ formatDateTime(pricing['sale_price_start_date'], 'D MMM Y') }} - {{ formatDateTime(pricing['sale_price_end_date'], 'D MMM Y') }})</b></div>
             </div>
             <div class="text-lg-center sd-none lg:sd-block lg:col-span-1">
                 <p class="small text-secondary mb-0">Warehouse</p>
@@ -28,46 +24,28 @@
             </div>
             <div class="col-span-12 md:col-span-4 lg:col-span-5">
                 <div class="row-col text-right" @click="expanded = !expanded">
-                    <div class="row">
-                        <div class="col-3">
-                            <text-card label="price" :text="pricing['price']" :class="{ 'text-secondary': isOnSale }" ></text-card>
-                        </div>
-                        <div class="col-3">
-                            <text-card label="sale price" :text="pricing['sale_price']" v-if="isOnSale" class="bg-warning"></text-card>
-                        </div>
-                        <div class="col-3">
-                            <number-card label="in stock" :number="record['quantity_in_stock']" v-bind:class="{'bg-warning' : record['quantity_in_stock'] < 0 }"></number-card>
-                        </div>
-                        <div class="col-3">
-                            <number-card label="required" :number="record['quantity_required']" v-if="record['warehouse_quantity'] > 0"></number-card>
-                            <text-card class="fa-pull-right" label="required" text="N/A" v-if="Number(record['warehouse_quantity']) === 0"></text-card>
-                        </div>
+                    <div class="row-col text-right">
+                        <text-card label="price" :text="pricing['price']" :class="{ 'text-secondary': isOnSale }" ></text-card>
+                        <text-card label="sale price" v-if="isOnSale"  :text="pricing['sale_price']"class="bg-warning"></text-card>
+                        <text-card label="" v-else text=""></text-card>
+                        <number-card label="in stock" :number="record['quantity_in_stock']" v-bind:class="{'bg-warning' : record['quantity_in_stock'] < 0 }"></number-card>
+                        <number-card label="required" v-if="Number(record['warehouse_quantity']) > 0" :number="record['quantity_required']"></number-card>
+                        <text-card v-else text="N/A" class="fa-pull-right" label="required"></text-card>
                     </div>
-                    <div class="row">
-                        <div class="col-3">
-                            <number-card label="weeks cover" :number="weeksCover"></number-card>
-                        </div>
-                        <div class="col-3">
-                        </div>
-                        <div class="col-3">
-                            <number-card label="sold 7 days" :number="record['quantity_sold_last_7_days']"></number-card>
-                        </div>
-                        <div class="col-3">
-                            <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
-                        </div>
-                    </div>
-
-                    <div class="text-left d-sm-flex d-md-inline">
+                    <div class="row-col text-right">
+                        <number-card label="weeks cover" :number="weeksCover"></number-card>
+                        <text-card label="" text=""></text-card>
+                        <number-card label="sold 7 days" :number="record['quantity_sold_last_7_days']"></number-card>
+                        <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
                     </div>
                 </div>
 
                 <div @click="expanded = !expanded" class="text-center text-secondary">
                     <font-awesome-icon v-if="expanded" icon="chevron-up" class="fa fa-xs"></font-awesome-icon>
-                    <font-awesome-icon v-if="!expanded" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
+                    <font-awesome-icon v-else icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
                 </div>
 
                 <div v-if="expanded">
-
                     <div class="row-col text-center mt-3 small text-secondary">
                         reorder point
                     </div>
@@ -107,12 +85,12 @@
                             <button tabindex="-1" @click="plusRestockLevel" class="btn btn-success ml-3" type="button" id="button-addon4" style="min-width: 45px">+</button>
                         </div>
                     </div>
-                    <template @click="expanded = !expanded" v-if="expanded">
-                        <div @click="expanded = !expanded">last movement at: <b>{{ formatDateTime(record['last_movement_at'],'D MMM HH:MM') }}</b></div>
-                        <div @click="expanded = !expanded">first received at: <b>{{ formatDateTime(record['first_received_at'],'D MMM HH:MM') }}</b></div>
-                        <div @click="expanded = !expanded">location: <b>{{ record['warehouse_code'] }}</b></div>
-                    </template>
-                    <div class="row-col text-center align-bottom pb-2 m-0 font-weight-bold text-uppercase small text-secondary">
+                    <div class="small" @click="expanded = !expanded" v-if="expanded">
+                        <div @click="expanded = !expanded">last movement at: <b>{{ formatDateTime(record['last_movement_at']) }}</b></div>
+                        <div @click="expanded = !expanded">first received at: <b>{{ formatDateTime(record['first_received_at']) }}</b></div>
+                    </div>
+
+                    <div class="mt-3 row-col text-center align-bottom pb-2 m-0 font-weight-bold text-uppercase small text-secondary">
                         Incoming
                     </div>
 
@@ -257,6 +235,10 @@ export default {
         },
 
         methods: {
+            toggleExpanded() {
+                this.expanded = !this.expanded;
+            },
+
             minusRestockLevel() {
                 if (Number(this.newRestockLevelValue) - 1 < Number(this.newReorderPointValue)) {
                     this.updateRestockLevel(Number(this.record['reorder_point']));
@@ -345,10 +327,18 @@ export default {
                 this.postInventoryUpdate();
             },
 
-            showInventoryMovementModal() {
+            showInventoryMovementsModal() {
                 this.$emit('showModalMovement', this.record['inventory_id'])
             },
         },
     }
 
 </script>
+
+<style lang="scss" scoped>
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+</style>
