@@ -11,6 +11,7 @@ class Api2cartOrderImportsFactory extends Factory
 
     public function definition(): array
     {
+        // this is a real example of the response from the API, copied raw
         return [
             'raw_import' => json_decode('
         {

@@ -3,24 +3,31 @@
 namespace App\Modules\Api2cart\src\Jobs;
 
 use App\Abstracts\UniqueJob;
+use App\Models\Order;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use App\Services\OrderService;
+use Illuminate\Support\Collection;
 
 class ProcessImportedOrdersJob extends UniqueJob
 {
-    public function handle()
+    public function handle(): void
     {
         Api2cartOrderImports::query()
             ->whereNull('when_processed')
             ->orderBy('id')
-            ->chunk(1, function ($api2cartOrderImports) {
-                foreach ($api2cartOrderImports as $api2cartOrderImport) {
-                    $this->processOrder($api2cartOrderImport);
-                }
+            ->chunk(1, function (Collection $api2cartOrderImports) {
+                $api2cartOrderImports->each(function (Api2cartOrderImports $api2cartOrderImport) {
+                    $order = $this->createOrderFrom($api2cartOrderImport);
+
+                    $api2cartOrderImport->update([
+                        'order_number' => $order->order_number,
+                        'when_processed' => now(),
+                    ]);
+                });
             });
     }
 
-    private function processOrder(Api2cartOrderImports $orderImport): void
+    private function createOrderFrom(Api2cartOrderImports $orderImport): Order
     {
         $data = $orderImport->raw_import;
 
@@ -42,11 +49,6 @@ class ProcessImportedOrdersJob extends UniqueJob
             'raw_import'                 => $data,
         ];
 
-        $order = OrderService::updateOrCreate($orderAttributes);
-
-        $orderImport->update([
-            'order_number' => $order->order_number,
-            'when_processed' => now(),
-        ]);
+        return OrderService::updateOrCreate($orderAttributes);
     }
 }

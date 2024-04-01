@@ -20,6 +20,7 @@ class AddressLabelShippingService extends ShippingServiceAbstract
 
         $pdfString = OrderService::getOrderPdf($order->order_number, 'address_label');
 
+        // we create new shipping label and save it to database, so it can automatically be printed
         $shippingLabel = new ShippingLabel();
         $shippingLabel->order_id = $order->getKey();
         $shippingLabel->user_id = auth()->id();
@@ -35,6 +36,7 @@ class AddressLabelShippingService extends ShippingServiceAbstract
             ->by(auth()->user())
             ->log("generated generic address label");
 
+        // we delete label after it was printed
         $shippingLabel->delete();
 
         return collect([$shippingLabel]);
