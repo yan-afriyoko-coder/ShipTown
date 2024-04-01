@@ -19,7 +19,9 @@ class ProcessImportedRecordJobTest extends TestCase
         ProcessImportedOrdersJob::dispatch();
 
         $api2cartOrderImport->refresh();
-        $order = Order::first();
+        $order = Order::query()->with(['shippingAddress', 'billingAddress'])->first();
+
+        ray($api2cartOrderImport->raw_import, $order);
 
         $this->assertNotEmpty($order, 'Order was not created');
         $this->assertEquals($api2cartOrderImport->order_number, $order->order_number, 'Order number does not match');
@@ -31,5 +33,11 @@ class ProcessImportedRecordJobTest extends TestCase
         $this->assertEquals($order->shippingAddress->last_name, $api2cartOrderImport->raw_import['shipping_address']['last_name']);
         $this->assertEquals($order->shippingAddress->address1, $api2cartOrderImport->raw_import['shipping_address']['address1']);
         $this->assertEquals($order->shippingAddress->address2, $api2cartOrderImport->raw_import['shipping_address']['address2']);
+
+        // billing address
+        $this->assertEquals($order->billingAddress->first_name, $api2cartOrderImport->raw_import['billing_address']['first_name']);
+        $this->assertEquals($order->billingAddress->last_name, $api2cartOrderImport->raw_import['billing_address']['last_name']);
+        $this->assertEquals($order->billingAddress->address1, $api2cartOrderImport->raw_import['billing_address']['address1']);
+        $this->assertEquals($order->billingAddress->address2, $api2cartOrderImport->raw_import['billing_address']['address2']);
     }
 }

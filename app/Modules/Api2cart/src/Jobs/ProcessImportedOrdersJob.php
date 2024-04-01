@@ -46,8 +46,11 @@ class ProcessImportedOrdersJob extends UniqueJob
             'order_placed_at'            => $orderImport->ordersCreateAt()->tz('UTC'),
             'order_products'             => $orderImport->extractOrderProducts(),
             'shipping_address'           => $orderImport->extractShippingAddressAttributes(),
+            'billing_address'            => $orderImport->extractBillingAddressAttributes(),
             'raw_import'                 => $data,
         ];
+
+        ray($orderAttributes);
 
         return OrderService::updateOrCreate($orderAttributes);
     }

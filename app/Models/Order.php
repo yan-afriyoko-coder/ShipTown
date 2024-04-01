@@ -74,6 +74,7 @@ use Spatie\Tags\Tag;
  * @property OrderStatus $orderStatus
  * @property OrderStatus $order_status
  * @property-read OrderAddress|null          $shippingAddress
+ * @property-read OrderAddress|null          $billingAddress
  * @property-read OrderProductTotal          $orderProductsTotals
  * @property-read User|null                  $packer
  *

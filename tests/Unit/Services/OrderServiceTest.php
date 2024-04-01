@@ -15,6 +15,9 @@ use Tests\TestCase;
 
 class OrderServiceTest extends TestCase
 {
+    /**
+     * @throws \Exception
+     */
     public function testIfUpdatesProductsQuantitiesAreCorrect()
     {
         $orderFake = Order::factory()->make();

@@ -53,5 +53,6 @@ class ImportShippingAddressJob implements ShouldQueue
         }
 
         OrderService::updateOrCreateShippingAddress($order, $order_import->extractShippingAddressAttributes());
+        OrderService::updateOrCreateBillingAddress($order, $order_import->extractBillingAddressAttributes());
     }
 }

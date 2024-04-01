@@ -121,6 +121,29 @@ class Api2cartOrderImports extends BaseModel
         ]);
     }
 
+    public function extractBillingAddressAttributes(): array
+    {
+        return array_filter([
+            'company'       => data_get($this->raw_import, 'billing_address.company', ''),
+            'gender'        => data_get($this->raw_import, 'billing_address.gender', ''),
+            'first_name'    => data_get($this->raw_import, 'billing_address.first_name', ''),
+            'last_name'     => data_get($this->raw_import, 'billing_address.last_name', ''),
+            'email'         => data_get($this->raw_import, 'customer.email', ''),
+            'address1'      => data_get($this->raw_import, 'billing_address.address1', ''),
+            'address2'      => data_get($this->raw_import, 'billing_address.address2', ''),
+            'postcode'      => data_get($this->raw_import, 'billing_address.postcode', ''),
+            'city'          => data_get($this->raw_import, 'billing_address.city', ''),
+            'state_code'    => data_get($this->raw_import, 'billing_address.state.code', ''),
+            'state_name'    => data_get($this->raw_import, 'billing_address.state.name', ''),
+            'country_code'  => data_get($this->raw_import, 'billing_address.country.code3', ''),
+            'country_name'  => data_get($this->raw_import, 'billing_address.country.name', ''),
+            'phone'         => data_get($this->raw_import, 'billing_address.phone', ''),
+            'fax'           => data_get($this->raw_import, 'billing_address.fax', ''),
+            'website'       => data_get($this->raw_import, 'billing_address.website', ''),
+            'region'        => data_get($this->raw_import, 'billing_address.region', ''),
+        ]);
+    }
+
     /**
      * @return array
      */
