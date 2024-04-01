@@ -40,6 +40,7 @@ use Spatie\Tags\Tag;
  *
  * @property int|null         $packer_user_id
  * @property int|null         $shipping_address_id
+ * @property int|null         $billing_address_id
  *
  * @property int              $product_line_count
  * @property float            $total
@@ -146,6 +147,7 @@ class Order extends BaseModel
         'total_paid',
         'is_on_hold',
         'shipping_address_id',
+        'billing_address_id',
         'shipping_method_code',
         'shipping_method_name',
         'packer_user_id',
@@ -529,6 +531,14 @@ class Order extends BaseModel
     /**
      * @return BelongsTo
      */
+    public function billingAddress(): BelongsTo
+    {
+        return $this->belongsTo(OrderAddress::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
     public function packer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'packer_user_id');
@@ -593,6 +603,7 @@ class Order extends BaseModel
                 AllowedInclude::relationship('activities', 'activities'),
                 AllowedInclude::relationship('activities.causer', 'activities.causer'),
                 AllowedInclude::relationship('shipping_address', 'shippingAddress'),
+                AllowedInclude::relationship('billing_address', 'billingAddress'),
                 AllowedInclude::relationship('order_shipments', 'orderShipments'),
                 AllowedInclude::relationship('order_products', 'orderProducts'),
                 AllowedInclude::relationship('order_products_totals', 'orderProductsTotals'),

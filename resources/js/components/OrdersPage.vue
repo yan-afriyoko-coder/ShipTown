@@ -124,7 +124,7 @@
                     'filter[created_between]': this.getUrlParameter('created_between'),
                     'sort': this.getUrlParameter('sort','-order_placed_at'),
                     'per_page': this.per_page,
-                    'include': 'order_comments,order_comments.user,packer,order_products_totals,tags,shipping_address,order_shipments',
+                    'include': 'order_comments,order_comments.user,packer,order_products_totals,tags,shipping_address,billing_address,order_shipments',
                     'page': page,
                 };
 

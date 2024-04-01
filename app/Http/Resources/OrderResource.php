@@ -34,6 +34,7 @@ class OrderResource extends JsonResource
             'total_paid' => $this->total_paid,
             'total_outstanding' => $this->total_outstanding,
             'shipping_address_id' => $this->shipping_address_id,
+            'billing_address_id' => $this->billing_address_id,
             'shipping_method_code' => $this->shipping_method_code,
             'shipping_method_name' => $this->shipping_method_name,
             'status_code' => $this->status_code,
@@ -54,6 +55,7 @@ class OrderResource extends JsonResource
 
             'activities' => ActivityResource::collection($this->whenLoaded('activities')),
             'shipping_address' => OrderAddressResource::make($this->whenLoaded('shippingAddress')),
+            'billing_address' => OrderAddressResource::make($this->whenLoaded('billingAddress')),
             'order_shipments' => new JsonResource($this->whenLoaded('orderShipments')),
             'order_products' => new JsonResource($this->whenLoaded('orderProducts')),
             'packer' => new UserResource($this->whenLoaded('packer')),

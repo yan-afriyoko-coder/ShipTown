@@ -208,6 +208,11 @@
                                 <div class="container" v-if="currentTab === 'shippingAddress'">
                                     <div class="row">
                                         <div class="col-md-6">
+
+                                            <div class="row col d-block font-weight-bold pb-1 text-uppercase small text-secondary">
+                                                SHIPPING ADDRESS
+                                            </div>
+
                                             <table class="table-borderless table-hover border-0">
                                                 <tr>
                                                     <td class="font-weight-bold">email:</td>
@@ -281,6 +286,86 @@
                                                 <tr>
                                                     <td class="font-weight-bold">website:</td>
                                                     <td>{{ order['shipping_address']['website'] }}</td>
+                                                </tr>
+                                            </table>
+
+                                            <div class="row col d-block font-weight-bold pb-1 text-uppercase small text-secondary">
+                                                BILLING ADDRESS
+                                            </div>
+
+                                            <table class="table-borderless table-hover border-0">
+                                                <tr>
+                                                    <td class="font-weight-bold">email:</td>
+                                                    <td><a
+                                                        :href="'mailto:' + order['billing_address']['email'] + '?subject=Order #' + order['order_number']">{{
+                                                            order['billing_address']['email']
+                                                        }} </a></td>
+                                                </tr>
+                                                <tr class="pb-2">
+                                                    <td class="font-weight-bold">phone:</td>
+                                                    <td><a :href="'tel:' + order['billing_address']['phone']">{{
+                                                            order['billing_address']['phone']
+                                                        }}</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold"></td>
+                                                    <td> &nbsp;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold">first_name:</td>
+                                                    <td> {{ order['billing_address']['first_name'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold">last_name:</td>
+                                                    <td> {{ order['billing_address']['last_name'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold">company:</td>
+                                                    <td> {{ order['billing_address']['company'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold">address1:</td>
+                                                    <td> {{ order['billing_address']['address1'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold">address2:</td>
+                                                    <td> {{ order['billing_address']['address2'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold">postcode:</td>
+                                                    <td>{{ order['billing_address']['postcode'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold">city:</td>
+                                                    <td> {{ order['billing_address']['city'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold">country_code:</td>
+                                                    <td> {{ order['billing_address']['country_code'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold">country_name:</td>
+                                                    <td> {{ order['billing_address']['country_name'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold">fax:</td>
+                                                    <td> {{ order['billing_address']['fax'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold">region:</td>
+                                                    <td>{{ order['billing_address']['region'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold">state_code:</td>
+                                                    <td>{{ order['billing_address']['state_code'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold">state_name:</td>
+                                                    <td>{{ order['billing_address']['state_name'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold">website:</td>
+                                                    <td>{{ order['billing_address']['website'] }}</td>
                                                 </tr>
                                             </table>
                                         </div>
