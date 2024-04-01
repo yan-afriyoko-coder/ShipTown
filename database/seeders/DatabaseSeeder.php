@@ -44,6 +44,7 @@ class DatabaseSeeder extends Seeder
             // Orders Seeders
             Demo\TestOrdersSeeder::class,
             Demo\PaidOrdersSeeder::class,
+            Demo\PaidPickedOrdersSeeder::class,
             Demo\CollectionOrdersSeeder::class,
 
             // Data Collector Seeders

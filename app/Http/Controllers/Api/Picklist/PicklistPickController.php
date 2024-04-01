@@ -46,7 +46,6 @@ class PicklistPickController extends Controller
             'name_ordered'             => $first['name_ordered'],
             'quantity_picked'          => $request->get('quantity_picked', 0),
             'quantity_skipped_picking' => $request->get('quantity_skipped_picking', 0),
-            'quantity_required'        => 0,
         ]);
 
         foreach ($orderProducts as $orderProduct) {
