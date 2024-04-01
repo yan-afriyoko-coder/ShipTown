@@ -38,6 +38,13 @@ class AddressLabelServiceProvider extends BaseModuleServiceProvider
                 'service_provider_class' => Services\AddressLabelShippingService::class,
             ]);
 
+        ShippingService::query()
+            ->updateOrCreate([
+                'code' => 'billing_address_label',
+            ], [
+                'service_provider_class' => Services\BillingAddressLabelShippingService::class,
+            ]);
+
         return true;
     }
 

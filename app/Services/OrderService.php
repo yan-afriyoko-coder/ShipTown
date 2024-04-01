@@ -50,7 +50,7 @@ class OrderService
         /** @var Order $order */
         $order = Order::query()
             ->where(['order_number' => $order_number])
-            ->with('shippingAddress')
+            ->with(['shippingAddress', 'billingAddress'])
             ->firstOrFail();
 
         if (!$order->shipping_address_id) {
