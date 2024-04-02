@@ -16,7 +16,6 @@ class OrderProductDeletedEventListener
 
         InventoryReservation::query()
             ->where('custom_uuid', ReservationsService::getUuid($event->orderProduct))
-            ->first()
-            ->delete();
+            ->each(fn(InventoryReservation $inventoryReservation) =>$inventoryReservation->delete());
     }
 }

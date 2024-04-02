@@ -50,6 +50,7 @@ class OrderProductShipmentController extends Controller
 
             return new OrderProductShipmentResource($orderProductShipment);
         } catch (\Exception | \Throwable $e) {
+            report($e);
             $this->respondBadRequest($e->getMessage());
             return null;
         }
