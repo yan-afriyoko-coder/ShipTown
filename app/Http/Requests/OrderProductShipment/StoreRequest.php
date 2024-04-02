@@ -26,7 +26,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'sku_shipped'       => ['sometimes', 'string'],
-            'product_id'        => ['sometimes', 'integer', 'exists:products,id'],
+            'product_id'        => ['sometimes', 'integer', 'exists:products,id', 'nullable'],
             'order_id'          => [
                     'sometimes', 'integer',
                     'exists:orders,id',

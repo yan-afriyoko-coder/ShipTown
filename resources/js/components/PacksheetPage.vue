@@ -514,11 +514,6 @@
                 shipOrderProduct(orderProduct, quantity) {
                     orderProduct.quantity_shipped += quantity;
 
-                    if (orderProduct.product_id === null) {
-                        this.notifyError('Product with SKU not found: "' + orderProduct.sku_ordered + '"');
-                        return;
-                    }
-
                     this.apiPostOrderProductShipment({
                             'sku_shipped': orderProduct.sku_ordered,
                             'product_id': orderProduct.product_id,
