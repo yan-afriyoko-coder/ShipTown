@@ -99,7 +99,7 @@ class Report extends Model
 
         $data = [
             'report_name' => $this->report_name ?? $this->table,
-            'fields' =>  explode(',', $this->defaultSelect),
+            'fields' =>  array_keys($this->fields),
             'data' => $resource,
             'pagination' => [
                 'total' => $queryBuilder->total(),
