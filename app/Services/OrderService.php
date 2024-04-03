@@ -7,7 +7,6 @@ use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderProduct;
-use App\Modules\Api2cart\src\Jobs\ImportShippingAddressJob;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -51,11 +50,6 @@ class OrderService
             ->where(['order_number' => $order_number])
             ->with(['shippingAddress', 'billingAddress'])
             ->firstOrFail();
-
-        if (!$order->shipping_address_id) {
-            ImportShippingAddressJob::dispatchSync($order->id);
-            $order = $order->refresh();
-        }
 
         $view = 'pdf/orders/'.$template_name;
         $data = $order->toArray();
