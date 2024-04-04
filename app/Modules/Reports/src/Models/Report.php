@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -64,6 +65,14 @@ class Report extends Model
             ->appends(request()->query());
     }
 
+    public static function toJsonResource(): JsonResource
+    {
+        return JsonResource::make((new static())->queryBuilder()
+            ->offset(( request('page', 1) - 1) * request('per_page', 100))
+            ->limit(request('per_page', 100))
+            ->get());
+    }
+
     public function queryBuilder(): QueryBuilder
     {
         $this->fieldAliases = [];
@@ -88,9 +97,11 @@ class Report extends Model
 
     private function view(): mixed
     {
+        $limit = request('per_page', $this->perPage);
+        $offset = request('page', 0) * $limit;
+
         try {
-            $queryBuilder = $this->queryBuilder()
-                ->paginate(request('per_page', $this->perPage));
+            $queryBuilder = $this->queryBuilder()->offset($offset)->limit($limit)->get();
         } catch (InvalidFilterQuery | InvalidSelectException $ex) {
             return response($ex->getMessage(), $ex->getStatusCode());
         }
@@ -102,10 +113,8 @@ class Report extends Model
             'fields' =>  array_keys($this->fields),
             'data' => $resource,
             'pagination' => [
-                'total' => $queryBuilder->total(),
-                'per_page' => $queryBuilder->perPage(),
-                'current_page' => $queryBuilder->currentPage(),
-                'last_page' => $queryBuilder->lastPage(),
+                'per_page' => $limit,
+                'page' => request('page', 0),
             ]
         ];
 

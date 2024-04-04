@@ -33,7 +33,7 @@ class StoreTest extends TestCase
             'shelve_location' => 'test',
         ];
 
-        $response = $this->post(route('api.inventory.index'), $params);
+        $response = $this->post(url('api/inventory'), $params);
 
         ray($response->json());
 
@@ -56,7 +56,7 @@ class StoreTest extends TestCase
 
     public function testIfCantPostWithoutData()
     {
-        $response = $this->postJson(route('api.inventory.store'), []);
+        $response = $this->postJson(url('api/inventory'), []);
 
         $response->assertStatus(422);
     }

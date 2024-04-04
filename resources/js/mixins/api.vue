@@ -320,6 +320,7 @@ export default {
             apiGetModules: function () { return axios.get('/api/modules')},
             apiPostModule: function (id, params) { return axios.put('/api/modules/' + id, params)},
 
+            getReportsXYZ: function(reportUrlSegment,params) { return axios.get(`/api/reports/${reportUrlSegment}`, {params: params}) },
 
             apiGetShippingServices: function (params = {}) {
                 return axios.get('/api/shipping-services', {params: params});

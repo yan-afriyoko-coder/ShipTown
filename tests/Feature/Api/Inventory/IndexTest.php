@@ -17,12 +17,7 @@ class IndexTest extends TestCase
         Warehouse::factory()->create();
         Product::factory()->create();
 
-        $response = $this->actingAs($user, 'api')
-            ->getJson(route('api.inventory.index', [
-                'include' => [
-                    'product',
-                ],
-            ]));
+        $response = $this->actingAs($user, 'api')->getJson('api/inventory?include=product');
 
         $response->assertOk();
 
