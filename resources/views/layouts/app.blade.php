@@ -10,7 +10,7 @@
     @endif
 
     @if (session('alert-info-message'))
-        <div class="alert alert-inof" role="alert">{{ session('alert-info-message') }}</div>
+        <div class="alert alert-info" role="alert">{{ session('alert-info-message') }}</div>
     @endif
 
     @if (session('alert-success-message'))
@@ -32,4 +32,6 @@
     <vue-snotify></vue-snotify>
 
     <recent-inventory-movements-modal></recent-inventory-movements-modal>
+    <product-modal></product-modal>
+
 @endsection

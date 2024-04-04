@@ -188,6 +188,7 @@ Vue.component('printer-configuration', require('./components/Settings/PrintersCo
 Vue.component('printnode-configuration', require('./components/Settings/PrintNode.vue').default);
 Vue.component('product-count-request-input-field', require('./components/SharedComponents/ProductCountRequestInputField.vue').default);
 Vue.component('product-info-card', require('./components/SharedComponents/ProductInfoCard.vue').default);
+Vue.component('product-modal', require('./components/Products/ProductModal.vue').default);
 Vue.component('products-table', require('./components/ProductsPage.vue').default);
 Vue.component('quick-connect-magento-page', require('./components/QuickConnectMagentoPage.vue').default);
 Vue.component('restocking-page', require('./components/RestockingPage.vue').default);
@@ -205,6 +206,8 @@ Vue.component('report', require('./components/Reports/Report.vue').default);
 Vue.component('card', require('./components/UI/Card.vue').default);
 Vue.component('container', require('./components/UI/Container.vue').default);
 Vue.component('top-nav-bar', require('./components/UI/TopNavBar.vue').default);
+
+Vue.prototype.$eventBus = new Vue();
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -149,7 +149,15 @@
                                         <div class="row text-left mb-2">
                                             <div class="col-12">
                                                 <small>{{ order_product['name_ordered'] }} &nbsp;</small>
-                                                <div class="small"><a v-if="order_product['product_id']" target="_blank" :href="getProductLink(order_product)">{{order_product['sku_ordered'] }}</a><div v-if="order_product['product_id'] === null" class="bg-warning">{{order_product['sku_ordered'] }}</div>&nbsp;
+<!--                                                <div class="small"><a v-if="order_product['product_id']" target="_blank" :href="getProductLink(order_product)">{{order_product['sku_ordered'] }}</a><div v-if="order_product['product_id'] === null" class="bg-warning">{{order_product['sku_ordered'] }}</div>&nbsp;-->
+<!--                                                </div>-->
+                                                <div class="small">
+                                                    <a href="#" v-if="order_product['product_id']" @click="showProductModal(order_product)">
+                                                        {{order_product['sku_ordered'] }}
+                                                    </a>
+                                                    <div v-if="order_product['product_id'] === null" class="bg-warning">
+                                                        {{order_product['sku_ordered'] }}
+                                                    </div>&nbsp;
                                                 </div>
                                             </div>
                                             <div class="col">
@@ -719,9 +727,9 @@ export default {
                 })
         },
 
-        getProductLink(orderProduct) {
-            const searchTerm = orderProduct['product'] ? orderProduct['product']['sku'] : orderProduct['sku_ordered'];
-            return '/products?filter[sku]=' + searchTerm + '&hide_nav_bar=true';
+        showProductModal(orderProduct) {
+            let search = orderProduct['product'] ? orderProduct['product']['sku'] : orderProduct['sku_ordered'];
+            this.$eventBus.$emit('show-product-modal', search);
         },
 
         getProductQuantity(orderProduct) {
