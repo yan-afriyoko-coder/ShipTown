@@ -28,7 +28,7 @@ class Report extends ReportBase
     protected function view(): mixed
     {
         $limit = request('per_page', $this->perPage);
-        $offset = request('page', 0) * $limit;
+        $offset = (request('page', 1) - 1) * $limit;
 
         try {
             $queryBuilder = $this->queryBuilder()->offset($offset)->limit($limit)->get();
@@ -44,7 +44,7 @@ class Report extends ReportBase
             'data' => $resource,
             'pagination' => [
                 'per_page' => $limit,
-                'page' => request('page', 0),
+                'page' => request('page', 1),
             ]
         ];
 

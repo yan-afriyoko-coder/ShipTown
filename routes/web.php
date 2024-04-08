@@ -58,6 +58,7 @@ Route::as('reports.')->group(function () {
     Route::resource('reports/stocktake-suggestions-totals', Reports\StocktakeSuggestionsTotalsReportController::class)->only('index');
     Route::resource('reports/inventory-movements-summary', Reports\InventoryMovementsSummaryController::class)->only('index');
     Route::resource('reports/inventory-movements', Reports\InventoryMovementController::class)->only('index');
+    Route::resource('reports/inventory-transfers', Reports\InventoryTransfersController::class)->only('index');
 });
 
 Route::get('pdf/orders/{order_number}/{template}', [PdfOrderController::class, 'show']);

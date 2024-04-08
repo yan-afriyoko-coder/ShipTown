@@ -75,6 +75,7 @@
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.picks.index') }}">{{ __('Order Picks') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.shipments.index') }}">{{ __('Order Shipments') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory.index', ['per_page' => 50, 'filter[quantity_between]=0.01,999999999', 'sort' => '-quantity']) }}">{{ __('Inventory') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-transfers.index', ['filter[warehouse_code]' =>  data_get(Auth::user(), 'warehouse.code'), 'per_page' => 50]) }}">{{ __('Inventory Transfers') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements.index') }}">{{ __('Inventory Movements') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements-summary.index').'?filter[created_at_between]=-7days,now&per_page=1000' }}">{{ __('Inventory Movements Summary') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.restocking.index') }}">{{ __('Restocking') }}</a>
