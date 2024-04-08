@@ -6,7 +6,7 @@ use App\Modules\Magento2MSI\src\Jobs\EnsureProductRecordsExistJob;
 
 class EveryHourEventListener
 {
-    public function handle()
+    public function handle(): void
     {
         EnsureProductRecordsExistJob::dispatch();
     }

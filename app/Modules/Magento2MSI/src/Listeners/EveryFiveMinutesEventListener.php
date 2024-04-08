@@ -8,9 +8,9 @@ use App\Modules\Magento2MSI\src\Jobs\FetchStockItemsJob;
 use App\Modules\Magento2MSI\src\Jobs\GetProductIdsJob;
 use App\Modules\Magento2MSI\src\Jobs\SyncProductInventoryJob;
 
-class EveryMinuteEventListener
+class EveryFiveMinutesEventListener
 {
-    public function handle()
+    public function handle(): void
     {
         GetProductIdsJob::dispatch();
         AssignInventorySourceJob::dispatch();
