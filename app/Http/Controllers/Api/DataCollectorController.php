@@ -10,16 +10,13 @@ use App\Models\DataCollection;
 use App\Modules\DataCollector\src\Services\DataCollectorService;
 use App\Modules\Reports\src\Models\DataCollectorListReport;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DataCollectorController extends Controller
 {
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $request): JsonResource
     {
-        $report = new DataCollectorListReport();
-
-        return JsonResource::collection($report->toArray());
+        return DataCollectorListReport::toJsonResource();
     }
 
     public function store(ApiDataCollectorStoreRequest $request): DataCollectionResource

@@ -8,8 +8,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
+use League\Csv\Exception;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class Controller extends BaseController
@@ -25,11 +24,11 @@ class Controller extends BaseController
 
     /**
      * @param QueryBuilder $query
+     * @throws Exception
      */
     public function throwCsvDownloadResponse(QueryBuilder $query)
     {
-        $fieldsArray = explode(',', request('fields'));
-        $content = CsvBuilder::fromQueryBuilder($query, $fieldsArray);
+        $content = CsvBuilder::fromQueryBuilder($query);
 
         $filename = request('filename', 'filename_url_param_not_specified.csv');
         $headers = [

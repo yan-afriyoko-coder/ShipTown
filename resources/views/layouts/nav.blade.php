@@ -17,9 +17,9 @@
 
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-md-left w-auto text-left bg-primary " aria-labelledby="navbarDropdown" >
                                 <a class="dropdown-item text-white lightHover mt-1" id="stocktaking_link" href="{{ route('stocktaking') }}">{{ __('Stocktaking') }}</a>
-                                <a class="dropdown-item text-white lightHover mt-1" id="restocking_link" href="{{ route('reports.restocking' , ['sort' => '-quantity_required', 'cache_name' => 'restocking_page']) }}">{{ __('Restocking') }}</a>
+                                <a class="dropdown-item text-white lightHover mt-1" id="restocking_link" href="{{ route('reports.restocking.index' , ['sort' => '-quantity_required', 'cache_name' => 'restocking_page']) }}">{{ __('Restocking') }}</a>
                                 <a class="dropdown-item text-white lightHover mt-1" id="data_collector_link" href="{{ route('data-collector') }}">{{ __('Data Collector') }}</a>
-                                <a class="dropdown-item text-white lightHover mt-1 mb-1" id="inventory_movements_link" href="{{ route('reports.inventory-movements') }}">{{ __('Inventory Movements') }}</a>
+                                <a class="dropdown-item text-white lightHover mt-1 mb-1" id="inventory_movements_link" href="{{ route('reports.inventory-movements.index') }}">{{ __('Inventory Movements') }}</a>
                             </div>
                         </div>
                     @endif
@@ -72,12 +72,12 @@
                             <a class="dropdown-item text-white lightHover" href="{{ route('inventory-dashboard') }}">{{ __('Inventory Dashboard') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('fulfillment-dashboard') }}">{{ __('Fulfillment Dashboard') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('fulfillment-statistics') .'?between_dates=-7days,now' }}">{{ __('Fulfillment Statistics') }}</a>
-                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.picks') }}">{{ __('Order Picks') }}</a>
-                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.shipments') }}">{{ __('Order Shipments') }}</a>
-                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory', ['per_page' => 50, 'filter[quantity_between]=0.01,999999999', 'sort' => '-quantity']) }}">{{ __('Inventory') }}</a>
-                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements') }}">{{ __('Inventory Movements') }}</a>
-                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements-summary').'?filter[created_at_between]=-7days,now&per_page=1000' }}">{{ __('Inventory Movements Summary') }}</a>
-                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.restocking') }}">{{ __('Restocking') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.picks.index') }}">{{ __('Order Picks') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.shipments.index') }}">{{ __('Order Shipments') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory.index', ['per_page' => 50, 'filter[quantity_between]=0.01,999999999', 'sort' => '-quantity']) }}">{{ __('Inventory') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements.index') }}">{{ __('Inventory Movements') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements-summary.index').'?filter[created_at_between]=-7days,now&per_page=1000' }}">{{ __('Inventory Movements Summary') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.restocking.index') }}">{{ __('Restocking') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.stocktake-suggestions.index') }}">{{ __('Stocktake Suggestions') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('activity-log') }}">{{ __('Activity Log') }}</a>
 {{--                            <a class="dropdown-item text-white lightHover" href="{{ url('products-merge?sku1=45&sku2=44') }}">{{ __('products-merge') }}</a>--}}

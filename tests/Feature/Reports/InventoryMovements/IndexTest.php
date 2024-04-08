@@ -31,7 +31,7 @@ class IndexTest extends TestCase
         parent::setUp();
         $this->user = User::factory()->create();
 
-        $this->uri = route('reports.inventory-movements');
+        $this->uri = route('reports.inventory-movements.index');
     }
 
     /** @test */

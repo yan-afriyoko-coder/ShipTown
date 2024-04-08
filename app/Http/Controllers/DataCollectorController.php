@@ -16,7 +16,7 @@ class DataCollectorController extends Controller
     {
         if ($request->has('filename')) {
             $report = new DataCollectionReport();
-            return $report->csvDownload();
+            return $report->toCsvFileDownload();
         }
 
         return view('data-collector-page', ['data_collection_id' => $id]);

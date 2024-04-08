@@ -2,24 +2,13 @@
 
 namespace App\Http\Controllers\Reports;
 
-use App\Http\Controllers\Controller;
+use App\Abstracts\ReportController;
 use App\Modules\Reports\src\Models\InventoryReport;
-use App\Traits\CsvFileResponse;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
-class InventoryController extends Controller
+class InventoryController extends ReportController
 {
-    use CsvFileResponse;
-
-    /**
-     * @param Request $request
-     *
-     * @return Application|Factory|View
-     */
-    public function index(Request $request)
+    public function index(Request $request): mixed
     {
         $report = new InventoryReport();
 

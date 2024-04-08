@@ -31,8 +31,6 @@ class IndexTest extends TestCase
         $this->assertCount(1, $response->json('data'), 'No records returned');
 
         $response->assertJsonStructure([
-            'meta',
-            'links',
             'data' => [
                 '*' => [
                     'id'

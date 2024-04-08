@@ -5,6 +5,7 @@ namespace App\Helpers;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use League\Csv\CannotInsertRecord;
+use League\Csv\Exception;
 use League\Csv\Writer;
 use Spatie\QueryBuilder\QueryBuilder;
 use SplTempFileObject;
@@ -16,11 +17,12 @@ class CsvBuilder
 {
     /**
      * @param QueryBuilder $query
-     * @param array        $fields
+     * @param array $fields
      *
      * @return Writer
+     * @throws Exception
      */
-    public static function fromQueryBuilder(QueryBuilder $query, array $fields): Writer
+    public static function fromQueryBuilder(QueryBuilder $query): Writer
     {
         try {
             $csv = Writer::createFromFileObject(new SplTempFileObject());

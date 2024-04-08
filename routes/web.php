@@ -13,12 +13,12 @@
 
 use App\Http\Controllers\Admin\Settings\Modules\Webhooks\SubscriptionController;
 use App\Http\Controllers\Auth;
-use App\Http\Controllers\FulfillmentDashboardController;
-use App\Http\Controllers\MailTemplatePreviewController;
-use App\Http\Controllers\Order;
 use App\Http\Controllers\Csv;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataCollectorController;
+use App\Http\Controllers\FulfillmentDashboardController;
+use App\Http\Controllers\MailTemplatePreviewController;
+use App\Http\Controllers\Order;
 use App\Http\Controllers\PdfOrderController;
 use App\Http\Controllers\ProductsMergeController;
 use App\Http\Controllers\Reports;
@@ -30,7 +30,7 @@ Route::redirect('home', '/')->name('home');
 
 Route::resource('verify', Auth\TwoFactorController::class)->only(['index', 'store']);
 
-Route::view('quick-connect/magento', 'quick-connect.magento')->name('quick-connect.magento');
+Route::view('quick-connect/magento', 'quick-connect.magento');
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('fulfillment-dashboard', [FulfillmentDashboardController::class, 'index'])->name('fulfillment-dashboard');
@@ -48,16 +48,16 @@ Route::get('shipping-labels/{shipping_label}', [ShippingLabelController::class, 
 Route::view('autopilot/packlist', 'autopilot/packlist')->name('autopilot.packlist');
 Route::resource('order/packsheet', Order\PacksheetController::class)->only(['show']);
 
-Route::name('reports.')->group(function () {
+Route::as('reports.')->group(function () {
+    Route::resource('reports/inventory', Reports\InventoryController::class)->only('index');
     Route::resource('reports/stocktake-suggestions', Reports\StocktakeSuggestionsController::class)->only('index');
-    Route::get('reports/inventory-dashboard', [Reports\InventoryDashboardController::class, 'index'])->name('inventory-dashboard');
-    Route::get('reports/picks', [Reports\PickController::class, 'index'])->name('picks');
-    Route::get('reports/shipments', [Reports\ShipmentController::class, 'index'])->name('shipments');
-    Route::get('reports/inventory', [Reports\InventoryController::class, 'index'])->name('inventory');
-    Route::get('reports/restocking', [Reports\RestockingReportController::class, 'index'])->name('restocking');
-    Route::view('reports/inventory-movements', 'reports/inventory-movements')->name('inventory-movements');
-    Route::get('reports/stocktake-suggestions-totals', [Reports\StocktakeSuggestionsTotalsReportController::class, 'index'])->name('stocktake-suggestions-totals');
-    Route::get('reports/inventory-movements-summary', [Reports\InventoryMovementsSummaryController::class, 'index'])->name('inventory-movements-summary');
+    Route::resource('reports/inventory-dashboard', Reports\InventoryDashboardController::class)->only('index');
+    Route::resource('reports/picks', Reports\PickController::class)->only('index');
+    Route::resource('reports/shipments', Reports\ShipmentController::class)->only('index');
+    Route::resource('reports/restocking', Reports\RestockingReportController::class)->only('index');
+    Route::resource('reports/stocktake-suggestions-totals', Reports\StocktakeSuggestionsTotalsReportController::class)->only('index');
+    Route::resource('reports/inventory-movements-summary', Reports\InventoryMovementsSummaryController::class)->only('index');
+    Route::resource('reports/inventory-movements', Reports\InventoryMovementController::class)->only('index');
 });
 
 Route::get('pdf/orders/{order_number}/{template}', [PdfOrderController::class, 'show']);

@@ -4,11 +4,9 @@ namespace App\Modules\StocktakeSuggestions\src\Reports;
 
 use App\Models\StocktakeSuggestion;
 use App\Modules\Reports\src\Models\Report;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 
-class StoctakeSuggestionReport extends Report
+class StocktakeSuggestionReport extends Report
 {
     public function __construct(array $attributes = [])
     {

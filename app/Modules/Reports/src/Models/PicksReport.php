@@ -2,9 +2,7 @@
 
 namespace App\Modules\Reports\src\Models;
 
-use App\Models\InventoryMovement;
 use App\Models\Pick;
-use Spatie\QueryBuilder\AllowedFilter;
 
 class PicksReport extends Report
 {
