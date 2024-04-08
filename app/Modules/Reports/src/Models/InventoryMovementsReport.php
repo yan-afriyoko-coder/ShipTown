@@ -3,7 +3,6 @@
 namespace App\Modules\Reports\src\Models;
 
 use App\Models\InventoryMovement;
-use App\Models\Warehouse;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class InventoryMovementsReport extends Report
@@ -12,9 +11,13 @@ class InventoryMovementsReport extends Report
     {
         parent::__construct($attributes);
 
-        $this->report_name = 'Stocktakes Report';
+//        $this->view = 'reports.inventory-movements';
 
-        $this->baseQuery = InventoryMovement::query();
+        $this->report_name = 'Inventory Movements Report';
+        $this->defaultSort = '-occurred_at';
+
+        $this->baseQuery = InventoryMovement::query()
+            ->leftJoin('products', 'products.id', '=', 'inventory_movements.product_id');
 
         $this->allowedIncludes = [
             'inventory',
@@ -25,17 +28,19 @@ class InventoryMovementsReport extends Report
         ];
 
         $this->fields = [
-            'id'                            => 'inventory_movements.id',
-            'type'                          => 'inventory_movements.type',
-            'sequence_number'               => 'inventory_movements.sequence_number',
             'occurred_at'                   => 'inventory_movements.occurred_at',
-            'quantity_delta'                => 'inventory_movements.quantity_delta',
+            'product_sku'                   => 'products.sku',
+            'product_name'                  => 'products.name',
+            'warehouse_code'                => 'inventory_movements.warehouse_code',
+            'type'                          => 'inventory_movements.type',
             'quantity_before'               => 'inventory_movements.quantity_before',
+            'quantity_delta'                => 'inventory_movements.quantity_delta',
             'quantity_after'                => 'inventory_movements.quantity_after',
+            'sequence_number'               => 'inventory_movements.sequence_number',
+            'id'                            => 'inventory_movements.id',
             'user_id'                       => 'inventory_movements.user_id',
             'product_id'                    => 'inventory_movements.product_id',
             'inventory_id'                  => 'inventory_movements.inventory_id',
-            'warehouse_code'                => 'inventory_movements.warehouse_code',
             'warehouse_id'                  => 'inventory_movements.warehouse_id',
             'description'                   => 'inventory_movements.description',
             'updated_at'                    => 'inventory_movements.updated_at',

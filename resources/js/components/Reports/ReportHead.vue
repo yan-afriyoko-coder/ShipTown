@@ -2,7 +2,7 @@
     <div>
         <div class="d-flex pl-1 pr-1">
             <div class="d-inline font-weight-bold text-uppercase small text-secondary align-content-center">
-                REPORTS > {{ reportName }}
+                {{ reportName }}
             </div>
             <div class="flex-grow-1">
                 <div class="filter-container d-none d-lg-flex" ref="filterContainer">

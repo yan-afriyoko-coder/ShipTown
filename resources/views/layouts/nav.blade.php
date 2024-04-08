@@ -1,5 +1,4 @@
 @auth
-{{--    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm mb-0">--}}
     <nav class="navbar navbar-expand-md navbar-light mb-2 p-0 bg-primary" style="z-index: 1021">
         <div class="container text-white">
             <div class="d-block mb-0 navbar-dark bg-primary">
@@ -19,7 +18,7 @@
                                 <a class="dropdown-item text-white lightHover mt-1" id="stocktaking_link" href="{{ route('stocktaking') }}">{{ __('Stocktaking') }}</a>
                                 <a class="dropdown-item text-white lightHover mt-1" id="restocking_link" href="{{ route('reports.restocking.index' , ['sort' => '-quantity_required', 'cache_name' => 'restocking_page']) }}">{{ __('Restocking') }}</a>
                                 <a class="dropdown-item text-white lightHover mt-1" id="data_collector_link" href="{{ route('data-collector') }}">{{ __('Data Collector') }}</a>
-                                <a class="dropdown-item text-white lightHover mt-1 mb-1" id="inventory_movements_link" href="{{ route('reports.inventory-movements.index') }}">{{ __('Inventory Movements') }}</a>
+                                <a class="dropdown-item text-white lightHover mt-1 mb-1" id="inventory_movements_link" href="{{ route('reports.inventory-movements.index', ['view' => 'reports.inventory-movements']) }}">{{ __('Inventory Movements') }}</a>
                             </div>
                         </div>
                     @endif
@@ -74,10 +73,10 @@
                             <a class="dropdown-item text-white lightHover" href="{{ route('fulfillment-statistics') .'?between_dates=-7days,now' }}">{{ __('Fulfillment Statistics') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.picks.index') }}">{{ __('Order Picks') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.shipments.index') }}">{{ __('Order Shipments') }}</a>
-                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory.index', ['per_page' => 50, 'filter[quantity_between]=0.01,999999999', 'sort' => '-quantity']) }}">{{ __('Inventory') }}</a>
-                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-transfers.index', ['filter[warehouse_code]' =>  data_get(Auth::user(), 'warehouse.code'), 'sort' => '-updated_at', 'per_page' => 50]) }}">{{ __('Inventory Transfers') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory.index', ['filter[quantity_between]' => '0.01,999999999', 'sort' => '-quantity']) }}">{{ __('Inventory') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-transfers.index', ['filter[warehouse_code]' =>  data_get(Auth::user(), 'warehouse.code'), 'sort' => '-updated_at']) }}">{{ __('Inventory Transfers') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements.index') }}">{{ __('Inventory Movements') }}</a>
-                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements-summary.index').'?filter[created_at_between]=-7days,now&per_page=1000' }}">{{ __('Inventory Movements Summary') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements-summary.index').'?filter[created_at_between]=-7days,now' }}">{{ __('Inventory Movements Summary') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.restocking.index') }}">{{ __('Restocking') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.stocktake-suggestions.index') }}">{{ __('Stocktake Suggestions') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('activity-log') }}">{{ __('Activity Log') }}</a>
@@ -125,15 +124,10 @@
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
-
                         </div>
                     </li>
-
                 </ul>
-
             </div>
-
-
         </div>
     </nav>
 @endauth

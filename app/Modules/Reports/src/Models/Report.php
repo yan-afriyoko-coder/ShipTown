@@ -5,6 +5,7 @@ namespace App\Modules\Reports\src\Models;
 use App\Exceptions\InvalidSelectException;
 use App\Helpers\CsvBuilder;
 use App\Modules\Reports\src\Http\Resources\ReportResource;
+use File;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -19,16 +20,24 @@ class Report extends ReportBase
         $request = $request ?? request();
 
         if ($request->has('filename')) {
-            return $this->toCsvFileDownload();
+            switch (File::extension($request->input('filename'))) {
+                case 'csv':
+                    return $this->toCsvFileDownload();
+                case 'json':
+                    return $this->toJsonResource();
+            }
         }
+
+        $this->perPage = $request->input('per_page', 50);
 
         return $this->view();
     }
 
     protected function view(): mixed
     {
+        $view = request('view', $this->view);
         $limit = request('per_page', $this->perPage);
-        $offset = (request('page', 1) - 1) * $limit;
+        $offset = request('page', 1) * $limit - $limit;
 
         try {
             $queryBuilder = $this->queryBuilder()->offset($offset)->limit($limit)->get();
@@ -66,7 +75,7 @@ class Report extends ReportBase
             ];
         });
 
-        return view($this->view, $data);
+        return view($view, $data);
     }
 
     public static function toJsonResource(): JsonResource

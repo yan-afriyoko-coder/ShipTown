@@ -16,7 +16,7 @@
         </div>
     </template>
 
-    <report-head :report-name="reportName"></report-head>
+    <report-head :report-name="breadcrumbs"></report-head>
 
     <div v-if="records === null || records.length === 0" class="text-secondary small text-center">
         No records found with filters specified
@@ -165,6 +165,8 @@
                 perPage: Number(JSON.parse(this.paginationString).per_page),
                 page: Number(JSON.parse(this.paginationString).page),
                 hasMoreRecords: true,
+
+                breadcrumbs: '',
             }
         },
 
@@ -175,6 +177,11 @@
         mounted() {
             this.buildFiltersFromUrl()
             window.onscroll = () => this.loadMoreRecords();
+
+            this.breadcrumbs = this.$router.currentRoute.path
+                .replace('/', '')
+                .replaceAll('/', ' > ')
+                .replaceAll('-', ' ');
         },
 
         methods: {
@@ -354,32 +361,34 @@
             },
 
             loadMoreRecords(){
-
                 if (helpers.isMoreThanPercentageScrolled(70) && this.hasMoreRecords && !this.isLoading) {
-
                     this.showLoading();
 
                     this.page++;
 
                     let urlParams = new URLSearchParams(window.location.search);
+                    urlParams.set('filename', 'data.json');
                     urlParams.set('page', this.page);
-                    urlParams.set('per_page', this.perPage);
+                    urlParams.set('per_page', this.getUrlParameter('per_page', 50));
 
-                    let reportName = this.reportName.toLowerCase().replace(' ', '-');
-
-                    this.getReportsXYZ(reportName, urlParams).then(response => {
-                        this.records = this.records.concat(response.data.data);
-                        this.hasMoreRecords = response.data.data.length === this.perPage;
-                        this.isLoading = false;
-                    })
-                    .catch(error => {
-                        this.displayApiCallError(error);
-                    })
-                    .finally(() => {
-                        this.hideLoading();
-                    });
+                    this.getReportData(this.$router.currentRoute.path, urlParams)
+                        .then(response => {
+                            this.records = this.records.concat(response.data.data);
+                            this.hasMoreRecords = response.data.data.length === this.perPage;
+                            this.isLoading = false;
+                        })
+                        .catch(error => {
+                            this.displayApiCallError(error);
+                        })
+                        .finally(() => {
+                            this.hideLoading();
+                        });
                 }
-            }
+            },
+
+            getReportData: function(url, params) {
+                return axios.get(url, {params: params})
+            },
         },
 
         computed: {
