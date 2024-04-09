@@ -1,17 +1,14 @@
 <?php
 
-namespace Tests\External\PrintNode;
+namespace Tests\Unit\Modules\PrintNode;
 
 use App\Modules\PrintNode\src\Models\Client;
 use App\Modules\PrintNode\src\PrintNode;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PrintNodeTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -21,13 +18,22 @@ class PrintNodeTest extends TestCase
 
     public function test_if_api_key_set()
     {
-        $actual = config('printnode.test_api_key');
-        $this->assertNotEmpty($actual, 'PRINTNODE_TEST_API_KEY env key is not set');
+        $apiKey = config('printnode.test_api_key');
+
+        if (empty($apiKey)) {
+            $this->markTestSkipped('TEST_MODULES_PRINTNODE_API_KEY env key is not set');
+        }
+
+        $this->assertNotEmpty($apiKey, 'TEST_MODULES_PRINTNODE_API_KEY env key is not set');
     }
 
     public function test_get_clients()
     {
         $apiKey = config('printnode.test_api_key');
+
+        if (empty($apiKey)) {
+            $this->markTestSkipped('TEST_MODULES_PRINTNODE_API_KEY env key is not set');
+        }
 
         Client::query()->updateOrCreate([], ['api_key' => $apiKey]);
 
@@ -40,6 +46,10 @@ class PrintNodeTest extends TestCase
     {
         $apiKey = config('printnode.test_api_key');
 
+        if (empty($apiKey)) {
+            $this->markTestSkipped('TEST_MODULES_PRINTNODE_API_KEY env key is not set');
+        }
+
         Client::query()->updateOrCreate([], ['api_key' => $apiKey]);
 
         $response = $this->get('api/modules/printnode/printers');
@@ -49,9 +59,13 @@ class PrintNodeTest extends TestCase
 
     public function test_store_printjob()
     {
-        $repository = config('printnode.test_api_key');
+        $apiKey = config('printnode.test_api_key');
 
-        Client::query()->updateOrCreate([], ['api_key' => $repository]);
+        if (empty($apiKey)) {
+            $this->markTestSkipped('TEST_MODULES_PRINTNODE_API_KEY env key is not set');
+        }
+
+        Client::query()->updateOrCreate([], ['api_key' => $apiKey]);
 
         $printers = collect(PrintNode::getPrinters());
 

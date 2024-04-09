@@ -3,7 +3,6 @@
 namespace Tests\Feature\Admin\Settings\Printnode;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
@@ -11,8 +10,6 @@ use Tests\TestCase;
  */
 class IndexTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * @var string
      */

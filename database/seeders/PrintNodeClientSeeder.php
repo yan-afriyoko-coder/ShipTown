@@ -16,16 +16,16 @@ class PrintNodeClientSeeder extends Seeder
      */
     public function run()
     {
-       if (env('TEST_PRINTNODE_KEY')) {
+       if (env('TEST_MODULES_PRINTNODE_API_KEY')) {
            $client = Client::firstOrNew();
-           $client->api_key = env('TEST_PRINTNODE_KEY');
+           $client->api_key = env('TEST_MODULES_PRINTNODE_API_KEY');
            $client->save();
 
            PrintNodeServiceProvider::enableModule();
        }
 
-       if (env('TEST_PRINTNODE_PRINTER_ID')) {
-           User::query()->update(['printer_id' => env('TEST_PRINTNODE_PRINTER_ID')]);
+       if (env('TEST_MODULES_PRINTNODE_PRINTER_ID')) {
+           User::query()->update(['printer_id' => env('TEST_MODULES_PRINTNODE_PRINTER_ID')]);
        }
     }
 }
