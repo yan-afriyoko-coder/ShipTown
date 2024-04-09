@@ -44,10 +44,6 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
             Listeners\EveryTenMinutesEventListener::class
         ],
 
-        EveryDayEvent::class => [
-            Listeners\EveryDayEventListener::class
-        ],
-
         ProductTagAttachedEvent::class => [
             Listeners\ProductTagAttachedEventListener::class,
         ],
