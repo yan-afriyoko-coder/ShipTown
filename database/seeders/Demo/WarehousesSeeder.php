@@ -14,11 +14,11 @@ class WarehousesSeeder extends Seeder
      */
     public function run()
     {
-        Warehouse::firstOrCreate(['code' => '999'], ['name' => 'Website Orders']);
+        Warehouse::firstOrCreate(['code' => 'WEB'], ['name' => 'Website Orders'])->attachTag('ALL');
 
-        Warehouse::firstOrCreate(['code' => 'WHS'], ['name' => 'Warehouse'])->attachTag('fulfilment');
-        Warehouse::firstOrCreate(['code' => 'DUB'], ['name' => 'Dublin']);
-        Warehouse::firstOrCreate(['code' => 'CRK'], ['name' => 'Cork']);
-        Warehouse::firstOrCreate(['code' => 'GAL'], ['name' => 'Galway']);
+        Warehouse::firstOrCreate(['code' => 'WHS'], ['name' => 'Warehouse'])->attachTag('ALL');
+        Warehouse::firstOrCreate(['code' => 'DUB'], ['name' => 'Dublin'])->attachTag('ALL');
+        Warehouse::firstOrCreate(['code' => 'CRK'], ['name' => 'Cork'])->attachTag('ALL');
+        Warehouse::firstOrCreate(['code' => 'GAL'], ['name' => 'Galway'])->attachTag('ALL');
     }
 }

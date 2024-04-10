@@ -17,7 +17,6 @@ class InventoryMovementsSummaryReport extends Report
         parent::__construct($attributes);
 
         $this->report_name = 'Inventory Movements Summary';
-        $this->view = 'reports.inventory-movements-summary';
 
         $this->defaultSelect = 'type,warehouse_code,count';
 

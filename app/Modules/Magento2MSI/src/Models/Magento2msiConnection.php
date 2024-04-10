@@ -13,6 +13,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property string $api_access_token
  * @property string $base_url
  * @property string $magento_source_code
+ * @property integer $inventory_source_warehouse_tag_id
  */
 class Magento2msiConnection extends BaseModel
 {

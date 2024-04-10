@@ -8,6 +8,6 @@ class InventoryController
 {
     public function index()
     {
-        return InventoryReport::toJsonResource();
+        return InventoryReport::json();
     }
 }

@@ -19,7 +19,7 @@
 <!--                            <th>ID</th>-->
                             <th>Code</th>
                             <th>Name</th>
-                            <th></th>
+                            <th>Tags</th>
                         </tr>
                     </thead>
                     <tbody>

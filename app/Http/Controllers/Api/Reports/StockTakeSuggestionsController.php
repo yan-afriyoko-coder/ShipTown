@@ -8,6 +8,6 @@ class StockTakeSuggestionsController
 {
     public function index()
     {
-        return StocktakeSuggestionReport::toJsonResource();
+        return StocktakeSuggestionReport::json();
     }
 }

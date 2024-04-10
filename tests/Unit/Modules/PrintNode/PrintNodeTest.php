@@ -37,7 +37,7 @@ class PrintNodeTest extends TestCase
 
         Client::query()->updateOrCreate([], ['api_key' => $apiKey]);
 
-        $response = $this->get('api/settings/modules/printnode/clients');
+        $response = $this->get('api/modules/printnode/clients');
 
         $response->assertSuccessful();
     }

@@ -7,9 +7,11 @@ use App\Traits\HasTagsTrait;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -20,23 +22,49 @@ class ReportBase extends Model
     use HasTagsTrait;
 
     public $table = 'report';
+
     public string $report_name = 'Report';
+
     public string $view = 'report-default';
 
     public string $defaultSelect = '';
-    public ?string $defaultSort = null;
 
-    public array $toSelect = [];
+    public ?string $defaultSort = null;
 
     public array $fields = [];
 
-    public array $initial_data = [];
-
     public mixed $baseQuery;
 
-    private array $allowedFilters = [];
+    public array $allowedFilters = [];
+
     public array $allowedIncludes = [];
+
     protected array $fieldAliases = [];
+
+    protected $casts = [];
+
+    public function getRecords(): Collection|array
+    {
+        $records = $this->getFinalQuery()->get();
+
+        if (empty($this->fields) && $records->isNotEmpty()) {
+            $this->fields = $records->first()->toArray();
+        }
+
+        return $records;
+    }
+
+    public function getFinalQuery(): QueryBuilder
+    {
+        $limit = request('per_page', 50);
+        $page = request('page', 1);
+
+        $offset = ($page - 1) * $limit;
+
+        return $this->queryBuilder()
+            ->offset($offset)
+            ->limit($limit);
+    }
 
     public function queryBuilder(): QueryBuilder
     {
@@ -54,28 +82,43 @@ class ReportBase extends Model
             $queryBuilder = $queryBuilder->defaultSort($this->defaultSort);
         }
 
-        return $queryBuilder
+        $queryBuilder = $queryBuilder
             ->allowedFilters($this->getAllowedFilters())
             ->allowedSorts($this->fieldAliases)
             ->allowedIncludes($this->allowedIncludes);
+
+        return $queryBuilder;
     }
 
     /**
-     * @param AllowedFilter $filter
-     * @return $this
+     * @return array
      */
-    public function addFilter(AllowedFilter $filter): Report
+    public function getMetaData(): array
+    {
+        return [
+            'report_name' => $this->report_name ?? $this->table,
+            'pagination' => [
+                'per_page' => $this->perPage,
+                'page' => request('page', 1),
+            ],
+            'field_links' => collect(array_keys($this->fields))
+                ->map(fn ($field) => [
+                    'name' => $field,
+                    'display_name' => Str::headline($field),
+                    'type' => $this->getFieldType($field),
+                    'operators' => $this->getFieldTypeOperators($field),
+                ])
+        ];
+    }
+
+    public function addFilter(AllowedFilter $filter): self
     {
         $this->allowedFilters[] = $filter;
 
         return $this;
     }
 
-    /**
-     * @param $include
-     * @return $this
-     */
-    public function addAllowedInclude($include): Report
+    public function addAllowedInclude($include): self
     {
         $this->allowedIncludes[] = $include;
 
@@ -139,9 +182,6 @@ class ReportBase extends Model
         return $queryBuilder;
     }
 
-    /**
-     * @return array
-     */
     private function addExactFilters(): array
     {
 
@@ -158,10 +198,6 @@ class ReportBase extends Model
         return $allowedFilters;
     }
 
-
-    /**
-     * @return array
-     */
     private function addContainsFilters(): array
     {
         $allowedFilters = [];
@@ -181,9 +217,6 @@ class ReportBase extends Model
         return $allowedFilters;
     }
 
-    /**
-     * @return array
-     */
     private function addBetweenFloatFilters(): array
     {
         $allowedFilters = [];
@@ -218,7 +251,6 @@ class ReportBase extends Model
     }
 
     /**
-     * @return array
      * @throws Exception
      */
     private function addBetweenDatesFilters(): array
@@ -257,7 +289,6 @@ class ReportBase extends Model
     }
 
     /**
-     * @return array
      * @throws Exception
      */
     private function addGreaterThan(): array
@@ -303,9 +334,6 @@ class ReportBase extends Model
         return $allowedFilters;
     }
 
-    /**
-     * @return array
-     */
     private function addLowerThan(): array
     {
         $allowedFilters = [];
@@ -334,15 +362,9 @@ class ReportBase extends Model
     {
         $allowedFilters = [];
 
-//        collect($this->fields)
-//            ->each(function ($record, $alias) use (&$allowedFilters) {
-//                $filterName = 'null';
-
-//                InvalidFilterValue::make($filterName);
         $allowedFilters[] = AllowedFilter::callback('null', function ($query, $value) {
             $query->whereNull($this->fields[$value]);
         });
-//            });
 
         return $allowedFilters;
     }

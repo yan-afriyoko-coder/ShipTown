@@ -16,7 +16,7 @@ class DataCollectorController extends Controller
 {
     public function index(Request $request): JsonResource
     {
-        return DataCollectorListReport::toJsonResource();
+        return DataCollectorListReport::json();
     }
 
     public function store(ApiDataCollectorStoreRequest $request): DataCollectionResource

@@ -31,6 +31,8 @@
             </div>
         </div>
 
+        <a class="btn btn-block" :href="'/settings/modules/magento2msi/inventory-source-items'">inventory-source-items</a>
+
         <table style="width: 100%" class="table table-fit table-hover table-borderless table-responsive mb-0 rounded">
             <thead>
                 <tr class="small table-active w-auto w-100">
@@ -81,8 +83,14 @@
 import CreateModal from "../Automations/CreateModal";
 import EditModal from "../Automations/EditModal";
 import api from "../../../mixins/api";
+import * as url from "url";
 
 export default {
+    computed: {
+        url() {
+            return url
+        }
+    },
     components: {
         CreateModal, EditModal
     },

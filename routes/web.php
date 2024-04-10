@@ -70,6 +70,8 @@ Route::get('csv/boxtop/stock', [Csv\BoxTopStockController::class, 'index'])->nam
 Route::view('settings/warehouses', 'settings/warehouses')->name('settings.warehouses');
 
 Route::middleware(['role:admin'])->group(function () {
+    Route::resource('settings/modules/magento2msi/inventory-source-items', \App\Modules\Magento2MSI\src\Http\Controllers\InventorySourceItemsController::class)->only(['index']);
+
     Route::view('settings/modules/magento2msi', 'settings/modules/magento2msi');
     Route::view('settings/modules/stocktake-suggestions', 'settings/modules/stocktake-suggestions');
     Route::view('settings/modules/active-orders-inventory-reservations', 'settings/modules/active-orders-inventory-reservations');

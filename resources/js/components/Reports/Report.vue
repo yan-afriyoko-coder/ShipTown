@@ -36,14 +36,14 @@
                                 <div class="dropdown">
                                     <button class="btn btn-link dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         {{ field.display_name }}
-                                        <font-awesome-icon v-if="field.is_current" :icon="field.is_desc ? 'caret-down' : 'caret-up'" class="fa-xs" role="button"></font-awesome-icon>
+                                        <font-awesome-icon v-if="isUrlSortedBy(field['name'])" :icon="isUrlSortDesc ? 'caret-down' : 'caret-up'" class="fa-xs" role="button"></font-awesome-icon>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                        <button class="dropdown-item" type="button" @click="setUrlParameterAngGo('sort', field.name)">
-                                            <icon-sort-asc/>&nbsp; Sort Ascending
-                                        </button>
                                         <button class="dropdown-item" type="button" @click="setUrlParameterAngGo('sort', ['-', field.name].join(''))">
                                             <icon-sort-desc/>&nbsp; Sort Descending
+                                        </button>
+                                        <button class="dropdown-item" type="button" @click="setUrlParameterAngGo('sort', field.name)">
+                                            <icon-sort-asc/>&nbsp; Sort Ascending
                                         </button>
                                         <button class="dropdown-item" type="button" @click="showFilterBox(field)">
                                             <icon-filter/>&nbsp; Filter by value
@@ -185,6 +185,7 @@
         },
 
         methods: {
+
             searchForProductSku(barcode) {
                 if (barcode === '') {
                     this.removeUrlParameterAndGo('filter[product_sku]');
@@ -389,12 +390,20 @@
             getReportData: function(url, params) {
                 return axios.get(url, {params: params})
             },
+
+            isUrlSortedBy(field) {
+                return this.getUrlParameter('sort', '').includes(field);
+            },
         },
 
         computed: {
             visibleFields() {
                 return Object.keys(this.records[0])
                     .map(this.findField);
+            },
+
+            isUrlSortDesc() {
+                return this.getUrlParameter('sort', ' ').startsWith('-');
             },
         }
     }

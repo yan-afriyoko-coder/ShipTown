@@ -15,7 +15,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-8 offset-md-2">
-                            <div class="row col d-block font-weight-bold pt-2 pb-2 text-uppercase small text-secondary align-content-center text-center">{{ __($report_name) }}</div>
+                            <div class="row col d-block font-weight-bold pt-2 pb-2 text-uppercase small text-secondary align-content-center text-center">{{ __($meta['report_name']) }}</div>
                             @foreach ($data as $record)
                                 @if(data_get($record,'warehouse_id') === auth()->user()->warehouse_id)
 

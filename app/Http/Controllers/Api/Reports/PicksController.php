@@ -8,6 +8,6 @@ class PicksController
 {
     public function index()
     {
-        return PicksReport::toJsonResource();
+        return PicksReport::json();
     }
 }
