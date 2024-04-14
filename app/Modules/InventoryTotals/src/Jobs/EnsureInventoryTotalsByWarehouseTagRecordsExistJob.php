@@ -27,6 +27,7 @@ class EnsureInventoryTotalsByWarehouseTagRecordsExistJob extends UniqueJob
                 'maxProductID' => $maxProductID,
             ]);
 
+            $maxProductID = $minProductID;
             usleep(100000); // 0.1 sec
         } while ($minProductID > 0);
     }
