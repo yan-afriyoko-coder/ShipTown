@@ -16,7 +16,7 @@ class EnsureInventoryTotalsByWarehouseTagRecordsExistJob extends UniqueJob
         $maxProductID = Product::query()->max('id');
 
         do {
-            $minProductID = $maxProductID - 1000;
+            $minProductID = $maxProductID - 50;
 
             $recordsInserted = $this->ensureRecordsExists($minProductID, $maxProductID);
 
