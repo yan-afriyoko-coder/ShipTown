@@ -1299,6 +1299,16 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('manual_request_jobs', function (Blueprint $table) {
+            $table->id();
+            $table->string('job_name');
+            $table->string('job_class');
+            $table->timestamps();
+
+            $table->unique('job_name');
+            $table->unique('job_class');
+        });
+
         $this->installSpatiePermissions();
 
         DB::statement('

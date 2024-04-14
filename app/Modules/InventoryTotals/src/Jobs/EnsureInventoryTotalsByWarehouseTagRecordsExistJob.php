@@ -3,46 +3,32 @@
 namespace App\Modules\InventoryTotals\src\Jobs;
 
 use App\Abstracts\UniqueJob;
-use App\Models\Inventory;
-use App\Modules\InventoryTotals\src\Models\Configuration;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use App\Models\Product;
+use App\Models\Taggable;
+use App\Models\Warehouse;
+use App\Modules\InventoryTotals\src\Models\InventoryTotalByWarehouseTag;
 use Illuminate\Support\Facades\Log;
 
 class EnsureInventoryTotalsByWarehouseTagRecordsExistJob extends UniqueJob
 {
-    private int $batchSize;
-    private Configuration|Model $config;
-    private mixed $inventoryMaxId;
-
-    public function __construct()
+    public function handle(): void
     {
-        $this->batchSize = 1000;
+        $maxProductID = Product::query()->max('id');
 
-        $this->config = Configuration::query()->firstOrCreate([]);
-
-        $this->inventoryMaxId = Inventory::query()->max('id');
-    }
-
-    public function handle()
-    {
         do {
-            $minID = $maxID ?? $this->config->totals_by_warehouse_tag_max_inventory_id_checked;
-            $maxID = $minID + $this->batchSize;
+            $minProductID = $maxProductID - 1000;
 
-            $this->insertMissingRecords($minID, $maxID);
+            $recordsInserted = $this->ensureRecordsExists($minProductID, $maxProductID);
 
             Log::debug('Job processing', [
                 'job' => self::class,
-                'records created' => DB::table('tempTable')->count(),
-                'minID' => $minID,
-                'maxID' => $maxID,
+                'records created' => $recordsInserted,
+                'minProductID' => $minProductID,
+                'maxProductID' => $maxProductID,
             ]);
 
-            $this->config->update(['totals_by_warehouse_tag_max_inventory_id_checked' => $maxID]);
-
             usleep(100000); // 0.1 sec
-        } while ($maxID <= $this->inventoryMaxId);
+        } while ($minProductID > 0);
     }
 
     public function fail($exception = null)
@@ -51,48 +37,22 @@ class EnsureInventoryTotalsByWarehouseTagRecordsExistJob extends UniqueJob
         report($exception);
     }
 
-    /**
-     * @param mixed $minID
-     * @param mixed $maxID
-     */
-    private function insertMissingRecords(mixed $minID, mixed $maxID): void
+    public static function ensureRecordsExists($minProductID, $maxProductID): int
     {
-        DB::statement("DROP TEMPORARY TABLE IF EXISTS tempTable;");
+        $records = Taggable::query()
+            ->leftJoin('inventory', 'taggables.taggable_id', '=', 'inventory.warehouse_id')
+            ->where(['taggable_type' => Warehouse::class])
+            ->whereBetween('inventory.product_id', [$minProductID, $maxProductID])
+            ->get()
+            ->map(function ($record) {
+                return [
+                    'tag_id' => data_get($record, 'tag_id'),
+                    'product_id' => data_get($record, 'product_id'),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            })->toArray();
 
-        DB::statement("
-                CREATE TEMPORARY TABLE tempTable AS
-                SELECT
-                    DISTINCT taggables.tag_id, inventory.product_id
-
-                FROM inventory
-
-                INNER JOIN taggables
-                  ON taggables.taggable_type = 'App\\\\Models\\\\Warehouse'
-                  AND taggables.taggable_id = inventory.warehouse_id
-
-                LEFT JOIN inventory_totals_by_warehouse_tag
-                  ON inventory_totals_by_warehouse_tag.product_id = inventory.product_id
-                  AND inventory_totals_by_warehouse_tag.tag_id = taggables.tag_id
-
-                WHERE
-                      inventory.id BETWEEN ? AND ?
-                    AND inventory_totals_by_warehouse_tag.id is null
-            ", [$minID, $maxID]);
-
-        DB::insert("
-                INSERT INTO inventory_totals_by_warehouse_tag (
-                    tag_id,
-                    product_id,
-                    created_at,
-                    updated_at
-                )
-                SELECT
-                    tempTable.tag_id as tag_id,
-                    tempTable.product_id as product_id,
-                    NOW() as created_at,
-                    NOW() as updated_at
-
-                FROM tempTable
-            ");
+        return InventoryTotalByWarehouseTag::query()->insertOrIgnore($records);
     }
 }
