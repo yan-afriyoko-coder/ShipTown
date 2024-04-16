@@ -127,25 +127,26 @@ class ProcessImportedProductRecordsJob extends UniqueJob
             'restock_level'     => data_get($importedProduct->raw_import, 'restock_level', 0),
         ]);
 
-        $uuid = implode(';', [
+        $reservationUuid = implode(';', [
             'rmsapi_imported_product',
             'inventory_id' . $importedProduct->inventory->id,
         ]);
 
-        if ($importedProduct->inventory->quantity_reserved = 0) {
-            InventoryReservation::query()->where('custom_uuid', $uuid)->delete();
-            return;
-        }
+        $quantityCommittedInRMS = data_get($importedProduct->raw_import, 'quantity_committed', 0);
 
-        InventoryReservation::query()->updateOrCreate([
-            'custom_uuid' => $uuid,
-        ], [
-            'inventory_id' => $importedProduct->inventory->id,
-            'warehouse_code' => $importedProduct->inventory->warehouse_code,
-            'product_sku' => $importedProduct->sku,
-            'quantity_reserved' => data_get($importedProduct->raw_import, 'quantity_committed', 0),
-            'comment' => 'Microsoft RMS - Imported Quantity Committed',
-        ]);
+        if ($quantityCommittedInRMS != 0) {
+            InventoryReservation::query()->updateOrCreate([
+                'custom_uuid' => $reservationUuid,
+            ], [
+                'inventory_id' => $importedProduct->inventory->id,
+                'warehouse_code' => $importedProduct->inventory->warehouse_code,
+                'product_sku' => $importedProduct->sku,
+                'quantity_reserved' => $quantityCommittedInRMS,
+                'comment' => 'Microsoft RMS - Imported Quantity Committed',
+            ]);
+        } else {
+            InventoryReservation::query()->where('custom_uuid', $reservationUuid)->delete();
+        }
     }
 
     private function importPricing(RmsapiProductImport $importedProduct): void
