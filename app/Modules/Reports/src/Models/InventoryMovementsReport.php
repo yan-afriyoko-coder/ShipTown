@@ -11,8 +11,6 @@ class InventoryMovementsReport extends Report
     {
         parent::__construct($attributes);
 
-//        $this->view = 'reports.inventory-movements';
-
         $this->report_name = 'Inventory Movements Report';
         $this->defaultSort = '-occurred_at';
 
@@ -29,12 +27,13 @@ class InventoryMovementsReport extends Report
 
         $this->fields = [
             'occurred_at'                   => 'inventory_movements.occurred_at',
+            'warehouse_code'                => 'inventory_movements.warehouse_code',
             'product_sku'                   => 'products.sku',
             'product_name'                  => 'products.name',
-            'warehouse_code'                => 'inventory_movements.warehouse_code',
             'type'                          => 'inventory_movements.type',
-            'quantity_before'               => 'inventory_movements.quantity_before',
             'quantity_delta'                => 'inventory_movements.quantity_delta',
+            'description'                   => 'inventory_movements.description',
+            'quantity_before'               => 'inventory_movements.quantity_before',
             'quantity_after'                => 'inventory_movements.quantity_after',
             'sequence_number'               => 'inventory_movements.sequence_number',
             'id'                            => 'inventory_movements.id',
@@ -42,7 +41,6 @@ class InventoryMovementsReport extends Report
             'product_id'                    => 'inventory_movements.product_id',
             'inventory_id'                  => 'inventory_movements.inventory_id',
             'warehouse_id'                  => 'inventory_movements.warehouse_id',
-            'description'                   => 'inventory_movements.description',
             'updated_at'                    => 'inventory_movements.updated_at',
             'created_at'                    => 'inventory_movements.created_at',
             'custom_unique_reference_id'    => 'inventory_movements.custom_unique_reference_id',
