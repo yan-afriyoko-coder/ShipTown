@@ -44,7 +44,7 @@ class EnsureProductRecordsExistJob extends UniqueJob
 
                 LEFT JOIN modules_magento2msi_inventory_source_items
                     ON modules_magento2msi_inventory_source_items.connection_id = modules_magento2msi_connections.id
-                    AND modules_magento2msi_inventory_source_items.product_id = available_online_tag.taggable_id
+                    AND modules_magento2msi_inventory_source_items.sku = products.sku
 
                 WHERE available_online_tag.tag_id IN (SELECT ID FROM `tags` WHERE JSON_EXTRACT(name, '$.en') = ?)
                 AND available_online_tag.taggable_type = ?
