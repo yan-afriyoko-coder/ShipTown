@@ -2,29 +2,16 @@
 
 namespace App\Http\Controllers\Reports;
 
-use App\Http\Controllers\Controller;
-use App\Models\OrderShipment;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Facades\Request;
-use Illuminate\View\View;
+use App\Abstracts\ReportController;
+use App\Modules\Reports\src\Models\OrderShipmentReport;
+use Illuminate\Http\Request;
 
-class ShipmentController extends Controller
+class ShipmentController extends ReportController
 {
-    /**
-     * @param Request $request
-     *
-     * @return Application|Factory|View
-     */
-    public function index(Request $request)
+    public function index(Request $request): mixed
     {
-        $shipments = OrderShipment::getSpatieQueryBuilder()
-            ->with('user')
-            ->with('order')
-            ->limit(1000)
-            ->get()
-            ->toArray();
+        $report = new OrderShipmentReport();
 
-        return view('reports.shipments', ['shipments' => $shipments]);
+        return $report->response($request);
     }
 }
