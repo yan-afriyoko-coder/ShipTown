@@ -18,23 +18,28 @@ class InventoryMovementsSummaryReport extends Report
 
         $this->report_name = 'Inventory Movements Summary';
 
-        $this->defaultSelect = 'type,warehouse_code,count';
+        $this->defaultSelect = implode(',', [
+            'type',
+            'warehouse_code',
+            'count'
+        ]);
 
         $this->baseQuery = InventoryMovement::query()
             ->leftJoin('inventory', 'inventory.id', '=', 'inventory_movements.inventory_id')
-            ->groupByRaw('inventory_movements.type, inventory.warehouse_code')
-            ->orderByRaw('inventory_movements.type, inventory.warehouse_code');
+            ->groupByRaw('inventory_movements.type, inventory.warehouse_code');
 
         $this->fields = [
-            'created_at'        => DB::raw('inventory_movements.created_at'),
-            'type'              => DB::raw('IFNULL(inventory_movements.type, "")'),
-            'warehouse_code'    => DB::raw('IFNULL(inventory.warehouse_code, "")'),
-            'count'             => DB::raw('count(*)'),
+            'type' => DB::raw('IFNULL(inventory_movements.type, "")'),
+            'warehouse_code' => DB::raw('IFNULL(inventory.warehouse_code, "")'),
+            'created_at' => 'inventory_movements.created_at',
+            'count' => DB::raw('count(*)')
         ];
 
         $this->casts = [
-            'count' => 'integer',
+            'type' => 'string',
+            'warehouse_code' => 'string',
             'created_at' => 'datetime',
+            'count' => 'integer'
         ];
     }
 

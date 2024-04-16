@@ -14,9 +14,6 @@ class InventoryMovementsSummaryController extends Controller
     public function index(Request $request)
     {
         $report = new InventoryMovementsSummaryReport();
-
-//        $report->defaultSelect = 'description,warehouse_code,count';
-
         return $report->response($request);
     }
 }
