@@ -22,7 +22,7 @@
                                 <table class="table table-borderless"><tbody>
                                     <tr>
                                         <td>
-                                            <a href='{{ url()->route('reports.restocking', [
+                                            <a href='{{ url()->route('reports.restocking.index', [
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'sort' => '-quantity_required,-quantity_incoming,-warehouse_quantity',
                                                         'per_page' => '999',
@@ -34,7 +34,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <a href='{{ url()->route('reports.restocking', [
+                                            <a href='{{ url()->route('reports.restocking.index', [
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'sort' => '-quantity_incoming,-quantity_required,-warehouse_quantity',
                                                         'per_page' => '999',
@@ -45,7 +45,7 @@
                                         <td class="text-right">{{ data_get($record, 'wh_products_incoming') === 0 ? '-' : data_get($record, 'wh_products_incoming')}}</td>
                                     </tr>
                                     <tr>
-                                        <td><a href='{{ url()->route('reports.restocking', [
+                                        <td><a href='{{ url()->route('reports.restocking.index', [
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'sort' => 'restock_level,-quantity_incoming,quantity_available,-warehouse_quantity',
                                                         'per_page' => '999',
@@ -56,7 +56,7 @@
                                         <td class="text-right">{{ data_get($record, 'missing_restock_levels') === 0 ? '-' : data_get($record, 'missing_restock_levels')}}</td>
                                     </tr>
                                     <tr>
-                                        <td><a href='{{ url()->route('reports.restocking', [
+                                        <td><a href='{{ url()->route('reports.restocking.index', [
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'sort' => 'quantity_available,-quantity_incoming,-warehouse_quantity',
                                                         'filter[quantity_available]' => 0,
@@ -69,7 +69,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <a href='{{ url()->route('reports.restocking', [
+                                            <a href='{{ url()->route('reports.restocking.index', [
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'sort' => '-quantity_required,-quantity_incoming,quantity_available',
                                                         'per_page' => '999',
@@ -106,7 +106,7 @@
                                 @foreach ($data as $record)
                                     <tr>
                                         <td>
-                                            <a href='{{ url()->route('reports.restocking', [
+                                            <a href='{{ url()->route('reports.restocking.index', [
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'sort' => '-quantity_required,-quantity_incoming,-warehouse_quantity',
                                                         'per_page' => '999',
@@ -131,7 +131,7 @@
                                 @foreach ($data as $record)
                                     <tr>
                                         <td>
-                                            <a href='{{ url()->route('reports.restocking', [
+                                            <a href='{{ url()->route('reports.restocking.index', [
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'sort' => '-quantity_incoming,-quantity_required,-warehouse_quantity',
                                                         'per_page' => '999',
@@ -155,7 +155,7 @@
                                 <tbody>
                                 @foreach ($data as $record)
                                     <tr>
-                                        <td><a href='{{ url()->route('reports.restocking', [
+                                        <td><a href='{{ url()->route('reports.restocking.index', [
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'sort' => '-quantity_incoming,-quantity_available,-warehouse_quantity',
                                                         'filter[restock_level]' => 0,
@@ -180,7 +180,7 @@
                                 <tbody>
                                 @foreach ($data as $record)
                                     <tr>
-                                        <td><a href='{{ url()->route('reports.restocking', [
+                                        <td><a href='{{ url()->route('reports.restocking.index', [
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'sort' => '-restock_level',
                                                         'filter[quantity_available]' => 0,
@@ -207,7 +207,7 @@
                                 @foreach ($data as $record)
                                     <tr>
                                         <td>
-                                            <a href='{{ url()->route('reports.restocking', [
+                                            <a href='{{ url()->route('reports.restocking.index', [
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'sort' => '-quantity_required,-quantity_incoming,quantity_available',
                                                         'per_page' => '999',
