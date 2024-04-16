@@ -2,6 +2,7 @@
 
 namespace App\Modules\SystemHeartbeats\src\Listeners;
 
+use App\Jobs\DispatchEveryTenMinutesEventJob;
 use App\Models\Heartbeat;
 use Illuminate\Support\Facades\Log;
 
@@ -15,7 +16,8 @@ class EveryTenMinutesEventListener
             'code' => self::class,
         ], [
             'error_message' => 'Every Ten Minutes heartbeat missed',
-            'expires_at' => now()->addMinutes(20)
+            'expires_at' => now()->addMinutes(20),
+            'auto_heal_job_class' => DispatchEveryTenMinutesEventJob::class
         ]);
     }
 }

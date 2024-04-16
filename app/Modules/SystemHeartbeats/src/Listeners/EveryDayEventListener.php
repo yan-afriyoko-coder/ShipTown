@@ -2,6 +2,7 @@
 
 namespace App\Modules\SystemHeartbeats\src\Listeners;
 
+use App\Jobs\DispatchEveryDayEventJob;
 use App\Models\Heartbeat;
 use Illuminate\Support\Facades\Log;
 
@@ -15,7 +16,8 @@ class EveryDayEventListener
             'code' => self::class,
         ], [
             'error_message' => 'Every Day heartbeat missed',
-            'expires_at' => now()->addDays(2)
+            'expires_at' => now()->addDays(2),
+            'auto_heal_job_class' => DispatchEveryDayEventJob::class
         ]);
     }
 }

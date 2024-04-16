@@ -2,6 +2,7 @@
 
 namespace App\Modules\SystemHeartbeats\src\Listeners;
 
+use App\Jobs\DispatchEveryHourEventJobs;
 use App\Models\Heartbeat;
 use Illuminate\Support\Facades\Log;
 
@@ -15,7 +16,8 @@ class EveryHourEventListener
             'code' => self::class,
         ], [
             'error_message' => 'Every Hour Event heartbeat missed',
-            'expires_at' => now()->addHours(2)
+            'expires_at' => now()->addHours(2),
+            'auto_heal_job_class' => DispatchEveryHourEventJobs::class
         ]);
     }
 }

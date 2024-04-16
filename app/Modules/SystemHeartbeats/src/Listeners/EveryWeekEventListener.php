@@ -2,11 +2,11 @@
 
 namespace App\Modules\SystemHeartbeats\src\Listeners;
 
-use App\Jobs\DispatchEveryFiveMinutesEventJob;
+use App\Jobs\DispatchEveryWeekEventJob;
 use App\Models\Heartbeat;
 use Illuminate\Support\Facades\Log;
 
-class EveryFiveMinutesEventListener
+class EveryWeekEventListener
 {
     public function handle()
     {
@@ -15,9 +15,9 @@ class EveryFiveMinutesEventListener
         Heartbeat::query()->updateOrCreate([
             'code' => self::class,
         ], [
-            'error_message' => 'Every Five minutes heartbeat missed',
-            'expires_at' => now()->addMinutes(20),
-            'auto_heal_job_class' => DispatchEveryFiveMinutesEventJob::class
+            'error_message' => 'Every Week heartbeat missed',
+            'expires_at' => now()->addWeek(),
+            'auto_heal_job_class' => DispatchEveryWeekEventJob::class
         ]);
     }
 }

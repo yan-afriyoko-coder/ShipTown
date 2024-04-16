@@ -6,7 +6,9 @@ use App\Events\EveryDayEvent;
 use App\Events\EveryFiveMinutesEvent;
 use App\Events\EveryHourEvent;
 use App\Events\EveryMinuteEvent;
+use App\Events\EveryMonthEvent;
 use App\Events\EveryTenMinutesEvent;
+use App\Events\EveryWeekEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
@@ -51,7 +53,15 @@ class SystemHeartbeatsServiceProvider extends BaseModuleServiceProvider
 
         EveryDayEvent::class => [
             Listeners\EveryDayEventListener::class,
-        ]
+        ],
+
+        EveryWeekEvent::class => [
+            Listeners\EveryWeekEventListener::class,
+        ],
+
+        EveryMonthEvent::class => [
+            Listeners\EveryMonthEventListener::class,
+        ],
     ];
 
     public static function disabling(): bool
