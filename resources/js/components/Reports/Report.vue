@@ -162,8 +162,8 @@
                 filters: [],
                 filterAdding: null,
                 showFilters: true,
-                perPage: Number(JSON.parse(this.paginationString).per_page),
-                page: Number(JSON.parse(this.paginationString).page),
+                perPage: 50,
+                page: 1,
                 hasMoreRecords: true,
 
                 breadcrumbs: '',
@@ -175,7 +175,9 @@
         },
 
         mounted() {
-            this.buildFiltersFromUrl()
+            this.perPage = this.getUrlParameter('per_page', 50);
+
+            this.buildFiltersFromUrl();
             window.onscroll = () => this.loadMoreRecords();
 
             this.breadcrumbs = this.$router.currentRoute.path
@@ -185,12 +187,12 @@
         },
 
         methods: {
-
             searchForProductSku(barcode) {
                 if (barcode === '') {
                     this.removeUrlParameterAndGo('filter[product_sku]');
                     return;
                 }
+
                 this.setUrlParameterAngGo('filter[product_sku]', barcode);
             },
 
@@ -267,7 +269,6 @@
             buildFiltersFromUrl() {
                 const urlParams = new URLSearchParams(window.location.search);
 
-                this.getUrlFilter()
                 for (const [key, value] of urlParams.entries()) {
                     if(key.startsWith('filter')) {
                         let filterName = key.split('[')[1].split(']')[0];
@@ -370,7 +371,7 @@
                     let urlParams = new URLSearchParams(window.location.search);
                     urlParams.set('filename', 'data.json');
                     urlParams.set('page', this.page);
-                    urlParams.set('per_page', this.getUrlParameter('per_page', 50));
+                    urlParams.set('per_page', this.perPage);
 
                     this.getReportData(this.$router.currentRoute.path, urlParams)
                         .then(response => {
