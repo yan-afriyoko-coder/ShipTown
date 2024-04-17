@@ -2,13 +2,9 @@
 
 namespace App\Modules\Reports\src\Models;
 
-use App\Helpers\CsvBuilder;
+use App\Helpers\CsvStreamedResponse;
 use File;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Response;
-use League\Csv\Exception;
 use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
 
 class Report extends ReportBase
@@ -17,7 +13,7 @@ class Report extends ReportBase
     {
         switch (File::extension(request('filename'))) {
             case 'csv':
-                return $this->toCsvFileDownload();
+                return CsvStreamedResponse::fromQueryBuilder($this->queryBuilder(), request('filename'));
             case 'json':
                 return $this->toJsonResource();
             default:
@@ -52,19 +48,5 @@ class Report extends ReportBase
         $report = new static();
 
         return $report->toJsonResource();
-    }
-    /**
-     * @throws Exception
-     */
-    public function toCsvFileDownload(): Response|Application|ResponseFactory
-    {
-        $csv = CsvBuilder::fromQueryBuilder($this->queryBuilder());
-
-        return response((string)$csv, 200, [
-            'Content-Type' => 'text/csv',
-            'Cache-Control' => 'no-store, no-cache',
-            'Content-Transfer-Encoding' => 'binary',
-            'Content-Disposition' => 'attachment; filename="' . request('filename', 'report.csv') . '"',
-        ]);
     }
 }

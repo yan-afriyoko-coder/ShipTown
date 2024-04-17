@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\CsvBuilder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
-use League\Csv\Exception;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class Controller extends BaseController
@@ -21,24 +19,6 @@ class Controller extends BaseController
      * @var int
      */
     private int $status_code = 200;
-
-    /**
-     * @param QueryBuilder $query
-     * @throws Exception
-     */
-    public function throwCsvDownloadResponse(QueryBuilder $query)
-    {
-        $content = CsvBuilder::fromQueryBuilder($query);
-
-        $filename = request('filename', 'filename_url_param_not_specified.csv');
-        $headers = [
-            'Content-Type'              => 'text/csv',
-            'Content-Transfer-Encoding' => 'binary',
-            'Content-Disposition'       => 'attachment; filename="'.$filename.'"',
-        ];
-
-        response($content, 200, $headers)->throwResponse();
-    }
 
     /**
      * @param string $pdfString
