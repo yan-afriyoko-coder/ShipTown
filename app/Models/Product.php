@@ -119,6 +119,7 @@ class Product extends BaseModel
         'sale_price_end_date',
         'quantity_reserved',
         'quantity',
+        'supplier',
     ];
 
     // we use attributes to set default values

@@ -25,6 +25,7 @@ class InventoryReport extends Report
             'warehouse_code',
             'product_sku',
             'product_name',
+            'supplier',
             'department',
             'shelf_location',
             'quantity',
@@ -45,6 +46,7 @@ class InventoryReport extends Report
         $this->fields = [
             'product_sku'           => 'product.sku',
             'product_name'          => 'product.name',
+            'supplier'              => 'product.supplier',
             'department'            => 'product.department',
             'category'              => 'product.category',
             'id'                    => 'inventory.id',

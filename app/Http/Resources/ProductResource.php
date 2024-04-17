@@ -34,6 +34,7 @@ class ProductResource extends JsonResource
             'created_at'                      => $this->created_at,
             'updated_at'                      => $this->updated_at,
             'quantity_available'              => $this->quantity_available,
+            'supplier'                        => $this->supplier,
             'inventory_source_location_id'    => $this->inventory_source_location_id,
             'inventory_source_product_id'     => $this->inventory_source_product_id,
             'inventory_source_shelf_location' => $this->inventory_source_shelf_location,
