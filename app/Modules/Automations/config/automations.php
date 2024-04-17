@@ -40,6 +40,10 @@ return [
             'description' => 'Shipping Method Name equals',
         ],
         [
+            'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodNameInCondition::class,
+            'description' => 'Shipping Method Name is in',
+        ],
+        [
             'class' => \App\Modules\Automations\src\Conditions\Order\ShippingAddressCountryCodeInCondition::class,
             'description' => 'Shipping Address Country Code is in',
         ],
