@@ -186,9 +186,9 @@
                     return false;
                 }
 
-                this.lastCommand = textEntered;
-
-                let command = this.lastCommand.split(':');
+                let command = textEntered
+                    .replace('https://myshiptown.com/?qr=', '')
+                    .split(':');
 
                 if(command.length < 2) {
                     return false;
