@@ -16,7 +16,7 @@ class InventorySourceItemsController extends ReportController
             ->addSelect('sku as product_sku');
 
         $report = ReportService::fromQuery($query)
-            ->addFilter(AllowedFilter::exact('sku'));
+            ->addFilter(AllowedFilter::exact('product_sku', 'sku'));
 
         return $report->response();
     }
