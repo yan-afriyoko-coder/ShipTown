@@ -232,7 +232,7 @@
                         defaultFilterValueMax = 0;
                         break;
                     case 'string':
-                        defaultOperator = 'contains';
+                        defaultOperator = 'equals';
                         defaultFilterValueMin = '';
                         defaultFilterValueMax = '';
                         break;
