@@ -12,7 +12,8 @@ class InventorySourceItemsController extends ReportController
 {
     public function index(Request $request): mixed
     {
-        $query = Magento2msiProduct::query();
+        $query = Magento2msiProduct::query()
+            ->addSelect('sku as product_sku');
 
         $report = ReportService::fromQuery($query)
             ->addFilter(AllowedFilter::exact('sku'));

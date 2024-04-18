@@ -2,6 +2,7 @@
 
 namespace App\Modules\Magento2MSI\src;
 
+use App\Events\EveryDayEvent;
 use App\Events\EveryFiveMinutesEvent;
 use App\Events\EveryHourEvent;
 use App\Events\Inventory\RecalculateInventoryRequestEvent;
@@ -40,6 +41,10 @@ class Magento2MsiServiceProvider extends BaseModuleServiceProvider
         ProductTagDetachedEvent::class => [
             Listeners\ProductTagDetachedEventListener::class,
         ],
+
+        EveryDayEvent::class => [
+            Listeners\EveryDayEventListener::class,
+        ],
     ];
 
     public static function enabling(): bool
@@ -77,6 +82,11 @@ class Magento2MsiServiceProvider extends BaseModuleServiceProvider
         ManualRequestJob::query()->upsert([
             'job_name' => 'Magento 2 MSI - EnsureInventoryGroupIdIsNotNullJob',
             'job_class' => Jobs\EnsureProductRecordsExistJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2 MSI - EnsureInventoryGroupIdIsNotNullJob',
+            'job_class' => Jobs\RecheckIfProductsExistInMagentoJob::class,
         ], ['job_class'], ['job_name']);
 
         return parent::enabling();
