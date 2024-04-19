@@ -13,9 +13,9 @@ class ActivityReport extends Report
     {
         parent::__construct($attributes);
 
-        $this->report_name = 'Activities Report';
+        $this->report_name = 'Activity Log';
 
-        $this->baseQuery = Activity::query()->orderBy('activity_log.id', 'desc');
+        $this->baseQuery = Activity::query();
 
         $this->fields = [
             'id'            => 'activity_log.id',

@@ -1,4 +1,4 @@
-<template>
+ <template>
     <div>
         <div class="row mb-1 pb-2 pt-1 sticky-top bg-light">
             <div class="col-8 col-lg-10">

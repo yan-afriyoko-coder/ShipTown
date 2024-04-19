@@ -79,7 +79,7 @@
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements-summary.index', ['sort' => '-created_at']) }}">{{ __('Inventory Movements Summary') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.restocking.index') }}">{{ __('Restocking') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.stocktake-suggestions.index') }}">{{ __('Stocktake Suggestions') }}</a>
-                            <a class="dropdown-item text-white lightHover" href="{{ route('activity-log') }}">{{ __('Activity Log') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.activity-log.index') }}">{{ __('Activity Log') }}</a>
 {{--                            <a class="dropdown-item text-white lightHover" href="{{ url('products-merge?sku1=45&sku2=44') }}">{{ __('products-merge') }}</a>--}}
 
                             @if(count($navigationMenuReports) > 0)

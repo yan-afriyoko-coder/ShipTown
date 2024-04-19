@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Browser\Routes\Admin;
+namespace Tests\Browser\Routes\Reports;
 
 use App\User;
 use Laravel\Dusk\Browser;
@@ -9,7 +9,7 @@ use Throwable;
 
 class ActivityLogPageTest extends DuskTestCase
 {
-    private string $uri = '/admin/activity-log';
+    private string $uri = '/reports/activity-log';
 
     /**
      * @throws Throwable
