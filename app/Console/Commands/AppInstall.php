@@ -8,7 +8,9 @@ use App\Models\MailTemplate;
 use App\Models\NavigationMenu;
 use App\Models\Warehouse;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
+use App\Modules\Automations\src\Conditions\Order\HasAnyShipmentCondition;
 use App\Modules\Automations\src\Conditions\Order\IsFullyPackedCondition;
+use App\Modules\Automations\src\Conditions\Order\IsFullyPaidCondition;
 use App\Modules\Automations\src\Conditions\Order\IsFullyPickedCondition;
 use App\Modules\Automations\src\Conditions\Order\LineCountEqualsCondition;
 use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
@@ -69,7 +71,12 @@ class AppInstall extends Command
         $this->createDefaultMailTemplateShipmentNotification();
         $this->createDefaultMailTemplateOversoldProduct();
 
-//        $this->createPaidToPickedAutomation();
+        $this->createNewToPaidAutomation();
+//        $this->createPaidToPickingAutomation();
+        $this->createPickingToPackingAutomation();
+        $this->createPackingToShippedAutomation();
+
+
         $this->createPaidToCompleteAutomation();
         $this->createPickedToCompleteAutomation();
         $this->createPaidToSingleLineOrdersAutomation();
@@ -149,6 +156,121 @@ class AppInstall extends Command
             'url' => '/autopilot/packlist?status=picked',
             'group' => 'packlist'
         ]);
+    }
+
+    private function createNewToPaidAutomation(): void
+    {
+        /** @var Automation $automation */
+        $automation = Automation::create([
+            'name' => '"new" to "paid"',
+            'priority' => 90,
+            'enabled' => false,
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => StatusCodeEqualsCondition::class,
+            'condition_value' => 'new'
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => IsFullyPaidCondition::class,
+            'condition_value' => 'True'
+        ]);
+
+        $automation->actions()->create([
+            'action_class' => SetStatusCodeAction::class,
+            'action_value' => 'paid'
+        ]);
+
+        $automation->update(['enabled' => true]);
+    }
+
+    private function createPaidToPickingAutomation(): void
+    {
+        /** @var Automation $automation */
+        $automation = Automation::create([
+            'name' => '"paid" to "picking"',
+            'priority' => 90,
+            'enabled' => false,
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => StatusCodeEqualsCondition::class,
+            'condition_value' => 'paid'
+        ]);
+
+        // todo - what other conditions should be here? If no others then this automation is redundant and we could just go new to picking
+
+        $automation->conditions()->create([
+            'condition_class' => IsFullyPickedCondition::class,
+            'condition_value' => 'False'
+        ]);
+
+        $automation->actions()->create([
+            'action_class' => SetStatusCodeAction::class,
+            'action_value' => 'picking'
+        ]);
+
+        $automation->update(['enabled' => true]);
+    }
+
+    private function createPickingToPackingAutomation(): void
+    {
+        /** @var Automation $automation */
+        $automation = Automation::create([
+            'name' => '"picking" to "packing"',
+            'priority' => 90,
+            'enabled' => false,
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => StatusCodeEqualsCondition::class,
+            'condition_value' => 'picking'
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => IsFullyPickedCondition::class,
+            'condition_value' => 'True'
+        ]);
+
+        $automation->actions()->create([
+            'action_class' => SetStatusCodeAction::class,
+            'action_value' => 'packing'
+        ]);
+
+        $automation->update(['enabled' => true]);
+    }
+
+    private function createPackingToShippedAutomation(): void
+    {
+        /** @var Automation $automation */
+        $automation = Automation::create([
+            'name' => '"packing" to "shipped"',
+            'priority' => 90,
+            'enabled' => false,
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => StatusCodeEqualsCondition::class,
+            'condition_value' => 'packing'
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => IsFullyPackedCondition::class,
+            'condition_value' => 'True'
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => HasAnyShipmentCondition::class,
+            'condition_value' => 'True'
+        ]);
+
+        $automation->actions()->create([
+            'action_class' => SetStatusCodeAction::class,
+            'action_value' => 'shipped'
+        ]);
+
+        $automation->update(['enabled' => true]);
     }
 
     private function createPaidToCompleteAutomation(): void
