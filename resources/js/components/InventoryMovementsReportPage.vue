@@ -1,16 +1,17 @@
 <template>
     <div>
-        <div class="row mb-1 pb-2 p-1 sticky-top bg-light" style="z-index: 10;">
-            <div class="flex-fill">
-                <barcode-input-field placeholder="Search products using name, sku, alias or command"
-                                     ref="barcode"
-                                     :url_param_name="'filter[search]'"
-                                     @barcodeScanned="findText"
-                />
-            </div>
-
-            <button type="button" v-b-modal="'quick-actions-modal'" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
-        </div>
+        <search-and-option-bar-observer/>
+        <search-and-option-bar :isStickable="true" style="z-index: 10;">
+            <barcode-input-field
+                placeholder="Search products using name, sku, alias or command"
+                ref="barcode"
+                :url_param_name="'filter[search]'"
+                @barcodeScanned="findText"
+            />
+            <template v-slot:buttons>
+                <button type="button" v-b-modal="'quick-actions-modal'" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+            </template>
+        </search-and-option-bar>
 
         <div class="row pl-2 p-0">
             <div class="col-12 col-md-6 col-lg-6 text-nowrap text-left align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">

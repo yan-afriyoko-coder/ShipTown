@@ -1,14 +1,23 @@
 <template>
     <div class="container dashboard-widgets">
+        <search-and-option-bar-observer/>
+        <search-and-option-bar :isStickable="true">
+            <barcode-input-field
+                placeholder='Search products using name, sku, alias or command'
+                :url_param_name="'filter[search]'"
+                @barcodeScanned="findText"
+            />
+            <template v-slot:buttons>
+                <button v-b-modal="'configuration-modal'"  id="config-button" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+            </template>
+        </search-and-option-bar>
 
         <div class="row mb-1 pb-2 p-1 sticky-top bg-light" style="z-index: 10;" v-if="currentUser['warehouse'] !== null">
             <div class="flex-fill">
-                <barcode-input-field placeholder='Search products using name, sku, alias or command'
-                                     :url_param_name="'filter[search]'"
-                                     @barcodeScanned="findText"></barcode-input-field>
+
             </div>
 
-            <button v-b-modal="'configuration-modal'"  id="config-button" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+
         </div>
 
         <div class="row pl-2 p-0">

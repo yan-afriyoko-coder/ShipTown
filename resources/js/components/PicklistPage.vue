@@ -1,26 +1,31 @@
  <template>
     <div>
-        <div class="row mb-1 pb-2 pt-1 sticky-top bg-light">
-            <div class="col-8 col-lg-10">
-                <div class="pl-1 pr-1">
-                    <barcode-input-field placeholder="Enter sku or alias to pick products"
-                                         ref="barcode"
-                                         :url_param_name="'search'"
-                                         @barcodeScanned="pickByBarcode"
+        <search-and-option-bar-observer/>
+        <search-and-option-bar :isStickable="true">
+            <div class="d-flex flex-nowrap">
+                <div class="flex-fill">
+                    <barcode-input-field
+                        placeholder="Enter sku or alias to pick products"
+                        ref="barcode"
+                        :url_param_name="'search'"
+                        @barcodeScanned="pickByBarcode"
+                    />
+                </div>
+                <div>
+                    <input
+                        ref="current_location"
+                        class="form-control w-100"
+                        placeholder="Current shelf"
+                        v-model="current_shelf_location"
+                        @keyup.enter="reloadPicks()"
                     />
                 </div>
             </div>
-            <div class="col pr-2">
-                <div class="row">
-                    <div class="col">
-                        <input ref="current_location" class="form-control w-100" placeholder="Current shelf"
-                               v-model="current_shelf_location"
-                               @keyup.enter="reloadPicks()"/>
-                    </div>
-                    <button v-b-modal="'quick-actions-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
-                </div>
-            </div>
-        </div>
+            <template v-slot:buttons>
+                <button v-b-modal="'quick-actions-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+            </template>
+        </search-and-option-bar>
+
 
         <div class="row pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
             <div class="col-6 text-left text-nowrap">

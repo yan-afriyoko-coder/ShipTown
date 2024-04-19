@@ -1,5 +1,5 @@
 {
-    "version": "1.0.257",
+    "version": "1.0.260",
     "private": true,
     "scripts": {
         "dev": "npm run development",
@@ -27,9 +27,9 @@
     },
     "dependencies": {
         "-": "0.0.1",
-        "@fortawesome/fontawesome-svg-core": "^1.2.36",
+        "@fortawesome/fontawesome-svg-core": "^6.5.2",
         "@fortawesome/free-brands-svg-icons": "^5.15.4",
-        "@fortawesome/free-solid-svg-icons": "^5.15.4",
+        "@fortawesome/free-solid-svg-icons": "^6.5.2",
         "@fortawesome/vue-fontawesome": "^2.0.9",
         "@handsontable/vue": "^4.1.1",
         "bootstrap-vue": "^2.22.0",

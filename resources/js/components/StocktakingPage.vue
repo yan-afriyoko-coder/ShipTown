@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class="row mb-1 pb-2 p-1 sticky-top bg-light">
-            <div class="flex-fill">
-                <stocktake-input @stocktakeSubmitted="reloadData"></stocktake-input>
-            </div>
-
-            <button type="button" v-b-modal="'quick-actions-modal'" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
-        </div>
+        <search-and-option-bar-observer/>
+        <search-and-option-bar :isStickable="true">
+            <stocktake-input @stocktakeSubmitted="reloadData"></stocktake-input>
+            <template v-slot:buttons>
+                <button type="button" v-b-modal="'quick-actions-modal'" class="btn btn-primary ml-1 md:ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+            </template>
+        </search-and-option-bar>
 
         <div class="row pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
             <div class="col-6 text-left text-nowrap">

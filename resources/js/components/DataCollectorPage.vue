@@ -18,18 +18,28 @@
             </template>
         </swiping-card>
 
-        <div class="row pb-2 p-1 mt-0 sticky-top bg-light flex-nowrap" style="z-index: 10;">
-            <div class="flex-fill">
-                <barcode-input-field :input_id="'barcode_input'" @barcodeScanned="onBarcodeScanned" placeholder="Scan sku or alias" class="text-center font-weight-bold"></barcode-input-field>
+        <search-and-option-bar-observer/>
+        <search-and-option-bar :isStickable="true">
+            <div class="d-flex flex-nowrap">
+                <div class="flex-fill">
+                    <barcode-input-field :input_id="'barcode_input'" @barcodeScanned="onBarcodeScanned" placeholder="Scan sku or alias" class="text-center font-weight-bold"></barcode-input-field>
+                </div>
+                <div>
+                    <input
+                        ref="current_location"
+                        placeholder="Shelf"
+                        style="width: 60px"
+                        class="form-control text-center ml-2 font-weight-bold"
+                        v-model="minShelfLocation"
+                        onClick="this.select();"
+                        @keyup.enter="setMinShelfLocation"
+                    />
+                </div>
             </div>
-
-            <input ref="current_location" placeholder="Shelf" style="width: 60px" class="form-control text-center ml-2 font-weight-bold"
-                   v-model="minShelfLocation"
-                   onClick="this.select();"
-                   @keyup.enter="setMinShelfLocation"/>
-
-            <button id="showConfigurationButton" v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
-        </div>
+            <template v-slot:buttons>
+                <button id="showConfigurationButton" v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+            </template>
+        </search-and-option-bar>
 
         <div v-show="manuallyExpandComments" class="row mb-2 mt-1 my-1">
             <input id="comment-input" ref="newCommentInput" v-model="input_comment" class="form-control" placeholder="Add comment here" @keypress.enter="addComment"/>
@@ -482,6 +492,7 @@
             },
 
             setMinShelfLocation() {
+                // todo - possible bug - the url only sets and does not update if you want to change. Not sure if intentional behaviour
                 this.setUrlParameter( "filter[shelf_location_greater_than]", this.minShelfLocation);
                 this.loadDataCollectorRecords();
                 this.setFocusElementById('barcode_input');

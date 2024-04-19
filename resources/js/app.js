@@ -17,6 +17,7 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 import { BootstrapVue } from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
+    faAnglesUp,
     faCog,
     faQuestionCircle,
     faUsers,
@@ -48,11 +49,12 @@ import {
     faWarehouse,
     faArchive,
     faCopy,
-    faCartPlus, faAtom, faChartBar, faChartLine, faBox, faBars, faArrowRight,
+    faCartPlus, faAtom, faChartBar, faChartLine, faChartColumn, faBox, faBars, faArrowRight,
     faFileDownload, faCaretDown, faCaretUp
 } from '@fortawesome/free-solid-svg-icons';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
 import VueTippy, { TippyComponent } from "vue-tippy";
 import Snotify from 'vue-snotify';
 import VueCountdownTimer from 'vuejs-countdown-timer';
@@ -79,6 +81,7 @@ library.add(faDesktop);
 library.add(faClipboardList);
 library.add(faChartBar);
 library.add(faChartLine);
+library.add(faChartColumn);
 library.add(faPuzzlePiece);
 library.add(faBoxOpen);
 library.add(faEdit);
@@ -98,6 +101,7 @@ library.add(faArrowRight);
 library.add(faCaretDown);
 library.add(faCaretUp);
 library.add(faFileDownload);
+library.add(faAnglesUp);
 
 Vue.config.productionTip = false;
 
@@ -205,7 +209,8 @@ Vue.component('webhooks-subscription-page', require('../../app/Modules/Webhooks/
 Vue.component('report', require('./components/Reports/Report.vue').default);
 Vue.component('card', require('./components/UI/Card.vue').default);
 Vue.component('container', require('./components/UI/Container.vue').default);
-Vue.component('top-nav-bar', require('./components/UI/TopNavBar.vue').default);
+Vue.component('search-and-option-bar', require('./components/UI/SearchAndOptionBar.vue').default);
+Vue.component('search-and-option-bar-observer', require('./components/UI/SearchAndOptionBarObserver.vue').default);
 
 Vue.prototype.$eventBus = new Vue();
 

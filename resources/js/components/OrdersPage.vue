@@ -1,14 +1,12 @@
 <template>
     <div>
-        <template v-if="getUrlParameter('hide_nav_bar', false) === false">
-            <div class="row mb-1 p-1 sticky-top bg-light">
-                <div class="flex-fill">
-                    <barcode-input-field :input_id="'barcode-input'"  :url_param_name="'search'" @barcodeScanned="findText" placeholder="Search orders using number, sku, alias or command" ref="barcode"/>
-                </div>
-
-                <button v-b-modal="'quick-actions-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
-            </div>
-        </template>
+        <search-and-option-bar-observer/>
+        <search-and-option-bar :isStickable="true">
+            <barcode-input-field :input_id="'barcode-input'"  :url_param_name="'search'" @barcodeScanned="findText" placeholder="Search orders using number, sku, alias or command" ref="barcode"/>
+            <template v-slot:buttons>
+                <button v-b-modal="'quick-actions-modal'" type="button" class="btn btn-primary ml-1 md:ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+            </template>
+        </search-and-option-bar>
 
         <div class="row pl-2 p-0">
             <div class="col-12 text-left align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
@@ -37,7 +35,6 @@
                 <div ref="loadingContainerOverride" style="height: 32px"></div>
             </div>
         </div>
-
         <b-modal id="quick-actions-modal" no-fade hide-header @hidden="setFocusElementById('barcode-input')">
             <stocktake-input v-bind:auto-focus-after="100" ></stocktake-input>
             <template #modal-footer>
@@ -49,7 +46,6 @@
                 </b-button>
             </template>
         </b-modal>
-
     </div>
 </template>
 

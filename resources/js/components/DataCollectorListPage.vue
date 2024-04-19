@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class="row mb-1 pb-2 p-1 sticky-top bg-light">
-            <div class="flex-fill">
-                <barcode-input-field placeholder="Search" :url_param_name="'filter[name_contains]'" @barcodeScanned="loadData(1)"></barcode-input-field>
-            </div>
-
-            <button id="new_data_collection" dusk="new_data_collection" v-b-modal="'new-collection-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="plus" class="fa-lg"></font-awesome-icon></button>
-        </div>
+        <search-and-option-bar-observer/>
+        <search-and-option-bar :isStickable="true">
+            <barcode-input-field placeholder="Search" :url_param_name="'filter[name_contains]'" @barcodeScanned="loadData(1)"></barcode-input-field>
+            <template v-slot:buttons>
+                <button id="new_data_collection" dusk="new_data_collection" v-b-modal="'new-collection-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="plus" class="fa-lg"></font-awesome-icon></button>
+            </template>
+        </search-and-option-bar>
 
         <div class="row pl-2 p-0 text-uppercase small text-secondary">
             <div class="col-8 text-nowrap text-left align-bottom pb-0 m-0 font-weight-bold ">

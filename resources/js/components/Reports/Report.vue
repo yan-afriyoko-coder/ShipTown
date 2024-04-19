@@ -1,20 +1,13 @@
 <template>
 
 <container>
-    <template v-if="getUrlParameter('hide_nav_bar', false) === false">
-        <div class="row mb-2 pl-1 pr-1">
-            <div class="flex-fill">
-                <barcode-input-field @barcodeScanned="searchForProductSku"
-                                     url_param_name="filter[product_sku]"
-                                     ref="barcode"
-                                     placeholder="Search"
-
-                />
-            </div>
-
+    <search-and-option-bar-observer/>
+    <search-and-option-bar :isStickable="true">
+        <barcode-input-field @barcodeScanned="searchForProductSku" url_param_name="filter[product_sku]" ref="barcode" placeholder="Search"/>
+        <template v-slot:buttons>
             <button type="button" v-b-modal="'quick-actions-modal'" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
-        </div>
-    </template>
+        </template>
+    </search-and-option-bar>
 
     <report-head :report-name="breadcrumbs"></report-head>
 

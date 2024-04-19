@@ -1,19 +1,19 @@
 <template>
     <div>
-        <template v-if="getUrlParameter('hide_nav_bar', false) === false">
-            <div class="row mb-1 pb-2 p-1 sticky-top bg-light">
-                <div class="flex-fill">
-                    <barcode-input-field :input_id="'barcode_input'" placeholder="Search products using name, sku, alias or command"
-                                         ref="barcode"
-                                         :url_param_name="'search'"
-                                         @refreshRequest="reloadProductList"
-                                         @barcodeScanned="findText"
-                    />
-                </div>
-
-                <button type="button" v-b-modal="'quick-actions-modal'" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
-            </div>
-        </template>
+        <search-and-option-bar-observer/>
+        <search-and-option-bar :isStickable="true">
+            <barcode-input-field
+                :input_id="'barcode_input'"
+                placeholder="Search products using name, sku, alias or command"
+                ref="barcode"
+                :url_param_name="'search'"
+                @refreshRequest="reloadProductList"
+                @barcodeScanned="findText"
+            />
+            <template v-slot:buttons>
+                <button v-b-modal="'quick-actions-modal'" type="button" class="btn btn-primary ml-1 md:ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+            </template>
+        </search-and-option-bar>
 
         <div class="row pl-2 p-0">
             <div class="col-12 text-left align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
