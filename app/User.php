@@ -36,7 +36,8 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  * @property int         $location_id
  * @property Carbon|null $email_verified_at
  * @property string      $password
- * @property int|null       $warehouse_id
+ * @property int|null    $warehouse_id
+ * @property string|null $warehouse_code
  * @property Warehouse|null $warehouse
  * @property string|null $remember_token
  * @property Carbon|null $deleted_at
@@ -98,6 +99,7 @@ class User extends Authenticatable
         'email',
         'password',
         'warehouse_id',
+        'warehouse_code',
         'default_dashboard_uri',
         'printer_id',
         'address_label_template',
