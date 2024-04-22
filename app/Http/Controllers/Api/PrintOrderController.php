@@ -26,8 +26,7 @@ class PrintOrderController extends Controller
         $printJob->printer_id = $request->user()->printer_id;
         $printJob->title = $template.'_'.$order_number.'_by_'.$request->user()->id;
         $printJob->pdf = base64_encode($pdfString);
-
-        PrintNode::print($printJob);
+        $printJob->save();
 
         return PrintJobResource::make($printJob);
     }

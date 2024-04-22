@@ -68,7 +68,8 @@ class Client
             'body' => $xml,
         ];
 
-        Log::debug('API REQUEST', [
+        Log::debug('API POST REQUEST', [
+            'url' => self::COMMON_API_PREADVICE,
             'service' => 'DPD-IRL',
             'request' => str_replace("\n", '', $xml),
         ]);

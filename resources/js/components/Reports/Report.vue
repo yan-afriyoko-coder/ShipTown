@@ -104,7 +104,7 @@
     <b-modal id="quick-actions-modal" no-fade hide-header @hidden="setFocusElementById('barcode-input')">
         <stocktake-input v-bind:auto-focus-after="100" ></stocktake-input>
         <hr>
-        <a class="btn btn-primary btn-block" :href="downloadUrl">{{ downloadButtonText }}</a>
+        <button class="btn btn-primary btn-block" @click="downloadFile">{{ downloadButtonText }}</button>
         <template #modal-footer>
             <b-button variant="secondary" class="float-right" @click="$bvModal.hide('quick-actions-modal');">
                 Cancel
@@ -140,18 +140,16 @@
         components: {IconArrowRight, IconArrowLeft, IconSortAsc, IconSortDesc, IconFilter, ModalDateBetweenSelector, SearchFilter, ReportHead},
 
         props: {
+            metaString: String,
             recordString: String,
-            fieldsString: String,
-            reportName: String,
-            downloadUrl: String,
             downloadButtonText: String,
-            paginationString: String,
         },
 
         data() {
             return {
+                meta: JSON.parse(this.metaString),
                 records: JSON.parse(this.recordString),
-                fields: JSON.parse(this.fieldsString),
+                fields: JSON.parse(this.metaString)['field_links'],
                 filters: [],
                 filterAdding: null,
                 showFilters: true,
@@ -180,6 +178,16 @@
         },
 
         methods: {
+            downloadFile() {
+                let filename  = this.meta['report_name']+'.csv';
+                let url       = this.$router.currentRoute;
+                let urlParams = new URLSearchParams(window.location.search);
+
+                urlParams.set('filename', filename);
+
+                helpers.downloadFile(url.path + '?' + urlParams.toString(), filename);
+            },
+
             searchForProductSku(barcode) {
                 if (barcode === '') {
                     this.removeUrlParameterAndGo('filter[product_sku]');
@@ -391,6 +399,9 @@
         },
 
         computed: {
+            helpers() {
+                return helpers
+            },
             visibleFields() {
                 return Object.keys(this.records[0])
                     .map(this.findField);

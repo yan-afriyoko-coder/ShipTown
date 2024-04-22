@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="bg-warning">
+        <div>
             <input :id="getInputId"
                    :placeholder="placeholder"
                    type=text
@@ -40,8 +40,17 @@
                   <span class="text-danger font-weight-bold">Close</span><span>- scan twice to close</span>
               </div>
           </div>
-      </b-modal>
 
+          <template #modal-footer>
+              <b-button class="mr-auto" variant="primary" :href="`/tools/printer?search=${command['value']}`">Reprint</b-button>
+              <b-button variant="secondary" class="float-right" @click="$bvModal.hide(getModalID)">
+                  Cancel
+              </b-button>
+              <b-button variant="primary" class="float-right" @click="$bvModal.hide(getModalID)">
+                  OK
+              </b-button>
+          </template>
+      </b-modal>
     </div>
 </template>
 

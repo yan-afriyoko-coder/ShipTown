@@ -404,6 +404,18 @@ export default {
             apiPostActiveOrdersInventoryReservationsConfig: function (id, params) {
                 return axios.put('/api/modules/active-orders-inventory-reservations/configuration/' + id, params)
             },
+
+            apiPostPdfPreview: function (data) {
+                return axios.post('/api/pdf/preview', data, { responseType: 'arraybuffer' });
+            },
+
+            apiPostPdfPrint: function (data) {
+                return axios.post('/api/pdf/print', data);
+            },
+
+            apiPostPdfDownload: function (data) {
+                return axios.post('/api/pdf/download', data, { responseType: 'blob' });
+            },
         }
     }
 </script>

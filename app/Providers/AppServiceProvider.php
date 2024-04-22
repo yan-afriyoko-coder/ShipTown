@@ -18,6 +18,7 @@ use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Models\ShippingLabel;
 use App\Models\Warehouse;
+use App\Modules\PrintNode\src\Models\PrintJob;
 use App\Observers\DataCollectionObserver;
 use App\Observers\DataCollectionRecordObserver;
 use App\Observers\InventoryMovementObserver;
@@ -30,6 +31,7 @@ use App\Observers\OrderProductShipmentObserver;
 use App\Observers\OrderShipmentObserver;
 use App\Observers\OrderStatusObserver;
 use App\Observers\PickObserver;
+use App\Observers\PrintJobObserver;
 use App\Observers\ProductObserver;
 use App\Observers\ProductPriceObserver;
 use App\Observers\ShippingLabelObserver;
@@ -76,6 +78,7 @@ class AppServiceProvider extends ServiceProvider
         DataCollection::observe(DataCollectionObserver::class);
         DataCollectionRecord::observe(DataCollectionRecordObserver::class);
         Pick::observe(PickObserver::class);
+        PrintJob::observe(PrintJobObserver::class);
     }
 
     private function registerEnabledModules(): void

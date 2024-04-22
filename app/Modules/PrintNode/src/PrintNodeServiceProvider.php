@@ -3,6 +3,7 @@
 
 namespace App\Modules\PrintNode\src;
 
+use App\Events\PrintJob\PrintJobCreatedEvent;
 use App\Events\ShippingLabel\ShippingLabelCreatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
@@ -37,6 +38,10 @@ class PrintNodeServiceProvider extends BaseModuleServiceProvider
     protected $listen = [
         ShippingLabelCreatedEvent::class => [
             Listeners\PrintShippingLabelListener::class,
+        ],
+
+        PrintJobCreatedEvent::class => [
+            Listeners\PrintJobListener::class,
         ],
     ];
 }

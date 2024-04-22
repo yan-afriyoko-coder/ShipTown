@@ -47,6 +47,7 @@ Route::get('data-collector/{data_collection_id}', [DataCollectorController::clas
 Route::get('shipping-labels/{shipping_label}', [ShippingLabelController::class, 'show'])->name('shipping-labels');
 Route::view('autopilot/packlist', 'autopilot/packlist')->name('autopilot.packlist');
 Route::resource('order/packsheet', Order\PacksheetController::class)->only(['show']);
+Route::view('tools/printer', 'tools/printer')->name('tools.printer');
 
 Route::as('reports.')->group(function () {
     Route::resource('reports/activity-log', Reports\ActivityLogController::class)->only('index');

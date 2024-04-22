@@ -22,6 +22,7 @@ class BasicModuleTest extends TestCase
             'token'     => env('TEST_DPD_TOKEN'),
             'user'      => env('TEST_DPD_USER'),
             'password'  => env('TEST_DPD_PASSWORD'),
+            'live'      => true,
         ]);
 
         DpdIrelandServiceProvider::enableModule();

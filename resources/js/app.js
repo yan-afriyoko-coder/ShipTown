@@ -49,12 +49,20 @@ import {
     faWarehouse,
     faArchive,
     faCopy,
-    faCartPlus, faAtom, faChartBar, faChartLine, faChartColumn, faBox, faBars, faArrowRight,
-    faFileDownload, faCaretDown, faCaretUp
+    faCartPlus,
+    faAtom,
+    faChartBar,
+    faChartColumn,
+    faChartLine,
+    faBox,
+    faBars,
+    faArrowRight,
+    faFileDownload,
+    faCaretDown,
+    faCaretUp
 } from '@fortawesome/free-solid-svg-icons';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-
 import VueTippy, { TippyComponent } from "vue-tippy";
 import Snotify from 'vue-snotify';
 import VueCountdownTimer from 'vuejs-countdown-timer';
@@ -158,6 +166,8 @@ Vue.component('admin-modules-slack-config-page', require('./components/admin/mod
 Vue.component('api', require('./mixins/api.vue').default);
 Vue.component('api2cart-configuration', require('./components/Settings/Api2cartConnections.vue').default);
 Vue.component('apt-configuration-modal', require('./components/Widgets/APT/ConfigurationModal.vue').default);
+Vue.component('array-dropdown-select', require('./components/UI/ArrayDropdownSelect.vue').default);
+
 Vue.component('auto-pilot-tuning-section', require('./components/Settings/AutoPilotTuningSection.vue').default);
 Vue.component('automation-table', require('./components/Settings/AutomationTable.vue').default);
 Vue.component('autopilot-packlist-page', require('./components/AutopilotPacklistPage.vue').default);
@@ -169,6 +179,7 @@ Vue.component('data-collector-quantity-request-modal', require('./components/Dat
 Vue.component('date-selector-widget', require('./components/Widgets/DateSelectorWidget.vue').default);
 Vue.component('dpd-configuration', require('./components/Settings/DpdConfiguration.vue').default);
 Vue.component('dpd-uk-configuration', require('./components/Settings/DpdUkConfiguration.vue').default);
+Vue.component('header-upper', require('./components/UI/HeaderUpper.vue').default);
 Vue.component('heartbeats', require('./components/Heartbeats.vue').default);
 Vue.component('inventory-movements-report-page', require('./components/InventoryMovementsReportPage.vue').default);
 Vue.component('active-orders-inventory-reservations-page', require('./components/Settings/Modules/ActiveOrdersInventoryReservationsConfigurationPage.vue').default);
@@ -198,6 +209,7 @@ Vue.component('quick-connect-magento-page', require('./components/QuickConnectMa
 Vue.component('restocking-page', require('./components/RestockingPage.vue').default);
 Vue.component('restocking-record-card', require('./components/RestockingPage/RestockingRecordCard.vue').default);
 Vue.component('rmsapi-configuration', require('./components/Settings/RmsapiiConfiguration.vue').default);
+Vue.component('shelf-label-printing-page', require('./components/Tools/ShelfLabelPrintingPage.vue').default);
 Vue.component('stocktake-input', require('./components/SharedComponents/StocktakeInput.vue').default);
 Vue.component('stocktaking-page', require('./components/StocktakingPage.vue').default);
 Vue.component('swiping-card', require('./components/SharedComponents/SwipingCard.vue').default);
@@ -211,8 +223,14 @@ Vue.component('card', require('./components/UI/Card.vue').default);
 Vue.component('container', require('./components/UI/Container.vue').default);
 Vue.component('search-and-option-bar', require('./components/UI/SearchAndOptionBar.vue').default);
 Vue.component('search-and-option-bar-observer', require('./components/UI/SearchAndOptionBarObserver.vue').default);
+Vue.component('top-nav-button', require('./components/UI/TopNavButton.vue').default);
 
 Vue.prototype.$eventBus = new Vue();
+
+// global helpers that we can use directly in our templates
+Vue.prototype.$selectAllInputText = function(event) {
+    event.target.select();
+}
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

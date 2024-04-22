@@ -19,7 +19,7 @@ class ShippingMethodNameInCondition extends BaseOrderConditionAbstract
     {
         static::invalidateQueryIf($query, trim($expected_value) === '');
 
-        $names = collect(explode(',', $expected_value) )
+        $names = collect(explode(',', $expected_value))
             ->filter()
             ->transform(function ($record) {
                 return trim($record);
