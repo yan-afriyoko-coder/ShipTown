@@ -15,7 +15,7 @@ class CsvStreamedResponse
 
             $hasExportedHeaders = false;
 
-            $query->chunk(10000, function ($records) use ($handle, $hasExportedHeaders) {
+            $query->chunk(1000, function ($records) use ($handle, $hasExportedHeaders) {
                 if (! $hasExportedHeaders) {
                     fputcsv($handle, array_keys($records->first()->toArray()));
                     $hasExportedHeaders = true;
