@@ -10,12 +10,12 @@ class CsvStreamedResponse
 {
     public static function fromQueryBuilder(QueryBuilder $query, string $filename): StreamedResponse|Writer
     {
-        return new StreamedResponse(function () use ($query) {
+        $hasExportedHeaders = false;
+        return new StreamedResponse(function () use ($query, &$hasExportedHeaders) {
             $handle = fopen('php://output', 'w');
 
-            $hasExportedHeaders = false;
 
-            $query->chunk(1000, function ($records) use ($handle, $hasExportedHeaders) {
+            $query->chunk(1000, function ($records) use ($handle, &$hasExportedHeaders) {
                 if (! $hasExportedHeaders) {
                     fputcsv($handle, array_keys($records->first()->toArray()));
                     $hasExportedHeaders = true;
