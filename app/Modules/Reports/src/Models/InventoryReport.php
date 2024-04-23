@@ -41,6 +41,7 @@ class InventoryReport extends Report
             'last_received_at',
             'last_sold_at',
             'last_counted_at',
+            'reservations'
         ]);
 
         $this->fields = [
@@ -80,6 +81,7 @@ class InventoryReport extends Report
             'sale_price'            => 'products_prices.sale_price',
             'sale_start_date'       => 'products_prices.sale_price_start_date',
             'sale_end_date'         => 'products_prices.sale_price_end_date',
+            'reservations'          => DB::raw('SELECT GROUP_CONCAT(concat(quantity_reserved, \' - \', comment) SEPARATOR \', \') FROM `inventory_reservations` WHERE inventory_reservations.inventory_id = inventory.id'),
             'retail_value'          => DB::raw('ROUND(product_prices.price * inventory.quantity, 2)'),
             'cost_value'            => DB::raw('ROUND(product_prices.cost * inventory.quantity, 2)'),
         ];
@@ -98,6 +100,7 @@ class InventoryReport extends Report
             'warehouse_code'        => 'string',
             'shelf_location'        => 'string',
             'recount_required'      => 'string',
+            'reservations'          => 'string',
             'quantity_available'    => 'float',
             'quantity'              => 'float',
             'quantity_reserved'     => 'float',
