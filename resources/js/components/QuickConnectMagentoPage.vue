@@ -62,7 +62,7 @@
 
                     </form>
                 </ValidationObserver>
-                <b-button @click="submit" variant="primary" class="btn btn-primary btn-block">Save</b-button>
+                <b-button @click="submit" variant="primary" class="btn btn-primary btn-block">Connect</b-button>
 <!--                        <button class="btn btn-primary btn-block" type="submit">Save</button>-->
             </div>
         </div>
