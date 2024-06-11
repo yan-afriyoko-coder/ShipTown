@@ -158,34 +158,6 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 /**
  * Application mixins
  */
-
-Vue.component('qrcode-scanner', {
-    props: {
-        qrbox: {
-            type: Number,
-            default: 250
-        },
-        fps: {
-            type: Number,
-            default: 10
-        },
-    },
-    template: `<div id="qr-code-full-region"></div>`,
-    mounted () {
-        const config = {
-            fps: this.fps,
-            qrbox: this.qrbox,
-        };
-        const html5QrcodeScanner = new Html5QrcodeScanner('qr-code-full-region', config);
-        html5QrcodeScanner.render(this.onScanSuccess);
-    },
-    methods: {
-        onScanSuccess (decodedText, decodedResult) {
-            this.$emit('result', decodedText, decodedResult);
-        }
-    }
-});
-
 Vue.component('product-details-modal', require('./modals/ProductDetailsModal.vue').default);
 Vue.component('recent-inventory-movements-modal', require('./modals/RecentInventoryMovementsModal.vue').default);
 Vue.component('new-product-modal', require('./modals/NewProductModal.vue').default);
