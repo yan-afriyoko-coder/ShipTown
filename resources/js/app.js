@@ -161,6 +161,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('product-details-modal', require('./modals/ProductDetailsModal.vue').default);
 Vue.component('recent-inventory-movements-modal', require('./modals/RecentInventoryMovementsModal.vue').default);
 Vue.component('new-product-modal', require('./modals/NewProductModal.vue').default);
+Vue.component('find-product-modal', require('./modals/FindProductModal.vue').default);
 
 Vue.component('stocktake-suggestions-page', require('./components/Settings/Modules/StocktakeSuggestionsPage.vue').default);
 Vue.component('activity-log-page', require('./components/ActivityLogPage.vue').default);
