@@ -1,6 +1,6 @@
  <template>
     <div>
-        <div v-if="getUrlParameter('step', '')=== 'select'">
+        <div v-if="getUrlParameter('step', '') === 'select'">
             <div v-for="bookmark in bookmarks" class="col-12 mt-1">
                 <a dusk="startAutopilotButton" type="button" class="btn btn-primary col" :href="bookmark['url']">
                     {{ bookmark['name'] }}
@@ -111,7 +111,6 @@ export default {
 
         this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
 
-        this.reloadPicks();
 
         this.apiGetNavigationMenu({
             'filter[group]': 'picklist'
@@ -121,7 +120,7 @@ export default {
             })
 
         if (this.getUrlParameter('step', '') === '') {
-            this.loadNextOrder();
+            this.reloadPicks();
         }
     },
 
