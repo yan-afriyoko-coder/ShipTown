@@ -5,6 +5,11 @@ use Illuminate\Support\Facades\Route;
 
 return [
     /*
+     *  Application version
+     */
+    'license_valid_until' => env('APP_LICENSE_VALID_UNTIL', '2025-06-01 00:00:00'),
+
+    /*
      *  Enables demo mode
      *  This will display a demo message on login page containing the demo credentials
      */

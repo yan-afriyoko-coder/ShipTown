@@ -42,6 +42,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
 
         EveryDayEvent::class => [
             Listeners\DailyEvent\RunDailyMaintenanceJobsListener::class,
+            Listeners\DailyEvent\CheckLicenseExpirationListener::class,
         ],
     ];
 
