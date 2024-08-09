@@ -42,11 +42,13 @@ Route::name('api.')->group(function () {
     Route::apiResource('stocktake-suggestions-details', Api\StocktakeSuggestionDetailController::class)->only(['index']);
     Route::apiResource('shipping-services', Api\ShippingServiceController::class)->only(['index']);
     Route::apiResource('shipping-labels', Api\ShippingLabelController::class)->only(['store']);
-
+    Route::apiResource('print-jobs', Api\PrintJobController::class)->only(['store']);
     Route::apiResource('reports/inventory', Api\Reports\InventoryController::class)->only(['index']);
     Route::apiResource('reports/inventory-transfers', Api\Reports\InventoryTransfersController::class)->only(['index']);
     Route::apiResource('reports/picks', Api\Reports\PicksController::class)->only(['index']);
     Route::apiResource('reports/stocktake-suggestions', Api\Reports\StockTakeSuggestionsController::class)->only(['index']);
+    Route::apiResource('quantity-discounts', Api\QuantityDiscountsController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::apiResource('quantity-discount-product', Api\QuantityDiscountProductsController::class)->only(['index', 'store', 'destroy']);
 });
 
 Route::prefix('modules')->name('api.modules.')->group(function () {

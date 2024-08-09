@@ -2,6 +2,10 @@
 
 namespace App\Modules\DataCollector\src;
 
+use App\Events\DataCollectionRecord\DataCollectionRecordCreatedEvent;
+use App\Events\DataCollectionRecord\DataCollectionRecordDeletedEvent;
+use App\Events\DataCollectionRecord\DataCollectionRecordUpdatedEvent;
+use App\Events\EveryMinuteEvent;
 use App\Events\EveryTenMinutesEvent;
 use App\Modules\BaseModuleServiceProvider;
 use App\Modules\DataCollector\src\Jobs\DispatchCollectionsTasksJob;
@@ -14,12 +18,12 @@ class DataCollectorServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Data Collector Services';
+    public static string $module_name = 'Data Collector - Transform Actions';
 
     /**
      * @var string
      */
-    public static string $module_description = 'Provides bulk actions for data collections';
+    public static string $module_description = 'Provides bulk actions for data collections such a Transfer In, Transfer Out, Transfer To and Import As Stocktake';
 
     /**
      * @var string
@@ -37,6 +41,22 @@ class DataCollectorServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
+        DataCollectionRecordCreatedEvent::class => [
+            Listeners\DataCollectionRecordCreatedEventListener::class,
+        ],
+
+        DataCollectionRecordUpdatedEvent::class => [
+            Listeners\DataCollectionRecordUpdatedEventListener::class,
+        ],
+
+        DataCollectionRecordDeletedEvent::class => [
+            Listeners\DataCollectionRecordDeletedEventListener::class,
+        ],
+
+        EveryMinuteEvent::class => [
+            Listeners\EveryMinuteEventListener::class,
+        ],
+
         EveryTenMinutesEvent::class => [
             Listeners\EveryTenMinutesEventListener::class,
         ],

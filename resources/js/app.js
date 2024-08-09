@@ -14,8 +14,8 @@ window.Vue = require('vue').default;
 import Vue from 'vue'
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
-import { BootstrapVue } from 'bootstrap-vue';
-import { library } from '@fortawesome/fontawesome-svg-core';
+import {BootstrapVue} from 'bootstrap-vue';
+import {library} from '@fortawesome/fontawesome-svg-core';
 import {
     faAnglesUp,
     faCog,
@@ -58,11 +58,11 @@ import {
     faArrowRight,
     faFileDownload,
     faCaretDown,
-    faCaretUp, faMagnifyingGlass, faEllipsisVertical
+    faCaretUp, faMagnifyingGlass, faEllipsisVertical, faCreditCard
 } from '@fortawesome/free-solid-svg-icons';
 
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import VueTippy, { TippyComponent } from "vue-tippy";
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+import VueTippy, {TippyComponent} from "vue-tippy";
 import Snotify from 'vue-snotify';
 import VueCountdownTimer from 'vuejs-countdown-timer';
 
@@ -111,6 +111,7 @@ library.add(faFileDownload);
 library.add(faAnglesUp);
 library.add(faMagnifyingGlass);
 library.add(faEllipsisVertical);
+library.add(faCreditCard);
 
 Vue.config.productionTip = false;
 
@@ -140,6 +141,25 @@ import Modals from './plugins/Modals.js'
 // use it
 Vue.use(Modals);
 
+// Vee-validate configuration
+import {configure, extend} from 'vee-validate';
+import {required} from 'vee-validate/dist/rules';
+
+const config = {
+    classes: {
+        valid: 'is-valid',
+        invalid: 'is-invalid',
+    },
+    mode: 'eager',
+};
+
+configure(config);
+
+extend('required', {
+    ...required,
+    message: 'This field is required',
+});
+
 /**
  * The following block of code may be used to automatically register your
  * Vue mixins. It will recursively scan this directory for the Vue
@@ -159,10 +179,12 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 /**
  * Application mixins
  */
+Vue.component('tools-point-of-sale-page', require('./components/Tools/PointOfSalePage.vue').default);
 Vue.component('product-details-modal', require('./modals/ProductDetailsModal.vue').default);
 Vue.component('recent-inventory-movements-modal', require('./modals/RecentInventoryMovementsModal.vue').default);
 Vue.component('new-product-modal', require('./modals/NewProductModal.vue').default);
 Vue.component('find-product-modal', require('./modals/FindProductModal.vue').default);
+Vue.component('new-quantity-discount-modal', require('./modals/NewQuantityDiscountModal.vue').default);
 
 Vue.component('stocktake-suggestions-page', require('./components/Settings/Modules/StocktakeSuggestionsPage.vue').default);
 Vue.component('activity-log-page', require('./components/ActivityLogPage.vue').default);
@@ -179,6 +201,7 @@ Vue.component('barcode-input-field', require('./components/SharedComponents/Barc
 Vue.component('configuration-section', require('./components/Settings/ConfigurationSection.vue').default);
 Vue.component('data-collector-list-page', require('./components/DataCollectorListPage.vue').default);
 Vue.component('data-collector-page', require('./components/DataCollectorPage.vue').default);
+Vue.component('data-collector-transaction-page', require('./components/Tools/DataCollector/TransactionPage.vue').default);
 Vue.component('data-collector-quantity-request-modal', require('./components/DataCollectionPage/DataCollectorQuantityRequestModal.vue').default);
 Vue.component('date-selector-widget', require('./components/Widgets/DateSelectorWidget.vue').default);
 Vue.component('dpd-configuration', require('./components/Settings/DpdConfiguration.vue').default);
@@ -207,6 +230,7 @@ Vue.component('printer-configuration', require('./components/Settings/PrintersCo
 Vue.component('printnode-configuration', require('./components/Settings/PrintNode.vue').default);
 Vue.component('product-count-request-input-field', require('./components/SharedComponents/ProductCountRequestInputField.vue').default);
 Vue.component('product-info-card', require('./components/SharedComponents/ProductInfoCard.vue').default);
+Vue.component('product-details-modal', require('./modals/ProductDetailsModal.vue').default);
 Vue.component('products-table', require('./components/ProductsPage.vue').default);
 Vue.component('quick-connect-page', require('./components/QuickConnectPage.vue').default);
 Vue.component('quick-connect-magento-page', require('./components/QuickConnectMagentoPage.vue').default);
@@ -229,11 +253,13 @@ Vue.component('container', require('./components/UI/Container.vue').default);
 Vue.component('search-and-option-bar', require('./components/UI/SearchAndOptionBar.vue').default);
 Vue.component('search-and-option-bar-observer', require('./components/UI/SearchAndOptionBarObserver.vue').default);
 Vue.component('top-nav-button', require('./components/UI/TopNavButton.vue').default);
+Vue.component('quantity-discounts-configuration-page', require('./components/Settings/QuantityDiscountsConfigurationPage.vue').default);
+Vue.component('quantity-discounts-edit-page', require('./components/Settings/QuantityDiscountEditPage.vue').default);
 
 Vue.prototype.$eventBus = new Vue();
 
 // global helpers that we can use directly in our templates
-Vue.prototype.$selectAllInputText = function(event) {
+Vue.prototype.$selectAllInputText = function (event) {
     event.target.select();
 }
 

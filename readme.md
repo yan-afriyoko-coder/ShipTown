@@ -134,13 +134,10 @@ For example, when an order is created, an event is dispatched to notify the ship
 
 ### Modules (App\Modules)
 Modules are used to group related functionality together.
+- modules should listen to events and take action when they occur
 - modules should be ideally maintaining their own data
 - modules data tables should prefix with ___module____ and module name (e.g. modules_inventory_reservations_configuration)
 - deleting a module should not affect functionality of other parts of the application
-
-> Example: 
-> __InventoryReservations__ module is used to listen for events like __OrderUpdatedEvent__ or __OrderProductShippedEvent__ 
-> to ensure correct quantity_reserved is maintained in inventory table and stock is not oversold. 
 
 Each module has its own folder and might contains the following:
 
@@ -155,6 +152,67 @@ Each module has its own folder and might contains the following:
 - __Views__ (App\Modules\InventoryReservations\src\Views)
 - __Resources__ (App\Modules\InventoryReservations\src\Resources)
 - __Requests__ (App\Modules\InventoryReservations\src\Requests)
+
+### Module Configuration
+
+Modules Service Providers are used to register the module with the application and to load the module configuration.
+
+```php
+
+<?php
+
+namespace App\Modules\Magento2MSI\src;
+
+use App\Events\EveryFiveMinutesEvent;
+use App\Events\Product\ProductTagAttachedEvent;
+use App\Modules\BaseModuleServiceProvider;
+
+class Magento2MsiServiceProvider extends BaseModuleServiceProvider
+{
+    public static string $module_name = 'eCommerce - Magento 2 MSI';
+
+    public static string $module_description = 'Module provides connectivity to Magento 2 API - Multi Source Inventory';
+
+    public static string $settings_link = '/settings/modules/magento2msi';
+
+    public static bool $autoEnable = false;
+
+    protected $listen = [
+        EveryFiveMinutesEvent::class => [
+            Listeners\EveryFiveMinutesEventListener::class
+        ],
+
+        ProductTagAttachedEvent::class => [
+            Listeners\ProductTagAttachedEventListener::class,
+        ],
+    ];
+
+    public static function enabling(): bool
+    {
+        // Add your logic here
+        return parent::enabling();
+    }
+}
+
+```
+
+### Module Installation
+Modules are installed using migrations
+
+```php
+<?php
+
+use App\Modules\Magento2MSI\src\Magento2MsiServiceProvider;
+use Illuminate\Database\Migrations\Migration;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Magento2MsiServiceProvider::installModule();
+    }
+};
+```
 
 ### ___Tests___ (/Tests)- `php artisan test`
 Helps us to make sure we didn't break anything accidentally

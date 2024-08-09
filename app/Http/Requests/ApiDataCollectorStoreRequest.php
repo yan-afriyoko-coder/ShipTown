@@ -16,7 +16,8 @@ class ApiDataCollectorStoreRequest extends FormRequest
         return [
             'warehouse_id' => ['required', 'exists:warehouses,id'],
             'name' => ['required', 'string'],
-            'type' => ['nullable', 'sometimes', 'string', 'in:App\\Models\\DataCollectionTransferIn,App\\Models\\DataCollectionTransferOut,App\\Models\\DataCollectionStocktake'],
+            'custom_uuid' => ['nullable', 'string', 'unique:data_collections,custom_uuid'],
+            'type' => ['nullable', 'sometimes', 'string', 'in:App\\Models\\DataCollectionTransferIn,App\\Models\\DataCollectionTransferOut,App\\Models\\DataCollectionStocktake,App\\Models\\DataCollectionTransaction'],
             'destination_warehouse_id' => ['nullable', 'sometimes', 'integer', 'exists:warehouses,id'],
         ];
     }

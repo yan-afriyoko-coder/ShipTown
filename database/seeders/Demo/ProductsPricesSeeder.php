@@ -34,5 +34,29 @@ class ProductsPricesSeeder extends Seeder
                         ]);
                 }
             });
+
+        Product::skuOrAlias('4001')->first()->prices()
+            ->update([
+                'price' => 10,
+                'sale_price' => 17.99,
+                'sale_price_start_date' => now()->subDays(14),
+                'sale_price_end_date' => now()->subDays(7)
+            ]);
+
+        Product::skuOrAlias('4002')->first()->prices()
+            ->update([
+                'price' => 20,
+                'sale_price' => 8.99,
+                'sale_price_start_date' => now()->subDays(3),
+                'sale_price_end_date' => now()->addDays(4)
+            ]);
+
+        Product::skuOrAlias('4005')->first()->prices()
+            ->update([
+                'price' => 50,
+                'sale_price' => 17.99,
+                'sale_price_start_date' => now()->subDays(14),
+                'sale_price_end_date' => now()->subDays(7)
+            ]);
     }
 }

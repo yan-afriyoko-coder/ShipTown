@@ -13,6 +13,7 @@
 
 use App\Http\Controllers\Admin\Settings\Modules\Webhooks\SubscriptionController;
 use App\Http\Controllers\Api\BarcodeGeneratorController;
+use App\Http\Controllers\Api\QuantityDiscountsController;
 use App\Http\Controllers\Auth;
 use App\Http\Controllers\Csv;
 use App\Http\Controllers\DashboardController;
@@ -53,6 +54,10 @@ Route::get('shipping-labels/{shipping_label}', [ShippingLabelController::class, 
 Route::view('autopilot/packlist', 'autopilot/packlist')->name('autopilot.packlist');
 Route::resource('order/packsheet', Order\PacksheetController::class)->only(['show']);
 Route::view('tools/printer', 'tools/printer')->name('tools.printer');
+
+Route::as('tools.')->group(function () {
+    Route::view('tools/data-collector/transaction', 'tools/data-collector/transaction')->name('point_of_sale');
+});
 
 Route::as('reports.')->group(function () {
     Route::resource('reports/activity-log', Reports\ActivityLogController::class)->only('index');
@@ -101,4 +106,6 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('admin/settings/modules/webhooks/subscriptions', [SubscriptionController::class, 'index'])->name('webhooks::subscriptions');
     Route::view('admin/modules/slack/config', 'modules/slack/config')->name('modules.slack.config');
     Route::view('admin/settings/modules/magento-api', 'settings/magento-api')->name('settings.modules.magento-api');
+    Route::view('admin/settings/modules/quantity-discounts', 'settings/modules/quantity-discounts/index')->name('settings.modules.quantity-discounts.index');
+    Route::get('admin/settings/modules/quantity-discounts/{id}', [QuantityDiscountsController::class, 'edit'])->name('settings.modules.quantity-discounts.edit');
 });

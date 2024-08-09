@@ -38,6 +38,8 @@ class DataCollectionReport extends Report
             'dataCollection',
             'inventory',
             'products_prices',
+            'prices',
+            'discount'
         ];
 
         $this->fields = [
@@ -53,6 +55,13 @@ class DataCollectionReport extends Report
             'total_transferred_out'         => 'data_collection_records.total_transferred_out',
             'quantity_scanned'              => 'data_collection_records.quantity_scanned',
             'quantity_to_scan'              => 'data_collection_records.quantity_to_scan',
+            'unit_cost'                     => 'data_collection_records.unit_cost',
+            'unit_sold_price'               => 'data_collection_records.unit_sold_price',
+            'unit_discount'                 => 'data_collection_records.unit_discount',
+            'unit_full_price'               => 'data_collection_records.unit_full_price',
+            'total_price'                   => 'data_collection_records.total_price',
+            'price_source'                  => 'data_collection_records.price_source',
+            'price_source_id'               => 'data_collection_records.price_source_id',
             'inventory_quantity'            => 'inventory.quantity',
             'inventory_last_counted_at'     => 'inventory.last_counted_at',
             'last_movement_at'              => 'inventory.last_movement_at',

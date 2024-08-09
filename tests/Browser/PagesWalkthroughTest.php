@@ -15,7 +15,7 @@ use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
-class PagesWalktroughTest extends DuskTestCase
+class PagesWalkthroughTest extends DuskTestCase
 {
     private Order $order;
     private User $user;
@@ -164,15 +164,21 @@ class PagesWalktroughTest extends DuskTestCase
             ->get()
             ->each(function (OrderProduct $orderProduct) use ($browser) {
                 $browser
-                ->pause($this->shortDelay)
-                ->pause($this->shortDelay)->keys('@barcode-input-field', $orderProduct->sku_ordered, '{ENTER}')
-                ->pause($this->shortDelay)
-                ->pause($this->shortDelay)->waitForText($orderProduct->sku_ordered)
-                ->pause($this->shortDelay)
-                ->pause($this->shortDelay)->waitFor('#data-collection-record-quantity-request-input')
-                ->pause($this->shortDelay)->typeSlowly('#data-collection-record-quantity-request-input', 12)->pause($this->shortDelay)
-                ->pause($this->shortDelay)->keys('#data-collection-record-quantity-request-input', '{ENTER}')
-                ->pause($this->longDelay);
+                    ->pause($this->shortDelay)
+                    ->pause($this->shortDelay)
+                    ->keys('@barcode-input-field', $orderProduct->sku_ordered, '{ENTER}')
+                    ->pause($this->shortDelay)
+                    ->pause($this->shortDelay)
+                    ->waitForText($orderProduct->sku_ordered)
+                    ->pause($this->shortDelay)
+                    ->pause($this->shortDelay)
+                    ->waitFor('#data-collection-record-quantity-request-input')
+                    ->pause($this->shortDelay)
+                    ->typeSlowly('#data-collection-record-quantity-request-input', 12)
+                    ->pause($this->shortDelay)
+                    ->pause($this->shortDelay)
+                    ->keys('#data-collection-record-quantity-request-input', '{ENTER}')
+                    ->pause($this->longDelay);
             });
 
         $browser
@@ -264,7 +270,8 @@ class PagesWalktroughTest extends DuskTestCase
         return $browser->mouseover('#orders_link')
             ->pause($this->shortDelay)->clickLink('Orders')
             ->pause($this->longDelay)
-            ->pause($this->shortDelay)->keys('@barcode-input-field', Order::first()->getAttribute('order_number'), '{enter}')
+            ->pause($this->shortDelay)
+            ->keys('@barcode-input-field', Order::first()->getAttribute('order_number'), '{enter}')
             ->pause($this->longDelay);
     }
 

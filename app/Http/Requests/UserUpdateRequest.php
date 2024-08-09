@@ -15,11 +15,21 @@ use Spatie\Permission\Models\Role;
  */
 class UserUpdateRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
     public function authorize(): bool
     {
         return $this->user()->hasRole('admin');
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
     public function rules(): array
     {
         $updatedUserId = $this->route('user');
@@ -40,7 +50,7 @@ class UserUpdateRequest extends FormRequest
             ],
 
             'role_id' => Rule::when($updatedUserId !== $this->user()->id, [
-                'required',
+                'sometimes',
                 'integer',
                 Rule::exists('roles', 'id'),
             ]),
@@ -53,11 +63,6 @@ class UserUpdateRequest extends FormRequest
             'warehouse_id' => [
                 'nullable',
                 'exists:warehouses,id'
-            ],
-
-            'warehouse_code' => [
-                'nullable',
-                'exists:warehouses,code'
             ],
         ];
     }
