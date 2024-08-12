@@ -113,11 +113,15 @@ export default {
 
 
         this.apiGetNavigationMenu({
-            'filter[group]': 'picklist'
-        })
+                'filter[group]': 'picklist',
+                'per_page': 100
+            })
             .then((response) => {
                 this.bookmarks = response.data.data;
             })
+            .catch((error) => {
+                this.displayApiCallError(error);
+            });
 
         if (this.getUrlParameter('step', '') === '') {
             this.reloadPicks();
