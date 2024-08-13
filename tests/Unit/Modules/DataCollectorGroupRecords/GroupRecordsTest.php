@@ -11,7 +11,7 @@ use App\Modules\DataCollector\src\Services\DataCollectorService;
 use App\Modules\DataCollectorGroupRecords\src\DataCollectorGroupRecordsServiceProvider;
 use Tests\TestCase;
 
-class GroupSimilarProductsTest extends TestCase
+class GroupRecordsTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -31,7 +31,7 @@ class GroupSimilarProductsTest extends TestCase
                 'price' => 10,
                 'sale_price' => '10',
                 'sale_price_start_date' => now()->subDays(14),
-                'sale_price_end_date' => now()->subDays(7)
+                'sale_price_end_date' => now()->addDays(7)
             ]);
 
         $this->product4005->prices()
@@ -39,7 +39,7 @@ class GroupSimilarProductsTest extends TestCase
                 'price' => 50,
                 'sale_price' => '50',
                 'sale_price_start_date' => now()->subDays(14),
-                'sale_price_end_date' => now()->subDays(7)
+                'sale_price_end_date' => now()->addDays(7)
             ]);
     }
 

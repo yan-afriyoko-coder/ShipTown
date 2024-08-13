@@ -9,6 +9,6 @@ class DataCollectionRecordUpdatedEventListener
 {
     public function handle(DataCollectionRecordUpdatedEvent $event): void
     {
-         AddSalePriceIfApplicable::class::dispatch($event->dataCollectionRecord);
+        AddSalePriceIfApplicable::class::dispatch($event->dataCollectionRecord);
     }
 }
