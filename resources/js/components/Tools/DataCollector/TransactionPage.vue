@@ -591,7 +591,6 @@ export default {
                 .then((response) => {
                     if (page === 1) {
                         this.dataCollectionRecords = response.data.data;
-                        console.log(this.dataCollectionRecords, 'dataCollectionRecords')
                     } else {
                         this.dataCollectionRecords = this.dataCollectionRecords.concat(response.data.data);
                     }

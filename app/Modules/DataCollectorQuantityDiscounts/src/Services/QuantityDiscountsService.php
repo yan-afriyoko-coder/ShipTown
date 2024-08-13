@@ -18,7 +18,9 @@ class QuantityDiscountsService
             ->whereIn('product_id', Arr::pluck($discount->products, 'product_id'))
             ->where(function ($query) use ($discount) {
                 $query->whereNull('price_source_id')
-                    ->orWhere(['price_source_id' => $discount->id]);
+                    ->orWhere(['price_source_id' => $discount->id])
+                    ->orWhere(['price_source' => ''])
+                    ->orWhere(['price_source' => 'SALE_PRICE']);
             })
             ->orderBy('unit_full_price', 'ASC')
             ->orderBy('price_source', 'DESC')
