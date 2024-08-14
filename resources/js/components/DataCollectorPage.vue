@@ -6,16 +6,16 @@
 
         <swiping-card>
             <template v-slot:content>
-                    <div class="row setting-list">
-                        <div class="col-sm-12 col-lg-6">
-                            <div id="data_collection_name" class="text-primary">{{ dataCollection ? dataCollection['name'] : '' }}</div>
-                            <div class="text-secondary small">{{ formatDateTime(dataCollection ? dataCollection['created_at'] : '', 'dddd - MMM D HH:mm')  }}</div>
-                            <div class="text-secondary small">{{ collectionTypes[dataCollection['type']]  }}</div>
-                        </div>
-                        <div class="col-sm-12 col-lg-6" v-if="dataCollection && dataCollection['deleted_at']">
-                            <text-card class="fa-pull-right" :label="formatDateTime(dataCollection ? dataCollection['deleted_at'] : '', 'dddd - MMM D HH:mm')" text="ARCHIVED"></text-card>
-                        </div>
+                <div class="row setting-list">
+                    <div class="col-sm-12 col-lg-6">
+                        <div id="data_collection_name" class="text-primary">{{ dataCollection ? dataCollection['name'] : '' }}</div>
+                        <div class="text-secondary small">{{ formatDateTime(dataCollection ? dataCollection['created_at'] : '', 'dddd - MMM D HH:mm')  }}</div>
+                        <div class="text-secondary small">{{ collectionTypes[dataCollection['type']]  }}</div>
                     </div>
+                    <div class="col-sm-12 col-lg-6" v-if="dataCollection && dataCollection['deleted_at']">
+                        <text-card class="fa-pull-right" :label="formatDateTime(dataCollection ? dataCollection['deleted_at'] : '', 'dddd - MMM D HH:mm')" text="ARCHIVED"></text-card>
+                    </div>
+                </div>
             </template>
         </swiping-card>
 
@@ -27,7 +27,7 @@
                                          :showManualSearchButton="true"
                                          @barcodeScanned="onBarcodeScanned"
                                          @findBarcodeManually="onBarcodeScanned"
-                                         placeholder="Scan sku or alias"
+                                         placeholder="Enter sku or alias"
                                          class="text-center font-weight-bold">
                     </barcode-input-field>
                 </div>
@@ -70,7 +70,7 @@
             </div>
         </div>
 
-        <data-collector-quantity-request-modal @hidden="onQuantityRequestModalHidden"></data-collector-quantity-request-modal>
+        <data-collector-quantity-request-modal @hidden="onQuantityRequestModalHidden" :placeholder="quantityRequestPlaceholderText"></data-collector-quantity-request-modal>
 
         <div v-if="(dataCollectionRecords !== null) && (dataCollectionRecords.length === 0)" class="text-secondary small text-center mt-3">
             No records found<br>
@@ -78,7 +78,13 @@
         </div>
 
         <template v-for="record in dataCollectionRecords">
-            <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
+            <swiping-card :disable-swipe-right="true" :disable-swipe-left="false" @swipeLeft="onBarcodeScanned(record['product']['sku'])">
+                <template v-slot:content-right>
+                    <div class="small">
+                        <div class="h5">ADD QUANTITY</div>
+                        <div class="small" style="border-top: 1px solid black">SWIPE LEFT</div>
+                    </div>
+                </template>
                 <template v-slot:content>
                     <div class="row">
                         <div class="col-12 col-md-4">
@@ -212,477 +218,481 @@
 </template>
 
 <script>
-    import beep from '../mixins/beep';
-    import loadingOverlay from '../mixins/loading-overlay';
+import beep from '../mixins/beep';
+import loadingOverlay from '../mixins/loading-overlay';
 
-    import FiltersModal from "./Packlist/FiltersModal";
-    import url from "../mixins/url";
-    import api from "../mixins/api";
-    import helpers from "../mixins/helpers";
-    import Vue from "vue";
-    import NumberCard from "./SharedComponents/NumberCard";
-    import SwipingCard from "./SharedComponents/SwipingCard";
-    import { VueCsvImport } from 'vue-csv-import';
+import FiltersModal from "./Packlist/FiltersModal";
+import url from "../mixins/url";
+import api from "../mixins/api";
+import helpers from "../mixins/helpers";
+import Vue from "vue";
+import NumberCard from "./SharedComponents/NumberCard";
+import SwipingCard from "./SharedComponents/SwipingCard";
+import { VueCsvImport } from 'vue-csv-import';
 
-    export default {
-        mixins: [loadingOverlay, beep, url, api, helpers],
+export default {
+    mixins: [loadingOverlay, beep, url, api, helpers],
 
-        components: {
-            FiltersModal,
-            NumberCard,
-            SwipingCard,
-            VueCsvImport,
+    components: {
+        FiltersModal,
+        NumberCard,
+        SwipingCard,
+        VueCsvImport,
+    },
+
+    props: {
+        data_collection_id: null,
+    },
+
+    data: function() {
+        return {
+            minShelfLocation: '',
+            singleScanEnabled: false,
+            addToRequested: false,
+            scannedDataCollectionRecord: null,
+            scannedProduct: null,
+            dataCollection: null,
+            dataCollectionRecords: [],
+            nextUrl: null,
+            page: 1,
+            per_page: 15,
+            csv: null,
+            warehouses: [],
+            buttonsEnabled: false,
+            selectedInventoryId: null,
+            manuallyExpandComments: false,
+            input_comment: '',
+            collectionTypes: {
+                'App\\Models\\DataCollectionTransferIn': 'Transfer In',
+                'App\\Models\\DataCollectionTransferOut': 'Transfer Out',
+                'App\\Models\\DataCollectionStocktake': 'Stocktake',
+            },
+        };
+    },
+
+    mounted() {
+        if (! Vue.prototype.$currentUser['warehouse_id']) {
+            this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
+            return;
+        }
+
+        window.onscroll = () => this.loadMoreWhenNeeded();
+
+        this.getUrlFilterOrSet('warehouse_code', Vue.prototype.$currentUser['warehouse']['code']);
+
+        this.loadWarehouses();
+
+        this.reloadDataCollection();
+    },
+
+    methods: {
+        toggleAddToRequested() {
+            setTimeout(() => {
+                this.hideBvModal('configuration-modal');
+            }, 200)
         },
 
-        props: {
-            data_collection_id: null,
+        showRecentInventoryMovementsModal(inventory_id) {
+            this.$modal.showRecentInventoryMovementsModal(inventory_id);
         },
 
-        data: function() {
-            return {
-                minShelfLocation: '',
-                singleScanEnabled: false,
-                addToRequested: false,
-                scannedDataCollectionRecord: null,
-                scannedProduct: null,
-                dataCollection: null,
-                dataCollectionRecords: [],
-                nextUrl: null,
-                page: 1,
-                per_page: 15,
-                csv: null,
-                warehouses: [],
-                buttonsEnabled: false,
-                selectedInventoryId: null,
-                manuallyExpandComments: false,
-                input_comment: '',
-                collectionTypes: {
-                    'App\\Models\\DataCollectionTransferIn': 'Transfer In',
-                    'App\\Models\\DataCollectionTransferOut': 'Transfer Out',
-                    'App\\Models\\DataCollectionStocktake': 'Stocktake',
-                },
-            };
+        reloadDataCollection() {
+            this.loadDataCollectorDetails();
+            this.loadDataCollectorRecords();
         },
 
-        mounted() {
-            if (! Vue.prototype.$currentUser['warehouse_id']) {
-                this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
-                return;
-            }
-
-            window.onscroll = () => this.loadMoreWhenNeeded();
-
-            this.getUrlFilterOrSet('warehouse_code', Vue.prototype.$currentUser['warehouse']['code']);
-
-            this.loadWarehouses();
-
+        onQuantityRequestModalHidden() {
+            this.setFocusElementById('barcode_input');
             this.reloadDataCollection();
         },
 
-        methods: {
-            toggleAddToRequested() {
-                setTimeout(() => {
-                    this.hideBvModal('configuration-modal');
-                }, 200)
-            },
-
-            showRecentInventoryMovementsModal(inventory_id) {
-                this.$modal.showRecentInventoryMovementsModal(inventory_id);
-            },
-
-            reloadDataCollection() {
-                this.loadDataCollectorDetails();
-                this.loadDataCollectorRecords();
-            },
-
-            onQuantityRequestModalHidden() {
-                this.setFocusElementById('barcode_input');
-                this.reloadDataCollection();
-            },
-
-            onShownConfigurationModal() {
-                this.setFocusElementById('stocktake-input', true, true);
-                this.buttonsEnabled = true;
-            },
-
-            onBarcodeScanned: function (barcode) {
-                if (barcode === '') {
-                    return;
-                }
-
-                if (this.dataCollection['deleted_at'] !== null) {
-                    this.notifyError('This collection is already archived');
-                    return;
-                }
-
-                if (this.singleScanEnabled) {
-                    this.addSinglePiece(barcode);
-                } else {
-                    this.$modal.showDataCollectorQuantityRequestModal(this.dataCollection['id'], barcode, this.addToRequested ? 'quantity_requested' : 'quantity_scanned');
-                }
-            },
-
-            addSinglePiece(barcode) {
-                let data = {
-                    'data_collection_id': this.dataCollection['id'],
-                    'sku_or_alias': barcode,
-                    'quantity_scanned': 1,
-                };
-
-                if (this.addToRequested) {
-                    data['quantity_requested'] = 1;
-                } else {
-                    data['quantity_scanned'] = 1;
-                }
-
-                this.apiPostDataCollectorActionsAddProduct(data)
-                    .then(() => {
-                        this.notifySuccess('1 x ' + barcode);
-                        this.reloadDataCollection();
-                    })
-                    .catch((error) => {
-                        this.displayApiCallError(error);
-                    });
-            },
-
-            toggleSingleScanMode() {
-                setTimeout(() => {
-                    this.hideBvModal('configuration-modal');
-                }, 200)
-            },
-
-            loadWarehouses: function () {
-                this.apiGetWarehouses({'per_page': 999, 'sort': 'name'})
-                    .then(response => {
-                        this.warehouses = response.data.data;
-                    });
-            },
-
-            loadDataCollectorDetails: function () {
-
-                let params = {
-                    'filter[id]': this.data_collection_id,
-                    'filter[with_archived]': true,
-                    'include': 'comments,comments.user'
-                }
-
-                this.apiGetDataCollector(params)
-                    .then(response => {
-                        this.dataCollection = response.data.data[0];
-                    }).catch(error => {
-                        console.log(error);
-                        this.displayApiCallError(error);
-                    });
-            },
-
-            transferToWarehouseClick() {
-                this.$bvModal.hide('configuration-modal');
-                this.$bvModal.show('transferToModal');
-            },
-
-            transferToWarehouse(warehouse) {
-                let data = {
-                    'action': 'transfer_to_scanned',
-                    'destination_warehouse_id': warehouse['id'],
-                }
-
-                this.apiUpdateDataCollection(this.data_collection_id, data)
-                    .then(response => {
-                        this.$bvModal.hide('configuration-modal');
-                        location.href = '/data-collector';
-                        // setTimeout(() => {
-                        //     this.reloadDataCollection();
-                        // }, 500);
-                    })
-                    .catch(error => {
-                        this.showException(error);
-                    });
-
-                this.$bvModal.hide('transferToModal');
-            },
-
-            transferStockOut() {
-                this.buttonsEnabled = false;
-
-                let data = {
-                    'action': 'transfer_out_scanned',
-                }
-
-                this.apiUpdateDataCollection(this.data_collection_id, data)
-                    .then(response => {
-                        this.$snotify.success('Stock transferred out successfully');
-                        this.$bvModal.hide('configuration-modal');
-                        setTimeout(() => {
-                            this.reloadDataCollection();
-                        }, 1000);
-                    })
-                    .catch(error => {
-                        this.showException(error);
-                    });
-            },
-
-
-            transferStockIn() {
-                let data = {
-                    'action': 'transfer_in_scanned',
-                }
-
-                this.apiUpdateDataCollection(this.data_collection_id, data)
-                    .then(response => {
-                        this.$snotify.success('Stock transferred in successfully');
-                        this.$bvModal.hide('configuration-modal');
-                        setTimeout(() => {
-                            this.reloadDataCollection();
-                        }, 500);
-                    })
-                    .catch(error => {
-                        this.showException(error);
-                    });
-            },
-
-            receiveAll() {
-                let data = {
-                    'action': 'auto_scan_all_requested',
-                }
-
-                this.apiUpdateDataCollection(this.data_collection_id, data)
-                    .then(response => {
-                        this.transferStockIn();
-                        this.reloadDataCollection();
-                    })
-                    .catch(error => {
-                        this.showException(error);
-                    });
-            },
-
-            importAsStocktake() {
-                this.buttonsEnabled = false;
-
-                let data = {
-                    'data_collection_id': this.data_collection_id,
-                }
-
-                this.apiDataCollectorActionImportAsStocktake(data)
-                    .then(response => {
-                        this.$snotify.success('Stocktake imported successfully');
-                        this.$bvModal.hide('configuration-modal');
-                        setTimeout(() => {
-                            this.reloadDataCollection();
-                        }, 500);
-                    })
-                    .catch(error => {
-                        this.showException(error);
-                    });
-            },
-
-            archiveCollection() {
-                this.apiDeleteDataCollection(this.data_collection_id)
-                    .then(response => {
-                        this.$snotify.success('Collection archived successfully');
-                        this.$bvModal.hide('configuration-modal');
-                        setTimeout(() => {
-                            this.reloadDataCollection();
-                        }, 500);
-                    })
-                    .catch(error => {
-                        this.showException(error);
-                    });
-            },
-
-            autoScanAll() {
-                let data = {
-                    'action': 'auto_scan_all_requested',
-                }
-
-                this.apiUpdateDataCollection(this.data_collection_id, data)
-                    .then(response => {
-                        this.$snotify.success('Auto scan completed successfully');
-                        this.$bvModal.hide('configuration-modal');
-                        setTimeout(() => {
-                            this.reloadDataCollection();
-                        }, 500);
-                    })
-                    .catch(error => {
-                        this.showException(error);
-                    });
-            },
-
-            loadMoreWhenNeeded() {
-                if (this.isLoading) {
-                    return;
-                }
-
-                if (this.isMoreThanPercentageScrolled(70) === false) {
-                    return;
-                }
-
-                if (this.nextUrl === null) {
-                    return;
-                }
-
-                // we double per_page every second page load to avoid hitting the API too hard
-                // and we will limit it to 100-ish per_page
-                if ((this.page % 2 === 0) && (this.per_page < 100)) {
-                    this.page = this.page/ 2;
-                    this.per_page = this.per_page * 2;
-                }
-
-                this.loadDataCollectorRecords(++this.page);
-            },
-
-            setMinShelfLocation() {
-                // todo - possible bug - the url only sets and does not update if you want to change. Not sure if intentional behaviour
-                this.setUrlParameter( "filter[shelf_location_greater_than]", this.minShelfLocation);
-                this.loadDataCollectorRecords();
-                this.setFocusElementById('barcode_input');
-            },
-
-            loadDataCollectorRecords(page = 1) {
-                this.showLoading();
-
-                const params = this.$router.currentRoute.query;
-                params['filter[data_collection_id]'] = this.data_collection_id;
-                params['include'] = 'product,inventory,product.tags,product.aliases';
-                params['per_page'] = this.per_page;
-                params['page'] = page;
-
-                this.apiGetDataCollectorRecords(params)
-                    .then((response) => {
-                        if (page === 1) {
-                            this.dataCollectionRecords = response.data.data;
-                        } else {
-                            this.dataCollectionRecords = this.dataCollectionRecords.concat(response.data.data);
-                        }
-
-                        this.page = response.data['meta']['current_page'];
-                        this.nextUrl = response.data['links']['next'];
-                    })
-                    .catch((error) => {
-                        this.displayApiCallError(error);
-                    })
-                    .finally(() => {
-                        this.hideLoading();
-                    });
-            },
-
-            onProductCountRequestResponse(response) {
-                const payload = {
-                    'data_collection_id': this.data_collection_id,
-                    'product_id': response['product_id'],
-                    'quantity_scanned': response['quantity'],
-                }
-
-                this.apiPostDataCollectorRecords(payload)
-                    .then(() => {
-                        this.notifySuccess('Data collected');
-                    })
-                    .catch(e => {
-                        this.displayApiCallError(e);
-                    })
-                    .finally(() => {
-                        this.reloadDataCollection();
-                    });
-            },
-
-            postCsvRecordsToApiAndCloseModal() {
-                const data = this.csv.map(record => ({
-                    'product_sku': record.product_sku,
-                    'quantity_requested': record.quantity_requested,
-                    'quantity_scanned': record.quantity_scanned,
-                }));
-
-                //we removing header row from csv
-                data.shift();
-
-                const payload = {
-                    'data_collection_id': this.data_collection_id,
-                    'data': data,
-                }
-
-                this.apiPostCsvImport(payload)
-                    .then(() => {
-                        this.notifySuccess('Records imported');
-                        this.$bvModal.hide('configuration-modal');
-                    })
-                    .catch(e => {
-                        this.displayApiCallError(e);
-                    })
-                    .finally(() => {
-                        this.reloadDataCollection();
-                    });
-            },
-
-            downloadFileAndHideModal() {
-                window.open(this.getDownloadLink, '_blank');
-
-                this.hideBvModal('configuration-modal')
-            },
-
-            hideBvModal(ref) {
-                this.$bvModal.hide(ref);
-            },
-
-            addComment() {
-
-                let data = {
-                    "data_collection_id": this.dataCollection.id,
-                    "comment": this.input_comment
-                };
-
-                // quick hack to immediately display comment
-                this.dataCollection.comments.unshift(data);
-
-                this.apiPostDataCollectionComment(data)
-                    .then(() => {
-                        this.loadDataCollectorDetails();
-                        this.input_comment = '';
-                        this.manuallyExpandComments = false;
-                        this.setFocusElementById('barcode_input');
-
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                        this.displayApiCallError(error);
-                    });
-            },
-
-            toggleExpandComments() {
-                this.manuallyExpandComments = !this.manuallyExpandComments;
-                if(this.manuallyExpandComments){
-                    this.setFocusElementById('comment-input', true);
-                } else {
-                    this.setFocusElementById('barcode_input', false);
-                }
-            },
-
+        onShownConfigurationModal() {
+            this.setFocusElementById('stocktake-input', true, true);
+            this.buttonsEnabled = true;
         },
 
-        computed: {
-            getDownloadLink() {
-                let routeData = this.$router.resolve({
-                    path: this.$router.currentRoute.fullPath,
-                    query: {
-                        'select': 'product_sku,product_name,total_transferred_in,total_transferred_out,quantity_requested,quantity_to_scan,quantity_scanned,inventory_quantity,product_price,product_sale_price,product_sale_price_start_date,product_sale_price_end_date,product_cost,last7days_sales,last14days_sales,last28days_sales',
-                        'filter[data_collection_id]': this.data_collection_id,
-                        filename: this.dataCollection['name'] +".csv"
-                    }
-                });
+        onBarcodeScanned: function (barcode) {
+            if (barcode === '') {
+                return;
+            }
 
-                return routeData.href;
-            },
+            if (this.dataCollection['deleted_at'] !== null) {
+                this.notifyError('This collection is already archived');
+                return;
+            }
 
-            commentsToShow() {
-                return this.dataCollection.comments.length
-                    ? (this.manuallyExpandComments ? this.dataCollection.comments : [this.dataCollection.comments[0]])
-                    : [];
+            if (this.singleScanEnabled) {
+                this.addSinglePiece(barcode);
+            } else {
+                this.$modal.showDataCollectorQuantityRequestModal(this.dataCollection['id'], barcode, this.addToRequested ? 'quantity_requested' : 'quantity_scanned');
             }
         },
-    }
+
+        addSinglePiece(barcode) {
+            let data = {
+                'data_collection_id': this.dataCollection['id'],
+                'sku_or_alias': barcode,
+                'quantity_scanned': 1,
+            };
+
+            if (this.addToRequested) {
+                data['quantity_requested'] = 1;
+            } else {
+                data['quantity_scanned'] = 1;
+            }
+
+            this.apiPostDataCollectorActionsAddProduct(data)
+                .then(() => {
+                    this.notifySuccess('1 x ' + barcode);
+                    this.reloadDataCollection();
+                })
+                .catch((error) => {
+                    this.displayApiCallError(error);
+                });
+        },
+
+        toggleSingleScanMode() {
+            setTimeout(() => {
+                this.hideBvModal('configuration-modal');
+            }, 200)
+        },
+
+        loadWarehouses: function () {
+            this.apiGetWarehouses({'per_page': 999, 'sort': 'name'})
+                .then(response => {
+                    this.warehouses = response.data.data;
+                });
+        },
+
+        loadDataCollectorDetails: function () {
+
+            let params = {
+                'filter[id]': this.data_collection_id,
+                'filter[with_archived]': true,
+                'include': 'comments,comments.user'
+            }
+
+            this.apiGetDataCollector(params)
+                .then(response => {
+                    this.dataCollection = response.data.data[0];
+                }).catch(error => {
+                console.log(error);
+                this.displayApiCallError(error);
+            });
+        },
+
+        transferToWarehouseClick() {
+            this.$bvModal.hide('configuration-modal');
+            this.$bvModal.show('transferToModal');
+        },
+
+        transferToWarehouse(warehouse) {
+            let data = {
+                'action': 'transfer_to_scanned',
+                'destination_warehouse_id': warehouse['id'],
+            }
+
+            this.apiUpdateDataCollection(this.data_collection_id, data)
+                .then(response => {
+                    this.$bvModal.hide('configuration-modal');
+                    location.href = '/data-collector';
+                    // setTimeout(() => {
+                    //     this.reloadDataCollection();
+                    // }, 500);
+                })
+                .catch(error => {
+                    this.showException(error);
+                });
+
+            this.$bvModal.hide('transferToModal');
+        },
+
+        transferStockOut() {
+            this.buttonsEnabled = false;
+
+            let data = {
+                'action': 'transfer_out_scanned',
+            }
+
+            this.apiUpdateDataCollection(this.data_collection_id, data)
+                .then(response => {
+                    this.$snotify.success('Stock transferred out successfully');
+                    this.$bvModal.hide('configuration-modal');
+                    setTimeout(() => {
+                        this.reloadDataCollection();
+                    }, 1000);
+                })
+                .catch(error => {
+                    this.showException(error);
+                });
+        },
+
+
+        transferStockIn() {
+            let data = {
+                'action': 'transfer_in_scanned',
+            }
+
+            this.apiUpdateDataCollection(this.data_collection_id, data)
+                .then(response => {
+                    this.$snotify.success('Stock transferred in successfully');
+                    this.$bvModal.hide('configuration-modal');
+                    setTimeout(() => {
+                        this.reloadDataCollection();
+                    }, 500);
+                })
+                .catch(error => {
+                    this.showException(error);
+                });
+        },
+
+        receiveAll() {
+            let data = {
+                'action': 'auto_scan_all_requested',
+            }
+
+            this.apiUpdateDataCollection(this.data_collection_id, data)
+                .then(response => {
+                    this.transferStockIn();
+                    this.reloadDataCollection();
+                })
+                .catch(error => {
+                    this.showException(error);
+                });
+        },
+
+        importAsStocktake() {
+            this.buttonsEnabled = false;
+
+            let data = {
+                'data_collection_id': this.data_collection_id,
+            }
+
+            this.apiDataCollectorActionImportAsStocktake(data)
+                .then(response => {
+                    this.$snotify.success('Stocktake imported successfully');
+                    this.$bvModal.hide('configuration-modal');
+                    setTimeout(() => {
+                        this.reloadDataCollection();
+                    }, 500);
+                })
+                .catch(error => {
+                    this.showException(error);
+                });
+        },
+
+        archiveCollection() {
+            this.apiDeleteDataCollection(this.data_collection_id)
+                .then(response => {
+                    this.$snotify.success('Collection archived successfully');
+                    this.$bvModal.hide('configuration-modal');
+                    setTimeout(() => {
+                        this.reloadDataCollection();
+                    }, 500);
+                })
+                .catch(error => {
+                    this.showException(error);
+                });
+        },
+
+        autoScanAll() {
+            let data = {
+                'action': 'auto_scan_all_requested',
+            }
+
+            this.apiUpdateDataCollection(this.data_collection_id, data)
+                .then(response => {
+                    this.$snotify.success('Auto scan completed successfully');
+                    this.$bvModal.hide('configuration-modal');
+                    setTimeout(() => {
+                        this.reloadDataCollection();
+                    }, 500);
+                })
+                .catch(error => {
+                    this.showException(error);
+                });
+        },
+
+        loadMoreWhenNeeded() {
+            if (this.isLoading) {
+                return;
+            }
+
+            if (this.isMoreThanPercentageScrolled(70) === false) {
+                return;
+            }
+
+            if (this.nextUrl === null) {
+                return;
+            }
+
+            // we double per_page every second page load to avoid hitting the API too hard
+            // and we will limit it to 100-ish per_page
+            if ((this.page % 2 === 0) && (this.per_page < 100)) {
+                this.page = this.page/ 2;
+                this.per_page = this.per_page * 2;
+            }
+
+            this.loadDataCollectorRecords(++this.page);
+        },
+
+        setMinShelfLocation() {
+            // todo - possible bug - the url only sets and does not update if you want to change. Not sure if intentional behaviour
+            this.setUrlParameter( "filter[shelf_location_greater_than]", this.minShelfLocation);
+            this.loadDataCollectorRecords();
+            this.setFocusElementById('barcode_input');
+        },
+
+        loadDataCollectorRecords(page = 1) {
+            this.showLoading();
+
+            const params = this.$router.currentRoute.query;
+            params['filter[data_collection_id]'] = this.data_collection_id;
+            params['include'] = 'product,inventory,product.tags,product.aliases';
+            params['per_page'] = this.per_page;
+            params['page'] = page;
+
+            this.apiGetDataCollectorRecords(params)
+                .then((response) => {
+                    if (page === 1) {
+                        this.dataCollectionRecords = response.data.data;
+                    } else {
+                        this.dataCollectionRecords = this.dataCollectionRecords.concat(response.data.data);
+                    }
+
+                    this.page = response.data['meta']['current_page'];
+                    this.nextUrl = response.data['links']['next'];
+                })
+                .catch((error) => {
+                    this.displayApiCallError(error);
+                })
+                .finally(() => {
+                    this.hideLoading();
+                });
+        },
+
+        onProductCountRequestResponse(response) {
+            const payload = {
+                'data_collection_id': this.data_collection_id,
+                'product_id': response['product_id'],
+                'quantity_scanned': response['quantity'],
+            }
+
+            this.apiPostDataCollectorRecords(payload)
+                .then(() => {
+                    this.notifySuccess('Data collected');
+                })
+                .catch(e => {
+                    this.displayApiCallError(e);
+                })
+                .finally(() => {
+                    this.reloadDataCollection();
+                });
+        },
+
+        postCsvRecordsToApiAndCloseModal() {
+            const data = this.csv.map(record => ({
+                'product_sku': record.product_sku,
+                'quantity_requested': record.quantity_requested,
+                'quantity_scanned': record.quantity_scanned,
+            }));
+
+            //we removing header row from csv
+            data.shift();
+
+            const payload = {
+                'data_collection_id': this.data_collection_id,
+                'data': data,
+            }
+
+            this.apiPostCsvImport(payload)
+                .then(() => {
+                    this.notifySuccess('Records imported');
+                    this.$bvModal.hide('configuration-modal');
+                })
+                .catch(e => {
+                    this.displayApiCallError(e);
+                })
+                .finally(() => {
+                    this.reloadDataCollection();
+                });
+        },
+
+        downloadFileAndHideModal() {
+            window.open(this.getDownloadLink, '_blank');
+
+            this.hideBvModal('configuration-modal')
+        },
+
+        hideBvModal(ref) {
+            this.$bvModal.hide(ref);
+        },
+
+        addComment() {
+
+            let data = {
+                "data_collection_id": this.dataCollection.id,
+                "comment": this.input_comment
+            };
+
+            // quick hack to immediately display comment
+            this.dataCollection.comments.unshift(data);
+
+            this.apiPostDataCollectionComment(data)
+                .then(() => {
+                    this.loadDataCollectorDetails();
+                    this.input_comment = '';
+                    this.manuallyExpandComments = false;
+                    this.setFocusElementById('barcode_input');
+
+                })
+                .catch((error) => {
+                    console.log(error)
+                    this.displayApiCallError(error);
+                });
+        },
+
+        toggleExpandComments() {
+            this.manuallyExpandComments = !this.manuallyExpandComments;
+            if(this.manuallyExpandComments){
+                this.setFocusElementById('comment-input', true);
+            } else {
+                this.setFocusElementById('barcode_input', false);
+            }
+        },
+
+    },
+
+    computed: {
+        quantityRequestPlaceholderText() {
+            return this.addToRequested ? 'quantity requested' : 'quantity scanned';
+        },
+
+        getDownloadLink() {
+            let routeData = this.$router.resolve({
+                path: this.$router.currentRoute.fullPath,
+                query: {
+                    'select': 'product_sku,product_name,total_transferred_in,total_transferred_out,quantity_requested,quantity_to_scan,quantity_scanned,inventory_quantity,product_price,product_sale_price,product_sale_price_start_date,product_sale_price_end_date,product_cost,last7days_sales,last14days_sales,last28days_sales',
+                    'filter[data_collection_id]': this.data_collection_id,
+                    filename: this.dataCollection['name'] + ".csv"
+                }
+            });
+
+            return routeData.href;
+        },
+
+        commentsToShow() {
+            return this.dataCollection.comments.length
+                ? (this.manuallyExpandComments ? this.dataCollection.comments : [this.dataCollection.comments[0]])
+                : [];
+        }
+    },
+}
 </script>
 
 
 <style lang="scss">
-.setting-list{
+.setting-list {
     width: 100%;
     color: #495057;
     display: flex;
@@ -696,18 +706,18 @@
     background-color: #f8f9fa;
 }
 
-.setting-icon{
+.setting-icon {
     padding: 1rem;
     margin-right: 1rem;
     background-color: #f8f9fa;
     border-radius: 0.25rem;
 }
 
-.setting-icon:hover{
+.setting-icon:hover {
     background-color: unset;
 }
 
-.setting-title{
+.setting-title {
     color: #3490dc;
     font-weight: bolder;
     /*font-size: 1rem;*/
@@ -715,7 +725,7 @@
     margin-bottom: 2px;
 }
 
-.setting-desc{
+.setting-desc {
     color: #6c757d;
     font-size: 10pt;
 }
