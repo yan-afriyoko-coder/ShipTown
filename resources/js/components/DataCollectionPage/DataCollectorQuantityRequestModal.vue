@@ -21,7 +21,7 @@
             <div class="col text-right mt-3 mb-3">
                 <number-card label="reserved" :number="product ? product['inventory'][dataCollection['warehouse_code']]['quantity_reserved'] : 0" :class="{ 'bg-warning': product ? product['inventory'][dataCollection['warehouse_code']]['quantity_reserved'] : 0 > 0}"></number-card>
                 <number-card label="requested" :number="dataCollectionRecord ? dataCollectionRecord['quantity_requested'] : 0"></number-card>
-                <number-card label="scanned" :class="{ 'bg-warning': dataCollectionRecord && dataCollectionRecord['quantity_scanned'] > dataCollectionRecord['quantity_requested']}" : number="dataCollectionRecord ? dataCollectionRecord['quantity_scanned'] : 0"></number-card>
+                <number-card label="scanned" :class="{ 'bg-warning': dataCollectionRecord && dataCollectionRecord['quantity_scanned'] > dataCollectionRecord['quantity_requested']}" :number="dataCollectionRecord ? dataCollectionRecord['quantity_scanned'] : 0"></number-card>
                 <number-card label="to scan" :class="{ 'bg-warning': dataCollectionRecord && dataCollectionRecord['quantity_scanned'] > 0 && dataCollectionRecord['quantity_to_scan'] > 0}" :number="dataCollectionRecord ? dataCollectionRecord['quantity_to_scan'] : 0"></number-card>
             </div>
 
