@@ -2,8 +2,7 @@
     <div>
         <b-modal @ok="submitCount" id="data-collector-quantity-request-modal" scrollable no-fade hide-header
                  @shown="modalShown"
-                 @hidden="onHidden"
-        >
+                 @hidden="onHidden">
             <div class="row">
                 <div class="col-lg-6">
                     <product-info-card :product="product"></product-info-card>
@@ -22,13 +21,13 @@
             <div class="col text-right mt-3 mb-3">
                 <number-card label="reserved" :number="product ? product['inventory'][dataCollection['warehouse_code']]['quantity_reserved'] : 0" :class="{ 'bg-warning': product ? product['inventory'][dataCollection['warehouse_code']]['quantity_reserved'] : 0 > 0}"></number-card>
                 <number-card label="requested" :number="dataCollectionRecord ? dataCollectionRecord['quantity_requested'] : 0"></number-card>
-                <number-card label="scanned" :class="{ 'bg-warning': dataCollectionRecord && dataCollectionRecord['quantity_scanned'] > dataCollectionRecord['quantity_requested']}":number="dataCollectionRecord ? dataCollectionRecord['quantity_scanned'] : 0"></number-card>
+                <number-card label="scanned" :class="{ 'bg-warning': dataCollectionRecord && dataCollectionRecord['quantity_scanned'] > dataCollectionRecord['quantity_requested']}" : number="dataCollectionRecord ? dataCollectionRecord['quantity_scanned'] : 0"></number-card>
                 <number-card label="to scan" :class="{ 'bg-warning': dataCollectionRecord && dataCollectionRecord['quantity_scanned'] > 0 && dataCollectionRecord['quantity_to_scan'] > 0}" :number="dataCollectionRecord ? dataCollectionRecord['quantity_to_scan'] : 0"></number-card>
             </div>
 
             <div class="row-col">
                 <div class="col-12">
-                    <input class="form-control" :placeholder="'quantity to add'" :class="{ 'border-danger': this.quantity_to_add < 0, 'border-success': this.quantity_to_add > 0}"
+                    <input class="form-control" :placeholder="placeholder" :class="{ 'border-danger': this.quantity_to_add < 0, 'border-success': this.quantity_to_add > 0}"
                            id="data-collection-record-quantity-request-input"
                            name="data-collection-record-quantity-request-input"
                            ref="data-collection-record-quantity-request-input"
@@ -65,7 +64,7 @@
         },
 
         props: {
-            placeholder: '',
+            placeholder: 'quantity',
         },
 
         data: function() {
