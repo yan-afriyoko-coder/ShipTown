@@ -24,9 +24,9 @@ return new class extends Migration
             });
 
         Schema::table('data_collection_records', function (Blueprint $table) {
-            $table->decimal('unit_cost', 10, 3)->nullable(false)->change();
-            $table->decimal('unit_sold_price', 10, 3)->nullable(false)->change();
-            $table->decimal('unit_full_price', 10, 3)->nullable(false)->change();
+            $table->decimal('unit_cost', 20, 3)->nullable(false)->change();
+            $table->decimal('unit_sold_price', 20, 3)->nullable(false)->change();
+            $table->decimal('unit_full_price', 20, 3)->nullable(false)->change();
         });
     }
 };
