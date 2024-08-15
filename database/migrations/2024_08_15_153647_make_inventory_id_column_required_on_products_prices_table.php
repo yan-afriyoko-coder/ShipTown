@@ -15,7 +15,7 @@ return new class extends Migration
                 ProductPrice::query()
                     ->whereIn('id', $records->pluck('id'))
                     ->update([
-                        'inventory_id' => DB::raw('(SELECT inventory_id FROM inventory WHERE inventory.warehouse_id = warehouse_id AND inventory.product_id = product_id)'),
+                        'inventory_id' => DB::raw('(SELECT id FROM inventory WHERE inventory.warehouse_id = products_prices.warehouse_id AND inventory.product_id = products_prices.product_id)'),
                     ]);
 
                 usleep(10000); // 10ms
