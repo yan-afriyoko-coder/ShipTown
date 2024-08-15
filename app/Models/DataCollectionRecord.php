@@ -99,6 +99,21 @@ class DataCollectionRecord extends Model
         'total_profit' => 'float',
     ];
 
+//    protected static function boot(): void
+//    {
+//        parent::boot();
+//
+//        static::saving(function ($model) {
+//            if (!$model->price_source_id) {
+//                if ($model->unit_sold_price < $model->unit_full_price) {
+//                    $model->price_source = 'SALE_PRICE';
+//                } else {
+//                    $model->price_source = 'FULL_PRICE';
+//                }
+//            }
+//        });
+//    }
+
     public function replicate(array $except = null): self
     {
         // these are computed columns or columns that should not be copied when replicating a record

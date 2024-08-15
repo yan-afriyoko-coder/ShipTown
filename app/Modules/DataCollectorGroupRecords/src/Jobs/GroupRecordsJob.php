@@ -34,6 +34,7 @@ class GroupRecordsJob extends UniqueJob
     public function groupSimilarProducts(): void
     {
         $groupedRecords = $this->dataCollection->records()
+            ->getQuery()
             ->whereNull('deleted_at')
             ->get()
             ->groupBy(function ($item) {

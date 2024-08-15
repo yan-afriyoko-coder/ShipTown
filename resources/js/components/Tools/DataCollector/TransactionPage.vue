@@ -99,7 +99,7 @@
                             <div v-if="record['price_source'] !== 'FULL_PRICE'">price source:
                                 <strong>{{ record['price_source'] }}</strong>
                             </div>
-                            <div v-if="record['discount']">Discount name:
+                            <div v-if="record['discount']">discount name:
                                 <strong>{{ record['discount']['name'] ?? '' }}</strong>
                             </div>
                         </div>

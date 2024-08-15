@@ -9,7 +9,7 @@ class DataCollectionRecordCreatedEventListener
 {
     public function handle(DataCollectionRecordCreatedEvent $event): void
     {
-        ray('DataCollectionRecordCreatedEvent - Sale Prices');
-        AddSalePriceIfApplicable::class::dispatch($event->dataCollectionRecord);
+        AddSalePriceIfApplicable::dispatch($event->dataCollectionRecord);
+        ray('------------------------------------');
     }
 }
