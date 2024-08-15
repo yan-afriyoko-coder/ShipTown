@@ -39,16 +39,20 @@ class DataCollectorRecordController extends Controller
         $collectionRecord = DataCollectionRecord::query()->firstOrCreate([
                 'data_collection_id' => $request->validated('data_collection_id'),
                 'inventory_id' => $request->validated('inventory_id'),
+                'price_source' => null,
             ], [
                 'product_id' => $request->validated('product_id'),
                 'warehouse_code' => $request->validated('warehouse_code'),
+                'warehouse_id' => $request->validated('warehouse_id'),
+                'unit_cost' => 0,
+                'unit_full_price' => 0,
+                'unit_sold_price' => 0,
             ]);
 
         $collectionRecord->update([
-            'unit_cost' => data_get($collectionRecord, 'prices.cost'),
-            'unit_full_price' => data_get($collectionRecord, 'prices.price'),
-            'unit_sold_price' => data_get($collectionRecord, 'prices.current_price'),
-            'price_source' => data_get($collectionRecord, 'prices.price') === data_get($collectionRecord, 'prices.current_price') ? 'FULL_PRICE' : 'SALE_PRICE',
+            'unit_cost' => $collectionRecord->prices->cost,
+            'unit_full_price' => $collectionRecord->prices->price,
+            'unit_sold_price' => $collectionRecord->prices->price,
             'quantity_scanned' => $collectionRecord->quantity_scanned + $request->validated('quantity_scanned', 0),
             'quantity_requested' => $collectionRecord->quantity_requested + $request->validated('quantity_requested', 0),
         ]);

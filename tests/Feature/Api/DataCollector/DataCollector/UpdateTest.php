@@ -26,7 +26,7 @@ class UpdateTest extends TestCase
         $warehouse = Warehouse::factory()->create();
 
         /** @var Inventory $inventory */
-        $inventory = Inventory::firstOrCreate([
+        $inventory = Inventory::query()->firstOrCreate([
             'product_id' => $product->id,
             'warehouse_id' => $warehouse->id,
         ], []);
@@ -41,6 +41,8 @@ class UpdateTest extends TestCase
         $dataCollectorRecord = DataCollectionRecord::factory()->create([
             'data_collection_id' => $dataCollector->id,
             'inventory_id' => $inventory->id,
+            'warehouse_code' => $inventory->warehouse_code,
+            'warehouse_id' => $inventory->warehouse_id,
             'product_id' => $inventory->product_id,
             'quantity_scanned' => $randomQuantity,
         ]);
@@ -88,6 +90,7 @@ class UpdateTest extends TestCase
         /** @var DataCollection $dataCollector */
         $dataCollector = DataCollection::factory()->create([
             'warehouse_id' => $warehouse->id,
+            'warehouse_code' => $warehouse->code,
             'name' => 'Test',
         ]);
 
@@ -95,6 +98,8 @@ class UpdateTest extends TestCase
         $dataCollectorRecord = DataCollectionRecord::factory()->create([
             'data_collection_id' => $dataCollector->id,
             'inventory_id' => $inventory->id,
+            'warehouse_code' => $inventory->warehouse_code,
+            'warehouse_id' => $inventory->warehouse_id,
             'product_id' => $inventory->product_id,
             'quantity_scanned' => $randomQuantity,
         ]);

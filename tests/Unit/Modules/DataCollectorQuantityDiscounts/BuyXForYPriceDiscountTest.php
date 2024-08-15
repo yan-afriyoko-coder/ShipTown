@@ -4,6 +4,7 @@ namespace Tests\Unit\Modules\DataCollectorQuantityDiscounts;
 
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
+use App\Models\DataCollectionTransaction;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\DataCollector\src\DataCollectorServiceProvider;
@@ -68,6 +69,7 @@ class BuyXForYPriceDiscountTest extends TestCase
     {
         /** @var DataCollection $dataCollection */
         $dataCollection = DataCollection::factory()->create([
+            'type' => DataCollectionTransaction::class,
             'warehouse_id' => $this->warehouse->getKey(),
             'warehouse_code' => $this->warehouse->code,
         ]);
@@ -76,6 +78,8 @@ class BuyXForYPriceDiscountTest extends TestCase
             'data_collection_id' => $dataCollection->getKey(),
             'product_id' => $this->product4002->getKey(),
             'inventory_id' => $this->product4002->inventory()->first()->id,
+            'warehouse_code' => $dataCollection->warehouse_code,
+            'warehouse_id' => $dataCollection->warehouse_id,
             'unit_cost' => 5,
             'unit_full_price' => 30,
             'unit_sold_price' => 30,
@@ -87,6 +91,8 @@ class BuyXForYPriceDiscountTest extends TestCase
             'data_collection_id' => $dataCollection->getKey(),
             'product_id' => $this->product4003->getKey(),
             'inventory_id' => $this->product4003->inventory()->first()->id,
+            'warehouse_code' => $dataCollection->warehouse_code,
+            'warehouse_id' => $dataCollection->warehouse_id,
             'unit_cost' => 20,
             'unit_full_price' => 40,
             'unit_sold_price' => 40,

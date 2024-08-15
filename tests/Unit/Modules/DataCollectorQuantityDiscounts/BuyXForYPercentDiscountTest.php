@@ -4,6 +4,7 @@ namespace Tests\Unit\Modules\DataCollectorQuantityDiscounts;
 
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
+use App\Models\DataCollectionTransaction;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\DataCollector\src\DataCollectorServiceProvider;
@@ -29,16 +30,18 @@ class BuyXForYPercentDiscountTest extends TestCase
 
         $this->product4004->prices()
             ->update([
+                'cost' => 5,
                 'price' => 35,
-                'sale_price' => '25.99',
+                'sale_price' => 25.99,
                 'sale_price_start_date' => now()->subDays(14),
                 'sale_price_end_date' => now()->addDays(7)
             ]);
 
         $this->product4006->prices()
             ->update([
+                'cost' => 20,
                 'price' => 50,
-                'sale_price' => '35.99',
+                'sale_price' => 35.99,
                 'sale_price_start_date' => now()->subDays(14),
                 'sale_price_end_date' => now()->addDays(7)
             ]);
@@ -68,6 +71,7 @@ class BuyXForYPercentDiscountTest extends TestCase
     {
         /** @var DataCollection $dataCollection */
         $dataCollection = DataCollection::factory()->create([
+            'type' => DataCollectionTransaction::class,
             'warehouse_id' => $this->warehouse->getKey(),
             'warehouse_code' => $this->warehouse->code,
         ]);
@@ -76,6 +80,8 @@ class BuyXForYPercentDiscountTest extends TestCase
             'data_collection_id' => $dataCollection->getKey(),
             'product_id' => $this->product4004->getKey(),
             'inventory_id' => $this->product4004->inventory()->first()->id,
+            'warehouse_code' => $dataCollection->warehouse_code,
+            'warehouse_id' => $dataCollection->warehouse_id,
             'unit_cost' => 5,
             'unit_full_price' => 35,
             'unit_sold_price' => 35,
@@ -87,6 +93,8 @@ class BuyXForYPercentDiscountTest extends TestCase
             'data_collection_id' => $dataCollection->getKey(),
             'product_id' => $this->product4006->getKey(),
             'inventory_id' => $this->product4006->inventory()->first()->id,
+            'warehouse_code' => $dataCollection->warehouse_code,
+            'warehouse_id' => $dataCollection->warehouse_id,
             'unit_cost' => 20,
             'unit_full_price' => 50,
             'unit_sold_price' => 50,

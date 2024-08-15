@@ -20,6 +20,8 @@ class StoreTest extends TestCase
 
         DataCollectionRecord::factory()->create([
             'data_collection_id' => $dataCollection->getKey(),
+            'warehouse_id' => $dataCollection->warehouse_id,
+            'warehouse_code' => $dataCollection->warehouse_code,
         ]);
 
         $response = $this->actingAs($user, 'api')->postJson($this->uri, [

@@ -36,6 +36,7 @@ class BasicModuleTest extends TestCase
             'data_collection_id' => $dataCollection->getKey(),
             'inventory_id' => $inventory->getKey(),
             'product_id' => $inventory->product_id,
+            'warehouse_code' => $inventory->warehouse_code,
             'warehouse_id' => $inventory->warehouse_id,
         ]);
 
@@ -75,6 +76,7 @@ class BasicModuleTest extends TestCase
             'data_collection_id' => $dataCollection->getKey(),
             'inventory_id' => $inventory->getKey(),
             'product_id' => $inventory->product_id,
+            'warehouse_code' => $inventory->warehouse_code,
             'warehouse_id' => $inventory->warehouse_id,
         ]);
 
@@ -115,6 +117,7 @@ class BasicModuleTest extends TestCase
             'data_collection_id' => $dataCollection->getKey(),
             'inventory_id' => $inventory->getKey(),
             'product_id' => $inventory->product_id,
+            'warehouse_code' => $inventory->warehouse_code,
             'warehouse_id' => $inventory->warehouse_id,
         ]);
 

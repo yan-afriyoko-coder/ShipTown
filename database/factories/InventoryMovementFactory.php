@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
+use App\Models\Product;
+use App\Models\Warehouse;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -16,8 +18,10 @@ class InventoryMovementFactory extends Factory
     {
         $user = User::query()->inRandomOrder()->first() ?? User::factory()->create();
 
+        Warehouse::factory()->create();
+
         /** @var Inventory $inventory */
-        $inventory = Inventory::query()->inRandomOrder()->first() ?? Inventory::factory()->create();
+        $inventory = Product::factory()->create()->inventory()->first();
 
         $quantity_delta = rand(1, 100);
 

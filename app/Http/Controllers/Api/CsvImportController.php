@@ -70,16 +70,26 @@ class CsvImportController extends Controller
                 data_collection_id,
                 inventory_id,
                 product_id,
+                warehouse_id,
+                warehouse_code,
                 quantity_requested,
                 quantity_scanned,
+                unit_cost,
+                unit_full_price,
+                unit_sold_price,
                 created_at,
                 updated_at
             )
             SELECT '. $validatedData['data_collection_id'] .',
                 inventory.id,
                 tempTable.product_id,
+                data_collections.warehouse_id,
+                data_collections.warehouse_code,
                 tempTable.quantity_requested,
-                IFNULL(tempTable.quantity_scanned, 0),
+                IFNULL(tempTable.quantity_scanned, 0) as quantity_scanned,
+                IFNULL(products_prices.cost, 0) as unit_cost,
+                IFNULL(products_prices.price, 0) as unit_full_price,
+                IFNULL(products_prices.sale_price, 0) as unit_sold_price,
                 NOW(),
                 NOW()
 
@@ -89,6 +99,8 @@ class CsvImportController extends Controller
             LEFT JOIN inventory
                 ON inventory.product_id = tempTable.product_id
                 AND inventory.warehouse_id = data_collections.warehouse_id
+            LEFT JOIN products_prices
+                ON products_prices.inventory_id = inventory.id
         ');
 
         return JsonResource::make(['success' => true]);

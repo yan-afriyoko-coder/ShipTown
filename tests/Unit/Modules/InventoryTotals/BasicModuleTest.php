@@ -48,8 +48,9 @@ class BasicModuleTest extends TestCase
 
     public function test_sales_totals()
     {
-        /** @var Inventory $inventory */
-        $inventory = Inventory::factory()->create();
+        $warehouse = Warehouse::factory()->create();
+
+        $inventory = Product::factory()->create()->inventory()->first();
 
         InventoryService::sell($inventory, 1);
 

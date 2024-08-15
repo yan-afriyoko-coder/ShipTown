@@ -30,6 +30,7 @@ class ArchivedTransfersFromWarehouseSeeder extends Seeder
                 $dataCollection = DataCollection::factory()
                     ->create([
                         'warehouse_id' =>  $destinationWarehouse->getKey(),
+                        'warehouse_code' => $destinationWarehouse->code,
                         'name' => 'Transfer from ' . $sourceWarehouse->name,
                         'type' => DataCollectionTransferIn::class,
                         'created_at' => now()->subHours(rand(24, 48)),
@@ -39,6 +40,8 @@ class ArchivedTransfersFromWarehouseSeeder extends Seeder
                     ->count(5)
                     ->create([
                         'data_collection_id' => $dataCollection->getKey(),
+                        'warehouse_id' =>  $destinationWarehouse->getKey(),
+                        'warehouse_code' => $destinationWarehouse->code,
                         'product_id' => Product::query()->inRandomOrder()->first()->getKey(),
                     ]);
 

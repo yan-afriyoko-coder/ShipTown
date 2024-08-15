@@ -91,16 +91,26 @@ class DataCollectionsImportController extends Controller
                         INSERT INTO data_collection_records (
                             data_collection_id,
                             inventory_id,
+                            warehouse_id,
+                            warehouse_code,
                             product_id,
                             quantity_requested,
+                            unit_cost,
+                            unit_full_price,
+                            unit_sold_price,
                             created_at,
                             updated_at
                         )
                         SELECT
                             '. $dataCollector->getKey() .',
                             inventory.id,
+                            inventory.warehouse_id,
+                            inventory.warehouse_code,
                             inventory.product_id,
                             IFNULL(`' .$warehouse->code. '`, 0) as quantity_requested,
+                            IFNULL(products_prices.cost, 0) as unit_cost,
+                            IFNULL(products_prices.price, 0) as unit_full_price,
+                            IFNULL(products_prices.price, 0) as unit_sold_price,
                             NOW(),
                             NOW()
 
@@ -108,6 +118,8 @@ class DataCollectionsImportController extends Controller
                         LEFT JOIN inventory
                           ON ' . $tempTableName . '.product_id = inventory.product_id
                           AND inventory.warehouse_id = ' . $warehouse->id . '
+                        LEFT JOIN products_prices
+                          ON inventory.id = products_prices.inventory_id
 
                         WHERE IFNULL(`' .$warehouse->code. '`, 0) != 0
                     ');

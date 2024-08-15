@@ -21,7 +21,9 @@ class BasicModuleTest extends TestCase
             'min_count_date' => now()->subWeek()
         ]);
 
-        $inventory = Inventory::factory()->create();
+        Warehouse::factory()->create();
+
+        $inventory = Product::factory()->create()->inventory()->first();
 
         $inventory->update([
             'last_counted_at' => now()->subMonth(),
@@ -50,12 +52,17 @@ class BasicModuleTest extends TestCase
 
         StocktakeSuggestionsConfiguration::updateOrCreate([], ['min_count_date' => now()->subWeek()]);
 
-        Inventory::factory()->create()->update([
-            'last_counted_at' => now()->subMonth(),
-            'first_movement_at' => now()->subMonth(),
-            'in_stock_since' => now()->subDay(),
-            'quantity' => 1,
-        ]);
+        Warehouse::factory()->create();
+
+        Product::factory()->create()
+            ->inventory()
+            ->first()
+            ->update([
+                'last_counted_at' => now()->subMonth(),
+                'first_movement_at' => now()->subMonth(),
+                'in_stock_since' => now()->subDay(),
+                'quantity' => 1,
+            ]);
 
         $this->assertEquals(0, StocktakeSuggestion::query()->count());
     }
@@ -66,12 +73,17 @@ class BasicModuleTest extends TestCase
 
         StocktakeSuggestionsConfiguration::updateOrCreate([], ['min_count_date' => now()->subWeek()]);
 
-        Inventory::factory()->create()->update([
-            'last_counted_at' => now()->subMonth(),
-            'first_movement_at' => now()->subMonth(),
-            'in_stock_since' => now()->subMonth(),
-            'quantity' => 1,
-        ]);
+        Warehouse::factory()->create();
+
+        Product::factory()->create()
+            ->inventory()
+            ->first()
+            ->update([
+                'last_counted_at' => now()->subMonth(),
+                'first_movement_at' => now()->subMonth(),
+                'in_stock_since' => now()->subMonth(),
+                'quantity' => 1,
+            ]);
 
         $this->assertEquals(1, StocktakeSuggestion::query()->count());
     }
@@ -82,23 +94,34 @@ class BasicModuleTest extends TestCase
 
         StocktakeSuggestionsConfiguration::updateOrCreate([], ['min_count_date' => now()->subDay()]);
 
-        Inventory::factory()->create()->update([
-            'last_counted_at' => now()->subMonth(),
-            'in_stock_since' => now()->subMonth(),
-            'quantity' => 1,
-        ]);
+        Warehouse::factory()->create();
 
-        Inventory::factory()->create()->update([
-            'last_counted_at' => null,
-            'in_stock_since' => now()->subMonth(),
-            'quantity' => 1,
-        ]);
+        Product::factory()->create()
+            ->inventory()
+            ->first()
+            ->update([
+                'last_counted_at' => now()->subMonth(),
+                'in_stock_since' => now()->subMonth(),
+                'quantity' => 1,
+            ]);
 
-        Inventory::factory()->create()->update([
-            'last_counted_at' => null,
-            'in_stock_since' => now(),
-            'quantity' => 1,
-        ]);
+        Product::factory()->create()
+            ->inventory()
+            ->first()
+            ->update([
+                'last_counted_at' => null,
+                'in_stock_since' => now()->subMonth(),
+                'quantity' => 1,
+            ]);
+
+        Product::factory()->create()
+            ->inventory()
+            ->first()
+            ->update([
+                'last_counted_at' => null,
+                'in_stock_since' => now(),
+                'quantity' => 1,
+            ]);
 
         $this->assertEquals(2, StocktakeSuggestion::count());
     }
@@ -107,23 +130,34 @@ class BasicModuleTest extends TestCase
     {
         StocktakeSuggestionsConfiguration::updateOrCreate([], ['min_count_date' => now()->subDay()]);
 
-        Inventory::factory()->create()->update([
+        Warehouse::factory()->create();
+
+        Product::factory()->create()
+            ->inventory()
+            ->first()
+            ->update([
             'last_counted_at' => now()->subMonth(),
             'in_stock_since' => now()->subMonth(),
             'quantity' => 1,
         ]);
 
-        Inventory::factory()->create()->update([
-            'last_counted_at' => null,
-            'in_stock_since' => now()->subMonth(),
-            'quantity' => 1,
-        ]);
+        Product::factory()->create()
+            ->inventory()
+            ->first()
+            ->update([
+                'last_counted_at' => null,
+                'in_stock_since' => now()->subMonth(),
+                'quantity' => 1,
+            ]);
 
-        Inventory::factory()->create()->update([
-            'last_counted_at' => null,
-            'in_stock_since' => now(),
-            'quantity' => 1,
-        ]);
+        Product::factory()->create()
+            ->inventory()
+            ->first()
+            ->update([
+                'last_counted_at' => null,
+                'in_stock_since' => now(),
+                'quantity' => 1,
+            ]);
 
         OutdatedCountsJob::dispatch();
 
@@ -133,9 +167,10 @@ class BasicModuleTest extends TestCase
     /** @test */
     public function test_module_basic_functionality()
     {
+        Warehouse::factory()->create();
+
         /** @var Product $product */
         $product = Product::factory()->create();
-        $warehouse = Warehouse::factory()->create();
 
         $inventory = $product->inventory()->first();
 

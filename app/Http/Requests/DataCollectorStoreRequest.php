@@ -31,6 +31,7 @@ class DataCollectorStoreRequest extends FormRequest
             'data_collection_id' => ['required', Rule::exists('data_collections', 'id')->whereNull('deleted_at')],
             'inventory_id' => ['required', 'exists:inventory,id'],
             'product_id' => ['required', 'exists:products,id'],
+            'warehouse_id' => ['sometimes', 'exists:warehouses,id'],
             'warehouse_code' => ['required', 'exists:warehouses,code'],
             'quantity_requested' => ['sometimes', 'numeric'],
             'quantity_scanned' => ['sometimes', 'numeric'],

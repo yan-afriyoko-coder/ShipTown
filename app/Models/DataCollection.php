@@ -66,6 +66,15 @@ class DataCollection extends BaseModel
         'currently_running_task'
     ];
 
+    protected $casts = [
+        'total_quantity_scanned' => 'double',
+        'total_cost' => 'double',
+        'total_full_price' => 'double',
+        'total_discount' => 'double',
+        'total_sold_price' => 'double',
+        'total_profit' => 'double',
+    ];
+
     public function records(): HasMany
     {
         return $this->hasMany(DataCollectionRecord::class);
@@ -107,7 +116,7 @@ class DataCollection extends BaseModel
             ->firstOr(function () use ($inventory, $unit_sold_price) {
                 return DataCollectionRecord::query()->create([
                     'data_collection_id' => $this->id,
-                    'unit_cost' => data_get($inventory, 'prices.cost'),
+                    'unit_cost' => $inventory->prices->cost,
                     'unit_full_price' => data_get($inventory, 'prices.price'),
                     'unit_sold_price' => $unit_sold_price ?? data_get($inventory, 'prices.current_price'),
                     'price_source' => null,

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -289,12 +290,9 @@ class Inventory extends BaseModel
         return $this->belongsTo(Product::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
-    public function prices(): BelongsTo
+    public function prices(): HasOne
     {
-        return $this->belongsTo(ProductPrice::class, 'id', 'inventory_id');
+        return $this->hasOne(ProductPrice::class);
     }
 
     /**

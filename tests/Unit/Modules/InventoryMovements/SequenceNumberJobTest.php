@@ -4,6 +4,8 @@ namespace Tests\Unit\Modules\InventoryMovements;
 
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
+use App\Models\Product;
+use App\Models\Warehouse;
 use App\Modules\InventoryMovements\src\InventoryMovementsServiceProvider;
 use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 use App\Services\InventoryService;
@@ -20,8 +22,10 @@ class SequenceNumberJobTest extends TestCase
 
     public function testBasicScenario()
     {
-        $inventory = Inventory::factory()->create();
-        $inventory2 = Inventory::factory()->create();
+        $warehouse = Warehouse::factory()->create();
+
+        $inventory = Product::factory()->create()->inventory()->first();
+        $inventory2 = Product::factory()->create()->inventory()->first();
 
         $inventoryMovement01 = InventoryService::adjust($inventory, 20);
         $inventoryMovement02 = InventoryService::sell($inventory, -5);

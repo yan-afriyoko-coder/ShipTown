@@ -24,6 +24,8 @@ class IndexTest extends TestCase
         DataCollectionRecord::factory()->create([
             'data_collection_id' => $dataCollection->getKey(),
             'product_id' => Product::factory()->create()->getKey(),
+            'warehouse_id' => $dataCollection->warehouse_id,
+            'warehouse_code' => $dataCollection->warehouse_code,
             'quantity_scanned' => rand(1, 10),
         ]);
 

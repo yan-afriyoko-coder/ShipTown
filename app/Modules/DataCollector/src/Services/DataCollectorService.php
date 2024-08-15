@@ -124,7 +124,8 @@ class DataCollectorService
                     'deleted_at'
                 ]);
                 $destinationDataCollection->type = DataCollectionTransferIn::class;
-                $destinationDataCollection->warehouse_id = $warehouse_id;
+                $destinationDataCollection->warehouse_code = $destinationWarehouse->code;
+                $destinationDataCollection->warehouse_id = $destinationWarehouse->id;
                 $destinationDataCollection->name = $name;
                 $destinationDataCollection->save();
 
@@ -143,22 +144,31 @@ class DataCollectorService
         $sourceDataCollection->records()
             ->where('quantity_scanned', '!=', DB::raw(0))
             ->get()
-            ->each(function (DataCollectionRecord $record) use ($destinationDataCollection) {
+            ->each(function (DataCollectionRecord $sourceRecord) use ($destinationDataCollection) {
                 $inventory = Inventory::query()->firstOrCreate([
-                    'product_id' => $record->product_id,
+                    'product_id' => $sourceRecord->product_id,
+                    'warehouse_code' => $destinationDataCollection->warehouse_code,
                     'warehouse_id' => $destinationDataCollection->warehouse_id,
                 ]);
 
-                $custom_uuid = implode('-', ['source_data_collections_records_id', $record->getKey()]);
+                $pricing = $sourceRecord->product->prices()
+                    ->where('warehouse_id', $destinationDataCollection->warehouse_id)
+                    ->first();
+
+                $custom_uuid = implode('-', ['source_data_collections_records_id', $sourceRecord->getKey()]);
 
                 DataCollectionRecord::query()->firstOrCreate([
                     'custom_uuid' => $custom_uuid,
                 ], [
                     'data_collection_id' => $destinationDataCollection->id,
                     'inventory_id' => $inventory->id,
+                    'warehouse_code' => $inventory->warehouse_code,
                     'warehouse_id' => $inventory->warehouse_id,
                     'product_id' => $inventory->product_id,
-                    'quantity_requested' => $record->quantity_scanned,
+                    'quantity_requested' => $sourceRecord->quantity_scanned,
+                    'unit_cost' => $sourceRecord->unit_full_price,
+                    'unit_sold_price' => $pricing->price,
+                    'unit_full_price' => $sourceRecord->unit_full_price,
                 ]);
             });
 
