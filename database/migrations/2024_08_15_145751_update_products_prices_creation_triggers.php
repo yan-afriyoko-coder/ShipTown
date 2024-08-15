@@ -6,9 +6,13 @@ return new class extends Migration
 {
     public function up(): void
     {
-        \Illuminate\Support\Facades\DB::unprepared('
-            DROP TRIGGER trigger_on_products;
-        ');
+        try {
+            \Illuminate\Support\Facades\DB::unprepared('
+                DROP TRIGGER trigger_on_products;
+            ');
+        } catch (\Exception $e) {
+            //
+        }
 
         \Illuminate\Support\Facades\DB::unprepared('
             CREATE TRIGGER trigger_on_products
