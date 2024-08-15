@@ -21,9 +21,13 @@ return new class extends Migration
                 usleep(10000); // 10ms
             });
 
-        Schema::table('products_prices', function (Blueprint $table) {
-            $table->dropForeign(['inventory_id']);
-        });
+        try {
+            Schema::table('products_prices', function (Blueprint $table) {
+                $table->dropForeign(['inventory_id']);
+            });
+        } catch (\Exception $e) {
+            //
+        }
 
         Schema::table('products_prices', function (Blueprint $table) {
             $table->unsignedBigInteger('inventory_id')->nullable(false)->change();
