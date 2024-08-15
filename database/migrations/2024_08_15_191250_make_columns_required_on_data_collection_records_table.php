@@ -10,8 +10,8 @@ return new class extends Migration
     public function up(): void
     {
         DataCollectionRecord::query()
-            ->where('warehouse_code', null)
-            ->chunk(1000, function ($records) {
+            ->whereNULL('warehouse_code')
+            ->chunkById(1000, function ($records) {
                 DataCollectionRecord::query()
                     ->whereIn('id', $records->pluck('id'))
                     ->update([
@@ -23,8 +23,8 @@ return new class extends Migration
             });
 
         DataCollectionRecord::query()
-            ->where('warehouse_id', null)
-            ->chunk(1000, function ($records) {
+            ->whereNull('warehouse_id')
+            ->chunkById(1000, function ($records) {
                 DataCollectionRecord::query()
                     ->whereIn('id', $records->pluck('id'))
                     ->update([

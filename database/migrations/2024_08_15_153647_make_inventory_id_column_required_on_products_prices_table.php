@@ -10,8 +10,8 @@ return new class extends Migration
     public function up(): void
     {
         ProductPrice::query()
-            ->where('inventory_id', null)
-            ->chunk(1000, function ($records) {
+            ->whereNull('inventory_id')
+            ->chunkById(1000, function ($records) {
                 ProductPrice::query()
                     ->whereIn('id', $records->pluck('id'))
                     ->update([
