@@ -42,6 +42,14 @@ return new class extends Migration
             //
         }
 
+        try {
+            Schema::table('data_collection_records', function (Blueprint $table) {
+                $table->dropForeign('data_collection_records_warehouse_id_foreign');
+            });
+        } catch (\Exception $e) {
+            //
+        }
+
         Schema::table('data_collection_records', function (Blueprint $table) {
             $table->string('warehouse_code', 5)->nullable(false)->change();
             $table->unsignedBigInteger('warehouse_id')->nullable(false)->change();
