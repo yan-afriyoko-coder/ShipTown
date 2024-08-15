@@ -34,9 +34,13 @@ return new class extends Migration
                 usleep(10000); // 10ms
             });
 
-        Schema::table('data_collection_records', function (Blueprint $table) {
-            $table->dropForeign('data_collection_records_warehouse_code_foreign');
-        });
+        try {
+            Schema::table('data_collection_records', function (Blueprint $table) {
+                $table->dropForeign('data_collection_records_warehouse_code_foreign');
+            });
+        } catch (\Exception $e) {
+            //
+        }
 
         Schema::table('data_collection_records', function (Blueprint $table) {
             $table->string('warehouse_code', 5)->nullable(false)->change();
