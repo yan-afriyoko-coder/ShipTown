@@ -6,6 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    public function __construct()
+    {
+        \Illuminate\Support\Facades\DB::getDoctrineSchemaManager()
+            ->getDatabasePlatform()->registerDoctrineTypeMapping('varchar', 'string');
+    }
+
     public function up(): void
     {
         Schema::table('inventory', function (Blueprint $table) {
