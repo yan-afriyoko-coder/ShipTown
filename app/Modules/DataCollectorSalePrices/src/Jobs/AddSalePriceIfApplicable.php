@@ -37,19 +37,14 @@ class AddSalePriceIfApplicable extends UniqueJob
             ->whereNull('price_source_id')
             ->whereNull('price_source')
             ->get();
-        ray($records)->label('records');
 
         $records->each(function (DataCollectionRecord $record) {
-            if (empty($record->prices)) {
-                return;
+            if (empty($record->prices) && $record->quantity_scanned <= 0) {
+                return true;
             }
 
-            if ($record->prices->sale_price_start_date > now()) {
-                return;
-            }
-
-            if ($record->prices->sale_price_end_date < now()) {
-                return;
+            if ($record->prices->sale_price_start_date > now() && $record->prices->sale_price_end_date < now()) {
+                return true;
             }
 
             if ($record->price_source === null) {

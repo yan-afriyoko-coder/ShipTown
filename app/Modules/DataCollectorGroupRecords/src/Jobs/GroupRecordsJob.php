@@ -49,7 +49,7 @@ class GroupRecordsJob extends UniqueJob
             });
 
         $groupedRecords->each(function (Collection $items) {
-            if ($items->count() === 1) {
+            if ($items->count() === 1 || $items->count() > $items->sum('quantity_scanned')) {
                 return true;
             }
 

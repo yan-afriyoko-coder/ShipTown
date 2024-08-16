@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Models\Warehouse;
 use App\Modules\DataCollector\src\DataCollectorServiceProvider;
+use App\Modules\DataCollector\src\Services\DataCollectorService;
 use App\Modules\DataCollectorSalePrices\src\DataCollectorSalePricesServiceProvider;
 use Tests\TestCase;
 
@@ -57,6 +58,8 @@ class AddSalePriceIfApplicableTest extends TestCase
         $record->prices()
             ->associate(ProductPrice::where('product_id', $this->product4005->getKey())->first())
             ->save();
+
+        DataCollectorService::recalculate($dataCollection);
 
         ray($dataCollection->refresh(), $dataCollection->refresh()->records()->get()->toArray());
 
