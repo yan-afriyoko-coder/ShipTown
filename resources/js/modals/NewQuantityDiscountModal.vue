@@ -59,6 +59,14 @@ export default {
                 {
                     name: 'Buy X for Y percent discount',
                     jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount'
+                },
+                {
+                    name: 'Multibuy percent discount',
+                    jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPercentDiscount'
+                },
+                {
+                    name: 'Multibuy price discount',
+                    jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPriceDiscount'
                 }
             ],
         }

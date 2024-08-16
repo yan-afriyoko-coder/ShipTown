@@ -25,7 +25,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:250',
-            'job_class' => ['nullable', 'sometimes', 'string', 'in:App\\Modules\\QuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount,App\\Modules\\QuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPriceDiscount,App\\Modules\\QuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPercentDiscount,App\\Modules\\QuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount'],
+            'job_class' => ['nullable', 'sometimes', 'string', 'in:App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount,App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPriceDiscount,App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPercentDiscount,App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount,App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPercentDiscount,App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPriceDiscount'],
         ];
     }
 }

@@ -13,42 +13,65 @@
                     <div class="col-sm-12 col-lg-4">
                         <div class="text-primary">Configuration</div>
                         <template
-                            v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount' || discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPercentDiscount'">
-                            <div class="text-secondary small">
-                                Quantity full price:
-                                {{ dashIfEmpty(discount['configuration']?.quantity_full_price ?? '') }}
-                            </div>
-                            <div class="text-secondary small">
-                                Quantity discounted:
-                                {{ dashIfEmpty(discount['configuration']?.quantity_discounted ?? '') }}
-                            </div>
+                            v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPercentDiscount' || discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPriceDiscount'">
+                            <table v-if="sortedQuantityDiscountRanges.length" class="discount-table">
+                                <thead>
+                                <tr>
+                                    <th>Minimum quantity</th>
+                                    <th v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPriceDiscount'">Discounted price</th>
+                                    <th v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPercentDiscount'">Discount percent</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="row in sortedQuantityDiscountRanges">
+                                    <td>{{ row.minimum_quantity }}</td>
+                                    <td v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPriceDiscount'">{{ row.discounted_price }}</td>
+                                    <td v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPercentDiscount'">{{ row.discount_percent }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </template>
-                        <template
-                            v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount'">
-                            <div class="text-secondary small">
-                                Discounted price:
-                                {{ dashIfEmpty(discount['configuration']?.discounted_price ?? '') }}
-                            </div>
-                        </template>
-                        <template
-                            v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPriceDiscount' || discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount'">
-                            <div class="text-secondary small">
-                                Quantity required:
-                                {{ dashIfEmpty(discount['configuration']?.quantity_required ?? '') }}
-                            </div>
-                        </template>
-                        <template
-                            v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPriceDiscount'">
-                            <div class="text-secondary small">
-                                Discounted unit price:
-                                {{ dashIfEmpty(discount['configuration']?.discounted_unit_price ?? '') }}
-                            </div>
-                        </template>
-                        <template
-                            v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPercentDiscount' || discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount'">
-                            <div class="text-secondary small">
-                                Discount percent: {{ dashIfEmpty(discount['configuration']?.discount_percent ?? '') }}
-                            </div>
+                        <template v-else>
+                            <template
+                                v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount' || discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPercentDiscount'">
+                                <div class="text-secondary small">
+                                    Quantity full price:
+                                    {{ dashIfEmpty(discount['configuration']?.quantity_full_price ?? '') }}
+                                </div>
+                                <div class="text-secondary small">
+                                    Quantity discounted:
+                                    {{ dashIfEmpty(discount['configuration']?.quantity_discounted ?? '') }}
+                                </div>
+                            </template>
+                            <template
+                                v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount'">
+                                <div class="text-secondary small">
+                                    Discounted price:
+                                    {{ dashIfEmpty(discount['configuration']?.discounted_price ?? '') }}
+                                </div>
+                            </template>
+                            <template
+                                v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPriceDiscount' || discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount'">
+                                <div class="text-secondary small">
+                                    Quantity required:
+                                    {{ dashIfEmpty(discount['configuration']?.quantity_required ?? '') }}
+                                </div>
+                            </template>
+                            <template
+                                v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPriceDiscount'">
+                                <div class="text-secondary small">
+                                    Discounted unit price:
+                                    {{ dashIfEmpty(discount['configuration']?.discounted_unit_price ?? '') }}
+                                </div>
+                            </template>
+                            <template
+                                v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPercentDiscount' || discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount'">
+                                <div class="text-secondary small">
+                                    Discount percent: {{
+                                        dashIfEmpty(discount['configuration']?.discount_percent ?? '')
+                                    }}
+                                </div>
+                            </template>
                         </template>
                     </div>
                     <div class="col-sm-12 col-lg-4 text-right">
@@ -105,99 +128,166 @@
             <ValidationObserver v-slot="{ handleSubmit }">
                 <form @submit.prevent="handleSubmit(saveDiscountConfiguration)" ref="loadingContainer">
                     <template
-                        v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount' || discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPercentDiscount'">
-                        <div class="form-group">
-                            <label class="form-label" for="quantity_full_price">Quantity Full Price</label>
-                            <ValidationProvider vid="quantity_full_price" name="quantity_full_price"
-                                                v-slot="{ errors }">
-                                <input v-model="configuration.quantity_full_price" type="number" min="1" :class="{
-                                        'form-control': true,
-                                        'is-invalid': errors.length > 0,
-                                    }" id="quantity_full_price" placeholder="1" required>
-                                <div class="invalid-feedback">
-                                    {{ errors[0] }}
+                        v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPercentDiscount' || discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPriceDiscount'">
+                        <div class="setting-list">
+                            <div class="setting-body flex-fill">
+                                <div class="setting-desc">Click "Add" button to add another quantity range to this
+                                    discount.
                                 </div>
-                            </ValidationProvider>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <b-button variant="primary" type="button" @click="addDiscountRange">Add</b-button>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label" for="quantity_discounted">Quantity Discounted</label>
-                            <ValidationProvider vid="quantity_discounted" name="quantity_discounted"
-                                                v-slot="{ errors }">
-                                <input v-model="configuration.quantity_discounted" type="number" min="1" :class="{
-                                        'form-control': true,
-                                        'is-invalid': errors.length > 0,
-                                    }" id="quantity_discounted" placeholder="1" required>
-                                <div class="invalid-feedback">
-                                    {{ errors[0] }}
+                        <template v-for="(row, index) in configuration.multibuy_discount_ranges">
+                            <div class="d-flex align-items-center multibuy-row">
+                                <div class="form-group multibuy-item">
+                                    <label class="form-label" for="minimum_quantity">Minimum quantity</label>
+                                    <ValidationProvider vid="minimum_quantity" name="minimum_quantity"
+                                                        v-slot="{ errors }">
+                                        <input v-model="row.minimum_quantity" type="number" min="1" :class="{
+                                            'form-control': true,
+                                            'is-invalid': errors.length > 0,
+                                        }" id="minimum_quantity" placeholder="1" required>
+                                        <div class="invalid-feedback">
+                                            {{ errors[0] }}
+                                        </div>
+                                    </ValidationProvider>
                                 </div>
-                            </ValidationProvider>
-                        </div>
-                    </template>
-                    <template
-                        v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount'">
-                        <div class="form-group">
-                            <label class="form-label" for="discounted_price">Discounted Price</label>
-                            <ValidationProvider vid="discounted_price" name="discounted_price"
-                                                v-slot="{ errors }">
-                                <input v-model="configuration.discounted_price" type="number" min="0" step="0.01"
-                                       :class="{
+                                <div
+                                    v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPercentDiscount'"
+                                    class="form-group multibuy-item">
+                                    <label class="form-label" for="discount_percent">Discount Percent</label>
+                                    <ValidationProvider vid="discount_percent" name="discount_percent"
+                                                        v-slot="{ errors }">
+                                        <input v-model="row.discount_percent" type="number" min="1" :class="{
+                                            'form-control': true,
+                                            'is-invalid': errors.length > 0,
+                                        }" id="discount_percent" placeholder="1" required>
+                                        <div class="invalid-feedback">
+                                            {{ errors[0] }}
+                                        </div>
+                                    </ValidationProvider>
+                                </div>
+                                <div v-else class="form-group multibuy-item">
+                                    <label class="form-label" for="discounted_price">Discounted Price</label>
+                                    <ValidationProvider vid="discounted_price" name="discounted_price"
+                                                        v-slot="{ errors }">
+                                        <input v-model="row.discounted_price" type="number" min="0" step="0.01"
+                                               :class="{
                                         'form-control': true,
                                         'is-invalid': errors.length > 0,
                                     }" id="discounted_price" placeholder="10" required>
-                                <div class="invalid-feedback">
-                                    {{ errors[0] }}
+                                        <div class="invalid-feedback">
+                                            {{ errors[0] }}
+                                        </div>
+                                    </ValidationProvider>
                                 </div>
-                            </ValidationProvider>
-                        </div>
+                                <button
+                                    class="remove-product multibuy-remove d-inline-flex align-items-center justify-content-center"
+                                    @click="removeDiscountRange(index)" type="button">
+                                    <font-awesome-icon icon="trash" class="fa-lg"></font-awesome-icon>
+                                </button>
+                            </div>
+                        </template>
                     </template>
-                    <template
-                        v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPriceDiscount' || discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount'">
-                        <div class="form-group">
-                            <label class="form-label" for="quantity_required">Quantity Required</label>
-                            <ValidationProvider vid="quantity_required" name="quantity_required"
-                                                v-slot="{ errors }">
-                                <input v-model="configuration.quantity_required" type="number" min="1" :class="{
+                    <template v-else>
+                        <template
+                            v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount' || discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPercentDiscount'">
+                            <div class="form-group">
+                                <label class="form-label" for="quantity_full_price">Quantity Full Price</label>
+                                <ValidationProvider vid="quantity_full_price" name="quantity_full_price"
+                                                    v-slot="{ errors }">
+                                    <input v-model="configuration.quantity_full_price" type="number" min="1" :class="{
+                                        'form-control': true,
+                                        'is-invalid': errors.length > 0,
+                                    }" id="quantity_full_price" placeholder="1" required>
+                                    <div class="invalid-feedback">
+                                        {{ errors[0] }}
+                                    </div>
+                                </ValidationProvider>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="quantity_discounted">Quantity Discounted</label>
+                                <ValidationProvider vid="quantity_discounted" name="quantity_discounted"
+                                                    v-slot="{ errors }">
+                                    <input v-model="configuration.quantity_discounted" type="number" min="1" :class="{
+                                        'form-control': true,
+                                        'is-invalid': errors.length > 0,
+                                    }" id="quantity_discounted" placeholder="1" required>
+                                    <div class="invalid-feedback">
+                                        {{ errors[0] }}
+                                    </div>
+                                </ValidationProvider>
+                            </div>
+                        </template>
+                        <template
+                            v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount'">
+                            <div class="form-group">
+                                <label class="form-label" for="discounted_price">Discounted Price</label>
+                                <ValidationProvider vid="discounted_price" name="discounted_price"
+                                                    v-slot="{ errors }">
+                                    <input v-model="configuration.discounted_price" type="number" min="0" step="0.01"
+                                           :class="{
+                                        'form-control': true,
+                                        'is-invalid': errors.length > 0,
+                                    }" id="discounted_price" placeholder="10" required>
+                                    <div class="invalid-feedback">
+                                        {{ errors[0] }}
+                                    </div>
+                                </ValidationProvider>
+                            </div>
+                        </template>
+                        <template
+                            v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPriceDiscount' || discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount'">
+                            <div class="form-group">
+                                <label class="form-label" for="quantity_required">Quantity Required</label>
+                                <ValidationProvider vid="quantity_required" name="quantity_required"
+                                                    v-slot="{ errors }">
+                                    <input v-model="configuration.quantity_required" type="number" min="1" :class="{
                                         'form-control': true,
                                         'is-invalid': errors.length > 0,
                                     }" id="quantity_required" placeholder="1" required>
-                                <div class="invalid-feedback">
-                                    {{ errors[0] }}
-                                </div>
-                            </ValidationProvider>
-                        </div>
-                    </template>
-                    <template
-                        v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPriceDiscount'">
-                        <div class="form-group">
-                            <label class="form-label" for="discounted_unit_price">Discounted Unit Price</label>
-                            <ValidationProvider vid="discounted_unit_price" name="discounted_unit_price"
-                                                v-slot="{ errors }">
-                                <input v-model="configuration.discounted_unit_price" type="number" min="0" step="0.01"
-                                       :class="{
+                                    <div class="invalid-feedback">
+                                        {{ errors[0] }}
+                                    </div>
+                                </ValidationProvider>
+                            </div>
+                        </template>
+                        <template
+                            v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPriceDiscount'">
+                            <div class="form-group">
+                                <label class="form-label" for="discounted_unit_price">Discounted Unit Price</label>
+                                <ValidationProvider vid="discounted_unit_price" name="discounted_unit_price"
+                                                    v-slot="{ errors }">
+                                    <input v-model="configuration.discounted_unit_price" type="number" min="0"
+                                           step="0.01"
+                                           :class="{
                                         'form-control': true,
                                         'is-invalid': errors.length > 0,
                                     }" id="discounted_unit_price" placeholder="1" required>
-                                <div class="invalid-feedback">
-                                    {{ errors[0] }}
-                                </div>
-                            </ValidationProvider>
-                        </div>
-                    </template>
-                    <template
-                        v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPercentDiscount' || discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount'">
-                        <div class="form-group">
-                            <label class="form-label" for="discount_percent">Discount Percent</label>
-                            <ValidationProvider vid="discount_percent" name="discount_percent"
-                                                v-slot="{ errors }">
-                                <input v-model="configuration.discount_percent" type="number" min="0" :class="{
+                                    <div class="invalid-feedback">
+                                        {{ errors[0] }}
+                                    </div>
+                                </ValidationProvider>
+                            </div>
+                        </template>
+                        <template
+                            v-if="discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPercentDiscount' || discount.job_class === 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount'">
+                            <div class="form-group">
+                                <label class="form-label" for="discount_percent">Discount Percent</label>
+                                <ValidationProvider vid="discount_percent" name="discount_percent"
+                                                    v-slot="{ errors }">
+                                    <input v-model="configuration.discount_percent" type="number" min="0" :class="{
                                         'form-control': true,
                                         'is-invalid': errors.length > 0,
                                     }" id="discount_percent" placeholder="10" required>
-                                <div class="invalid-feedback">
-                                    {{ errors[0] }}
-                                </div>
-                            </ValidationProvider>
-                        </div>
+                                    <div class="invalid-feedback">
+                                        {{ errors[0] }}
+                                    </div>
+                                </ValidationProvider>
+                            </div>
+                        </template>
                     </template>
                     <div class="d-flex justify-content-end">
                         <b-button variant="secondary" type="button" @click="$bvModal.hide('configuration-modal');"
@@ -245,6 +335,7 @@ export default {
             discount: null,
             products: null,
             configuration: {
+                multibuy_discount_ranges: [],
                 quantity_full_price: null,
                 quantity_discounted: null,
                 discounted_price: null,
@@ -256,7 +347,9 @@ export default {
                 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount': 'Buy X, get Y for Z price',
                 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPercentDiscount': 'Buy X, get Y for Z percent discount',
                 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPriceDiscount': 'Buy X for Y price',
-                'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount': 'Buy X for Y percent discount'
+                'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount': 'Buy X for Y percent discount',
+                'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPercentDiscount': 'Multibuy percent discount',
+                'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPriceDiscount': 'Multibuy price discount'
             },
         }
     },
@@ -269,6 +362,12 @@ export default {
         }
 
         this.reloadQuantityDiscountProducts();
+    },
+
+    computed: {
+        sortedQuantityDiscountRanges() {
+            return [...this.configuration.multibuy_discount_ranges].sort((a, b) => a.minimum_quantity - b.minimum_quantity);
+        },
     },
 
     methods: {
@@ -368,26 +467,31 @@ export default {
                 return this.dashIfZero(product.product.price);
             }
         },
+
         displaySalePrice(product) {
             if (this.currentUser()['warehouse_code']) {
                 return this.dashIfZero(product.product.prices[this.currentUser()['warehouse_code']]['current_price']);
             } else {
                 return this.dashIfZero(product.product['sale_price']);
             }
+        },
+
+        addDiscountRange() {
+            this.configuration.multibuy_discount_ranges.push({
+                minimum_quantity: null,
+                discounted_price: null,
+                discount_percent: null
+            });
+        },
+
+        removeDiscountRange(index) {
+            this.configuration.multibuy_discount_ranges.splice(index, 1);
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-.setting-list {
-    width: 100%;
-    color: #495057;
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 5px;
-}
-
 .remove-product {
     cursor: pointer;
     width: 40px;
@@ -400,6 +504,45 @@ export default {
     &:hover {
         background-color: #dc3545;
         color: white;
+    }
+}
+
+.multibuy-row {
+    gap: 10px;
+}
+
+.multibuy-item {
+    flex: 1;
+}
+
+.multibuy-remove {
+    margin-top: 15px;
+    flex: 0 0 37px;
+    max-width: 37px;
+    height: 37px;
+    border-radius: 0.25rem;
+}
+
+.discount-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+        padding: 0.25rem;
+        border-bottom: 1px solid #dee2e6;
+        border-right: 1px solid #dee2e6;
+
+        &:last-of-type {
+            border-right: none;
+        }
+    }
+
+    tr {
+        &:last-of-type {
+            td {
+                border-bottom: none;
+            }
+        }
     }
 }
 </style>

@@ -29,7 +29,15 @@ class QuantityDiscountsService
     public static function preselectEligibleRecords(DataCollection $dataCollection, QuantityDiscount $discount): void
     {
         $eligibleRecords = self::getRecordsEligibleForDiscount($dataCollection, $discount)->get();
-        $remainingQuantityToDistribute = $discount->total_quantity_per_discount * self::timesWeCanApplyOfferFor($eligibleRecords, $discount);
+
+        if ($discount->is_multibuy_discount) {
+            $config = collect($discount->configuration['multibuy_discount_ranges']);
+            $remainingQuantityToDistribute = $eligibleRecords->sum('quantity_scanned') < $config->min('minimum_quantity')
+                ? 0
+                : $eligibleRecords->sum('quantity_scanned');
+        } else {
+            $remainingQuantityToDistribute = $discount->total_quantity_per_discount * self::timesWeCanApplyOfferFor($eligibleRecords, $discount);
+        }
 
         $eligibleRecords->each(function (DataCollectionRecord $record) use (&$remainingQuantityToDistribute, $discount) {
             if ($remainingQuantityToDistribute <= 0) {

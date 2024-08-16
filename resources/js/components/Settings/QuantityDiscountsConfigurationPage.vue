@@ -94,7 +94,9 @@ export default {
             'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount': 'Buy X, get Y for Z price',
             'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPercentDiscount': 'Buy X, get Y for Z percent discount',
             'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPriceDiscount': 'Buy X for Y price',
-            'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount': 'Buy X for Y percent discount'
+            'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount': 'Buy X for Y percent discount',
+            'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPercentDiscount': 'Multibuy percent discount',
+            'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPriceDiscount': 'Multibuy price discount'
         },
     }),
 

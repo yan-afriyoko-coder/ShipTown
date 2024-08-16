@@ -7,6 +7,8 @@ use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\CalculateSoldPriceForBuy
 use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\CalculateSoldPriceForBuyXForYPriceDiscount;
 use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\CalculateSoldPriceForBuyXGetYForZPercentDiscount;
 use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\CalculateSoldPriceForBuyXGetYForZPriceDiscount;
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\CalculateSoldPriceForMultibuyPercentDiscount;
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\CalculateSoldPriceForMultibuyPriceDiscount;
 use App\Modules\DataCollectorQuantityDiscounts\src\Models\QuantityDiscount;
 use App\Modules\DataCollectorQuantityDiscounts\src\Models\QuantityDiscountsProduct;
 use Illuminate\Database\Seeder;
@@ -57,6 +59,42 @@ class QuantityDiscountSeeder extends Seeder
                 ],
             ]);
 
+        $quantityDiscount5 = QuantityDiscount::factory()
+            ->create([
+                'name' => 'Buy 5 for 10% discount, buy 10 for 15% discount',
+                'job_class' => CalculateSoldPriceForMultibuyPercentDiscount::class,
+                'configuration' => [
+                    'multibuy_discount_ranges' => [
+                        [
+                            'minimum_quantity' => 5,
+                            'discount_percent' => 10,
+                        ],
+                        [
+                            'minimum_quantity' => 10,
+                            'discount_percent' => 15,
+                        ],
+                    ],
+                ],
+            ]);
+
+        $quantityDiscount6 = QuantityDiscount::factory()
+            ->create([
+                'name' => 'Buy 5 for €3 each, buy 10 for €2 each',
+                'job_class' => CalculateSoldPriceForMultibuyPriceDiscount::class,
+                'configuration' => [
+                    'multibuy_discount_ranges' => [
+                        [
+                            'minimum_quantity' => 5,
+                            'discounted_price' => 3,
+                        ],
+                        [
+                            'minimum_quantity' => 10,
+                            'discounted_price' => 2,
+                        ],
+                    ],
+                ],
+            ]);
+
         QuantityDiscountsProduct::factory()
             ->create([
                 'quantity_discount_id' => $quantityDiscount1->id,
@@ -103,6 +141,18 @@ class QuantityDiscountSeeder extends Seeder
             ->create([
                 'quantity_discount_id' => $quantityDiscount4->id,
                 'product_id' => Product::where(['sku' => '4008'])->first(),
+            ]);
+
+        QuantityDiscountsProduct::factory()
+            ->create([
+                'quantity_discount_id' => $quantityDiscount5->id,
+                'product_id' => Product::where(['sku' => '4009'])->first(),
+            ]);
+
+        QuantityDiscountsProduct::factory()
+            ->create([
+                'quantity_discount_id' => $quantityDiscount6->id,
+                'product_id' => Product::where(['sku' => '40013'])->first(),
             ]);
     }
 }
