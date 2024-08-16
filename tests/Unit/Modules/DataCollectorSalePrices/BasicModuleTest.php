@@ -50,6 +50,8 @@ class BasicModuleTest extends TestCase
             'data_collection_id' => $dataCollection->getKey(),
             'product_id' => $this->product4005->getKey(),
             'inventory_id' => $this->product4005->inventory()->first()->id,
+            'warehouse_id' => $this->warehouse->getKey(),
+            'warehouse_code' => $this->warehouse->code,
             'unit_cost' => 5,
             'unit_full_price' => 50,
             'unit_sold_price' => 50,
