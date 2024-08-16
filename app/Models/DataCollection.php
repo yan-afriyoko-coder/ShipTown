@@ -111,9 +111,6 @@ class DataCollection extends BaseModel
             ->where([
                 'data_collection_id' => $this->id,
                 'product_id' => $product_id,
-                'unit_sold_price' => $unit_sold_price ?? data_get($inventory, 'prices.current_price'),
-                'price_source' => null,
-                'price_source_id' => null,
             ])
             ->firstOr(function () use ($inventory, $unit_sold_price) {
                 return DataCollectionRecord::query()->create([
