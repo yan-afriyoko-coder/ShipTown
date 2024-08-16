@@ -21,6 +21,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * App\Models\Inventory.
  *
  * @property int         $id
+ * @property string      $product_sku
  * @property int|null    $warehouse_id
  * @property int         $product_id
  * @property string      $warehouse_code

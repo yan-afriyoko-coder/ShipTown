@@ -88,6 +88,7 @@ class ImportAsStocktakeJob extends UniqueJob
                 Inventory::query()->upsert($dataCollectionRecords->map(function (DataCollectionRecord $record) use ($dataCollection) {
                     return [
                         'id' => $record->inventory_id,
+                        'product_sku' => $record->inventory->product_sku,
                         'quantity' => $record->quantity_scanned,
                         'warehouse_id' => $dataCollection->warehouse_id,
                         'warehouse_code' => $dataCollection->warehouse->code,

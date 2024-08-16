@@ -32,6 +32,7 @@ class EnsureAllInventoryRecordsExistsJob implements ShouldQueue
      */
     private string $insertQuery = /** @lang text */
         'INSERT INTO inventory (
+          product_sku,
           product_id,
           warehouse_id,
           warehouse_code,
@@ -39,6 +40,7 @@ class EnsureAllInventoryRecordsExistsJob implements ShouldQueue
           updated_at
         )
         SELECT
+          products.sku as product_sku,
           products.id as product_id,
           warehouses.id as warehouse_id,
           warehouses.code as warehouse_code,

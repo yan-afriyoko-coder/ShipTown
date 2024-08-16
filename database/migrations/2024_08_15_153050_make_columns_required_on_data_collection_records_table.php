@@ -12,7 +12,7 @@ return new class extends Migration
         DataCollectionRecord::query()
             ->whereNULL('warehouse_code')
             ->withTrashed()
-            ->chunkById(1000, function ($records) {
+            ->chunkById(5000, function ($records) {
                 DataCollectionRecord::query()
                     ->whereIn('id', $records->pluck('id'))
                     ->withTrashed()

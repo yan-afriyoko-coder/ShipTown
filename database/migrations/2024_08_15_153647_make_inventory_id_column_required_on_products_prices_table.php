@@ -11,7 +11,7 @@ return new class extends Migration
     {
         ProductPrice::query()
             ->whereNull('inventory_id')
-            ->chunkById(1000, function ($records) {
+            ->chunkById(5000, function ($records) {
                 ProductPrice::query()
                     ->whereIn('id', $records->pluck('id'))
                     ->update([
