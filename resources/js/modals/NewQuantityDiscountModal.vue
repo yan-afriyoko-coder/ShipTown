@@ -46,19 +46,19 @@ export default {
             discountTypes: [
                 {
                     name: 'Buy X, get Y for Z price',
-                    jobClass: 'App\\Modules\\QuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount'
+                    jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount'
                 },
                 {
                     name: 'Buy X, get Y for Z percent discount',
-                    jobClass: 'App\\Modules\\QuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPercentDiscount'
+                    jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPercentDiscount'
                 },
                 {
                     name: 'Buy X for Y price',
-                    jobClass: 'App\\Modules\\QuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPriceDiscount'
+                    jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPriceDiscount'
                 },
                 {
                     name: 'Buy X for Y percent discount',
-                    jobClass: 'App\\Modules\\QuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount'
+                    jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount'
                 }
             ],
         }
