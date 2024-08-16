@@ -2,8 +2,7 @@
 
 namespace App\Modules\DataCollectorSalePrices\src;
 
-use App\Events\DataCollectionRecord\DataCollectionRecordCreatedEvent;
-use App\Events\DataCollectionRecord\DataCollectionRecordUpdatedEvent;
+use App\Events\DataCollection\DataCollectionRecalculateRequestEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 class DataCollectorSalePricesServiceProvider extends BaseModuleServiceProvider
@@ -15,12 +14,8 @@ class DataCollectorSalePricesServiceProvider extends BaseModuleServiceProvider
     public static bool $autoEnable = true;
 
     protected $listen = [
-        DataCollectionRecordCreatedEvent::class => [
-            Listeners\DataCollectionRecordCreatedEventListener::class,
-        ],
-
-        DataCollectionRecordUpdatedEvent::class => [
-            Listeners\DataCollectionRecordUpdatedEventListener::class,
+        DataCollectionRecalculateRequestEvent::class => [
+            Listeners\DataCollectionRecalculateRequestEventListener::class,
         ],
     ];
 
