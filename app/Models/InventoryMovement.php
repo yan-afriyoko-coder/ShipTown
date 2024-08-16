@@ -57,6 +57,8 @@ class InventoryMovement extends BaseModel
         'quantity_before',
         'quantity_delta',
         'quantity_after',
+        'unit_cost',
+        'unit_price',
         'description',
         'user_id',
         'previous_movement_id',

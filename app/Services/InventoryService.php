@@ -51,6 +51,8 @@ class InventoryService
                     'quantity_before' => $inventoryRefreshed->quantity,
                     'quantity_delta' => $quantityDelta,
                     'quantity_after' => $inventoryRefreshed->quantity + $quantityDelta,
+                    'unit_cost' => $inventoryRefreshed->prices->cost,
+                    'unit_price' => $inventoryRefreshed->prices->price,
                     'description' => '',
                 ],
                 $attributes

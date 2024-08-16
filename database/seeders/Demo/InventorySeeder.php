@@ -20,6 +20,7 @@ class InventorySeeder extends Seeder
     public function run()
     {
         $movements = Inventory::query()
+            ->with('prices')
             ->where('warehouse_code', '!=', DB::raw('999'))
             ->get()
             ->map(function (Inventory $inventory) {
@@ -40,6 +41,8 @@ class InventorySeeder extends Seeder
                     'quantity_before' => 0,
                     'quantity_delta' => $inventory->restock_level,
                     'quantity_after' => $inventory->restock_level,
+                    'unit_cost' => $inventory->prices->cost,
+                    'unit_price' => $inventory->prices->price,
                     'type' => 'stocktake',
                     'description' => 'initial stocktake',
                     'created_at' => now()->subMonth(),

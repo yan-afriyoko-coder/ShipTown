@@ -40,6 +40,8 @@ class BasicModuleTest extends TestCase
             'quantity_before' => 0,
             'quantity_delta' => $randomQuantity * -1,
             'quantity_after' => $inventory->quantity + $randomQuantity * -1,
+            'unit_cost' => $inventory->prices->cost,
+            'unit_price' => $inventory->prices->price,
             'description' => 'test',
         ]);
 
@@ -123,6 +125,8 @@ class BasicModuleTest extends TestCase
             'quantity_before' => $inventory->quantity + $randomQuantity * -1,
             'quantity_delta' => $randomQuantity * -1,
             'quantity_after' => $inventory->quantity + $randomQuantity * -1,
+            'unit_cost' => $inventory->prices->cost,
+            'unit_price' => $inventory->prices->price,
             'description' => 'test',
         ]);
 

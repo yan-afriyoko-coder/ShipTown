@@ -32,6 +32,8 @@ class InventoryMovementFactory extends Factory
             'quantity_delta'    => $quantity_delta,
             'quantity_before'   => $inventory->quantity,
             'quantity_after'    => $inventory->quantity + $quantity_delta,
+            'unit_cost'         => $inventory->prices->cost,
+            'unit_price'        => $inventory->prices->price,
             'description'       => $this->faker->word(),
             'product_id'        => $inventory->product_id,
             'warehouse_code'    => $inventory->warehouse_code,

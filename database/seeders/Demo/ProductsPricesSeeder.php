@@ -27,6 +27,7 @@ class ProductsPricesSeeder extends Seeder
                     ProductPrice::query()
                         ->where('product_id', '=', $product->getKey())
                         ->update([
+                            'cost' => $randomPrice * rand(40, 70) / 100,
                             'price' => $randomPrice,
                             'sale_price' => $salesPrice,
                             'sale_price_start_date' => $saleStartDate,
