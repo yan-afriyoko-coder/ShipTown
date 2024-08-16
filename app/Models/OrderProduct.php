@@ -256,7 +256,7 @@ class OrderProduct extends BaseModel
         $source_inventory = Inventory::query()
             ->select([
                 'warehouse_id as inventory_source_warehouse_id',
-                'location_id as inventory_source_location_id',
+                'warehouse_code as inventory_source_warehouse_code',
                 'shelve_location as inventory_source_shelf_location',
                 'quantity as inventory_source_quantity',
                 'product_id as inventory_source_product_id',

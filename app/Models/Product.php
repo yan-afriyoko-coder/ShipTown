@@ -58,7 +58,7 @@ use Spatie\Tags\Tag;
  * @property-read int|null $notifications_count
  * @property-read int|null $tags_count
  *
- * @method static Builder|Product addInventorySource($inventory_location_id)
+ * @method static Builder|Product addInventorySource($inventory_warehouse_code)
  * @method static Builder|Product newModelQuery()
  * @method static Builder|Product newQuery()
  * @method static Builder|Product onlyTrashed()
@@ -173,7 +173,7 @@ class Product extends BaseModel
                 AllowedFilter::exact('sku'),
                 AllowedFilter::exact('name'),
                 AllowedFilter::exact('price'),
-                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->ignore(['', null]),
+                AllowedFilter::scope('inventory_source_warehouse_code', 'addInventorySource')->ignore(['', null]),
 
                 AllowedFilter::scope('search', 'whereHasText'),
                 AllowedFilter::scope('has_tags', 'hasTags'),
@@ -278,21 +278,21 @@ class Product extends BaseModel
 
     /**
      * @param mixed $query
-     * @param mixed $inventory_location_id
+     * @param mixed $inventory_warehouse_code
      *
      * @return mixed
      */
-    public function scopeAddInventorySource($query, $inventory_location_id)
+    public function scopeAddInventorySource($query, $inventory_warehouse_code)
     {
         $source_inventory = Inventory::query()
             ->select([
                 'shelve_location as inventory_source_shelf_location',
                 'quantity as inventory_source_quantity',
                 'product_id as inventory_source_product_id',
-                'location_id as inventory_source_location_id',
+                'warehouse_id as inventory_source_warehouse_id',
                 'warehouse_code as inventory_source_warehouse_code',
             ])
-            ->where(['warehouse_code' => $inventory_location_id])
+            ->where(['warehouse_code' => $inventory_warehouse_code])
             ->toBase();
 
         return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {

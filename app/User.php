@@ -62,7 +62,6 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static Builder|User onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
- * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)

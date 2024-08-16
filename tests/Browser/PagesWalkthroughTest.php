@@ -59,6 +59,7 @@ class PagesWalkthroughTest extends DuskTestCase
         $warehouse = Warehouse::factory()->create(['name' => 'Dublin', 'code' => 'DUB']);
 
         $this->user = User::factory()->create([
+            'warehouse_code' => $warehouse->code,
             'warehouse_id' => $warehouse->getKey(),
             'password' => bcrypt('password')
         ]);

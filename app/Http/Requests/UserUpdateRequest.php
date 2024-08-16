@@ -64,6 +64,11 @@ class UserUpdateRequest extends FormRequest
                 'nullable',
                 'exists:warehouses,id'
             ],
+
+            'warehouse_code' => [
+                'nullable',
+                'exists:warehouses,code'
+            ],
         ];
     }
 }

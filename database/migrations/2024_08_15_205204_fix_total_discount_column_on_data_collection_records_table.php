@@ -13,7 +13,7 @@ return new class extends Migration
         });
 
         Schema::table('data_collection_records', function (Blueprint $table) {
-            $table->decimal('total_discount', 20)
+            $table->decimal('total_discount', 20, 3)
                 ->storedAs('ROUND(quantity_scanned * (unit_full_price - unit_sold_price), 3)')
                 ->comment('ROUND(quantity_scanned * (unit_full_price - unit_sold_price), 3)')
                 ->after('total_full_price');

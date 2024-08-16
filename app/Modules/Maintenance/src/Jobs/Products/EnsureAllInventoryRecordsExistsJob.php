@@ -34,7 +34,6 @@ class EnsureAllInventoryRecordsExistsJob implements ShouldQueue
         'INSERT INTO inventory (
           product_id,
           warehouse_id,
-          location_id,
           warehouse_code,
           created_at,
           updated_at
@@ -42,7 +41,6 @@ class EnsureAllInventoryRecordsExistsJob implements ShouldQueue
         SELECT
           products.id as product_id,
           warehouses.id as warehouse_id,
-          warehouses.code as location_id,
           warehouses.code as warehouse_code,
           now(),
           now()
