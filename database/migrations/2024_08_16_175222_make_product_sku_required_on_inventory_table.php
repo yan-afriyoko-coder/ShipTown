@@ -15,7 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('inventory', function (Blueprint $table) {
-            $table->string('product_sku', 50)->nullable(false)->change();
+            $table->string('product_sku')->nullable(false)->change();
         });
     }
 };
