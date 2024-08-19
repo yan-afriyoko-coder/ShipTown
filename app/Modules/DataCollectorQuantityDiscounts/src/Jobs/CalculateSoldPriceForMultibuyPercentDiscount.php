@@ -45,27 +45,21 @@ class CalculateSoldPriceForMultibuyPercentDiscount extends UniqueJob
             ->where(['price_source_id' => $this->discount->id])
             ->get();
 
-        if ($this->discount->is_multibuy_discount) {
-            $config = collect($this->discount->configuration['multibuy_discount_ranges']);
-            $quantityToDistribute = $eligibleRecords->sum('quantity_scanned') < $config->min('minimum_quantity')
-                ? 0
-                : $eligibleRecords->sum('quantity_scanned');
-            $correctDiscount = $config
-                ->where('minimum_quantity', '<=', $quantityToDistribute)
-                ->sortByDesc('minimum_quantity')
-                ->first();
-
-            $discountedPercent = $correctDiscount['discount_percent'] ?? 0;
-        } else {
-            $quantityToDistribute = $this->discount->quantity_required * QuantityDiscountsService::timesWeCanApplyOfferFor($eligibleRecords, $this->discount);
-            $discountedPercent = $this->discount->configuration['discount_percent'];
-        }
+        $config = collect($this->discount->configuration['multibuy_discount_ranges']);
+        $quantityToDistribute = $eligibleRecords->sum('quantity_scanned') < $config->min('minimum_quantity')
+            ? 0
+            : $eligibleRecords->sum('quantity_scanned');
+        $correctDiscount = $config
+            ->where('minimum_quantity', '<=', $quantityToDistribute)
+            ->sortByDesc('minimum_quantity')
+            ->first();
+        $discountPercent = $correctDiscount['discount_percent'] ?? 0;
 
         QuantityDiscountsService::applyDiscounts(
             $eligibleRecords,
             $quantityToDistribute,
-            function ($record) use ($discountedPercent) {
-                return $record->unit_full_price - ($record->unit_full_price * ($discountedPercent / 100));
+            function ($record) use ($discountPercent) {
+                return $record->unit_full_price - ($record->unit_full_price * ($discountPercent / 100));
             }
         );
     }

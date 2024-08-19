@@ -45,14 +45,20 @@ class CalculateSoldPriceForMultibuyPriceDiscount extends UniqueJob
             ->where(['price_source_id' => $this->discount->id])
             ->get();
 
-        $quantityToDistribute = $this->discount->quantity_required * QuantityDiscountsService::timesWeCanApplyOfferFor($eligibleRecords, $this->discount);
+        $config = collect($this->discount->configuration['multibuy_discount_ranges']);
+        $quantityToDistribute = $eligibleRecords->sum('quantity_scanned') < $config->min('minimum_quantity')
+            ? 0
+            : $eligibleRecords->sum('quantity_scanned');
+        $correctDiscount = $config
+            ->where('minimum_quantity', '<=', $quantityToDistribute)
+            ->sortByDesc('minimum_quantity')
+            ->first();
+        $discountedPrice = $correctDiscount['discounted_price'] ?? 0;
 
         QuantityDiscountsService::applyDiscounts(
             $eligibleRecords,
             $quantityToDistribute,
-            function ($record) {
-                return $record->unit_full_price - ($record->unit_full_price * ($this->discount->configuration['discount_percent'] / 100));
-            }
+            $discountedPrice
         );
     }
 }

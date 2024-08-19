@@ -54,6 +54,8 @@ class AddSalePriceIfApplicable extends UniqueJob
                     'price_source' => 'SALE_PRICE',
                 ]);
             }
+
+            return true;
         });
     }
 }

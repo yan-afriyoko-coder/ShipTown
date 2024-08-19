@@ -47,7 +47,6 @@ class GroupRecordsJob extends UniqueJob
                     $item['custom_uuid']
                 ]);
             });
-        ray($groupedRecords)->label('groupedRecords');
 
         $groupedRecords->each(function (Collection $items) {
             if ($items->count() === 1) {
