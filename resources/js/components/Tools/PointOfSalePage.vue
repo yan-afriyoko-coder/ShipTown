@@ -53,6 +53,7 @@ export default {
         createNewTransaction(customUuid) {
             let data = {
                 custom_uuid: customUuid,
+                warehouse_code: this.currentUser().warehouse_code,
                 warehouse_id: this.currentUser().warehouse_id,
                 name: 'TRANSACTION IN PROGRESS',
                 type: this.dataCollectionType
