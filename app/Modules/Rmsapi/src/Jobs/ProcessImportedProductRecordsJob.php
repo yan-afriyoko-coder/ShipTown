@@ -65,8 +65,17 @@ class ProcessImportedProductRecordsJob extends UniqueJob
 
     private function import(RmsapiProductImport $importedProduct): void
     {
+        if ($importedProduct->product->sku !== $importedProduct->sku) {
+            $importedProduct->update([
+                'product_id' => null,
+                'inventory_id' => null,
+                'product_price_id' => null,
+            ]);
+
+            return;
+        }
+
         $importedProduct->product->update([
-            'sku' => $importedProduct->sku,
             'name' => $importedProduct->name,
             'department' => data_get($importedProduct, 'department_name', ''),
             'category' => data_get($importedProduct, 'category_name', ''),
