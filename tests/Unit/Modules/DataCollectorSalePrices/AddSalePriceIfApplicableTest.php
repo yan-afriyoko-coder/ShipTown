@@ -4,6 +4,7 @@ namespace Tests\Unit\Modules\DataCollectorSalePrices;
 
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
+use App\Models\DataCollectionTransaction;
 use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Models\Warehouse;
@@ -40,6 +41,7 @@ class AddSalePriceIfApplicableTest extends TestCase
     {
         /** @var DataCollection $dataCollection */
         $dataCollection = DataCollection::factory()->create([
+            'type' => DataCollectionTransaction::class,
             'warehouse_id' => $this->warehouse->getKey(),
             'warehouse_code' => $this->warehouse->code,
         ]);
