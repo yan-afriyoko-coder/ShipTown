@@ -37,7 +37,6 @@ class UpdateInventoryWarehouseCodeJob implements ShouldQueue
             ->where(['warehouse_id' => $this->warehouse->getKey()])
             ->update([
                 'warehouse_code' => $this->warehouse->code,
-                'location_id' => $this->warehouse->code
             ]);
     }
 }

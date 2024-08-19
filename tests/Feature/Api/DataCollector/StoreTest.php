@@ -13,9 +13,12 @@ class StoreTest extends TestCase
     {
         $user = User::factory()->create();
 
+        $warehouse = Warehouse::factory()->create();
+
         $response = $this->actingAs($user, 'api')
             ->postJson(route('api.data-collector.store'), [
-                'warehouse_id' => Warehouse::factory()->create()->getKey(),
+                'warehouse_id' => $warehouse->getKey(),
+                'warehouse_code' => $warehouse->code,
                 'name' => 'test',
             ]);
 

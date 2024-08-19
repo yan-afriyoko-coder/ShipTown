@@ -40,6 +40,8 @@ class InventoryDatesUpdatesTest extends TestCase
             'quantity_before' => $this->inventory->quantity,
             'quantity_delta' => 10,
             'quantity_after' => $this->inventory->quantity + 10,
+            'unit_cost' => $this->inventory->prices->cost,
+            'unit_price' => $this->inventory->prices->price,
             'description' => 'test',
         ]);
 
@@ -64,6 +66,8 @@ class InventoryDatesUpdatesTest extends TestCase
             'quantity_before' => 5,
             'quantity_delta' => 45,
             'quantity_after' => 50,
+            'unit_cost' => $this->inventory->prices->cost,
+            'unit_price' => $this->inventory->prices->price,
             'description' => 'test',
         ]);
 
@@ -90,6 +94,8 @@ class InventoryDatesUpdatesTest extends TestCase
             'quantity_before' => 10,
             'quantity_delta' => -2,
             'quantity_after' => 8,
+            'unit_cost' => $this->inventory->prices->cost,
+            'unit_price' => $this->inventory->prices->price,
             'description' => 'test',
         ]);
 

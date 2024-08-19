@@ -11,7 +11,7 @@ return new class extends Migration
     {
         DataCollectionRecord::query()
             ->whereNull('unit_cost')
-            ->chunk(1000, function ($records) {
+            ->chunk(5000, function ($records) {
                 DataCollectionRecord::query()
                     ->whereIn('id', $records->pluck('id'))
                     ->update([

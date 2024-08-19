@@ -41,7 +41,7 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
                 'warehouse_id' => $warehouse->getKey(),
             ],[
                 'quantity' => 100,
-                'location_id' => $warehouse->code,
+                'warehouse_code' => $warehouse->code,
             ]);
         });
 

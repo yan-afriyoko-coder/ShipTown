@@ -11,9 +11,11 @@ return new class extends Migration
     {
         DataCollectionRecord::query()
             ->whereNULL('warehouse_code')
-            ->chunkById(1000, function ($records) {
+            ->withTrashed()
+            ->chunkById(5000, function ($records) {
                 DataCollectionRecord::query()
                     ->whereIn('id', $records->pluck('id'))
+                    ->withTrashed()
                     ->update([
                         'warehouse_code' => DB::raw('(SELECT warehouse_code FROM inventory WHERE inventory.id = inventory_id)'),
                         'warehouse_id' => DB::raw('(SELECT warehouse_id FROM inventory WHERE inventory.id = inventory_id)'),

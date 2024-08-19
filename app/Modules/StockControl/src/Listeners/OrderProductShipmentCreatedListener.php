@@ -38,6 +38,8 @@ class OrderProductShipmentCreatedListener
             'quantity_before' => $orderProductShipment->inventory->quantity,
             'quantity_delta' => $quantityDelta,
             'quantity_after' => $orderProductShipment->inventory->quantity + $quantityDelta,
+            'unit_cost' => $orderProductShipment->inventory->prices->cost,
+            'unit_price' => $orderProductShipment->inventory->prices->price,
             'description' => 'shipped',
         ]);
 

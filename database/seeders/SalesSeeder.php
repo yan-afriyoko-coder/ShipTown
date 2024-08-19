@@ -42,6 +42,8 @@ class SalesSeeder extends Seeder
                     'quantity_before' => $inventory->quantity,
                     'quantity_delta' => $quantityDelta,
                     'quantity_after' => $inventory->quantity + $quantityDelta,
+                    'unit_cost' => $inventory->prices->cost,
+                    'unit_price' => $inventory->prices->price,
                     'description' => 'sale',
                 ];
             });

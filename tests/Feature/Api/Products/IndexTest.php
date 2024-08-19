@@ -72,7 +72,7 @@ class IndexTest extends TestCase
                 'aliases',
                 'tags',
             ],
-            'filter[inventory_source_location_id]' => 1,
+            'filter[inventory_source_warehouse_code]' => 1,
         ]));
 
         $response->assertOk();

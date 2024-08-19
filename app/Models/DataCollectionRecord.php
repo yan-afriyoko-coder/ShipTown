@@ -105,6 +105,7 @@ class DataCollectionRecord extends Model
         return parent::replicate(array_merge($except ?? [], [
             'quantity_to_scan',
             'unit_discount',
+            'total_discount',
             'total_transferred_in',
             'total_transferred_out',
             'total_sold_price',

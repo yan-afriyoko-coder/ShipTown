@@ -31,6 +31,7 @@ class TransferInJob extends UniqueJob
         $dataCollection = DataCollection::withTrashed()->findOrFail($this->dataCollection_id);
 
         $dataCollection->records()
+            ->with('inventory')
             ->where('quantity_scanned', '!=', 0)
             ->chunkById(10, function ($records) {
                 $records->each(function (DataCollectionRecord $record) {

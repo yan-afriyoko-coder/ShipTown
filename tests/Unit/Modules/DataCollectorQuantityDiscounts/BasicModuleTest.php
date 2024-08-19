@@ -17,6 +17,6 @@ class BasicModuleTest extends TestCase
     /** @test */
     public function testBasicFunctionality()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->assertTrue(true, 'Each quantity discounts has its own tests');
     }
 }

@@ -43,6 +43,8 @@ class ImportAsStocktakeJob extends UniqueJob
 
         do {
             $dataCollectionRecords = $dataCollection->records()
+                ->with('inventory.prices')
+                ->with('inventory')
                 ->whereNull('is_processed')
                 ->limit(100)
                 ->get();
@@ -71,6 +73,8 @@ class ImportAsStocktakeJob extends UniqueJob
                     'quantity_before' => $record->inventory->quantity,
                     'quantity_delta' => $record->quantity_scanned - $record->inventory->quantity,
                     'quantity_after' => $record->quantity_scanned,
+                    'unit_cost' => $record->inventory->prices->cost,
+                    'unit_price' => $record->inventory->prices->price,
                     'description' => Str::substr('Data Collection - ' . $dataCollection->name, 0, 255),
                     'user_id' => Auth::id(),
                     'created_at' => now()->utc()->toDateTimeLocalString(),
@@ -88,6 +92,7 @@ class ImportAsStocktakeJob extends UniqueJob
                 Inventory::query()->upsert($dataCollectionRecords->map(function (DataCollectionRecord $record) use ($dataCollection) {
                     return [
                         'id' => $record->inventory_id,
+                        'product_sku' => $record->inventory->product_sku,
                         'quantity' => $record->quantity_scanned,
                         'warehouse_id' => $dataCollection->warehouse_id,
                         'warehouse_code' => $dataCollection->warehouse->code,

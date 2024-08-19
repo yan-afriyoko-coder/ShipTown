@@ -39,6 +39,11 @@ class UserStoreRequest extends FormRequest
                 'exists:warehouses,id',
             ],
 
+            'warehouse_code' => [
+                'nullable',
+                'exists:warehouses,code',
+            ],
+
             'default_dashboard_uri' => [
                 'nullable',
                 'string',

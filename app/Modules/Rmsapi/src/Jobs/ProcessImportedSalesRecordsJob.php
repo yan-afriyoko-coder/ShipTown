@@ -64,6 +64,8 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
                         'quantity_before' => 0,
                         'quantity_delta' => $salesRecord->quantity,
                         'quantity_after' => 0,
+                        'unit_cost' => data_get($salesRecord, 'unit_cost', 0),
+                        'unit_price' => data_get($salesRecord, 'price', 0),
                         'description' => $salesRecord->type === 'rms_sale' ? 'rms_sale' : 'rmsapi_inventory_movement',
                         'updated_at' => now()->utc()->toDateTimeLocalString(),
                 ]);

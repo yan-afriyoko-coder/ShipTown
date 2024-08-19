@@ -234,6 +234,7 @@
                 createCollectionAndRedirect(event) {
                     const payload = {
                         'warehouse_id': this.currentUser()['warehouse_id'],
+                        'warehouse_code': this.currentUser()['warehouse_code'],
                         'name': this.newCollectionName,
                         'type': this.newCollectionType,
                         'destination_warehouse_id': this.newCollectionDestinationWarehouseID,

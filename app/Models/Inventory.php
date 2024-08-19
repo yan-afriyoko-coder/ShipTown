@@ -21,9 +21,9 @@ use Spatie\QueryBuilder\QueryBuilder;
  * App\Models\Inventory.
  *
  * @property int         $id
+ * @property string      $product_sku
  * @property int|null    $warehouse_id
  * @property int         $product_id
- * @property int         $location_id
  * @property string      $warehouse_code
  * @property string      $shelve_location
  * @property float       $quantity
@@ -75,7 +75,6 @@ class Inventory extends BaseModel
     protected $fillable = [
         'recount_required',
         'warehouse_id',
-        'location_id',
         'warehouse_code',
         'shelve_location',
         'product_id',

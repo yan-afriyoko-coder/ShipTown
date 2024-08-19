@@ -83,6 +83,7 @@ class DataCollectionsImportController extends Controller
                 if (DB::table($tempTableName)->whereNotNull($warehouse->code)->where($warehouse->code, '>', 0)->exists()) {
                     $dataCollector = DataCollection::create([
                         'warehouse_id' => $warehouse->id,
+                        'warehouse_code' => $warehouse->code,
                         'name' => implode(' ', [$request->get('data_collection_name_prefix'), $warehouse->code]),
                         'type' => DataCollectionTransferIn::class
                     ]);

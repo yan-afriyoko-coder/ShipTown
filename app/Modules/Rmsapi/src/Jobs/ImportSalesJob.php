@@ -101,6 +101,8 @@ class ImportSalesJob extends UniqueJob
                 'uuid'                  => $saleRecord['uuid'],
                 'type'                  => $saleRecord['type'],
                 'sku'                   => $saleRecord['sku'],
+                'unit_cost'             => $saleRecord['cost'],
+                'total_sales_tax'       => $saleRecord['total_sales_tax'],
                 'price'                 => $saleRecord['price'],
                 'quantity'              => $saleRecord['quantity'],
                 'transaction_time'      => $saleRecord['transaction_time'],

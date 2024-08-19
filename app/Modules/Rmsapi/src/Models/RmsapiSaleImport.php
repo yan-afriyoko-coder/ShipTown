@@ -52,6 +52,7 @@ class RmsapiSaleImport extends BaseModel
         'type',
         'sku',
         'price',
+        'cost',
         'quantity',
         'transaction_time',
         'transaction_number',
