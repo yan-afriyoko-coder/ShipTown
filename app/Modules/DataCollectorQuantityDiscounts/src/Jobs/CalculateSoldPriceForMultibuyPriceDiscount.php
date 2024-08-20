@@ -33,7 +33,15 @@ class CalculateSoldPriceForMultibuyPriceDiscount extends UniqueJob
         ]);
 
         Cache::lock($cacheLockKey, 5)->get(function () {
-            QuantityDiscountsService::preselectEligibleRecords($this->dataCollection, $this->discount);
+            $quantityScanned = QuantityDiscountsService::getRecordsEligibleForDiscount($this->dataCollection, $this->discount)
+                ->sum('quantity_scanned') ;
+
+            $minQuantityRequired = collect($this->discount->configuration['multibuy_discount_ranges'])
+                ->min('minimum_quantity');
+
+            $quantityToDiscount = $quantityScanned < $minQuantityRequired ? 0 : $quantityScanned;
+
+            QuantityDiscountsService::preselectEligibleRecords($this->dataCollection, $this->discount, $quantityToDiscount);
             $this->applyDiscountsToSelectedRecords();
             DataCollectorService::recalculate($this->dataCollection);
         });
