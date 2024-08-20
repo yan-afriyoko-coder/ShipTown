@@ -151,8 +151,20 @@ class QuantityDiscountSeeder extends Seeder
 
         QuantityDiscountsProduct::factory()
             ->create([
+                'quantity_discount_id' => $quantityDiscount5->id,
+                'product_id' => Product::where(['sku' => '40011'])->first(),
+            ]);
+
+        QuantityDiscountsProduct::factory()
+            ->create([
                 'quantity_discount_id' => $quantityDiscount6->id,
                 'product_id' => Product::where(['sku' => '40013'])->first(),
+            ]);
+
+        QuantityDiscountsProduct::factory()
+            ->create([
+                'quantity_discount_id' => $quantityDiscount6->id,
+                'product_id' => Product::where(['sku' => '40014'])->first(),
             ]);
     }
 }
