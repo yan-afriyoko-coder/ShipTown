@@ -47,19 +47,27 @@ export default {
             discountTypes: [
                 {
                     name: 'Buy X, get Y for Z price',
-                    jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount'
+                    jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\BuyXGetYForZPriceDiscount'
                 },
                 {
                     name: 'Buy X, get Y for Z percent discount',
-                    jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPercentDiscount'
+                    jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\BuyXGetYForZPercentDiscount'
                 },
                 {
                     name: 'Buy X for Y price',
-                    jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPriceDiscount'
+                    jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\BuyXForYPriceDiscount'
                 },
                 {
                     name: 'Buy X for Y percent discount',
-                    jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount'
+                    jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\BuyXForYPercentDiscount'
+                },
+                {
+                    name: 'VolumePurchase percent discount',
+                    jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\VolumePurchasePercentDiscount'
+                },
+                {
+                    name: 'VolumePurchase price discount',
+                    jobClass: 'App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\VolumePurchasePriceDiscount'
                 }
             ],
         }

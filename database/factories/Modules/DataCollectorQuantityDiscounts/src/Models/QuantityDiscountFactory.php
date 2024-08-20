@@ -2,7 +2,7 @@
 
 namespace Database\Factories\Modules\DataCollectorQuantityDiscounts\src\Models;
 
-use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\CalculateSoldPriceForBuyXGetYForZPercentDiscount;
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\BuyXGetYForZPercentDiscount;
 use App\Modules\DataCollectorQuantityDiscounts\src\Models\QuantityDiscount;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -14,7 +14,7 @@ class QuantityDiscountFactory extends Factory
     {
         return [
             'name' => 'Buy 2 get 3rd half price',
-            'job_class' => CalculateSoldPriceForBuyXGetYForZPercentDiscount::class,
+            'job_class' => BuyXGetYForZPercentDiscount::class,
             'configuration' => [
                 'quantity_full_price' => 2,
                 'quantity_discounted' => 1,
