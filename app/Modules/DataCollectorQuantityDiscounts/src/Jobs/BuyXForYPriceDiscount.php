@@ -9,7 +9,7 @@ use App\Modules\DataCollectorQuantityDiscounts\src\Models\QuantityDiscount;
 use App\Modules\DataCollectorQuantityDiscounts\src\Services\QuantityDiscountsService;
 use Illuminate\Support\Facades\Cache;
 
-class CalculateSoldPriceForMultibuyPercentDiscount extends UniqueJob
+class BuyXForYPriceDiscount extends UniqueJob
 {
     private QuantityDiscount $discount;
     private DataCollection $dataCollection;
@@ -33,15 +33,7 @@ class CalculateSoldPriceForMultibuyPercentDiscount extends UniqueJob
         ]);
 
         Cache::lock($cacheLockKey, 5)->get(function () {
-            $quantityScanned = QuantityDiscountsService::getRecordsEligibleForDiscount($this->dataCollection, $this->discount)
-                ->sum('quantity_scanned') ;
-
-            $minQuantityRequired = collect($this->discount->configuration['multibuy_discount_ranges'])
-                ->min('minimum_quantity');
-
-            $quantityToDiscount = $quantityScanned < $minQuantityRequired ? 0 : $quantityScanned;
-
-            QuantityDiscountsService::preselectEligibleRecords($this->dataCollection, $this->discount, $quantityToDiscount);
+            QuantityDiscountsService::preselectEligibleRecords($this->dataCollection, $this->discount);
             $this->applyDiscountsToSelectedRecords();
             DataCollectorService::recalculate($this->dataCollection);
         });
@@ -53,22 +45,12 @@ class CalculateSoldPriceForMultibuyPercentDiscount extends UniqueJob
             ->where(['price_source_id' => $this->discount->id])
             ->get();
 
-        $config = collect($this->discount->configuration['multibuy_discount_ranges']);
-        $quantityToDistribute = $eligibleRecords->sum('quantity_scanned') < $config->min('minimum_quantity')
-            ? 0
-            : $eligibleRecords->sum('quantity_scanned');
-        $correctDiscount = $config
-            ->where('minimum_quantity', '<=', $quantityToDistribute)
-            ->sortByDesc('minimum_quantity')
-            ->first();
-        $discountPercent = $correctDiscount['discount_percent'] ?? 0;
+        $quantityToDistribute = $this->discount->quantity_required * QuantityDiscountsService::timesWeCanApplyOfferFor($eligibleRecords, $this->discount);
 
         QuantityDiscountsService::applyDiscounts(
             $eligibleRecords,
             $quantityToDistribute,
-            function ($record) use ($discountPercent) {
-                return $record->unit_full_price - ($record->unit_full_price * ($discountPercent / 100));
-            }
+            $this->discount->configuration['discounted_unit_price']
         );
     }
 }

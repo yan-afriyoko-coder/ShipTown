@@ -3,12 +3,12 @@
 namespace Database\Seeders\Demo;
 
 use App\Models\Product;
-use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\CalculateSoldPriceForBuyXForYPercentDiscount;
-use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\CalculateSoldPriceForBuyXForYPriceDiscount;
-use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\CalculateSoldPriceForBuyXGetYForZPercentDiscount;
-use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\CalculateSoldPriceForBuyXGetYForZPriceDiscount;
-use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\CalculateSoldPriceForMultibuyPercentDiscount;
-use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\CalculateSoldPriceForMultibuyPriceDiscount;
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\BuyXForYPercentDiscount;
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\BuyXForYPriceDiscount;
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\BuyXGetYForZPercentDiscount;
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\BuyXGetYForZPriceDiscount;
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\VolumePurchasePercentDiscount;
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\VolumePurchasePriceDiscount;
 use App\Modules\DataCollectorQuantityDiscounts\src\Models\QuantityDiscount;
 use App\Modules\DataCollectorQuantityDiscounts\src\Models\QuantityDiscountsProduct;
 use Illuminate\Database\Seeder;
@@ -20,7 +20,7 @@ class QuantityDiscountSeeder extends Seeder
         $quantityDiscount1 = QuantityDiscount::factory()
             ->create([
                 'name' => 'Buy 2, get 2 half price',
-                'job_class' => CalculateSoldPriceForBuyXGetYForZPercentDiscount::class,
+                'job_class' => BuyXGetYForZPercentDiscount::class,
                 'configuration' => [
                     'quantity_full_price' => 2,
                     'quantity_discounted' => 2,
@@ -31,7 +31,7 @@ class QuantityDiscountSeeder extends Seeder
         $quantityDiscount2 = QuantityDiscount::factory()
             ->create([
                 'name' => 'Buy 3, get 1 for $10',
-                'job_class' => CalculateSoldPriceForBuyXGetYForZPriceDiscount::class,
+                'job_class' => BuyXGetYForZPriceDiscount::class,
                 'configuration' => [
                     'quantity_full_price' => 3,
                     'quantity_discounted' => 1,
@@ -42,7 +42,7 @@ class QuantityDiscountSeeder extends Seeder
         $quantityDiscount3 = QuantityDiscount::factory()
             ->create([
                 'name' => 'Buy 5 and get 10% OFF',
-                'job_class' => CalculateSoldPriceForBuyXForYPercentDiscount::class,
+                'job_class' => BuyXForYPercentDiscount::class,
                 'configuration' => [
                     'quantity_required' => 5,
                     'discount_percent' => 10,
@@ -52,7 +52,7 @@ class QuantityDiscountSeeder extends Seeder
         $quantityDiscount4 = QuantityDiscount::factory()
             ->create([
                 'name' => 'Buy 5 for €10 (€2 each)',
-                'job_class' => CalculateSoldPriceForBuyXForYPriceDiscount::class,
+                'job_class' => BuyXForYPriceDiscount::class,
                 'configuration' => [
                     'quantity_required' => 5,
                     'discounted_unit_price' => 10,
@@ -62,7 +62,7 @@ class QuantityDiscountSeeder extends Seeder
         $quantityDiscount5 = QuantityDiscount::factory()
             ->create([
                 'name' => 'Buy 5 for 10% discount, buy 10 for 15% discount',
-                'job_class' => CalculateSoldPriceForMultibuyPercentDiscount::class,
+                'job_class' => VolumePurchasePercentDiscount::class,
                 'configuration' => [
                     'multibuy_discount_ranges' => [
                         [
@@ -80,7 +80,7 @@ class QuantityDiscountSeeder extends Seeder
         $quantityDiscount6 = QuantityDiscount::factory()
             ->create([
                 'name' => 'Buy 5 for €3 each, buy 10 for €2 each',
-                'job_class' => CalculateSoldPriceForMultibuyPriceDiscount::class,
+                'job_class' => VolumePurchasePriceDiscount::class,
                 'configuration' => [
                     'multibuy_discount_ranges' => [
                         [

@@ -2,7 +2,14 @@
 
 namespace App\Http\Requests\QuantityDiscount;
 
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\BuyXForYPercentDiscount;
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\BuyXForYPriceDiscount;
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\BuyXGetYForZPercentDiscount;
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\BuyXGetYForZPriceDiscount;
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\VolumePurchasePercentDiscount;
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\VolumePurchasePriceDiscount;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
@@ -25,7 +32,16 @@ class StoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:250',
-            'job_class' => ['nullable', 'sometimes', 'string', 'in:App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPercentDiscount,App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXForYPriceDiscount,App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPercentDiscount,App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount,App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPercentDiscount,App\\Modules\\DataCollectorQuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForMultibuyPriceDiscount'],
+            'job_class' => ['nullable', 'sometimes', 'string',
+                Rule::in([
+                    BuyXForYPercentDiscount::class,
+                    BuyXForYPriceDiscount::class,
+                    BuyXGetYForZPercentDiscount::class,
+                    BuyXGetYForZPriceDiscount::class,
+                    VolumePurchasePercentDiscount::class,
+                    VolumePurchasePriceDiscount::class,
+                ])
+            ],
         ];
     }
 }

@@ -9,7 +9,7 @@ use App\Modules\DataCollectorQuantityDiscounts\src\Models\QuantityDiscount;
 use App\Modules\DataCollectorQuantityDiscounts\src\Services\QuantityDiscountsService;
 use Illuminate\Support\Facades\Cache;
 
-class CalculateSoldPriceForBuyXForYPercentDiscount extends UniqueJob
+class BuyXGetYForZPercentDiscount extends UniqueJob
 {
     private QuantityDiscount $discount;
     private DataCollection $dataCollection;
@@ -41,14 +41,14 @@ class CalculateSoldPriceForBuyXForYPercentDiscount extends UniqueJob
 
     public function applyDiscountsToSelectedRecords(): void
     {
-        $eligibleRecords = QuantityDiscountsService::getRecordsEligibleForDiscount($this->dataCollection, $this->discount)
+        $records = QuantityDiscountsService::getRecordsEligibleForDiscount($this->dataCollection, $this->discount)
             ->where(['price_source_id' => $this->discount->id])
             ->get();
 
-        $quantityToDistribute = $this->discount->quantity_required * QuantityDiscountsService::timesWeCanApplyOfferFor($eligibleRecords, $this->discount);
+        $quantityToDistribute = $this->discount->quantity_at_discounted_price * QuantityDiscountsService::timesWeCanApplyOfferFor($records, $this->discount);
 
         QuantityDiscountsService::applyDiscounts(
-            $eligibleRecords,
+            $records,
             $quantityToDistribute,
             function ($record) {
                 return $record->unit_full_price - ($record->unit_full_price * ($this->discount->configuration['discount_percent'] / 100));

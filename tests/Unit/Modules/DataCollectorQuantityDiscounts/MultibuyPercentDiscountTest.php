@@ -8,7 +8,7 @@ use App\Models\DataCollectionTransaction;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\DataCollector\src\DataCollectorServiceProvider;
-use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\CalculateSoldPriceForMultibuyPercentDiscount;
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\VolumePurchasePercentDiscount;
 use App\Modules\DataCollectorQuantityDiscounts\src\Models\QuantityDiscount;
 use App\Modules\DataCollectorQuantityDiscounts\src\Models\QuantityDiscountsProduct;
 use App\Modules\DataCollectorQuantityDiscounts\src\QuantityDiscountsServiceProvider;
@@ -37,7 +37,7 @@ class MultibuyPercentDiscountTest extends TestCase
 
         $quantityDiscount = QuantityDiscount::factory()->create([
             'name' => 'Buy 5 or more for 10% discount',
-            'job_class' => CalculateSoldPriceForMultibuyPercentDiscount::class,
+            'job_class' => VolumePurchasePercentDiscount::class,
             'configuration' => [
                 'multibuy_discount_ranges' => [
                     [

@@ -9,7 +9,7 @@ use App\Modules\DataCollectorQuantityDiscounts\src\Models\QuantityDiscount;
 use App\Modules\DataCollectorQuantityDiscounts\src\Services\QuantityDiscountsService;
 use Illuminate\Support\Facades\Cache;
 
-class CalculateSoldPriceForBuyXGetYForZPriceDiscount extends UniqueJob
+class VolumePurchasePriceDiscount extends UniqueJob
 {
     private QuantityDiscount $discount;
     private DataCollection $dataCollection;
@@ -33,7 +33,15 @@ class CalculateSoldPriceForBuyXGetYForZPriceDiscount extends UniqueJob
         ]);
 
         Cache::lock($cacheLockKey, 5)->get(function () {
-            QuantityDiscountsService::preselectEligibleRecords($this->dataCollection, $this->discount);
+            $quantityScanned = QuantityDiscountsService::getRecordsEligibleForDiscount($this->dataCollection, $this->discount)
+                ->sum('quantity_scanned') ;
+
+            $minQuantityRequired = collect($this->discount->configuration['multibuy_discount_ranges'])
+                ->min('minimum_quantity');
+
+            $quantityToDiscount = $quantityScanned < $minQuantityRequired ? 0 : $quantityScanned;
+
+            QuantityDiscountsService::preselectEligibleRecords($this->dataCollection, $this->discount, $quantityToDiscount);
             $this->applyDiscountsToSelectedRecords();
             DataCollectorService::recalculate($this->dataCollection);
         });
@@ -45,12 +53,20 @@ class CalculateSoldPriceForBuyXGetYForZPriceDiscount extends UniqueJob
             ->where(['price_source_id' => $this->discount->id])
             ->get();
 
-        $quantityToDistribute = $this->discount->quantity_at_discounted_price * QuantityDiscountsService::timesWeCanApplyOfferFor($eligibleRecords, $this->discount);
+        $config = collect($this->discount->configuration['multibuy_discount_ranges']);
+        $quantityToDistribute = $eligibleRecords->sum('quantity_scanned') < $config->min('minimum_quantity')
+            ? 0
+            : $eligibleRecords->sum('quantity_scanned');
+        $correctDiscount = $config
+            ->where('minimum_quantity', '<=', $quantityToDistribute)
+            ->sortByDesc('minimum_quantity')
+            ->first();
+        $discountedPrice = $correctDiscount['discounted_price'] ?? 0;
 
         QuantityDiscountsService::applyDiscounts(
             $eligibleRecords,
             $quantityToDistribute,
-            $this->discount->configuration['discounted_price']
+            $discountedPrice
         );
     }
 }
