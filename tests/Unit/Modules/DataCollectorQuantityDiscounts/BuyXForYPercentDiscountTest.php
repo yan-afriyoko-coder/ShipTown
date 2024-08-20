@@ -8,7 +8,7 @@ use App\Models\DataCollectionTransaction;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\DataCollector\src\DataCollectorServiceProvider;
-use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\CalculateSoldPriceForBuyXForYPercentDiscount;
+use App\Modules\DataCollectorQuantityDiscounts\src\Jobs\BuyXForYPercentDiscount;
 use App\Modules\DataCollectorQuantityDiscounts\src\Models\QuantityDiscount;
 use App\Modules\DataCollectorQuantityDiscounts\src\Models\QuantityDiscountsProduct;
 use App\Modules\DataCollectorQuantityDiscounts\src\QuantityDiscountsServiceProvider;
@@ -48,7 +48,7 @@ class BuyXForYPercentDiscountTest extends TestCase
 
         $quantityDiscount = QuantityDiscount::factory()->create([
             'name' => 'Buy 5 and get 10% OFF',
-            'job_class' => CalculateSoldPriceForBuyXForYPercentDiscount::class,
+            'job_class' => BuyXForYPercentDiscount::class,
             'configuration' => [
                 'quantity_required' => 5,
                 'discount_percent' => 10,

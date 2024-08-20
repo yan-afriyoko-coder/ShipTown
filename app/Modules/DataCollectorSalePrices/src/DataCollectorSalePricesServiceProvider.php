@@ -18,4 +18,9 @@ class DataCollectorSalePricesServiceProvider extends BaseModuleServiceProvider
             Listeners\DataCollectionRecalculateRequestEventListener::class,
         ],
     ];
+
+    public static function enabling(): bool
+    {
+        return parent::enabling();
+    }
 }

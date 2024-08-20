@@ -17,6 +17,11 @@ class QuantityDiscountsService
             ->getQuery()
             ->whereIn('product_id', Arr::pluck($discount->products, 'product_id'))
             ->where(function ($query) use ($discount) {
+                $query->whereNull('price_source')
+                    ->orWhere(['price_source' => 'QUANTITY_DISCOUNT'])
+                    ->orWhere(['price_source' => 'SALE_PRICE']);
+            })
+            ->where(function ($query) use ($discount) {
                 $query->whereNull('price_source_id')
                     ->orWhere(['price_source_id' => $discount->id]);
             })
@@ -26,10 +31,11 @@ class QuantityDiscountsService
             ->orderBy('id', 'ASC');
     }
 
-    public static function preselectEligibleRecords(DataCollection $dataCollection, QuantityDiscount $discount): void
+    public static function preselectEligibleRecords(DataCollection $dataCollection, QuantityDiscount $discount, $quantityToDistribute = null): void
     {
         $eligibleRecords = self::getRecordsEligibleForDiscount($dataCollection, $discount)->get();
-        $remainingQuantityToDistribute = $discount->total_quantity_per_discount * self::timesWeCanApplyOfferFor($eligibleRecords, $discount);
+
+        $remainingQuantityToDistribute = $quantityToDistribute ?? $discount->total_quantity_per_discount * self::timesWeCanApplyOfferFor($eligibleRecords, $discount);
 
         $eligibleRecords->each(function (DataCollectionRecord $record) use (&$remainingQuantityToDistribute, $discount) {
             if ($remainingQuantityToDistribute <= 0) {
