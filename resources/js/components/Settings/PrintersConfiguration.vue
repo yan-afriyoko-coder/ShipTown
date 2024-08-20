@@ -9,7 +9,6 @@
                 </div>
             </div>
             <div class="card-body">
-
                 <div class="row mb-2" v-for="printer in printers" :key="printer['id']" :class="{'table-primary': isDefaultPrinter(printer['id'])}">
                     <div class="col-lg-6 col-md-12">
                         {{ printer['name'] }} <br>
@@ -55,11 +54,13 @@ export default {
             });
     },
 
-    data: () => ({
-        defaultPrinter: 0,
-        printers: [],
-        errorMessage: null,
-    }),
+    data() {
+        return {
+            defaultPrinter: 0,
+            printers: [],
+            errorMessage: null,
+        };
+    },
 
     methods: {
         setUserPrinter(printerId) {

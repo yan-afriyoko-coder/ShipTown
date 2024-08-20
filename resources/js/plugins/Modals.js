@@ -38,6 +38,10 @@ const Modals = {
             showAddNewQuantityDiscountModal(discount = null) {
                 this.show('new-quantity-discount-modal', {'discount': discount});
             },
+
+            showSetTransactionPrinterModal(printer = null) {
+                this.show('set-transaction-printer-modal', {'printer': printer});
+            },
         }
     }
 }

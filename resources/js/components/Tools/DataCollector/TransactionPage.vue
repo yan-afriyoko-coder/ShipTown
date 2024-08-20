@@ -158,6 +158,17 @@
                         </div>
                     </div>
                     <hr>
+                    <div v-if="selectedPrinter" class="row mb-2">
+                        <div class="col">
+                            <div class="setting-title">Selected Printer</div>
+                            <div class="setting-desc">{{ selectedPrinter.name }}</div>
+                        </div>
+                    </div>
+                    <button :disabled="! buttonsEnabled" @click.prevent="selectPrinter" v-b-toggle
+                            class="col btn mb-2 btn-primary">
+                        <template v-if="selectedPrinter">Change printer</template>
+                        <template v-else>Select printer</template>
+                    </button>
                     <button :disabled="! buttonsEnabled" @click.prevent="autoScanAll" v-b-toggle
                             class="col btn mb-2 btn-primary">AutoScan ALL Records
                     </button>
@@ -212,9 +223,7 @@
                     <button v-if="csv" type="button" @click.prevent="postCsvRecordsToApiAndCloseModal"
                             class="col btn mb-1 btn-primary">Import Records
                     </button>
-
                 </div>
-
             </div>
 
             <template #modal-footer>
@@ -225,7 +234,6 @@
                     OK
                 </b-button>
             </template>
-
         </b-modal>
 
         <b-modal id="transferToModal" no-fade hide-header @hidden="setFocusElementById('barcode_input')">
@@ -241,6 +249,8 @@
                 </b-button>
             </template>
         </b-modal>
+
+        <set-transaction-printer-modal/>
     </div>
 </template>
 
@@ -256,6 +266,7 @@ import Vue from "vue";
 import NumberCard from "./../../SharedComponents/NumberCard";
 import SwipingCard from "./../../SharedComponents/SwipingCard";
 import {VueCsvImport} from 'vue-csv-import';
+import Modals from "../../../plugins/Modals";
 
 export default {
     mixins: [loadingOverlay, beep, url, api, helpers],
@@ -271,7 +282,7 @@ export default {
         data_collection_id: null,
     },
 
-    data: function () {
+    data() {
         return {
             minShelfLocation: '',
             singleScanEnabled: true,
@@ -294,6 +305,7 @@ export default {
                 'App\\Models\\DataCollectionTransferOut': 'Transfer Out',
                 'App\\Models\\DataCollectionStocktake': 'Stocktake',
             },
+            selectedPrinter: null,
         };
     },
 
@@ -303,7 +315,13 @@ export default {
             return;
         }
 
+        this.selectedPrinter = this.getSelectedPrinter();
+
         window.onscroll = () => this.loadMoreWhenNeeded();
+
+        Modals.EventBus.$on('hide::modal::set-transaction-printer-modal', (printer) => {
+            this.selectedPrinter = printer;
+        });
 
         this.getUrlFilterOrSet('warehouse_code', Vue.prototype.$currentUser['warehouse']['code']);
 
@@ -530,6 +548,10 @@ export default {
                 });
         },
 
+        selectPrinter() {
+            this.$modal.showSetTransactionPrinterModal(this.selectedPrinter);
+        },
+
         autoScanAll() {
             let data = {
                 'action': 'auto_scan_all_requested',
@@ -696,6 +718,21 @@ export default {
             }
         },
 
+        getSelectedPrinter() {
+            const printer = localStorage.getItem('selectedTransactionsPrinter');
+
+            if (printer) {
+                this.apiPostUserMe({
+                    'printer_id': printer.id
+                }).catch(e => {
+                    this.displayApiCallError(e);
+                });
+
+                return JSON.parse(printer);
+            } else {
+                return null;
+            }
+        }
     },
 
     computed: {
