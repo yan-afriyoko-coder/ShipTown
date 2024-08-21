@@ -139,12 +139,6 @@ export default {
         setChosenPrinter(printer) {
             this.selectedPrinter = printer;
 
-            this.apiPostUserMe({
-                'printer_id': printer.id
-            }).catch(e => {
-                this.displayApiCallError(e);
-            });
-
             window.localStorage.setItem('selectedTransactionsPrinter', JSON.stringify(printer));
         },
 

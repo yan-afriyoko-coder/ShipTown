@@ -722,12 +722,6 @@ export default {
             const printer = localStorage.getItem('selectedTransactionsPrinter');
 
             if (printer) {
-                this.apiPostUserMe({
-                    'printer_id': printer.id
-                }).catch(e => {
-                    this.displayApiCallError(e);
-                });
-
                 return JSON.parse(printer);
             } else {
                 return null;
