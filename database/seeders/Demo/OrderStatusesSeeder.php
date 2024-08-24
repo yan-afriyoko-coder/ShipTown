@@ -48,5 +48,13 @@ class OrderStatusesSeeder extends Seeder
              'order_active' => true,
              'order_on_hold' => true,
          ]);
+
+         OrderStatus::updateOrCreate([
+             'code' => 'out_of_stock',
+         ], [
+             'name' => 'out_of_stock',
+             'order_active' => true,
+             'order_on_hold' => true,
+         ]);
     }
 }

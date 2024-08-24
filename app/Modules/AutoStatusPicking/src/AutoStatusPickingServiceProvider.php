@@ -12,24 +12,12 @@ use App\Modules\BaseModuleServiceProvider;
  */
 class AutoStatusPickingServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = 'Automation - Auto "picking" refilling';
 
-    /**
-     * @var string
-     */
     public static string $module_description = '"paid" to "picking" batch refill prioritizing old orders';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = false;
 
-    /**
-     * @var string[][]
-     */
     protected $listen = [
         EveryHourEvent::class => [
             Listeners\HourlyEvent\RefillPickingIfEmpty::class,

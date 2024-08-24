@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use Barryvdh\LaravelIdeHelper\Eloquent;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -23,15 +22,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @method static Builder|OrderStatus newModelQuery()
- * @method static Builder|OrderStatus newQuery()
- * @method static Builder|OrderStatus query()
- * @method static Builder|OrderStatus whereCode($value)
- * @method static Builder|OrderStatus whereCreatedAt($value)
- * @method static Builder|OrderStatus whereId($value)
- * @method static Builder|OrderStatus whereName($value)
- * @method static Builder|OrderStatus whereOrderActive($value)
- * @method static Builder|OrderStatus whereUpdatedAt($value)
  * @mixin Eloquent
  */
 class OrderStatus extends BaseModel

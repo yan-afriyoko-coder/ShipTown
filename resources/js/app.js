@@ -126,6 +126,7 @@ Vue.use(VueTippy);
 Vue.use(Snotify, {
     global: {
         newOnTop: false,
+        maxOnScreen: 3,
     },
     toast: {
         position: "centerBottom",

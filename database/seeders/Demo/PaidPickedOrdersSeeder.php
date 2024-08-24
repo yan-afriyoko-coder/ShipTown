@@ -14,7 +14,6 @@ class PaidPickedOrdersSeeder extends Seeder
 {
     public function run(): void
     {
-
         $user = User::first();
 
         $orders = Order::factory()
@@ -65,6 +64,8 @@ class PaidPickedOrdersSeeder extends Seeder
             'name_ordered' => $orderProduct->name_ordered,
             'quantity_picked' => $orderProduct->quantity_ordered,
             'quantity_skipped_picking' => 0,
+            'is_distributed' => true,
+            'order_product_ids' => [$orderProduct->getKey()],
         ]);
     }
 

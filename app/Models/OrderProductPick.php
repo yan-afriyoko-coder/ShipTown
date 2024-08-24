@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $order_product_id
  * @property double $quantity_picked
  * @property double $quantity_skipped_picking
+ * @property OrderProduct $orderProduct
+ * @property Pick $pick
  */
 class OrderProductPick extends Model
 {
@@ -25,4 +28,14 @@ class OrderProductPick extends Model
         'quantity_picked',
         'quantity_skipped_picking',
     ];
+
+    public function pick(): BelongsTo
+    {
+        return $this->belongsTo(Pick::class, 'pick_id', 'id')->withTrashed();
+    }
+
+    public function orderProduct(): BelongsTo
+    {
+        return $this->belongsTo(OrderProduct::class);
+    }
 }

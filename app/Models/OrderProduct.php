@@ -9,6 +9,7 @@ use Barryvdh\LaravelIdeHelper\Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
@@ -282,5 +283,10 @@ class OrderProduct extends BaseModel
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function picks(): HasMany
+    {
+        return $this->hasMany(Pick::class);
     }
 }

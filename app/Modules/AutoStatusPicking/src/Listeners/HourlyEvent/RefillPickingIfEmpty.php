@@ -9,7 +9,7 @@ use App\Modules\AutoStatusPicking\src\Jobs\RefillPickingIfEmptyJob;
  */
 class RefillPickingIfEmpty
 {
-    public function handle()
+    public function handle(): void
     {
         RefillPickingIfEmptyJob::dispatch();
     }

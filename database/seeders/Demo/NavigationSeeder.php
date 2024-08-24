@@ -7,12 +7,12 @@ use Illuminate\Database\Seeder;
 
 class NavigationSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        NavigationMenu::query()->create([
-            'name' => 'Status: packing',
-            'url' => '/autopilot/packlist?status=packing',
-            'group' => 'packlist'
-        ]);
+//        NavigationMenu::query()->create([
+//            'name' => 'Status: packing',
+//            'url' => '/autopilot/packlist?status=packing',
+//            'group' => 'packlist'
+//        ]);
     }
 }

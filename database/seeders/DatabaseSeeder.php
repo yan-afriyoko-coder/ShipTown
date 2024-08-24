@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             Demo\ConfigurationSeeder::class,
-            Demo\NavigationSeeder::class,
+//            Demo\NavigationSeeder::class,
             Demo\OrderStatusesSeeder::class,
             Demo\UsersSeeder::class,
 
@@ -79,11 +79,6 @@ class DatabaseSeeder extends Seeder
 
         AutoStatusPickingConfiguration::query()->updateOrCreate(['max_batch_size' => 5]);
         AutoStatusPickingServiceProvider::enableModule();
-        NavigationMenu::query()->create([
-            'name' => 'Status: picking',
-            'url' => '/picklist?status=picking',
-            'group' => 'picklist'
-        ]);
 
         DispatchEveryMinuteEventJob::dispatch();
         DispatchEveryFiveMinutesEventJob::dispatch();

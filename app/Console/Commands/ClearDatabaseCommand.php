@@ -63,6 +63,8 @@ class ClearDatabaseCommand extends Command
 
         App\Models\InventoryReservation::query()->forceDelete();
 
+        App\Models\OrderProductPick::query()->forceDelete();
+        App\Models\Pick::query()->forceDelete();
         App\Models\NavigationMenu::query()->forceDelete();
         App\Models\ProductAlias::query()->forceDelete();
         App\Models\Product::query()->forceDelete();
