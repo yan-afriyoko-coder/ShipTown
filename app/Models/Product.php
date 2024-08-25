@@ -304,6 +304,9 @@ class Product extends BaseModel
     {
         return $this->hasMany(Inventory::class)
             ->whereNull('deleted_at')
+            ->whereHas('warehouse', function ($query) {
+                $query->whereNull('deleted_at');
+            })
             ->when($warehouse_code, function ($query) use ($warehouse_code) {
                 $query->where(['warehouse_code' => $warehouse_code]);
             })
@@ -330,6 +333,9 @@ class Product extends BaseModel
     public function prices(string $warehouse_code = null): HasMany
     {
         return $this->hasMany(ProductPrice::class)
+            ->whereHas('warehouse', function ($query) {
+                $query->whereNull('deleted_at');
+            })
             ->when($warehouse_code, function ($query) use ($warehouse_code) {
                 $query->where(['warehouse_code' => $warehouse_code]);
             })
