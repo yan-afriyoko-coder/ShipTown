@@ -355,7 +355,7 @@
                     const params = {
                         'filter[order_id]': this.order_id,
                         'filter[warehouse_id]': this.getUrlParameter('warehouse_id'),
-                        'sort': 'inventory_source_shelf_location,sku_ordered',
+                        'sort': 'inventory_source_shelf_location,product.department,product.category,sku_ordered',
                         'include': 'product,product.aliases',
                         'per_page': 999,
                     };
@@ -367,8 +367,8 @@
                             this.packed = this.orderProducts.filter(orderProduct => Number(orderProduct['quantity_to_ship']) === 0);
                             this.packlist = this.orderProducts.filter(orderProduct => Number(orderProduct['quantity_to_ship']) > 0);
                         })
-                        .catch(() => {
-                            this.notifyError('Error occurred while loading packlist');
+                        .catch((error) => {
+                            this.displayApiCallError(error);
                         });
                 },
 

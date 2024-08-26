@@ -137,6 +137,7 @@ class OrderProduct extends BaseModel
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(OrderProduct::class)
+            ->leftJoin('products as product', 'products.id', '=', 'orders_products.product_id')
             ->allowedFilters([
                 AllowedFilter::scope('has_stock_reserved', 'whereHasStockReserved'),
                 AllowedFilter::scope('warehouse_id', 'addWarehouseSource')->default(0),
@@ -168,6 +169,8 @@ class OrderProduct extends BaseModel
                 'sku_ordered',
                 'is_shipped',
                 'id',
+                'product.department',
+                'product.category'
             ]);
     }
 
