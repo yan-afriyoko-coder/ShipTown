@@ -224,7 +224,7 @@ class PagesWalkthroughTest extends DuskTestCase
             ->pause($this->shortDelay)->clickLink('Inventory Dashboard')
             ->pause($this->shortDelay)->mouseover('#reports_link')
             ->pause($this->shortDelay)->clickLink('Reports')
-            ->pause($this->shortDelay)->clickLink('Fulfillment Dashboard')
+            ->pause($this->shortDelay)->clickLink('Orders Dashboard')
             ->pause($this->longDelay);
 
         return $browser;

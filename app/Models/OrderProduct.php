@@ -137,28 +137,8 @@ class OrderProduct extends BaseModel
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(OrderProduct::class)
-            ->allowedFields([
-                'orders_products.id',
-                'orders_products.order_id',
-                'orders_products.product_id',
-                'orders_products.sku_ordered',
-                'orders_products.name_ordered',
-                'orders_products.price',
-                'orders_products.quantity_ordered',
-                'orders_products.quantity_split',
-                'orders_products.total_price',
-                'orders_products.quantity_shipped',
-                'orders_products.quantity_to_pick',
-                'orders_products.quantity_to_ship',
-                'orders_products.quantity_picked',
-                'orders_products.quantity_skipped_picking',
-                'orders_products.quantity_not_picked',
-                'orders_products.deleted_at',
-                'orders_products.created_at',
-                'orders_products.updated_at',
-                'orders_products.custom_unique_reference_id',
-            ])
             ->leftJoin('products as product', 'product.id', '=', 'orders_products.product_id')
+            ->select('orders_products.*')
             ->allowedFilters([
                 AllowedFilter::scope('has_stock_reserved', 'whereHasStockReserved'),
                 AllowedFilter::scope('warehouse_id', 'addWarehouseSource')->default(0),
@@ -189,7 +169,7 @@ class OrderProduct extends BaseModel
                 'inventory_source_shelf_location',
                 'sku_ordered',
                 'is_shipped',
-                'id',
+                'orders_products.id',
                 'product.department',
                 'product.category'
             ]);
