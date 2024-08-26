@@ -46,7 +46,7 @@ class RefillPickingByOldestJob implements ShouldQueue
         }
 
         Order::whereStatusCode('paid')
-            ->orderBy('created_at')
+            ->orderBy('order_placed_at')
             ->limit($this->configuration->required_count)
             ->get()
             ->each(function (Order $order) {

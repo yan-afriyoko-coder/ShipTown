@@ -54,7 +54,7 @@ class RefillPickingMissingStockJob implements ShouldQueue
         $requiredCount = $this->configuration->required_count;
 
         $orders = Order::whereStatusCode('paid')
-            ->orderBy('created_at')
+            ->orderBy('order_placed_at')
             ->get();
 
         foreach ($orders as $order) {
