@@ -145,6 +145,7 @@ class ReportBase extends Model
         $filters = $filters->merge($this->addGreaterThan());
         $filters = $filters->merge($this->addLowerThan());
         $filters = $filters->merge($this->addNullFilters());
+        $filters = $filters->merge($this->addNotEqualFilters());
 
         return $filters->toArray();
     }
@@ -257,6 +258,22 @@ class ReportBase extends Model
                     }
 
                     $query->whereBetween($fieldQuery, [floatval($value[0]), floatval($value[1])]);
+                });
+            });
+
+        return $allowedFilters;
+    }
+
+    private function addNotEqualFilters(): array
+    {
+        $allowedFilters = [];
+
+        collect($this->fields)
+            ->each(function ($fullFieldName, $alias) use (&$allowedFilters) {
+                $filterName = $alias . '_not equal';
+
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fullFieldName) {
+                    return $query->where($fullFieldName, '!=', $value);
                 });
             });
 
@@ -463,11 +480,11 @@ class ReportBase extends Model
     protected function getFieldTypeOperators($field): array
     {
         return match ($this->getFieldType($field)) {
-            'string' => ['equals', 'btwn', 'contains', 'greater than', 'lower than'],
-            'numeric' => ['equals', 'btwn', 'greater than', 'lower than'],
+            'string' => ['equals', 'not equal', 'btwn', 'contains', 'greater than', 'lower than'],
+            'numeric' => ['equals', 'not equal', 'btwn', 'greater than', 'lower than'],
             'date' => ['btwn'],
             'datetime' => ['btwn'],
-            default => ['contains', 'equals'],
+            default => ['contains', 'equals', 'not equal'],
         };
     }
 }
