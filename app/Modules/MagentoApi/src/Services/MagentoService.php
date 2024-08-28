@@ -3,6 +3,7 @@
 namespace App\Modules\MagentoApi\src\Services;
 
 use App\Modules\MagentoApi\src\Api\MagentoApi;
+use App\Modules\MagentoApi\src\Exceptions\UnauthorizedException;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
 use Exception;
 use Grayloon\Magento\Magento;
@@ -74,9 +75,16 @@ class MagentoService
         $magentoProduct->save();
     }
 
-    public static function fetchBasePrices(MagentoProduct $magentoProduct)
+    /**
+     * @throws UnauthorizedException
+     */
+    public static function fetchBasePrices(MagentoProduct $magentoProduct): void
     {
         $response = self::api()->postProductsBasePricesInformation($magentoProduct->product->sku);
+
+        if ($response->unauthorized()) {
+            throw new UnauthorizedException();
+        }
 
         if ($response === null || $response->failed()) {
             Log::error('Failed to fetch base prices for product '.$magentoProduct->product->sku);
