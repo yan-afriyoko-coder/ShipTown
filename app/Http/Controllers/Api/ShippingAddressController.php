@@ -28,7 +28,7 @@ class ShippingAddressController extends Controller
             }
 
             $orderAddress->update($validatedData);
-            return response()->json(['message' => 'Shipping Address updated successfully.'], 200);
+            return response()->json(['message' => 'Shipping Address updated successfully.', 'data' => $orderAddress], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Unexpected error'], 503);
         }
