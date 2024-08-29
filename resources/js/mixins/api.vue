@@ -205,6 +205,10 @@ export default {
             return axios.post('/api/order/comments', data);
         },
 
+        apiUpdateOrderAddress: function (order_address_id, data) {
+            return axios.put('/api/order/addresses/' + order_address_id, data);
+        },
+
         apiPostActivity: function (data) {
             return axios.post('/api/activities', data);
         },

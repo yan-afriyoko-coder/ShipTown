@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreShippingAddressRequest extends FormRequest
+class UpdateOrderAddressRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,6 @@ class StoreShippingAddressRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:255',
             'first_name' => 'required|string|max:255',
