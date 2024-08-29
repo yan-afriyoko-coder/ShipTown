@@ -216,8 +216,14 @@
                                 <div class="container" v-if="currentTab === 'shippingAddress'">
                                     <div class="row">
                                         <div class="col-12">
-                                            <div class="row col d-block font-weight-bold pb-1 text-uppercase small text-secondary align-content-center text-center">
+                                            <div class="row col d-flex font-weight-bold pb-1 text-uppercase small text-secondary align-content-center text-center justify-content-center">
                                                 SHIPPING ADDRESS
+                                                <li class="nav-item">
+                                                    <a class="nav-link p-0 pl-2"
+                                                        @click.prevent="$emit('open-modal', order['shipping_address']['id'])" href="#">
+                                                        <font-awesome-icon class="fas fa-sm" icon="pen-to-square" />
+                                                    </a>
+                                                </li>
                                             </div>
 
                                             <table class="table-borderless table-hover border-0">
@@ -550,6 +556,7 @@ export default {
     },
 
     mounted() {
+        // console.log(this.order);
         // we pre creating array of empty products so UI will display empty row for each orderProduct
         // its simply more pleasant to eye and card doesn't "jump"
         for (let i = 0; i < this.order['product_line_count']; i++)
