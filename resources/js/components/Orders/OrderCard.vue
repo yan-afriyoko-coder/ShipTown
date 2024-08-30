@@ -216,8 +216,14 @@
                                 <div class="container" v-if="currentTab === 'shippingAddress'">
                                     <div class="row">
                                         <div class="col-12">
-                                            <div class="row col d-block font-weight-bold pb-1 text-uppercase small text-secondary align-content-center text-center">
+                                            <div class="row col d-flex font-weight-bold pb-1 text-uppercase small text-secondary align-content-center text-center justify-content-center">
                                                 SHIPPING ADDRESS
+                                                <li class="nav-item">
+                                                    <a class="nav-link p-0 pl-2"
+                                                        @click.prevent="$emit('open-modal', order['shipping_address']['id'])" href="#">
+                                                        <font-awesome-icon class="fas fa-sm" icon="pen-to-square" />
+                                                    </a>
+                                                </li>
                                             </div>
 
                                             <table class="table-borderless table-hover border-0">
