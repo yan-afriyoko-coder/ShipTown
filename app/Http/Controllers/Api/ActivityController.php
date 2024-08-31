@@ -19,7 +19,7 @@ class ActivityController extends Controller
     public function index(ActivityIndexRequest $request): AnonymousResourceCollection
     {
         $report = new ActivityReport();
-        return LogResource::collection($report->queryBuilder()->orderBy('created_at', 'desc')->simplePaginate(50));
+        return LogResource::collection($report->queryBuilder()->simplePaginate(50));
     }
 
     public function store(ActivityStoreRequest $request): JsonResource
