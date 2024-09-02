@@ -403,7 +403,7 @@ export default {
             return axios.put('/api/orders-statuses/' + id, params)
         },
         apiDeleteOrderStatus: function (id) {
-            return axios.delete('/api/settings/order-statuses/' + id)
+            return axios.delete('/api/orders-statuses/' + id)
         },
 
         apiGetMailTemplate: function () {
