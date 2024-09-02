@@ -52,7 +52,6 @@ class ProductPrice extends BaseModel
     protected $fillable = [
         'product_id',
         'warehouse_id',
-        'location_id',
         'warehouse_code',
         'cost',
         'price',
