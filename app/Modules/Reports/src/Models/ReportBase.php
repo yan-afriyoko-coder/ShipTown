@@ -87,8 +87,7 @@ class ReportBase extends Model
         $queryBuilder = $queryBuilder
             ->allowedFilters($this->getAllowedFilters())
             ->allowedSorts($this->fieldAliases)
-            ->allowedIncludes($this->allowedIncludes)
-            ->orderBy('created_at', 'desc');
+            ->allowedIncludes($this->allowedIncludes);
 
         return $queryBuilder;
     }

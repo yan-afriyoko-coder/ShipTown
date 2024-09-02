@@ -683,7 +683,7 @@ export default {
                 'filter[subject_type]': 'App\\Models\\Order',
                 'include': 'causer',
                 'sort': '-id',
-                'per_page': '999',
+                'per_page': '50',
             };
 
             this.apiGetActivityLog(params)
