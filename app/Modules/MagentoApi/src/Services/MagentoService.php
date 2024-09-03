@@ -2,11 +2,11 @@
 
 namespace App\Modules\MagentoApi\src\Services;
 
-use App\Modules\MagentoApi\src\Api\MagentoApi;
+use App\Modules\Magento2MSI\src\Api\Client;
+use App\Modules\Magento2MSI\src\Api\MagentoApi;
 use App\Modules\MagentoApi\src\Exceptions\UnauthorizedException;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
 use Exception;
-use Grayloon\Magento\Magento;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
@@ -14,7 +14,7 @@ class MagentoService
 {
     public static function api(): MagentoApi
     {
-        return new MagentoApi(new Magento());
+        return new MagentoApi();
     }
 
     public static function updateBasePrice(string $sku, float $price, int $store_id)
@@ -41,9 +41,13 @@ class MagentoService
         }
     }
 
-    public static function fetchSpecialPrices(MagentoProduct $magentoProduct)
+    public static function fetchSpecialPrices(MagentoProduct $magentoProduct): void
     {
-        $response = self::api()->postProductsSpecialPriceInformation($magentoProduct->product->sku);
+        $connection = $magentoProduct->magentoConnection;
+
+        $response = Client::post($connection->api_access_token, $connection->base_url. '/rest/all/V1/products/special-price-information', [
+            'skus' => Arr::wrap($magentoProduct->product->sku)
+        ]);
 
         if ($response === null || $response->failed()) {
             Log::error('Failed to fetch sale prices for product '.$magentoProduct->product->sku);
@@ -80,7 +84,11 @@ class MagentoService
      */
     public static function fetchBasePrices(MagentoProduct $magentoProduct): void
     {
-        $response = self::api()->postProductsBasePricesInformation($magentoProduct->product->sku);
+        $connection = $magentoProduct->magentoConnection;
+
+        $response = Client::post($connection->api_access_token, $connection->base_url. '/rest/all/V1/products/base-prices-information', [
+            'skus' => Arr::wrap($magentoProduct->product->sku)
+        ]);
 
         if ($response->unauthorized()) {
             throw new UnauthorizedException();
@@ -95,9 +103,9 @@ class MagentoService
         $magentoProduct->base_prices_raw_import = $response->json();
 
         collect($response->json())
-            ->filter(function ($item) use ($magentoProduct) {
-                return $item['store_id'] === $magentoProduct->magentoConnection->magento_store_id;
-            })
+//            ->filter(function ($item) use ($magentoProduct) {
+//                return $item['store_id'] === $magentoProduct->magentoConnection->magento_store_id;
+//            })
             ->each(function ($item) use ($magentoProduct) {
                 $magentoProduct->magento_price = $item['price'];
             });

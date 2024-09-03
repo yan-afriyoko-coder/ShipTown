@@ -16,6 +16,7 @@ class FetchBasePricesJob extends UniqueJob
     public function handle(): void
     {
         MagentoProduct::query()
+            ->with(['magentoConnection', 'product'])
             ->whereRaw('IFNULL(exists_in_magento, 1) = 1')
             ->whereNull('base_prices_fetched_at')
             ->orWhereNull('base_prices_raw_import')

@@ -2,54 +2,34 @@
 
 namespace App\Modules\MagentoApi\src\Jobs;
 
-use App\Modules\MagentoApi\src\Models\MagentoProductPricesComparisonView;
-use App\Modules\MagentoApi\src\Services\MagentoService;
-use Carbon\Carbon;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use App\Abstracts\UniqueJob;
+use App\Modules\Magento2MSI\src\Api\MagentoApi;
+use App\Modules\MagentoApi\src\Models\MagentoProduct;
 
 /**
  * Class SyncCheckFailedProductsJob.
  */
-class SyncProductSalePricesJob implements ShouldQueue
+class SyncProductSalePricesJob extends UniqueJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
-    public function handle()
+    public function handle(): void
     {
-        MagentoProductPricesComparisonView::query()
-            ->whereRaw('special_prices_fetched_at IS NOT NULL
-
-            AND (
-                IFNULL(magento_sale_price, 0) != expected_sale_price
-                OR magento_sale_price_start_date != expected_sale_price_start_date
-                OR magento_sale_price_end_date != expected_sale_price_end_date
-                OR magento_sale_price IS NULL
-                OR magento_sale_price_start_date IS NULL
-                OR magento_sale_price_end_date IS NULL
-            )')
-            ->chunkById(100, function ($products) {
-                collect($products)->each(function (MagentoProductPricesComparisonView $comparison) {
-                    MagentoService::updateSalePrice(
-                        $comparison->sku,
-                        $comparison->expected_sale_price,
-                        $comparison->expected_sale_price_start_date->format('Y-m-d H:i:s'),
-                        $comparison->expected_sale_price_end_date->format('Y-m-d H:i:s'),
-                        $comparison->magento_store_id
+        MagentoProduct::query()
+            ->with(['magentoConnection', 'product', 'prices'])
+            ->where(['special_price_sync_required' => true])
+            ->chunkById(10, function ($products) {
+                collect($products)->each(function (MagentoProduct $magentoProduct) {
+                    MagentoApi::postProductsSpecialPrice(
+                        $magentoProduct->magentoConnection->base_url,
+                        $magentoProduct->magentoConnection->api_access_token,
+                        $magentoProduct->magentoConnection->magento_store_id ?? 0,
+                        $magentoProduct->product->sku,
+                        $magentoProduct->prices->sale_price,
+                        $magentoProduct->prices->sale_price_start_date->format('Y-m-d H:i:s'),
+                        $magentoProduct->prices->sale_price_end_date->format('Y-m-d H:i:s'),
                     );
 
-                    $comparison->magentoProduct->update([
+                    $magentoProduct->update([
+                        'special_price_sync_required'   => null,
                         'special_prices_fetched_at'     => null,
                         'special_prices_raw_import'     => null,
                         'magento_sale_price'            => null,
@@ -57,6 +37,6 @@ class SyncProductSalePricesJob implements ShouldQueue
                         'magento_sale_price_end_date'   => null,
                     ]);
                 });
-            }, 'modules_magento2api_products_id');
+            });
     }
 }
