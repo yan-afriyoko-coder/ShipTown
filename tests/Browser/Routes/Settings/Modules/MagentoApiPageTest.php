@@ -9,7 +9,7 @@ use Tests\DuskTestCase;
 
 class MagentoApiPageTest extends DuskTestCase
 {
-    private string $uri = '/admin/settings/modules/magento-api';
+    private string $uri = '/settings/modules/magento-api';
 
     public function testBasics()
     {

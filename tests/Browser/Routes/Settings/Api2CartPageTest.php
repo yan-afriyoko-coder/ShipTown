@@ -9,7 +9,7 @@ use Throwable;
 
 class Api2CartPageTest extends DuskTestCase
 {
-    private string $uri = '/admin/settings/api2cart';
+    private string $uri = '/settings/api2cart';
 
     /**
      * @throws Throwable

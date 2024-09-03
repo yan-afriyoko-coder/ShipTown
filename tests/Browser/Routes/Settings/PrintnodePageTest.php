@@ -9,7 +9,7 @@ use Throwable;
 
 class PrintnodePageTest extends DuskTestCase
 {
-    private string $uri = '/admin/settings/printnode';
+    private string $uri = '/settings/printnode';
 
     /**
      * @throws Throwable

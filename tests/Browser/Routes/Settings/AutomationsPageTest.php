@@ -9,7 +9,7 @@ use Throwable;
 
 class AutomationsPageTest extends DuskTestCase
 {
-    private string $uri = '/admin/settings/automations';
+    private string $uri = '/settings/automations';
 
     /**
      * @throws Throwable

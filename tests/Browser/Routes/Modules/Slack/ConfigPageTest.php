@@ -9,7 +9,7 @@ use Throwable;
 
 class ConfigPageTest extends DuskTestCase
 {
-    private string $uri = '/admin/modules/slack/config';
+    private string $uri = '/modules/slack/config';
 
     /**
      * @throws Throwable

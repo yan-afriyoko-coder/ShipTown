@@ -7,7 +7,7 @@ use Throwable;
 
 class PreviewPageTest extends DuskTestCase
 {
-    private string $uri = '/admin/settings/mail-templates/{mailTemplate}/preview';
+    private string $uri = '/settings/mail-templates/{mailTemplate}/preview';
 
     /**
      * @throws Throwable

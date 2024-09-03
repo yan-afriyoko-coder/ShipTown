@@ -9,7 +9,7 @@ use Throwable;
 
 class NavigationMenuPageTest extends DuskTestCase
 {
-    private string $uri = '/admin/settings/navigation-menu';
+    private string $uri = '/settings/navigation-menu';
 
     /**
      * @throws Throwable

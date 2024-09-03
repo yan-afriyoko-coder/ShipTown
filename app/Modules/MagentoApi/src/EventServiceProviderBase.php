@@ -27,7 +27,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $settings_link = '/admin/settings/modules/magento-api';
+    public static string $settings_link = '/settings/modules/magento-api';
 
     /**
      * @var bool

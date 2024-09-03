@@ -10,7 +10,7 @@ use Throwable;
 
 class IdPageTest extends DuskTestCase
 {
-    private string $uri = '/admin/settings/modules/quantity-discounts/{id}';
+    private string $uri = '/settings/modules/quantity-discounts/{id}';
 
     private User $user;
 

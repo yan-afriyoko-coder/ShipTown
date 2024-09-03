@@ -27,7 +27,7 @@ class RmsapiModuleServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $settings_link = '/admin/settings/rmsapi';
+    public static string $settings_link = '/settings/rmsapi';
 
     /**
      * @var bool

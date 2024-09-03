@@ -10,7 +10,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
 
     public static string $module_description = 'Reserves stock for active orders.';
 
-    public static string $settings_link = '/admin/settings/modules/inventory-reservations';
+    public static string $settings_link = '/settings/modules/inventory-reservations';
 
     public static bool $autoEnable = false;
 

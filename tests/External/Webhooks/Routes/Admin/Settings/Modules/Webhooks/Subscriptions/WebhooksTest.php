@@ -15,7 +15,7 @@ class WebhooksTest extends TestCase
     /**
      * @var string
      */
-    protected string $uri = '/admin/settings/modules/webhooks/subscriptions';
+    protected string $uri = '/settings/modules/webhooks/subscriptions';
 
     /**
      * @var User

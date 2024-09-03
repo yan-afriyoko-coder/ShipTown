@@ -28,7 +28,7 @@ class DpdIrelandServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $settings_link = '/admin/settings/dpd-ireland';
+    public static string $settings_link = '/settings/dpd-ireland';
 
     /**
      * @var bool

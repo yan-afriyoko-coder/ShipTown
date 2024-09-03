@@ -7,7 +7,7 @@ use Throwable;
 
 class SubscriptionsPageTest extends DuskTestCase
 {
-    private string $uri = '/admin/settings/modules/webhooks/subscriptions';
+    private string $uri = '/settings/modules/webhooks/subscriptions';
 
     /**
      * @throws Throwable

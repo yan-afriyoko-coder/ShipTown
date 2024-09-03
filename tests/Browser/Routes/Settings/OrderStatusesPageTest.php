@@ -9,7 +9,7 @@ use Throwable;
 
 class OrderStatusesPageTest extends DuskTestCase
 {
-    private string $uri = '/admin/settings/order-statuses';
+    private string $uri = '/settings/order-statuses';
 
     /**
      * @throws Throwable

@@ -9,7 +9,7 @@ use Throwable;
 
 class RmsapiPageTest extends DuskTestCase
 {
-    private string $uri = '/admin/settings/rmsapi';
+    private string $uri = '/settings/rmsapi';
 
     /**
      * @throws Throwable

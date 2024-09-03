@@ -23,7 +23,7 @@ class DpdUkServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $settings_link = '/admin/settings/modules/dpd-uk';
+    public static string $settings_link = '/settings/modules/dpd-uk';
 
     /**
      * @var bool

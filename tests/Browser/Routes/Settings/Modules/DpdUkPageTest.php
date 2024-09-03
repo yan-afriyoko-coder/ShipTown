@@ -9,7 +9,7 @@ use Throwable;
 
 class DpdUkPageTest extends DuskTestCase
 {
-    private string $uri = '/admin/settings/modules/dpd-uk';
+    private string $uri = '/settings/modules/dpd-uk';
 
     /**
      * @throws Throwable

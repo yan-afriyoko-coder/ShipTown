@@ -9,7 +9,7 @@ use Throwable;
 
 class ModulesPageTest extends DuskTestCase
 {
-    private string $uri = '/admin/settings/modules';
+    private string $uri = '/settings/modules';
 
     /**
      * @throws Throwable

@@ -9,7 +9,7 @@ use Throwable;
 
 class MailTemplatesPageTest extends DuskTestCase
 {
-    private string $uri = '/admin/settings/mail-templates';
+    private string $uri = '/settings/mail-templates';
 
     /**
      * @throws Throwable

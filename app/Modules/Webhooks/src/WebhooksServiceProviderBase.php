@@ -22,7 +22,7 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
 
     public static string $module_description = 'Amazon SNS integration to provide webhooks';
 
-    public static string $settings_link = '/admin/settings/modules/webhooks/subscriptions';
+    public static string $settings_link = '/settings/modules/webhooks/subscriptions';
 
     public static bool $autoEnable = false;
 

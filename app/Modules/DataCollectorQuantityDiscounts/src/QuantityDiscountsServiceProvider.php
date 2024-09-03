@@ -13,7 +13,7 @@ class QuantityDiscountsServiceProvider extends BaseModuleServiceProvider
 
     public static string $module_description = 'Module provides an ability to use quantity discounts for price calculation.';
 
-    public static string $settings_link = '/admin/settings/modules/quantity-discounts';
+    public static string $settings_link = '/settings/modules/quantity-discounts';
 
     public static bool $autoEnable = true;
 

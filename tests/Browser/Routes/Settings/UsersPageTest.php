@@ -10,7 +10,7 @@ use Throwable;
 
 class UsersPageTest extends DuskTestCase
 {
-    private string $uri = '/admin/settings/users';
+    private string $uri = '/settings/users';
 
     /**
      * @throws Throwable
