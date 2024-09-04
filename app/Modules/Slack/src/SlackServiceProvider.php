@@ -14,7 +14,7 @@ class SlackServiceProvider extends BaseModuleServiceProvider
 
     public static string $module_description = 'Provides Slack integration';
 
-    public static string $settings_link = '/admin/modules/slack/config';
+    public static string $settings_link = '/modules/slack/config';
 
     public static bool $autoEnable = false;
 

@@ -25,7 +25,7 @@ class PrintNodeServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $settings_link = '/admin/settings/printnode';
+    public static string $settings_link = '/settings/printnode';
 
     /**
      * @var bool

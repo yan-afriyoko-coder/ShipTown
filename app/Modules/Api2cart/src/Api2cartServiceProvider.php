@@ -33,7 +33,7 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $settings_link = '/admin/settings/api2cart';
+    public static string $settings_link = '/settings/api2cart';
 
     /**
      * @var bool

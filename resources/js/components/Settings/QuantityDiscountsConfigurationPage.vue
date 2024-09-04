@@ -160,7 +160,7 @@ export default {
         },
 
         openDiscount(id) {
-            window.location.href = '/admin/settings/modules/quantity-discounts/' + id;
+            window.location.href = '/settings/modules/quantity-discounts/' + id;
         }
     },
 }

@@ -102,7 +102,7 @@ export default {
                 .then(({data}) => {
                     this.$bvModal.hide(this.modal_id);
                     if (typeof data.data !== 'undefined' && typeof data.data.id !== 'undefined') {
-                        window.location.href = '/admin/settings/modules/quantity-discounts/' + data.data.id;
+                        window.location.href = '/settings/modules/quantity-discounts/' + data.data.id;
                     }
                 })
                 .catch(error => {

@@ -1,16 +1,15 @@
 <?php
 
-namespace Tests\External\Webhooks\Routes\Admin\Settings\Modules\Webhooks\Subscriptions;
+namespace Tests\Feature\Settings\Modules\Webhooks\Subscriptions;
 
 use App\Modules\Webhooks\src\WebhooksServiceProviderBase;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
  *
  */
-class WebhooksTest extends TestCase
+class IndexTest extends TestCase
 {
     /**
      * @var string
@@ -29,8 +28,6 @@ class WebhooksTest extends TestCase
     {
         parent::setUp();
         $this->user = User::factory()->create();
-
-        WebhooksServiceProviderBase::enableModule();
     }
 
     /** @test */
@@ -38,34 +35,36 @@ class WebhooksTest extends TestCase
     {
         $this->assertNotEmpty($this->uri);
     }
-//
-//    /** @test */
-//    public function test_guest_call()
-//    {
-//        $response = $this->get($this->uri);
-//
-//        $response->assertRedirect('/login');
-//    }
-//
-//    /** @test */
-//    public function test_user_call()
-//    {
-//        $this->actingAs($this->user, 'web');
-//
-//        $response = $this->get($this->uri);
-//
-//        $response->assertForbidden();
-//    }
+
+    /** @test */
+    public function test_guest_call()
+    {
+        $response = $this->get($this->uri);
+
+        $response->assertRedirect('/login');
+    }
+
+    /** @test */
+    public function test_user_call()
+    {
+        $this->actingAs($this->user, 'web');
+
+        $response = $this->get($this->uri);
+
+        $response->assertForbidden();
+    }
 
     /** @test */
     public function test_admin_call()
     {
+        WebhooksServiceProviderBase::disableModule();
+
         $this->user->assignRole('admin');
 
         $this->actingAs($this->user, 'web');
 
         $response = $this->get($this->uri);
 
-        $response->assertSuccessful();
+        $response->assertRedirect();
     }
 }
