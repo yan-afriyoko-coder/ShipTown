@@ -38,20 +38,20 @@ class OrderShippingMethodCodeEqualsConditionTest extends TestCase
         Condition::create([
             'automation_id' => $automation->getKey(),
             'condition_class' => StatusCodeEqualsCondition::class,
-            'condition_value' => 'paid'
+            'condition_value' => 'paid',
         ]);
 
         /** @var Condition $condition */
         Condition::create([
             'automation_id' => $automation->getKey(),
             'condition_class' => ShippingMethodCodeEqualsCondition::class,
-            'condition_value' => 'store_pickup'
+            'condition_value' => 'store_pickup',
         ]);
 
         Action::create([
             'automation_id' => $automation->getKey(),
             'action_class' => SetStatusCodeAction::class,
-            'action_value' => 'store_pickup'
+            'action_value' => 'store_pickup',
         ]);
 
         /** @var Order $order */

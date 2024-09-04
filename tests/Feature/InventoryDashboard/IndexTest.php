@@ -5,24 +5,12 @@ namespace Tests\Feature\InventoryDashboard;
 use App\User;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
-    /**
-     * @var string
-     */
     protected string $uri = 'inventory-dashboard';
 
-    /**
-     * @var User
-     */
     protected User $user;
 
-    /**
-     *
-     */
     protected function setUp(): void
     {
         parent::setUp();

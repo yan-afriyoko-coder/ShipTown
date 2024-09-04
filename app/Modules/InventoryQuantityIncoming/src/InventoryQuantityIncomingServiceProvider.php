@@ -15,19 +15,10 @@ use App\Modules\InventoryQuantityIncoming\src\Jobs\FixIncorrectQuantityIncomingJ
  */
 class InventoryQuantityIncomingServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = 'Inventory Quantity Incoming';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'Reserves quantity incoming for open Inventory Transfers In';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = true;
 
     /**

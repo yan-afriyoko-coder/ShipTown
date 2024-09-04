@@ -40,8 +40,8 @@ class IndexTest extends TestCase
                 'name',
                 'enabled',
                 'actions',
-                'conditions'
-            ]
+                'conditions',
+            ],
         ]);
     }
 }

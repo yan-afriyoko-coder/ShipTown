@@ -27,13 +27,13 @@ class NextDayShippingService extends ShippingServiceAbstract
 
         $preAdvice = $this->createPreAdviceOrFail($order);
 
-        $shippingLabel = new ShippingLabel();
+        $shippingLabel = new ShippingLabel;
         $shippingLabel->order_id = $order_id;
         $shippingLabel->user_id = Auth::id();
         $shippingLabel->carrier = 'DPD Ireland';
         $shippingLabel->service = 'next_day';
         $shippingLabel->shipping_number = $preAdvice->trackingNumber();
-        $shippingLabel->tracking_url = 'https://dpd.ie/tracking?consignmentNumber=' . $preAdvice->trackingNumber();
+        $shippingLabel->tracking_url = 'https://dpd.ie/tracking?consignmentNumber='.$preAdvice->trackingNumber();
         $shippingLabel->content_type = ShippingLabel::CONTENT_TYPE_URL;
         $shippingLabel->base64_pdf_labels = base64_encode($preAdvice->labelImage());
         $shippingLabel->save();
@@ -41,16 +41,12 @@ class NextDayShippingService extends ShippingServiceAbstract
         activity()
             ->on($order)
             ->by(auth()->user())
-            ->log("generated shipping label ". $shippingLabel->shipping_number);
+            ->log('generated shipping label '.$shippingLabel->shipping_number);
 
         return collect()->add($shippingLabel);
     }
 
-
     /**
-     * @param Order $order
-     *
-     * @return PreAdvice
      * @throws Exception|GuzzleException
      */
     private function createPreAdviceOrFail(Order $order): PreAdvice
@@ -64,7 +60,7 @@ class NextDayShippingService extends ShippingServiceAbstract
 
             return $preAdvice;
         } catch (ConsignmentValidationException $exception) {
-            throw new ShippingServiceException('DPD: '. $exception->getMessage());
+            throw new ShippingServiceException('DPD: '.$exception->getMessage());
         } catch (AuthorizationException $exception) {
             throw new ShippingServiceException('DPD: Account authorization failed, contact administrator');
         }

@@ -12,28 +12,26 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\RmsapiProductImport.
  *
- * @property int         $id
+ * @property int $id
  * @property Carbon|null $reserved_at
- * @property int         $connection_id
- * @property int         $warehouse_id
- * @property int         $product_id
+ * @property int $connection_id
+ * @property int $warehouse_id
+ * @property int $product_id
  * @property Carbon|null $when_processed
  * @property string|null $uuid
  * @property string|null $type
  * @property string|null $sku
- * @property float|null  $quantity
+ * @property float|null $quantity
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $transaction_time
- * @property int|null    $transaction_number
- * @property int|null    $transaction_entry_id
+ * @property int|null $transaction_number
+ * @property int|null $transaction_entry_id
  * @property string|null $comment
- * @property array       $raw_import
- *
+ * @property array $raw_import
  * @property RmsapiConnection $rmsapiConnection
  * @property mixed $inventory_id
  * @property Warehouse $warehouse
- *
  */
 class RmsapiSaleImport extends BaseModel
 {

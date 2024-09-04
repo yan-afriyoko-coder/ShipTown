@@ -3,7 +3,6 @@
 namespace Tests\Feature\Api\Pdf\Print;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
@@ -15,9 +14,9 @@ class StoreTest extends TestCase
 
         $response = $this->actingAs($user, 'api')->postJson('api/pdf/print', [
             'data' => [
-                'labels'  => ['label1', 'label2'],
+                'labels' => ['label1', 'label2'],
             ],
-            'template'  => 'shelf-labels/6x4in-1-per-page',
+            'template' => 'shelf-labels/6x4in-1-per-page',
         ]);
 
         $response->assertStatus(422);
@@ -30,9 +29,9 @@ class StoreTest extends TestCase
 
         $response = $this->actingAs($user, 'api')->postJson('api/pdf/print', [
             'data' => [
-                'labels'  => ['label1', 'label2'],
+                'labels' => ['label1', 'label2'],
             ],
-            'template'  => 'shelf-labels/6x4in-1-per-page',
+            'template' => 'shelf-labels/6x4in-1-per-page',
             'printer_id' => 1,
         ]);
 

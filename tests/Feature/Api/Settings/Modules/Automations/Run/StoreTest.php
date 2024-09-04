@@ -22,7 +22,7 @@ class StoreTest extends TestCase
         $automation = Automation::factory()->create();
 
         $response = $this->post(route('settings.modules.automations.run.store'), [
-            'automation_id' => $automation->getKey()
+            'automation_id' => $automation->getKey(),
         ]);
 
         $response->assertOk();

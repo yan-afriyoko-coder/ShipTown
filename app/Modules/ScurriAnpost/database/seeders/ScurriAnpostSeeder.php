@@ -38,7 +38,7 @@ class ScurriAnpostSeeder extends Seeder
         /** @var Order $order */
         $order = Order::factory()->create([
             'status_code' => 'test_orders_courier_anpost_ireland',
-            'label_template' => 'anpost_3day'
+            'label_template' => 'anpost_3day',
         ]);
 
         /** @var Product $product */
@@ -73,12 +73,12 @@ class ScurriAnpostSeeder extends Seeder
             'status_code' => 'packing',
             'label_template' => 'anpost_3day',
             'shipping_address_id' => $orderAddress->getKey(),
-            'order_placed_at' => now()->subDays(3)
+            'order_placed_at' => now()->subDays(3),
         ]);
 
         OrderComment::create([
             'order_id' => $order->getKey(),
-            'comment' => 'Test with incorrect address (too long)'
+            'comment' => 'Test with incorrect address (too long)',
         ]);
 
         /** @var Product $product */

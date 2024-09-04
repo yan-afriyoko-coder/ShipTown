@@ -36,7 +36,7 @@ class AutomationStoreRequest extends FormRequest
             'conditions.*.condition_class' => ['nullable', Rule::in($available_conditions_classes)],
             'conditions.*.condition_value' => 'nullable|string',
             'actions.*.action_class' => ['nullable', Rule::in($available_action_classes)],
-            'actions.*.action_value' => 'nullable|string'
+            'actions.*.action_value' => 'nullable|string',
         ];
     }
 
@@ -50,8 +50,8 @@ class AutomationStoreRequest extends FormRequest
         return [
             'conditions.*.condition_class' => 'condition',
             'conditions.*.condition_value' => 'condition value',
-            'actions.*.action_class'  => 'action value',
-            'actions.*.action_value'  => 'action value',
+            'actions.*.action_class' => 'action value',
+            'actions.*.action_value' => 'action value',
         ];
     }
 }

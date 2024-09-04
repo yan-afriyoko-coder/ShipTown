@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Cache;
 class BuyXForYPercentDiscount extends UniqueJob
 {
     private QuantityDiscount $discount;
+
     private DataCollection $dataCollection;
 
     public function uniqueId(): string
@@ -29,7 +30,7 @@ class BuyXForYPercentDiscount extends UniqueJob
     {
         $cacheLockKey = implode('-', [
             'recalculating_quantity_discounts_for_data_collection',
-            $this->dataCollection->id
+            $this->dataCollection->id,
         ]);
 
         Cache::lock($cacheLockKey, 5)->get(function () {

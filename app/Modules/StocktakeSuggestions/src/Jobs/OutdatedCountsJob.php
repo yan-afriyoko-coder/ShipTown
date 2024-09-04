@@ -23,11 +23,6 @@ class OutdatedCountsJob extends UniqueJob
         return true;
     }
 
-    /**
-     * @param string $reason
-     * @param int $points
-     * @return bool
-     */
     protected function addSuggestions(string $reason, int $points): bool
     {
         if (is_null($this->config->min_count_date)) {
@@ -35,7 +30,7 @@ class OutdatedCountsJob extends UniqueJob
         }
 
         $minCountDate = $this->config->min_count_date->format('Y-m-d');
-        DB::statement("
+        DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
             SELECT inventory.id, inventory.product_id, inventory.warehouse_id, ? , ?, NOW(), NOW()
             FROM inventory
@@ -46,7 +41,7 @@ class OutdatedCountsJob extends UniqueJob
                 AND inventory.quantity != 0
                 AND (inventory.in_stock_since IS NULL OR inventory.in_stock_since < ?)
                 AND (inventory.last_counted_at IS NULL OR inventory.last_counted_at < ?)
-        ", [$points, $reason, $reason, $minCountDate, $minCountDate]);
+        ', [$points, $reason, $reason, $minCountDate, $minCountDate]);
 
         return true;
     }
@@ -54,17 +49,18 @@ class OutdatedCountsJob extends UniqueJob
     private function removeSuggestions(string $reason): void
     {
         if (is_null($this->config->min_count_date)) {
-            DB::statement("
+            DB::statement('
                 DELETE stocktake_suggestions
                 FROM stocktake_suggestions
                 WHERE stocktake_suggestions.reason = ?
-            ", [$reason]);
+            ', [$reason]);
+
             return;
         }
 
         $min_count_date = $this->config->min_count_date->format('Y-m-d');
 
-        DB::statement("
+        DB::statement('
             DELETE stocktake_suggestions
             FROM stocktake_suggestions
             INNER JOIN inventory
@@ -74,6 +70,6 @@ class OutdatedCountsJob extends UniqueJob
                 OR inventory.in_stock_since > ?
                 OR inventory.last_counted_at > ?
             )
-        ", [$reason, $min_count_date, $min_count_date]);
+        ', [$reason, $min_count_date, $min_count_date]);
     }
 }

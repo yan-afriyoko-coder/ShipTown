@@ -11,6 +11,7 @@ use Laravel\Forge\Forge;
 
 /**
  * Class SyncCheckFailedProductsJob.
+ *
  * @property $domain
  */
 class CreateSiteJob implements ShouldQueue
@@ -20,14 +21,8 @@ class CreateSiteJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /**
-     * @var string
-     */
     public string $domain;
 
-    /**
-     * @param string $domain
-     */
     public function __constructs(string $domain)
     {
         $this->domain = $domain;
@@ -50,61 +45,55 @@ class CreateSiteJob implements ShouldQueue
         $this->installSiteOnForge($token, $serverId, $this->domain);
     }
 
-
-    /**
-     * @param string $token
-     * @param int $serverId
-     * @param string $siteDomain
-     */
     private function installSiteOnForge(string $token, int $serverId, string $siteDomain): void
     {
         $siteUsername = \Illuminate\Support\Str::camel($siteDomain);
-        $githubRepository = "CodingCabProduction/management.products.api";
-        $githubBranch = "master";
-        $phpVersion = "php74";
+        $githubRepository = 'CodingCabProduction/management.products.api';
+        $githubBranch = 'master';
+        $phpVersion = 'php74';
 
         $forge = new Forge($token);
 
         try {
             info('Creating site');
             $site = $forge->createSite($serverId, [
-                "domain" => $siteDomain,
-                "project_type" => "php",
-                "isolated" => true,
-                "username" => $siteUsername,
-                "directory" => '/public',
-                "php_version" => $phpVersion,
+                'domain' => $siteDomain,
+                'project_type' => 'php',
+                'isolated' => true,
+                'username' => $siteUsername,
+                'directory' => '/public',
+                'php_version' => $phpVersion,
             ]);
             info('Site created', $site->attributes);
 
             info('Installing git repository');
             $site->installGitRepository([
-                "provider" => "github",
-                "repository" => $githubRepository,
-                "branch" => $githubBranch,
-                "composer" => true
+                'provider' => 'github',
+                'repository' => $githubRepository,
+                'branch' => $githubBranch,
+                'composer' => true,
             ]);
             info('Git repository installed', $site->attributes);
 
             info('Installing LetEncrypt certificate');
             $forge->setTimeout(120)->obtainLetsEncryptCertificate($serverId, $site->id, [
-                "type" => "new",
-                "domains" => [$siteDomain],
+                'type' => 'new',
+                'domains' => [$siteDomain],
             ]);
             info('LetEncrypt certificate installed', $site->attributes);
 
             info('Creating job worker');
             $forge->createWorker($serverId, $site->id, [
-                "connection" => "database",
-                "timeout" => 3600,
-                "sleep" => 60,
-                "tries" => 1,
-                "processes" => 1,
-                "stopwaitsecs" => 600,
-                "daemon" => false,
-                "force" => false,
-                "php_version" => $phpVersion,
-                "queue" => "default"
+                'connection' => 'database',
+                'timeout' => 3600,
+                'sleep' => 60,
+                'tries' => 1,
+                'processes' => 1,
+                'stopwaitsecs' => 600,
+                'daemon' => false,
+                'force' => false,
+                'php_version' => $phpVersion,
+                'queue' => 'default',
             ]);
             info('Job worker created', $site->attributes);
         } catch (\Exception $e) {

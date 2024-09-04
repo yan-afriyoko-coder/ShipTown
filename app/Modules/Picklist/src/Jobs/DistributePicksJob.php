@@ -11,9 +11,10 @@ use Illuminate\Support\Facades\Cache;
 class DistributePicksJob extends UniqueJob
 {
     private ?Pick $pick;
+
     private string $key;
 
-    public function __construct(Pick $pick = null)
+    public function __construct(?Pick $pick = null)
     {
         $this->pick = $pick;
         $this->key = implode('_', [get_class($this), data_get($this->pick, 'id', 0)]);
@@ -43,7 +44,7 @@ class DistributePicksJob extends UniqueJob
         $pick->update([
             'quantity_distributed' => OrderProductPick::query()
                 ->where('pick_id', $pick->id)
-                ->sum('quantity_picked') ?? 0
+                ->sum('quantity_picked') ?? 0,
         ]);
 
         $orderProducts = OrderProduct::query()

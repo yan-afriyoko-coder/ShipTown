@@ -6,14 +6,8 @@ use App\Models\Product;
 use App\User;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
-    /**
-     * @var string
-     */
     protected string $uri = '/products-merge?sku1=sku1&sku2=sku2';
 
     protected mixed $user;

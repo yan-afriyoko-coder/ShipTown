@@ -62,7 +62,7 @@ class ImportShippingsTest extends TestCase
 
         $orderProduct = OrderProduct::first();
 
-        $uuid = 'rmsapi_shipping_import-order_product_id-' . $orderProduct->id;
+        $uuid = 'rmsapi_shipping_import-order_product_id-'.$orderProduct->id;
 
         $this->assertDatabaseHas('inventory_movements', [
             'product_id' => $product->id,
@@ -81,7 +81,7 @@ class ImportShippingsTest extends TestCase
             'orders' => Order::all()->toArray(),
             'inventory' => Inventory::all()->toArray(),
             'inventory_totals' => InventoryTotal::all()->toArray(),
-            'inventory_movements' => InventoryMovement::all()->toArray()
+            'inventory_movements' => InventoryMovement::all()->toArray(),
         ]);
     }
 }

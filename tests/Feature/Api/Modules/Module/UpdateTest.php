@@ -9,16 +9,18 @@ use Illuminate\Testing\TestResponse;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
-class TestModule extends BaseModuleServiceProvider {
+class TestModule extends BaseModuleServiceProvider
+{
     public static string $module_name = 'Test Module';
-    public static string $module_description = "Test Description";
+
+    public static string $module_description = 'Test Description';
 }
 
 class UpdateTest extends TestCase
 {
     private function simulationTest(): TestResponse
     {
-       TestModule::enableModule();
+        TestModule::enableModule();
 
         $module = Module::where(['service_provider_class' => TestModule::class])->first();
 

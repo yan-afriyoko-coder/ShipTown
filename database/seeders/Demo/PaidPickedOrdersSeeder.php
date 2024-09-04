@@ -52,7 +52,7 @@ class PaidPickedOrdersSeeder extends Seeder
      * @param $user
      * @return void
      */
-    function pickOrderProduct(OrderProduct $orderProduct, $user): void
+    public function pickOrderProduct(OrderProduct $orderProduct, $user): void
     {
         $orderProduct->update(['quantity_picked' => $orderProduct->quantity_ordered]);
 

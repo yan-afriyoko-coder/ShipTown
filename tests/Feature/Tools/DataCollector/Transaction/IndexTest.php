@@ -5,14 +5,8 @@ namespace Tests\Feature\Tools\DataCollector\Transaction;
 use App\User;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
-    /**
-     * @var string
-     */
     protected string $uri = '/tools/data-collector/transaction';
 
     protected mixed $user;

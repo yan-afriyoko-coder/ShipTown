@@ -17,7 +17,7 @@ class CollectionOrdersSeeder extends Seeder
             'shipping_method_code' => 'store_collection',
             'shipping_method_name' => 'store_collection',
             'label_template' => 'address_label',
-            'shipping_address_id' => $this->createIrishShippingAddress()->getKey()
+            'shipping_address_id' => $this->createIrishShippingAddress()->getKey(),
         ]);
 
         $orders->each(function (Order $order) {

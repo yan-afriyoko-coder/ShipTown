@@ -25,7 +25,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'quantity_packed' => ['required', 'numeric'],
-            'is_packed'       => ['required', 'boolean'],
+            'is_packed' => ['required', 'boolean'],
         ];
     }
 }

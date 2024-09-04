@@ -13,7 +13,6 @@ class RefillPickingIfEmpty
     /**
      * Handle the event.
      *
-     * @param OrderUpdatedEvent $event
      *
      * @return void
      */

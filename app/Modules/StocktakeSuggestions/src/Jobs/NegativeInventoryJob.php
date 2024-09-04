@@ -18,10 +18,6 @@ class NegativeInventoryJob extends UniqueJob
         return true;
     }
 
-    /**
-     * @param int $points
-     * @param string $reason
-     */
     private function insertNewSuggestions(string $reason, int $points): void
     {
         DB::statement('
@@ -38,9 +34,6 @@ class NegativeInventoryJob extends UniqueJob
         ');
     }
 
-    /**
-     * @param string $reason
-     */
     private function deleteIncorrectSuggestions(string $reason): void
     {
         DB::statement('

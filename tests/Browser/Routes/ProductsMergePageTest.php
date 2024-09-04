@@ -86,4 +86,3 @@ class ProductsMergePageTest extends DuskTestCase
         });
     }
 }
-

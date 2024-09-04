@@ -12,8 +12,8 @@ class DestroyTest extends TestCase
     private function simulationTest()
     {
         $navigationMenu = NavigationMenu::create([
-            'name'  => 'testing',
-            'url'   => 'testing',
+            'name' => 'testing',
+            'url' => 'testing',
             'group' => 'picklist',
         ]);
 

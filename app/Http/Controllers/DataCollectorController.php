@@ -11,7 +11,8 @@ class DataCollectorController extends Controller
     public function index(Request $request, $id)
     {
         if ($request->has('filename')) {
-            $report = new DataCollectionReport();
+            $report = new DataCollectionReport;
+
             return CsvStreamedResponse::fromQueryBuilder($report->queryBuilder(), $request->get('filename'));
         }
 

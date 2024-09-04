@@ -31,16 +31,16 @@ class InventoryQuantityReservedServiceProvider extends BaseModuleServiceProvider
             Listeners\InventoryReservationUpdatedEventListener::class,
         ],
 
-//        RecalculateInventoryRequestEvent::class => [
-//            Listeners\RecalculateInventoryRequestEventListener::class,
-//        ],
+        //        RecalculateInventoryRequestEvent::class => [
+        //            Listeners\RecalculateInventoryRequestEventListener::class,
+        //        ],
     ];
 
     public function boot(): void
     {
         parent::boot();
 
-        $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
+        $this->loadMigrationsFrom(__DIR__.'/Database/Migrations');
     }
 
     public static function disabling(): bool

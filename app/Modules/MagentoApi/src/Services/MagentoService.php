@@ -14,7 +14,7 @@ class MagentoService
 {
     public static function api(): MagentoApi
     {
-        return new MagentoApi();
+        return new MagentoApi;
     }
 
     public static function updateBasePrice(string $sku, float $price, int $store_id)
@@ -45,12 +45,13 @@ class MagentoService
     {
         $connection = $magentoProduct->magentoConnection;
 
-        $response = Client::post($connection->api_access_token, $connection->base_url. '/rest/all/V1/products/special-price-information', [
-            'skus' => Arr::wrap($magentoProduct->product->sku)
+        $response = Client::post($connection->api_access_token, $connection->base_url.'/rest/all/V1/products/special-price-information', [
+            'skus' => Arr::wrap($magentoProduct->product->sku),
         ]);
 
         if ($response === null || $response->failed()) {
             Log::error('Failed to fetch sale prices for product '.$magentoProduct->product->sku);
+
             return;
         }
 
@@ -86,16 +87,17 @@ class MagentoService
     {
         $connection = $magentoProduct->magentoConnection;
 
-        $response = Client::post($connection->api_access_token, $connection->base_url. '/rest/all/V1/products/base-prices-information', [
-            'skus' => Arr::wrap($magentoProduct->product->sku)
+        $response = Client::post($connection->api_access_token, $connection->base_url.'/rest/all/V1/products/base-prices-information', [
+            'skus' => Arr::wrap($magentoProduct->product->sku),
         ]);
 
         if ($response->unauthorized()) {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException;
         }
 
         if ($response === null || $response->failed()) {
             Log::error('Failed to fetch base prices for product '.$magentoProduct->product->sku);
+
             return;
         }
 
@@ -117,6 +119,7 @@ class MagentoService
     {
         if (config('magento.store_code') === 'all') {
             self::fetchStockItem($magentoProduct);
+
             return;
         }
 
@@ -127,6 +130,7 @@ class MagentoService
     {
         if (config('magento.store_code') === 'all') {
             self::updateStockItems($sku, $quantity);
+
             return;
         }
 
@@ -143,10 +147,10 @@ class MagentoService
         $response = self::api()->putStockItems($sku, $params);
 
         Log::debug('MagentoApi: stockItem update', [
-            'sku'                  => $sku,
+            'sku' => $sku,
             'response_status_code' => $response->status(),
-            'response_body'        => $response->json(),
-            'params'               => $params
+            'response_body' => $response->json(),
+            'params' => $params,
         ]);
     }
 
@@ -155,9 +159,9 @@ class MagentoService
         $response = self::api()->postInventorySourceItems($sku, config('magento.store_code'), $quantity);
 
         Log::debug('MagentoApi: updateInventorySourceItems', [
-            'sku'                  => $sku,
+            'sku' => $sku,
             'response_status_code' => $response->status(),
-            'response_body'        => $response->json(),
+            'response_body' => $response->json(),
         ]);
     }
 
@@ -174,6 +178,7 @@ class MagentoService
 
         if ($response->notFound()) {
             $product->update(['exists_in_magento' => false]);
+
             return;
         }
 
@@ -181,9 +186,9 @@ class MagentoService
             throw new Exception('Failed to fetch stock items for product '.$product->product->sku);
         }
 
-        $product->stock_items_raw_import    = $response->json();
-        $product->stock_items_fetched_at    = now();
-        $product->quantity                  = null;
+        $product->stock_items_raw_import = $response->json();
+        $product->stock_items_fetched_at = now();
+        $product->quantity = null;
 
         if (Arr::has($response->json(), 'qty')) {
             $product->quantity = data_get($response->json(), 'qty') ?: 0;

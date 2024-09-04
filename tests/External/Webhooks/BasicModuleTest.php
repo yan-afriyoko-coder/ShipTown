@@ -27,7 +27,7 @@ class BasicModuleTest extends TestCase
     public function test_if_publishes_inventory_movements()
     {
         WebhooksConfiguration::updateOrCreate([], [
-            'topic_arn' => env('TEST_SNS_TOPIC_ARN')
+            'topic_arn' => env('TEST_SNS_TOPIC_ARN'),
         ]);
 
         WebhooksServiceProviderBase::enableModule();

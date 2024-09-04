@@ -2,7 +2,6 @@
 
 namespace App\Modules\Api2cart\src\Jobs;
 
-use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\Api2cart\src\Models\Api2cartVariant;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -21,9 +20,9 @@ class SyncVariantsJob implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @throws Exception
-     *
      * @return void
+     *
+     * @throws Exception
      */
     public function handle()
     {

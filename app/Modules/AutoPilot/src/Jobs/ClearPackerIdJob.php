@@ -33,7 +33,7 @@ class ClearPackerIdJob implements ShouldQueue
 
         $records->each(function (Order $order) {
             $order->log('Clearing packer assignment')
-                    ->update(['packer_user_id' => null]);
+                ->update(['packer_user_id' => null]);
         });
 
         info('ClearPackerIdJob finished', ['record_recalculated' => $records->count()]);

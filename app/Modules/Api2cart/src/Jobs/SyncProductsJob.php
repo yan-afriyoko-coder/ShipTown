@@ -20,9 +20,9 @@ class SyncProductsJob implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @throws Exception
-     *
      * @return void
+     *
+     * @throws Exception
      */
     public function handle()
     {

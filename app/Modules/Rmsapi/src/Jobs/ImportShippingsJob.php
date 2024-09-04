@@ -37,8 +37,8 @@ class ImportShippingsJob extends UniqueJob
     public function handle(): bool
     {
         $params = [
-            'per_page'            => 500,
-            'order_by'            => 'DBTimeStamp:asc',
+            'per_page' => 500,
+            'order_by' => 'DBTimeStamp:asc',
             'ShippingCarrierName' => 'PM',
             'min:DBTimeStamp' => $this->rmsapiConnection->shippings_last_timestamp,
         ];
@@ -49,10 +49,10 @@ class ImportShippingsJob extends UniqueJob
             $records = $response->getResult();
 
             Log::info('Job processing', [
-                'job'            => self::class,
+                'job' => self::class,
                 'warehouse_code' => $this->rmsapiConnection->location_id,
-                'count'          => count($response->getResult()),
-                'left'           => $response->asArray()['total'],
+                'count' => count($response->getResult()),
+                'left' => $response->asArray()['total'],
             ]);
 
             if (empty($records)) {
@@ -61,7 +61,7 @@ class ImportShippingsJob extends UniqueJob
 
             RmsapiShippingImports::query()->create([
                 'connection_id' => $this->rmsapiConnection->id,
-                'raw_import' => $response->getResult()
+                'raw_import' => $response->getResult(),
             ]);
 
             $this->importShippingRecords($records);
@@ -77,9 +77,6 @@ class ImportShippingsJob extends UniqueJob
         return true;
     }
 
-    /**
-     * @param array $records
-     */
     public function importShippingRecords(array $records): void
     {
         collect($records)
@@ -95,15 +92,11 @@ class ImportShippingsJob extends UniqueJob
             });
     }
 
-    /**
-     * @param array $record
-     * @return Order
-     */
     private function firstOrCreateOrder(array $record): Order
     {
         /** @var Order $order */
         $order = Order::firstOrCreate([
-            'order_number' => $this->rmsapiConnection->location_id. '-TRN-' . $record['TransactionNumber'],
+            'order_number' => $this->rmsapiConnection->location_id.'-TRN-'.$record['TransactionNumber'],
         ], [
             'status_code' => 'imported_rms_shippings',
             'order_placed_at' => Carbon::createFromTimeString($record['ShippingDateCreated'])->subHour(),
@@ -113,7 +106,7 @@ class ImportShippingsJob extends UniqueJob
 
         /** @var OrderAddress $shippingAddress */
         $shippingAddress = OrderAddress::updateOrCreate([
-            'id' => $order->shipping_address_id
+            'id' => $order->shipping_address_id,
         ], [
             'company' => $record['Company'],
             'first_name' => $record['Name'],
@@ -155,12 +148,11 @@ class ImportShippingsJob extends UniqueJob
     }
 
     /**
-     * @param $shippingRecord
      * @return OrderProduct|null:
      */
     private function createOrderProductFrom($shippingRecord): ?OrderProduct
     {
-        $uuid = $this->rmsapiConnection->location_id . '-shipping.id-' . $shippingRecord['ID'];
+        $uuid = $this->rmsapiConnection->location_id.'-shipping.id-'.$shippingRecord['ID'];
 
         $order = $this->firstOrCreateOrder($shippingRecord);
 
@@ -168,6 +160,7 @@ class ImportShippingsJob extends UniqueJob
 
         if ($orderProduct) {
             $this->rmsapiConnection->update(['shippings_last_timestamp' => $shippingRecord['DBTimeStamp']]);
+
             return $orderProduct;
         }
 
@@ -209,8 +202,6 @@ class ImportShippingsJob extends UniqueJob
      * We not 100% sure where the stock is gonna be shipped from so
      * We will restock sold products and reserve from all stock until shipped
      * then transaction will be created in warehouse where product ships from
-     *
-     * @param OrderProduct $orderProduct
      */
     private function restockOriginForStockToBalance(OrderProduct $orderProduct): void
     {
@@ -218,9 +209,9 @@ class ImportShippingsJob extends UniqueJob
             'product_id' => $orderProduct->product_id,
             'warehouse_code' => $this->rmsapiConnection->location_id,
         ])
-        ->first();
+            ->first();
 
-        $custom_unique_reference_id = 'rmsapi_shipping_import-order_product_id-' . $orderProduct->getKey();
+        $custom_unique_reference_id = 'rmsapi_shipping_import-order_product_id-'.$orderProduct->getKey();
 
         if (InventoryMovement::where(['custom_unique_reference_id' => $custom_unique_reference_id])->exists()) {
             return;
@@ -228,7 +219,7 @@ class ImportShippingsJob extends UniqueJob
 
         InventoryService::adjust($inventory, $orderProduct->quantity_ordered, [
             'description' => 'rmsapi_shipping_import',
-            'custom_unique_reference_id' => $custom_unique_reference_id
+            'custom_unique_reference_id' => $custom_unique_reference_id,
         ]);
 
         $inventory->product->log('Imported RMS shipping, restocking', [

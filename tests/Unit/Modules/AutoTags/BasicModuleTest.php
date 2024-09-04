@@ -19,15 +19,14 @@ class BasicModuleTest extends TestCase
         EventServiceProviderBase::enableModule();
     }
 
-    public function
-    test_if_attaches_tag()
+    public function test_if_attaches_tag()
     {
         /** @var Product $product */
         $product = Product::factory()->create();
 
         $product->inventory->first()->update([
             'quantity' => 0,
-            'quantity_reserved' => 1
+            'quantity_reserved' => 1,
         ]);
 
         $product = $product->refresh();
@@ -42,7 +41,7 @@ class BasicModuleTest extends TestCase
 
         $product->inventory->first()->update([
             'quantity' => 0,
-            'quantity_reserved' => 0
+            'quantity_reserved' => 0,
         ]);
 
         $this->assertFalse($product->hasTags(['oversold']));

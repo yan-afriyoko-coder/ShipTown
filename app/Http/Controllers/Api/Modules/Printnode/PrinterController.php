@@ -12,11 +12,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class PrinterController extends Controller
 {
-    /**
-     * @param PrintNodeIndexRequest $request
-     *
-     * @return JsonResource
-     */
     public function index(PrintNodeIndexRequest $request): JsonResource
     {
         return new JsonResource(PrintNode::getPrinters());

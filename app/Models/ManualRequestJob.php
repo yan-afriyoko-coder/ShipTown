@@ -7,12 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class ManualRequestJob
- * @package App\Models
  *
  * @property int $id
  * @property string $job_name
  * @property string $job_class
- *
  */
 class ManualRequestJob extends BaseModel
 {

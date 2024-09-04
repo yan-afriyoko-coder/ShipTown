@@ -14,7 +14,6 @@ class RestockingReportSeeder extends Seeder
     {
         /** @var Warehouse $destination_warehouse */
         /** @var Warehouse $source_warehouse */
-
         $source_warehouse = Warehouse::whereCode('99')->first()
             ?? Warehouse::factory()->create(['code' => '99']);
 
@@ -26,7 +25,7 @@ class RestockingReportSeeder extends Seeder
             $inventory = $product->inventory($source_warehouse->code)->first();
 
             InventoryService::adjust($inventory, rand(30, 100), [
-                'description' => 'stocktake for Restocking report sample'
+                'description' => 'stocktake for Restocking report sample',
             ]);
         });
 

@@ -8,15 +8,8 @@ use App\Modules\BoxTop\src\Models\OrderLock;
 use App\Modules\BoxTop\src\Services\BoxTopService;
 use Exception;
 
-/**
- *
- */
 class PushToBoxTopOrderAction extends BaseOrderActionAbstract
 {
-    /**
-     * @param string $options
-     * @return bool
-     */
     public function handle(string $options = ''): bool
     {
         parent::handle($options);
@@ -49,21 +42,22 @@ class PushToBoxTopOrderAction extends BaseOrderActionAbstract
 
             $response = BoxTopService::postOrder($this->order);
 
-            if (201 === $response->http_response->getStatusCode()) {
+            if ($response->http_response->getStatusCode() === 201) {
                 $shipment->carrier = 'BoxTop';
                 $shipment->shipping_number = $response->toArray()['WarehouseJobNumber'];
                 $shipment->save();
 
-                $this->order->log('BoxTop pick created - '. $response->content);
+                $this->order->log('BoxTop pick created - '.$response->content);
 
                 $this->order->status_code = $newStatusCode;
                 $this->order->save();
+
                 return true;
             }
 
             $shipment->delete();
             $lock->delete();
-            $this->order->log('BoxTop pick FAILED - '. $response->content);
+            $this->order->log('BoxTop pick FAILED - '.$response->content);
         } catch (Exception $exception) {
             if (isset($lock)) {
                 $lock->forceDelete();
@@ -71,7 +65,8 @@ class PushToBoxTopOrderAction extends BaseOrderActionAbstract
             if (isset($shipment)) {
                 $shipment->forceDelete();
             }
-            $this->order->log('BoxTop pick FAILED - '. $exception->getMessage());
+            $this->order->log('BoxTop pick FAILED - '.$exception->getMessage());
+
             return false;
         }
 

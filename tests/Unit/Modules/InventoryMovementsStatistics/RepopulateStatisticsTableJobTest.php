@@ -33,7 +33,6 @@ class RepopulateStatisticsTableJobTest extends TestCase
 
         SequenceNumberJob::dispatchSync();
 
-
         DispatchRecalculateInventoryRecordsJob::dispatchSync();
 
         RecalculateStatisticsTableJob::dispatch();

@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
     // id, inventory_id, product_sku, warehouse_code, quantity_reserved, reason, custom_uuid
     public function up(): void
     {

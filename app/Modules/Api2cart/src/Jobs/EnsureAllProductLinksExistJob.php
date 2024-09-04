@@ -2,8 +2,6 @@
 
 namespace App\Modules\Api2cart\src\Jobs;
 
-use App\Modules\Api2cart\src\Exceptions\RequestException;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

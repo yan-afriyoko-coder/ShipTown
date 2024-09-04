@@ -17,7 +17,7 @@ class TelescopeModuleServiceProvider extends BaseModuleServiceProvider
 
     protected $listen = [
         EveryHourEvent::class => [
-            Listeners\HourlyEventListener::class
+            Listeners\HourlyEventListener::class,
         ],
     ];
 }

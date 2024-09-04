@@ -28,7 +28,7 @@ class PrintShippingLabelListener
 
     public function printFromUrl(ShippingLabel $label, mixed $printer_id): PrintJob
     {
-        $printJob = new PrintJob();
+        $printJob = new PrintJob;
         $printJob->title = 'Url Print';
         $printJob->pdf_url = base64_decode($label->base64_pdf_labels);
         $printJob->printer_id = $printer_id;
@@ -39,7 +39,7 @@ class PrintShippingLabelListener
 
     public function createPdfPrintJob(ShippingLabel $label, mixed $printer_id): PrintJob
     {
-        $printJob = new PrintJob();
+        $printJob = new PrintJob;
         $printJob->title = 'Url Print';
         $printJob->content_type = 'pdf_base64';
         $printJob->content = $label->base64_pdf_labels;
@@ -51,7 +51,7 @@ class PrintShippingLabelListener
 
     public function createRawPrintJob(ShippingLabel $label, mixed $printer_id): PrintJob
     {
-        $printJob = new PrintJob();
+        $printJob = new PrintJob;
         $printJob->title = 'Raw Print';
         $printJob->content_type = 'raw_base64';
         $printJob->content = $label->base64_pdf_labels;

@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Facade;
-use Illuminate\Support\Facades\Route;
 
 return [
     /*
@@ -241,12 +240,12 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'AWS'          => Aws\Laravel\AwsFacade::class,
-        'DNS1D'        => Milon\Barcode\Facades\DNS1DFacade::class,
-        'DNS2D'        => Milon\Barcode\Facades\DNS2DFacade::class,
-        'PDF'          => Barryvdh\DomPDF\Facade::class,
-        'Redis'        => Illuminate\Support\Facades\Redis::class,
-        'Sentry'       => Sentry\Laravel\Facade::class,
+        'AWS' => Aws\Laravel\AwsFacade::class,
+        'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+        'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Redis' => Illuminate\Support\Facades\Redis::class,
+        'Sentry' => Sentry\Laravel\Facade::class,
     ])->toArray(),
 
 ];

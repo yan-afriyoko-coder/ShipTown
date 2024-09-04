@@ -83,7 +83,7 @@ class ProcessImportedSalesRecordsJobTest extends TestCase
         /** @var RmsapiSaleImport $saleRecord */
         $saleRecord = RmsapiSaleImport::create([
             'connection_id' => $rmsapiConnection->id,
-            'comment' => 'PM_OrderProductShipment_1234567890'
+            'comment' => 'PM_OrderProductShipment_1234567890',
         ]);
 
         ProcessImportedSalesRecordsJob::dispatchSync();

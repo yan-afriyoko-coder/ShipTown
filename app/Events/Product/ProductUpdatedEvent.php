@@ -12,30 +12,21 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Class UpdatedEvent
- * @package App\Events\Product
  */
 class ProductUpdatedEvent implements ShouldQueue
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var Product
-     */
     public Product $product;
 
     /**
      * Create a new event instance.
-     *
-     * @param Product $product
      */
     public function __construct(Product $product)
     {
         $this->product = $product;
     }
 
-    /**
-     * @return Product
-     */
     public function getProduct(): Product
     {
         return $this->product;

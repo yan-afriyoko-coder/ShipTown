@@ -12,11 +12,11 @@ class StoreTest extends TestCase
     private function simulationTest()
     {
         $response = $this->post('api/orders-statuses', [
-            'name'              => 'Test Create',
-            'code'              => 'test-create',
-            'order_active'      => 0,
-            'reserves_stock'    => 0,
-            'sync_ecommerce'    => 0,
+            'name' => 'Test Create',
+            'code' => 'test-create',
+            'order_active' => 0,
+            'reserves_stock' => 0,
+            'sync_ecommerce' => 0,
         ]);
 
         return $response;
@@ -83,11 +83,11 @@ class StoreTest extends TestCase
         $orderStatus->delete();
 
         $response = $this->post(route('api.orders-statuses.store'), [
-            'name'              => $orderStatus->name,
-            'code'              => $orderStatus->code,
-            'order_active'      => 0,
-            'reserves_stock'    => 0,
-            'sync_ecommerce'    => 0,
+            'name' => $orderStatus->name,
+            'code' => $orderStatus->code,
+            'order_active' => 0,
+            'reserves_stock' => 0,
+            'sync_ecommerce' => 0,
         ]);
 
         $response->assertStatus(200);

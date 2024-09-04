@@ -18,7 +18,7 @@ class StoreTest extends TestCase
         $order = Order::factory()->create();
 
         $response = $this->actingAs($user, 'api')->postJson(route('shipments.store'), [
-            'order_id'        => $order['id'],
+            'order_id' => $order['id'],
             'shipping_number' => '123',
         ]);
 

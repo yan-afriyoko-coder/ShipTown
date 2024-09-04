@@ -17,7 +17,7 @@ class CompletedOrdersCountByDayWidgetTest extends TestCase
     {
         Order::factory()->create(['order_closed_at' => now()]);
 
-        $widget = new CompletedOrdersCountByDateWidget();
+        $widget = new CompletedOrdersCountByDateWidget;
 
         $this->assertNotNull($widget->run());
     }

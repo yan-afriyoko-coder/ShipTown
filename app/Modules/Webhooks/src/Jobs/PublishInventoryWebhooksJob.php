@@ -86,10 +86,10 @@ class PublishInventoryWebhooksJob extends UniqueJob
         return SnsService::publishNew(
             $payload->toJson(),
             [
-                "warehouse_code" => [
-                    "DataType" => "String",
-                    "StringValue" => data_get($ordersCollection->collection->first()->resource->toArray(), 'warehouse.code')
-                ]
+                'warehouse_code' => [
+                    'DataType' => 'String',
+                    'StringValue' => data_get($ordersCollection->collection->first()->resource->toArray(), 'warehouse.code'),
+                ],
             ]
         );
     }

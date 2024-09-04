@@ -7,7 +7,7 @@ use JMac\Testing\Traits\AdditionalAssertions;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication;
     use AdditionalAssertions;
+    use CreatesApplication;
     use ResetsDatabase;
 }

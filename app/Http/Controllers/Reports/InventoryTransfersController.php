@@ -10,7 +10,7 @@ class InventoryTransfersController extends Controller
 {
     public function index(Request $request)
     {
-        $report = new InventoryTransferReport();
+        $report = new InventoryTransferReport;
 
         return $report->response($request);
     }

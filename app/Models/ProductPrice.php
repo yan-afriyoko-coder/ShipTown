@@ -11,23 +11,22 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\ProductPrice.
  *
- * @property int         $id
- * @property int         $product_id
- * @property int         $warehouse_id
- * @property string      $warehouse_code
- * @property boolean     $is_on_sale
- * @property double      $current_price
- * @property double      $price
- * @property double      $cost
- * @property double      $sale_price
+ * @property int $id
+ * @property int $product_id
+ * @property int $warehouse_id
+ * @property string $warehouse_code
+ * @property bool $is_on_sale
+ * @property float $current_price
+ * @property float $price
+ * @property float $cost
+ * @property float $sale_price
  * @property Carbon|null $sale_price_start_date
  * @property Carbon|null $sale_price_end_date
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
- * @property Product     $product
- * @property Warehouse   $warehouse
+ * @property Product $product
+ * @property Warehouse $warehouse
  *
  * @method static Builder|ProductPrice newModelQuery()
  * @method static Builder|ProductPrice newQuery()
@@ -43,6 +42,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|ProductPrice whereSalePriceEndDate($value)
  * @method static Builder|ProductPrice whereSalePriceStartDate($value)
  * @method static Builder|ProductPrice whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class ProductPrice extends BaseModel
@@ -65,22 +65,22 @@ class ProductPrice extends BaseModel
     // as this is then not populated
     // correctly to events
     protected $attributes = [
-        'price'                 => 99999,
-        'sale_price'            => 99999,
+        'price' => 99999,
+        'sale_price' => 99999,
         'sale_price_start_date' => '2001-01-01 00:00:00',
-        'sale_price_end_date'   => '2001-01-01 00:00:00',
+        'sale_price_end_date' => '2001-01-01 00:00:00',
     ];
 
     protected $casts = [
-        'price'                 => 'float',
-        'sale_price'            => 'float',
-        'cost'                  => 'float',
-        'is_on_sale'            => 'boolean',
-        'created_at'            => 'datetime',
-        'updated_at'            => 'datetime',
-        'deleted_at'            => 'datetime',
+        'price' => 'float',
+        'sale_price' => 'float',
+        'cost' => 'float',
+        'is_on_sale' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
         'sale_price_start_date' => 'datetime',
-        'sale_price_end_date'   => 'datetime',
+        'sale_price_end_date' => 'datetime',
     ];
 
     protected $appends = [
@@ -98,17 +98,11 @@ class ProductPrice extends BaseModel
         return ($this->sale_price < $this->price) && now()->between($this->sale_price_start_date, $this->sale_price_end_date);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function warehouse(): BelongsTo
     {
         return $this->belongsTo(Warehouse::class);

@@ -18,8 +18,8 @@ class StoreTest extends TestCase
     public function test_store_call_returns_ok()
     {
         $response = $this->post(route('widgets.store'), [
-            'name'   => 'Tes widget',
-            'config' => []
+            'name' => 'Tes widget',
+            'config' => [],
         ]);
 
         $response->assertStatus(201);
@@ -27,7 +27,7 @@ class StoreTest extends TestCase
             'data' => [
                 'name',
                 'config' => [],
-                'id'
+                'id',
             ],
         ]);
     }

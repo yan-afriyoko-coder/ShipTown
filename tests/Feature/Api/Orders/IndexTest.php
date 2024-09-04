@@ -30,7 +30,7 @@ class IndexTest extends TestCase
             '/api/orders?filter[has_tags]=Test&include=activities',
             'activities.causer,shipping_address',
             'order_shipments,order_products,order_products.product',
-            'order_products.product.aliases,packer,order_comments,order_comments.user'
+            'order_products.product.aliases,packer,order_comments,order_comments.user',
         ]));
 
         ray($response->getContent());

@@ -10,7 +10,7 @@ class InventoryController extends ReportController
 {
     public function index(Request $request): mixed
     {
-        $report = new InventoryReport();
+        $report = new InventoryReport;
 
         return $report->response($request);
     }

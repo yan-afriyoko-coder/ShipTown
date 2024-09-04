@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Log;
 class EnsureInventoryTotalsRecordsExistJob extends UniqueJob
 {
     private int $batchSize;
+
     private Configuration|Model $config;
+
     private mixed $productsMaxId;
 
     public function __construct()
@@ -45,15 +47,11 @@ class EnsureInventoryTotalsRecordsExistJob extends UniqueJob
         } while ($maxID <= $this->productsMaxId);
     }
 
-    /**
-     * @param mixed $minID
-     * @param mixed $maxID
-     */
     private function insertMissingRecords(mixed $minID, mixed $maxID): void
     {
-        DB::statement("DROP TEMPORARY TABLE IF EXISTS tempTable;");
+        DB::statement('DROP TEMPORARY TABLE IF EXISTS tempTable;');
 
-        DB::statement("
+        DB::statement('
                 CREATE TEMPORARY TABLE tempTable AS
                 SELECT
                     products.id as product_id
@@ -66,9 +64,9 @@ class EnsureInventoryTotalsRecordsExistJob extends UniqueJob
                 WHERE
                     products.id BETWEEN ? AND ?
                     AND inventory_totals.id is null
-            ", [$minID, $maxID]);
+            ', [$minID, $maxID]);
 
-        DB::insert("
+        DB::insert('
                 INSERT INTO inventory_totals (
                     product_id,
                     created_at,
@@ -80,6 +78,6 @@ class EnsureInventoryTotalsRecordsExistJob extends UniqueJob
                     NOW() as updated_at
 
                 FROM tempTable
-            ");
+            ');
     }
 }

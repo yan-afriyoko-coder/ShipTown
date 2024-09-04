@@ -31,7 +31,6 @@ class InventoryReport extends Report
         $this->addField('reorder_point', 'inventory.reorder_point', 'float');
         $this->addField('restock_level', 'inventory.restock_level', 'float');
 
-
         $this->addField('unit_price', 'product_prices.price', 'float');
         $this->addField('unit_cost', 'product_prices.cost', 'float');
         $this->addField('total_price', DB::raw('ROUND(product_prices.price * inventory.quantity, 2)'), 'float');
@@ -60,7 +59,6 @@ class InventoryReport extends Report
         $this->addField('deleted_at', 'inventory.deleted_at', 'datetime');
         $this->addField('created_at', 'inventory.created_at', 'datetime');
         $this->addField('updated_at', 'inventory.updated_at', 'datetime');
-
 
         $this->addField('last_sequence_number', 'inventory.last_sequence_number', 'integer');
         $this->addField('recount_required', 'inventory.recount_required');

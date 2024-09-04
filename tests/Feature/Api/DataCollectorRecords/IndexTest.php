@@ -18,7 +18,7 @@ class IndexTest extends TestCase
 
         $dataCollection = DataCollection::factory()->create([
             'warehouse_id' => Warehouse::factory()->create()->getKey(),
-            'name' => 'test'
+            'name' => 'test',
         ]);
 
         DataCollectionRecord::factory()->create([
@@ -42,7 +42,7 @@ class IndexTest extends TestCase
             'links',
             'data' => [
                 '*' => [
-                    'id'
+                    'id',
                 ],
             ],
         ]);

@@ -40,7 +40,7 @@ class InventoryQuantityCheckJob extends UniqueJob
 
             Log::info('Job processing', [
                 'job' => self::class,
-                'recordsUpdated' => $recordsUpdated
+                'recordsUpdated' => $recordsUpdated,
             ]);
 
             usleep(100000); // 0.1 seconds

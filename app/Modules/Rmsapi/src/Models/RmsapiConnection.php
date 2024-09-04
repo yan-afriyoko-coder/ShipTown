@@ -12,18 +12,18 @@ use Illuminate\Support\Facades\Crypt;
 /**
  * App\Models\RmsapiConnection.
  *
- * @property int         $id
- * @property int         $warehouse_id
- * @property string      $location_id
- * @property string      $url
- * @property string      $username
- * @property string      $password
- * @property int         $products_last_timestamp
- * @property int         $shippings_last_timestamp
- * @property int         $sales_last_timestamp
+ * @property int $id
+ * @property int $warehouse_id
+ * @property string $location_id
+ * @property string $url
+ * @property string $username
+ * @property string $password
+ * @property int $products_last_timestamp
+ * @property int $shippings_last_timestamp
+ * @property int $sales_last_timestamp
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property string      $price_field_name
+ * @property string $price_field_name
  *
  * @method static Builder|RmsapiConnection newModelQuery()
  * @method static Builder|RmsapiConnection newQuery()
@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Crypt;
  * @method static Builder|RmsapiConnection whereUpdatedAt($value)
  * @method static Builder|RmsapiConnection whereUrl($value)
  * @method static Builder|RmsapiConnection whereUsername($value)
+ *
  * @mixin Eloquent
  */
 class RmsapiConnection extends BaseModel
@@ -53,7 +54,7 @@ class RmsapiConnection extends BaseModel
         'products_last_timestamp',
         'shippings_last_timestamp',
         'sales_last_timestamp',
-        'price_field_name'
+        'price_field_name',
     ];
 
     public function setPasswordAttribute($password)

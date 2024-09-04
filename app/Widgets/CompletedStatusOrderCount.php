@@ -3,7 +3,6 @@
 namespace App\Widgets;
 
 use App\Models\Order;
-use App\Models\OrderStatus;
 use Illuminate\Support\Facades\DB;
 
 class CompletedStatusOrderCount extends AbstractDateSelectorWidget
@@ -37,9 +36,9 @@ class CompletedStatusOrderCount extends AbstractDateSelectorWidget
         });
 
         return view('widgets.completed_orders_counts', [
-            'config'              => $this->config,
+            'config' => $this->config,
             'status_order_counts' => $status_order_counts,
-            'total_count'         => $total_count,
+            'total_count' => $total_count,
         ]);
     }
 }

@@ -28,7 +28,7 @@ class CsvImportController extends Controller
     {
         $validatedData = Validator::make($request->all(), $this->rules)->validate();
 
-        $tempTableName = 'temp_csv_import_' . rand(100000000000000000, 999999999999999999);
+        $tempTableName = 'temp_csv_import_'.rand(100000000000000000, 999999999999999999);
 
         Schema::create($tempTableName, function (Blueprint $table) {
             $table->temporary();
@@ -46,10 +46,10 @@ class CsvImportController extends Controller
         ray(DB::table($tempTableName)->get());
 
         DB::statement('
-            UPDATE ' . $tempTableName . '
-            LEFT JOIN products_aliases ON ' . $tempTableName . '.product_sku = products_aliases.alias
-            SET ' . $tempTableName . '.product_id = products_aliases.product_id
-            WHERE ' . $tempTableName . '.product_id IS NULL
+            UPDATE '.$tempTableName.'
+            LEFT JOIN products_aliases ON '.$tempTableName.'.product_sku = products_aliases.alias
+            SET '.$tempTableName.'.product_id = products_aliases.product_id
+            WHERE '.$tempTableName.'.product_id IS NULL
         ');
 
         $skuNotFoundErrors = DB::table($tempTableName)
@@ -57,7 +57,7 @@ class CsvImportController extends Controller
             ->select('product_sku')
             ->get()
             ->map(function ($item) use (&$errors) {
-                return 'SKU not found: ' . $item->product_sku;
+                return 'SKU not found: '.$item->product_sku;
             })
             ->filter();
 
@@ -80,7 +80,7 @@ class CsvImportController extends Controller
                 created_at,
                 updated_at
             )
-            SELECT '. $validatedData['data_collection_id'] .',
+            SELECT '.$validatedData['data_collection_id'].',
                 inventory.id,
                 tempTable.product_id,
                 data_collections.warehouse_id,
@@ -93,9 +93,9 @@ class CsvImportController extends Controller
                 NOW(),
                 NOW()
 
-            FROM ' . $tempTableName . ' as tempTable
+            FROM '.$tempTableName.' as tempTable
             LEFT JOIN data_collections
-                ON data_collections.id = '. $validatedData['data_collection_id'] .'
+                ON data_collections.id = '.$validatedData['data_collection_id'].'
             LEFT JOIN inventory
                 ON inventory.product_id = tempTable.product_id
                 AND inventory.warehouse_id = data_collections.warehouse_id

@@ -32,7 +32,7 @@ class DecreaseQuantityTest extends TestCase
 
         StockControlServiceProvider::enableModule();
 
-        $orderProductShipment = new OrderProductShipment();
+        $orderProductShipment = new OrderProductShipment;
         $orderProductShipment->order_id = $order->getKey();
         $orderProductShipment->quantity_shipped = $orderProduct->quantity_to_ship;
         $orderProductShipment->product()->associate($product);

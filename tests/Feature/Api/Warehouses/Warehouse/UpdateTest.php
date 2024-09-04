@@ -28,9 +28,9 @@ class UpdateTest extends TestCase
         $newWarehouse = Warehouse::factory()->make();
 
         $data = [
-            'name'  => $newWarehouse->name,
-            'code'  => $newWarehouse->code,
-            'tags'  => ['tag1','tag2']
+            'name' => $newWarehouse->name,
+            'code' => $newWarehouse->code,
+            'tags' => ['tag1', 'tag2'],
         ];
 
         $response = $this->put(route('api.warehouses.update', $warehouse), $data);

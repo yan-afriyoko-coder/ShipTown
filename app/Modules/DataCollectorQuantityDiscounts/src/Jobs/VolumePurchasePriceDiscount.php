@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Cache;
 class VolumePurchasePriceDiscount extends UniqueJob
 {
     private QuantityDiscount $discount;
+
     private DataCollection $dataCollection;
 
     public function uniqueId(): string
@@ -29,12 +30,12 @@ class VolumePurchasePriceDiscount extends UniqueJob
     {
         $cacheLockKey = implode('-', [
             'recalculating_quantity_discounts_for_data_collection',
-            $this->dataCollection->id
+            $this->dataCollection->id,
         ]);
 
         Cache::lock($cacheLockKey, 5)->get(function () {
             $quantityScanned = QuantityDiscountsService::getRecordsEligibleForDiscount($this->dataCollection, $this->discount)
-                ->sum('quantity_scanned') ;
+                ->sum('quantity_scanned');
 
             $minQuantityRequired = collect($this->discount->configuration['multibuy_discount_ranges'])
                 ->min('minimum_quantity');

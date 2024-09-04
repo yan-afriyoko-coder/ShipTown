@@ -7,15 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property integer $inventory_id
+ * @property int $inventory_id
  * @property string $product_sku
  * @property string $warehouse_code
  * @property float $quantity_reserved
  * @property string $comment
- *
  * @property Inventory $inventory
  */
-
 class InventoryReservation extends BaseModel
 {
     use HasFactory;
@@ -26,11 +24,11 @@ class InventoryReservation extends BaseModel
         'warehouse_code',
         'quantity_reserved',
         'comment',
-        'custom_uuid'
+        'custom_uuid',
     ];
 
     protected $casts = [
-        'quantity_reserved' => 'float'
+        'quantity_reserved' => 'float',
     ];
 
     public function inventory(): BelongsTo

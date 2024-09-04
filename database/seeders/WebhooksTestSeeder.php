@@ -20,7 +20,7 @@ class WebhooksTestSeeder extends Seeder
         }
 
         WebhooksConfiguration::query()->updateOrCreate([], [
-            'topic_arn' => env('TEST_SNS_TOPIC_ARN')
+            'topic_arn' => env('TEST_SNS_TOPIC_ARN'),
         ]);
 
         WebhooksServiceProviderBase::enableModule();

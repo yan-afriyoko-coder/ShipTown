@@ -6,9 +6,6 @@ use App\Modules\Automations\src\Helpers\AutomationHelper;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
-/**
- *
- */
 class AutomationService
 {
     /**
@@ -22,10 +19,6 @@ class AutomationService
      * In case of an issue, and one of the order will block application for some reason,
      * we will start automations from newest to oldest,
      * that will effectively process new orders first and lastly process problematic order
-     *
-     * @param Builder $automationsToRunQuery
-     * @param Builder $ordersToRunQuery
-     * @return bool
      */
     public static function runAutomationsOnOrdersQuery(Builder $automationsToRunQuery, Builder $ordersToRunQuery): bool
     {

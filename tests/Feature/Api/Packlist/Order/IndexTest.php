@@ -31,12 +31,12 @@ class IndexTest extends TestCase
 
         /** @var User $user */
         $user = User::factory()->create([
-            'location_id' => $warehouse->getKey()
+            'location_id' => $warehouse->getKey(),
         ]);
 
         $response = $this->actingAs($user, 'api')
             ->getJson(route('packlist.order.index', [
-                'filter[inventory_source_warehouse_id]' => $user->location_id
+                'filter[inventory_source_warehouse_id]' => $user->location_id,
             ]));
 
         $response->assertOk();
@@ -70,7 +70,7 @@ class IndexTest extends TestCase
         $response->assertJsonStructure([
             'errors' => [
                 'filter' => [],
-            ]
+            ],
         ]);
     }
 }

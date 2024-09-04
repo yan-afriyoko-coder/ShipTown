@@ -8,9 +8,6 @@ use App\Models\ShippingLabel;
 use App\Services\OrderService;
 use Illuminate\Support\Collection;
 
-/**
- *
- */
 class BillingAddressLabelShippingService extends ShippingServiceAbstract
 {
     public function ship(int $order_id): Collection
@@ -21,7 +18,7 @@ class BillingAddressLabelShippingService extends ShippingServiceAbstract
         $pdfString = OrderService::getOrderPdf($order->order_number, 'billing_address_label');
 
         // we create new shipping label and save it to database, so it can automatically be printed
-        $shippingLabel = new ShippingLabel();
+        $shippingLabel = new ShippingLabel;
         $shippingLabel->order_id = $order->getKey();
         $shippingLabel->user_id = auth()->id();
         $shippingLabel->carrier = '';
@@ -34,7 +31,7 @@ class BillingAddressLabelShippingService extends ShippingServiceAbstract
         activity()
             ->on($order)
             ->by(auth()->user())
-            ->log("generated generic address label");
+            ->log('generated generic address label');
 
         // we delete label after it was printed
         $shippingLabel->delete();

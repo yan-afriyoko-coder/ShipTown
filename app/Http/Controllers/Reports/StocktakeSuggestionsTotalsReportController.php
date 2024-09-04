@@ -10,7 +10,7 @@ class StocktakeSuggestionsTotalsReportController extends Controller
 {
     public function index(Request $request): mixed
     {
-        $report = new StocktakeSuggestionsTotalsReport();
+        $report = new StocktakeSuggestionsTotalsReport;
 
         return $report->response($request);
     }

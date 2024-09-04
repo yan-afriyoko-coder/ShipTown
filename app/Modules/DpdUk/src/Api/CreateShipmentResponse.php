@@ -5,19 +5,10 @@ namespace App\Modules\DpdUk\src\Api;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
 
-/**
- *
- */
 class CreateShipmentResponse
 {
-    /**
-     * @var Response
-     */
     private Response $apiResponse;
 
-    /**
-     * @param Response $response
-     */
     public function __construct(Response $response)
     {
         $this->apiResponse = $response;
@@ -31,9 +22,6 @@ class CreateShipmentResponse
         return $this->apiResponse->json('data.shipmentId');
     }
 
-    /**
-     * @return Collection
-     */
     public function errors(): Collection
     {
         return collect($this->apiResponse->json('error'));

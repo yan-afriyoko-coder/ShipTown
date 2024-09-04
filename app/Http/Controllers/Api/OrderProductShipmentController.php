@@ -17,15 +17,11 @@ class OrderProductShipmentController extends Controller
 {
     /**
      * Update the specified resource in storage.
-     *
-     * @param StoreRequest $request
-     *
-     * @return OrderProductShipmentResource
      */
     public function store(StoreRequest $request): ?OrderProductShipmentResource
     {
         try {
-            $orderProductShipment = new OrderProductShipment();
+            $orderProductShipment = new OrderProductShipment;
 
             app('db')->transaction(function () use ($request, &$orderProductShipment) {
                 /** @var OrderProduct $orderProduct */
@@ -44,14 +40,15 @@ class OrderProductShipmentController extends Controller
                 $orderProductShipment->save();
 
                 $orderProduct->update([
-                    'quantity_shipped' => $orderProduct->quantity_shipped + $request->get('quantity_shipped', 0)
+                    'quantity_shipped' => $orderProduct->quantity_shipped + $request->get('quantity_shipped', 0),
                 ]);
             });
 
             return new OrderProductShipmentResource($orderProductShipment);
-        } catch (\Exception | \Throwable $e) {
+        } catch (\Exception|\Throwable $e) {
             report($e);
             $this->respondBadRequest($e->getMessage());
+
             return null;
         }
     }

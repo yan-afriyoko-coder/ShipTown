@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Api\Modules\OrderAutomations;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AutomationResource;
-use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Http\Requests\AutomationDestoyRequest;
 use App\Modules\Automations\src\Http\Requests\AutomationIndexRequest;
 use App\Modules\Automations\src\Http\Requests\AutomationShowRequest;
 use App\Modules\Automations\src\Http\Requests\AutomationStoreRequest;
 use App\Modules\Automations\src\Http\Requests\AutomationUpdateRequest;
+use App\Modules\Automations\src\Models\Automation;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -18,8 +18,6 @@ class AutomationController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return AnonymousResourceCollection
      */
     public function index(AutomationIndexRequest $request): AnonymousResourceCollection
     {
@@ -33,13 +31,11 @@ class AutomationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param AutomationStoreRequest $request
-     * @return AutomationResource
      * @throws Throwable
      */
     public function store(AutomationStoreRequest $request): AutomationResource
     {
-        $automation = new Automation();
+        $automation = new Automation;
 
         try {
             DB::beginTransaction();
@@ -50,12 +46,12 @@ class AutomationController extends Controller
             // filter out empty conditions and actions
             $conditions = collect($request->validated()['conditions'])
                 ->filter(function (array $condition) {
-                    return $condition['condition_class'] != "";
+                    return $condition['condition_class'] != '';
                 });
 
             $actions = collect($request->validated()['actions'])
                 ->filter(function (array $action) {
-                    return $action['action_class'] != "";
+                    return $action['action_class'] != '';
                 });
 
             $automation->conditions()->createMany($conditions);
@@ -67,7 +63,7 @@ class AutomationController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             report($e);
-            abort(500, "Something wrong");
+            abort(500, 'Something wrong');
         }
 
         return new AutomationResource($automation);
@@ -99,12 +95,12 @@ class AutomationController extends Controller
             // filter out empty conditions and actions
             $conditions = collect($request->validated()['conditions'])
                 ->filter(function (array $condition) {
-                    return $condition['condition_class'] != "";
+                    return $condition['condition_class'] != '';
                 });
 
             $actions = collect($request->validated()['actions'])
                 ->filter(function (array $action) {
-                    return $action['action_class'] != "";
+                    return $action['action_class'] != '';
                 });
 
             // create conditions and actions
@@ -115,7 +111,7 @@ class AutomationController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             report($e);
-            abort(500, "Something wrong");
+            abort(500, 'Something wrong');
         }
 
         return new AutomationResource($automation);

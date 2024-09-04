@@ -10,7 +10,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $report = new OrderReport();
+        $report = new OrderReport;
 
         return $report->response($request);
     }

@@ -6,9 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\SubscriptionResource;
 use App\Modules\Webhooks\src\Http\Requests\WebhookSubscriptionStoreRequest;
 use App\Modules\Webhooks\src\Services\SnsService;
-use Aws\Exception\AwsException;
-use Aws\Result;
-use Illuminate\Support\Facades\Log;
 
 class SubscriptionController extends Controller
 {
@@ -16,13 +13,13 @@ class SubscriptionController extends Controller
     {
         $listSubscriptionsByTopicResponse = SnsService::client()
             ->listSubscriptionsByTopic([
-                'TopicArn' => SnsService::getConfiguration()->topic_arn
+                'TopicArn' => SnsService::getConfiguration()->topic_arn,
             ]);
 
         return SubscriptionResource::make([
-            "service" => 'AWS SNS',
+            'service' => 'AWS SNS',
             'method' => 'listSubscriptions',
-            'response' => $listSubscriptionsByTopicResponse->toArray()
+            'response' => $listSubscriptionsByTopicResponse->toArray(),
         ]);
     }
 
@@ -31,9 +28,9 @@ class SubscriptionController extends Controller
         $subscribeResponse = SnsService::subscribeOrFail($request->validated()['endpoint']);
 
         return SubscriptionResource::make([
-            "service" => 'AWS SNS',
+            'service' => 'AWS SNS',
             'method' => 'subscribe',
-            'response' => $subscribeResponse->toArray()
+            'response' => $subscribeResponse->toArray(),
         ]);
     }
 }

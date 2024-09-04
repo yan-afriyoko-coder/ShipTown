@@ -49,11 +49,11 @@ class ImportSalesJob extends UniqueJob
                 ]);
 
                 Heartbeat::query()->updateOrCreate([
-                    'code' => 'modules_rmsapi_successful_sales_fetch_warehouseId_' . $this->rmsConnection->location_id,
+                    'code' => 'modules_rmsapi_successful_sales_fetch_warehouseId_'.$this->rmsConnection->location_id,
                 ], [
                     'level' => Heartbeat::LEVEL_ERROR,
-                    'error_message' => 'RMSAPI Sales not synced for last hour WarehouseID: ' . $this->rmsConnection->location_id,
-                    'expires_at' => now()->addHour()
+                    'error_message' => 'RMSAPI Sales not synced for last hour WarehouseID: '.$this->rmsConnection->location_id,
+                    'expires_at' => now()->addHour(),
                 ]);
             } catch (GuzzleException $e) {
                 Log::warning('RMSAPI ImportSalesJob Failed sales fetch', [
@@ -96,24 +96,24 @@ class ImportSalesJob extends UniqueJob
             $isImportedFromPM = Str::startsWith($saleRecord['comment'], ['PM_OrderProductShipment_']);
 
             return [
-                'connection_id'         => $this->rmsConnection->getKey(),
-                'warehouse_id'          => $this->rmsConnection->warehouse_id,
-                'uuid'                  => $saleRecord['uuid'],
-                'type'                  => $saleRecord['type'],
-                'sku'                   => $saleRecord['sku'],
-                'unit_cost'             => $saleRecord['cost'],
-                'total_sales_tax'       => $saleRecord['total_sales_tax'],
-                'price'                 => $saleRecord['price'],
-                'quantity'              => $saleRecord['quantity'],
-                'transaction_time'      => $saleRecord['transaction_time'],
-                'transaction_number'    => $saleRecord['transaction_number'],
-                'transaction_entry_id'  => $saleRecord['transaction_entry_id'],
-                'comment'               => $saleRecord['comment'],
-                'raw_import'            => json_encode($saleRecord),
-                'reserved_at'           => $isImportedFromPM ? $time : null,
-                'processed_at'          => $isImportedFromPM ? $time : null,
-                'created_at'            => $time,
-                'updated_at'            => $time,
+                'connection_id' => $this->rmsConnection->getKey(),
+                'warehouse_id' => $this->rmsConnection->warehouse_id,
+                'uuid' => $saleRecord['uuid'],
+                'type' => $saleRecord['type'],
+                'sku' => $saleRecord['sku'],
+                'unit_cost' => $saleRecord['cost'],
+                'total_sales_tax' => $saleRecord['total_sales_tax'],
+                'price' => $saleRecord['price'],
+                'quantity' => $saleRecord['quantity'],
+                'transaction_time' => $saleRecord['transaction_time'],
+                'transaction_number' => $saleRecord['transaction_number'],
+                'transaction_entry_id' => $saleRecord['transaction_entry_id'],
+                'comment' => $saleRecord['comment'],
+                'raw_import' => json_encode($saleRecord),
+                'reserved_at' => $isImportedFromPM ? $time : null,
+                'processed_at' => $isImportedFromPM ? $time : null,
+                'created_at' => $time,
+                'updated_at' => $time,
             ];
         });
 

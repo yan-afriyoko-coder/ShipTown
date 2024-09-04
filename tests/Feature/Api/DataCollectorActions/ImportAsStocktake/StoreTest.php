@@ -34,7 +34,7 @@ class StoreTest extends TestCase
 
         $response->assertJsonStructure([
             'data' => [
-                'data_collection_id'
+                'data_collection_id',
             ],
         ]);
     }

@@ -16,11 +16,8 @@ class OrderStatusController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @param OrderStatusIndexRequest $request
-     * @return AnonymousResourceCollection
      */
-    public function index(OrderStatusIndexRequest $request) : AnonymousResourceCollection
+    public function index(OrderStatusIndexRequest $request): AnonymousResourceCollection
     {
         $query = OrderStatus::getSpatieQueryBuilder();
 
@@ -36,6 +33,7 @@ class OrderStatusController extends Controller
 
         if ($orderStatus) {
             $orderStatus->restore();
+
             return OrderStatusResource::make($orderStatus);
         }
 
@@ -60,7 +58,7 @@ class OrderStatusController extends Controller
         $orderStatus = OrderStatus::findOrFail($order_status_id);
 
         if ($orderStatus->order_active || $orderStatus->sync_ecommerce) {
-            abort(401, "This order statuses cannot archived");
+            abort(401, 'This order statuses cannot archived');
         }
 
         $orderStatus->delete();

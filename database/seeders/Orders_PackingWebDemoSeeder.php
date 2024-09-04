@@ -19,7 +19,7 @@ class Orders_PackingWebDemoSeeder extends Seeder
             [
                 'name' => 'Status: packing_web',
                 'url' => '/autopilot/packlist?inventory_source_location_id=100&status=packing_web&is_picked=true&sort=order_placed_at%2Cproduct_line_count%2Ctotal_quantity_ordered',
-                'group' => 'packlist'
+                'group' => 'packlist',
             ],
         ];
 

@@ -12,19 +12,10 @@ use App\Modules\BaseModuleServiceProvider;
  */
 class InventoryMovementsServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = '.CORE - Inventory Movements';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'Monitor inventory movements and ensure inventory quantities quantities are correct.';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = true;
 
     /**

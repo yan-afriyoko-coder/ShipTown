@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Http\Request;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
@@ -35,8 +35,6 @@ class RouteServiceProvider extends ServiceProvider
         });
     }
 
-
-
     /**
      * Define the "public" web routes for the application.
      *
@@ -48,7 +46,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapPublicRoutes()
     {
         Route::middleware(['web'])
-             ->group(base_path('routes/public.php'));
+            ->group(base_path('routes/public.php'));
     }
 
     /**
@@ -61,7 +59,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes()
     {
         Route::middleware(['web', 'auth', 'twofactor'])
-             ->group(base_path('routes/web.php'));
+            ->group(base_path('routes/web.php'));
     }
 
     /**

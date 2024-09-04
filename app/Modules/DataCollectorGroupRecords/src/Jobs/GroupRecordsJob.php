@@ -41,13 +41,13 @@ class GroupRecordsJob extends UniqueJob
                 $item['unit_sold_price'],
                 $item['price_source'],
                 $item['price_source_id'],
-                $item['custom_uuid']
+                $item['custom_uuid'],
             ],
             default => [
                 $item['inventory_id'],
                 $item['price_source'],
                 $item['price_source_id'],
-                $item['custom_uuid']
+                $item['custom_uuid'],
             ],
         };
     }

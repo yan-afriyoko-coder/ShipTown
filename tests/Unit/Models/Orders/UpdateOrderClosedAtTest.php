@@ -24,13 +24,13 @@ class UpdateOrderClosedAtTest extends TestCase
         Order::query()->forceDelete();
 
         OrderStatus::factory()->create([
-            'code'         => 'pending',
-            'name'         => 'pending',
+            'code' => 'pending',
+            'name' => 'pending',
             'order_active' => 1,
         ]);
 
         $order = Order::factory()->create([
-            'status_code'     => 'open',
+            'status_code' => 'open',
             'order_closed_at' => null,
         ]);
 
@@ -51,13 +51,13 @@ class UpdateOrderClosedAtTest extends TestCase
         Order::query()->forceDelete();
 
         OrderStatus::factory()->create([
-            'code'         => 'closed',
-            'name'         => 'closed',
+            'code' => 'closed',
+            'name' => 'closed',
             'order_active' => 0,
         ]);
 
         $order = Order::factory()->create([
-            'status_code'     => 'open',
+            'status_code' => 'open',
             'order_closed_at' => null,
         ]);
 

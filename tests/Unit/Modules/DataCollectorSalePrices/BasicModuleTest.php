@@ -32,7 +32,7 @@ class BasicModuleTest extends TestCase
                 'price' => 50,
                 'sale_price' => 35.0,
                 'sale_price_start_date' => now()->subDays(14),
-                'sale_price_end_date' => now()->addDays(7)
+                'sale_price_end_date' => now()->addDays(7),
             ]);
     }
 

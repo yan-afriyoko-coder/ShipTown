@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\BaseModel;
 use Barryvdh\LaravelIdeHelper\Eloquent;
-use Spatie\MailTemplates\Interfaces\MailTemplateInterface;
-use Spatie\MailTemplates\TemplateMailable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @mixin Eloquent
+ *
  * @property string code
  * @property string to
  * @property string reply_to
@@ -26,7 +24,7 @@ class MailTemplate extends \Spatie\MailTemplates\Models\MailTemplate
         'html_template',
         'text_template',
         'reply_to',
-        'to'
+        'to',
     ];
 
     public function getNameAttribute()

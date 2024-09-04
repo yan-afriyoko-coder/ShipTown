@@ -19,6 +19,7 @@ use Illuminate\Database\Query\Builder;
  * @method static \Illuminate\Database\Eloquent\Builder|Packlist newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Packlist newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Packlist query()
+ *
  * @mixin Eloquent
  */
 class Packlist extends Model
@@ -42,9 +43,8 @@ class Packlist extends Model
     ];
 
     /**
-     * @param Builder $query
-     * @param int     $inventory_location_id
-     *
+     * @param  Builder  $query
+     * @param  int  $inventory_location_id
      * @return Builder
      */
     public function scopeAddInventorySource($query, $inventory_location_id)
@@ -55,7 +55,7 @@ class Packlist extends Model
                 'quantity as inventory_source_quantity',
                 'product_id as inventory_source_product_id',
             ])
-            ->where(['location_id'=>$inventory_location_id])
+            ->where(['location_id' => $inventory_location_id])
             ->toBase();
 
         return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {

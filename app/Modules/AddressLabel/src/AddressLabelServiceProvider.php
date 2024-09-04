@@ -7,19 +7,10 @@ use App\Modules\BaseModuleServiceProvider;
 
 class AddressLabelServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = '.CORE - Courier - Address Label';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'Allows to generate generic address label for the order';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = true;
 
     /**

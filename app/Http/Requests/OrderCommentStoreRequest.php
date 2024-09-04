@@ -25,7 +25,7 @@ class OrderCommentStoreRequest extends FormRequest
     {
         return [
             'order_id' => ['required', 'numeric', 'exists:orders,id'],
-            'comment'  => ['required', 'string'],
+            'comment' => ['required', 'string'],
         ];
     }
 }

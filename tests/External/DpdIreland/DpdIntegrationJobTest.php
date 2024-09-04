@@ -42,15 +42,15 @@ class DpdIntegrationJobTest extends TestCase
     public function if_record_id_matches()
     {
         $address = OrderAddress::factory()->create([
-            'company'      => 'DPD Test',
-            'first_name'   => 'DPD',
-            'last_name'    => 'Depot',
-            'address1'     => 'Athlone Business Park',
-            'address2'     => 'Dublin Road',
-            'phone'        => '0861230000',
-            'city'         => 'Athlone',
-            'state_name'   => 'Athlone',
-            'postcode'     => '1234XYZ',
+            'company' => 'DPD Test',
+            'first_name' => 'DPD',
+            'last_name' => 'Depot',
+            'address1' => 'Athlone Business Park',
+            'address2' => 'Dublin Road',
+            'phone' => '0861230000',
+            'city' => 'Athlone',
+            'state_name' => 'Athlone',
+            'postcode' => '1234XYZ',
             'country_code' => 'IRL',
         ]);
 

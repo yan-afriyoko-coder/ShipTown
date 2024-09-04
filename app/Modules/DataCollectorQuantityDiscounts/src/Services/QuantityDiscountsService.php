@@ -16,7 +16,7 @@ class QuantityDiscountsService
         return $dataCollection->records()
             ->getQuery()
             ->whereIn('product_id', Arr::pluck($discount->products, 'product_id'))
-            ->where(function ($query) use ($discount) {
+            ->where(function ($query) {
                 $query->whereNull('price_source')
                     ->orWhere(['price_source' => 'QUANTITY_DISCOUNT'])
                     ->orWhere(['price_source' => 'SALE_PRICE']);
@@ -58,6 +58,7 @@ class QuantityDiscountsService
                 ]);
 
                 $remainingQuantityToDistribute -= $record->quantity_scanned;
+
                 return true;
             }
 
@@ -78,6 +79,7 @@ class QuantityDiscountsService
                     ->save();
 
                 $remainingQuantityToDistribute = 0;
+
                 return true;
             }
 
@@ -102,29 +104,32 @@ class QuantityDiscountsService
 
             if ($discountedPrice > $record->unit_full_price) {
                 $record->update(['unit_sold_price' => $record->unit_full_price]);
+
                 return true;
             }
 
             if ($record->quantity_scanned <= $quantityToDistribute) {
                 $record->update(['unit_sold_price' => $discountedPrice]);
                 $quantityToDistribute -= $record->quantity_scanned;
+
                 return true;
             }
 
             if ($record->quantity_scanned > $quantityToDistribute) {
                 $record->update([
                     'quantity_scanned' => $record->quantity_scanned - $quantityToDistribute,
-                    'unit_sold_price' => $record->unit_full_price
+                    'unit_sold_price' => $record->unit_full_price,
                 ]);
 
                 $record->replicate()
                     ->fill([
                         'quantity_scanned' => $quantityToDistribute,
-                        'unit_sold_price' => $discountedPrice
+                        'unit_sold_price' => $discountedPrice,
                     ])
                     ->save();
 
                 $quantityToDistribute = 0;
+
                 return true;
             }
 

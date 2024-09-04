@@ -19,11 +19,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class OrderController extends Controller
 {
-    /**
-     * @param Request $request
-     *
-     * @return AnonymousResourceCollection
-     */
     public function index(Request $request): AnonymousResourceCollection
     {
         $query = Order::getSpatieQueryBuilder()
@@ -33,11 +28,6 @@ class OrderController extends Controller
         return OrderResource::collection($query);
     }
 
-    /**
-     * @param StoreOrderRequest $request
-     *
-     * @return JsonResponse
-     */
     public function store(StoreOrderRequest $request): JsonResponse
     {
         $order = Order::query()->updateOrCreate(
@@ -48,12 +38,12 @@ class OrderController extends Controller
         collect($request['products'])->each(function ($orderProductData) use ($order) {
             $product = Product::findBySKU($orderProductData['sku']);
             OrderProduct::create([
-                'order_id'         => $order->getKey(),
-                'product_id'       => $product ? $product->getKey() : null,
-                'sku_ordered'      => $orderProductData['sku'],
-                'name_ordered'     => $orderProductData['name'],
+                'order_id' => $order->getKey(),
+                'product_id' => $product ? $product->getKey() : null,
+                'sku_ordered' => $orderProductData['sku'],
+                'name_ordered' => $orderProductData['name'],
                 'quantity_ordered' => $orderProductData['quantity'],
-                'price'            => $orderProductData['price'],
+                'price' => $orderProductData['price'],
             ]);
         });
 
@@ -69,7 +59,7 @@ class OrderController extends Controller
         if ($request->has('label_template') && $request->get('label_template') === null) {
             // we don't want turn off ConvertEmptyStringToNulls middleware
             $attributes['label_template'] = '';
-        };
+        }
 
         if ($request->has('is_packed')) {
             if ($order->is_packed) {
@@ -88,11 +78,6 @@ class OrderController extends Controller
         return OrderResource::make($order->refresh());
     }
 
-    /**
-     * @param Request $request
-     * @param int $order_id
-     * @return JsonResource
-     */
     public function show(Request $request, int $order_id): JsonResource
     {
         $order = Order::findOrFail($order_id);

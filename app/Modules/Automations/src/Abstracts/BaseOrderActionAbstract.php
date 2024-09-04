@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Log;
  */
 abstract class BaseOrderActionAbstract
 {
-    /**
-     * @var Order
-     */
     public Order $order;
 
     public function __construct($order)
@@ -20,10 +17,6 @@ abstract class BaseOrderActionAbstract
         $this->order = $order;
     }
 
-    /**
-     * @param string $options
-     * @return bool
-     */
     public function handle(string $options = ''): bool
     {
         Log::debug('automation.action.executing', [

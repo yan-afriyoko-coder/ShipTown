@@ -10,9 +10,9 @@ use Illuminate\Support\Carbon;
 /**
  * App\Module.
  *
- * @property int         $id
- * @property string      $service_provider_class
- * @property bool        $enabled
+ * @property int $id
+ * @property string $service_provider_class
+ * @property bool $enabled
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -24,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Module whereId($value)
  * @method static Builder|Module whereServiceProviderClass($value)
  * @method static Builder|Module whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class Module extends BaseModel

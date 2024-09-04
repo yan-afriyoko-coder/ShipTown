@@ -34,8 +34,8 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
 
         info('Refilling "picking" status (old orders)', [
             'currently_in_process' => $this->configuration->current_count_with_status,
-            'max_daily_allowed'    => $this->configuration->max_batch_size,
-            'ordersRequiredCount'  => $this->configuration->required_count,
+            'max_daily_allowed' => $this->configuration->max_batch_size,
+            'ordersRequiredCount' => $this->configuration->required_count,
         ]);
     }
 

@@ -11,21 +11,15 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Class CreatedEvent
- * @package App\Events\Product
  */
 class ProductPriceUpdatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var ProductPrice
-     */
     public ProductPrice $product_price;
 
     /**
      * Create a new event instance.
-     *
-     * @param ProductPrice $product_price
      */
     public function __construct(ProductPrice $product_price)
     {

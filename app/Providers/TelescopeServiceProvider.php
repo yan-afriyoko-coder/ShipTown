@@ -14,7 +14,7 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
      */
     public function register(): void
     {
-//        Telescope::night();
+        //        Telescope::night();
 
         $this->hideSensitiveRequestDetails();
 
@@ -23,13 +23,13 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
                 ? ['slow']
                 : [];
         });
-//        Telescope::filter(function (IncomingEntry $entry) {
-//            return $entry->isReportableException() ||
-//                   $entry->isFailedRequest() ||
-//                   $entry->isFailedJob() ||
-//                   $entry->isScheduledTask() ||
-//                   $entry->hasMonitoredTag();
-//        });
+        //        Telescope::filter(function (IncomingEntry $entry) {
+        //            return $entry->isReportableException() ||
+        //                   $entry->isFailedRequest() ||
+        //                   $entry->isFailedJob() ||
+        //                   $entry->isScheduledTask() ||
+        //                   $entry->hasMonitoredTag();
+        //        });
     }
 
     /**

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property MagentoProduct $magentoProduct
- * @property double $expected_quantity
+ * @property float $expected_quantity
  */
 class MagentoProductInventoryComparisonView extends BaseModel
 {

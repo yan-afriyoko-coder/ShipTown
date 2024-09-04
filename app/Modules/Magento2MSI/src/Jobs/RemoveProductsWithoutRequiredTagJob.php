@@ -5,7 +5,6 @@ namespace App\Modules\Magento2MSI\src\Jobs;
 use App\Abstracts\UniqueJob;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
-use Spatie\Tags\Tag;
 
 class RemoveProductsWithoutRequiredTagJob extends UniqueJob
 {
@@ -14,7 +13,7 @@ class RemoveProductsWithoutRequiredTagJob extends UniqueJob
         $requiredTag = 'Available Online';
 
         do {
-            $recordsAffected = DB::affectingStatement("
+            $recordsAffected = DB::affectingStatement('
                 DELETE FROM modules_magento2msi_inventory_source_items WHERE ID IN (SELECT ID FROM (SELECT modules_magento2msi_inventory_source_items.ID
                 FROM modules_magento2msi_inventory_source_items
                 LEFT JOIN products
@@ -25,7 +24,7 @@ class RemoveProductsWithoutRequiredTagJob extends UniqueJob
                   AND taggables.taggable_type = ?
                 WHERE taggables.tag_name IS NULL
                 LIMIT 5000) as tbl)
-            ", [$requiredTag, Product::class]);
+            ', [$requiredTag, Product::class]);
         } while ($recordsAffected > 0);
     }
 }

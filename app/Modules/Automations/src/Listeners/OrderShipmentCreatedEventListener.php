@@ -7,9 +7,6 @@ use App\Modules\Automations\src\Jobs\RunEnabledAutomationsOnSpecificOrderJob;
 
 class OrderShipmentCreatedEventListener
 {
-    /**
-     * @param OrderShipmentCreatedEvent $event
-     */
     public function handle(OrderShipmentCreatedEvent $event)
     {
         RunEnabledAutomationsOnSpecificOrderJob::dispatchSync($event->orderShipment->order_id);

@@ -10,7 +10,6 @@ class OrderProductShipmentObserver
     /**
      * Handle the order product "created" event.
      *
-     * @param OrderProductShipment $orderProductShipment
      *
      * @return void
      */
@@ -21,9 +20,6 @@ class OrderProductShipmentObserver
         $this->logActivitiesAbout($orderProductShipment);
     }
 
-    /**
-     * @param OrderProductShipment $orderProductShipment
-     */
     private function logActivitiesAbout(OrderProductShipment $orderProductShipment): void
     {
         //  log activity on order
@@ -33,7 +29,7 @@ class OrderProductShipmentObserver
                 ->withProperties([
                     'sku' => $orderProductShipment->sku_shipped,
                     'quantity' => $orderProductShipment->quantity_shipped,
-                    'warehouse_code' => data_get($orderProductShipment, 'warehouse.code')
+                    'warehouse_code' => data_get($orderProductShipment, 'warehouse.code'),
                 ])
                 ->log('shipped');
         }
@@ -46,7 +42,7 @@ class OrderProductShipmentObserver
                     'sku' => $orderProductShipment->sku_shipped,
                     'order_number' => $orderProductShipment->order->order_number,
                     'quantity' => $orderProductShipment->quantity_shipped,
-                    'warehouse_code' => data_get($orderProductShipment, 'warehouse.code')
+                    'warehouse_code' => data_get($orderProductShipment, 'warehouse.code'),
                 ])
                 ->log('shipped');
         }

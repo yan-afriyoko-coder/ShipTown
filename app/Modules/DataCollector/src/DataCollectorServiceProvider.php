@@ -15,24 +15,12 @@ use App\Modules\DataCollector\src\Jobs\DispatchCollectionsTasksJob;
  */
 class DataCollectorServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = 'Data Collector - Transform Actions';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'Provides bulk actions for data collections such a Transfer In, Transfer Out, Transfer To and Import As Stocktake';
 
-    /**
-     * @var string
-     */
     public static string $settings_link = '/modules/data-collector';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = true;
 
     /**

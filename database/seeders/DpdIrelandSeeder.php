@@ -20,15 +20,15 @@ class DpdIrelandSeeder extends Seeder
      */
     public function run()
     {
-        if(empty(env('TEST_DPD_USER'))) {
+        if (empty(env('TEST_DPD_USER'))) {
             return;
         }
 
         DpdIreland::factory()->create([
-            'live'              => true,
-            'token'             => env('TEST_DPD_TOKEN'),
-            'user'              => env('TEST_DPD_USER'),
-            'password'          => env('TEST_DPD_PASSWORD'),
+            'live' => true,
+            'token' => env('TEST_DPD_TOKEN'),
+            'user' => env('TEST_DPD_USER'),
+            'password' => env('TEST_DPD_PASSWORD'),
         ]);
 
         DpdIrelandServiceProvider::enableModule();
@@ -43,9 +43,6 @@ class DpdIrelandSeeder extends Seeder
         $this->createTestOrder();
     }
 
-    /**
-     * @return void
-     */
     private function createTestOrder(): void
     {
         /** @var OrderAddress $testAddress */
@@ -53,13 +50,13 @@ class DpdIrelandSeeder extends Seeder
         $testAddress->first_name = 'John';
         $testAddress->last_name = 'Smith';
         $testAddress->phone = '12345678901';
-        $testAddress->company = "DPD Group Ltd";
-        $testAddress->country_code = "IE";
-        $testAddress->postcode = "B661BY";
-        $testAddress->address1 = "DPD Ireland";
-        $testAddress->address2 = "Unit 2B Midland Gateway Bus";
-        $testAddress->city = "Westmeath";
-        $testAddress->state_code = "Kilbeggan";
+        $testAddress->company = 'DPD Group Ltd';
+        $testAddress->country_code = 'IE';
+        $testAddress->postcode = 'B661BY';
+        $testAddress->address1 = 'DPD Ireland';
+        $testAddress->address2 = 'Unit 2B Midland Gateway Bus';
+        $testAddress->city = 'Westmeath';
+        $testAddress->state_code = 'Kilbeggan';
         $testAddress->email = 'john.smith@dpd.ie';
         $testAddress->save();
 

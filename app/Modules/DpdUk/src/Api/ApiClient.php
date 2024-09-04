@@ -12,9 +12,6 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-/**
- *
- */
 class ApiClient
 {
     /**
@@ -22,19 +19,10 @@ class ApiClient
      */
     const GEO_SESSION_CACHE_KEY_NAME = 'dpd-uk.geo-session';
 
-    /**
-     * @var Connection
-     */
     private Connection $connection;
 
-    /**
-     * @var GuzzleClient
-     */
     private GuzzleClient $guzzleClient;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -45,7 +33,6 @@ class ApiClient
     }
 
     /**
-     * @return string
      * @throws Exception
      */
     private function getGeoSession(): string
@@ -59,9 +46,9 @@ class ApiClient
         $authenticationResponse = $this->postAuthenticationsRequest();
 
         if ($authenticationResponse->response->status() !== 200) {
-            throw new Exception('DPD UK Authentication failed: ' .
-                $authenticationResponse->response->status() .
-                ' ' .
+            throw new Exception('DPD UK Authentication failed: '.
+                $authenticationResponse->response->status().
+                ' '.
                 $authenticationResponse->response->body());
         }
 
@@ -74,10 +61,6 @@ class ApiClient
     }
 
     /**
-     * @param string $method
-     * @param string $uri
-     * @param array $options
-     * @return ApiResponse|null
      * @throws Exception
      */
     public function request(string $method, string $uri = '', array $options = []): ?ApiResponse
@@ -93,25 +76,24 @@ class ApiClient
                 'service' => 'DPD-UK',
                 'response' => [
                     'status_code' => $response->http_response->getStatusCode(),
-                    'message' => Str::substr($response->content, 0, 1024)
+                    'message' => Str::substr($response->content, 0, 1024),
                 ],
                 'request' => [
                     'method' => $method,
                     'uri' => $uri,
-                    'options' => $options
+                    'options' => $options,
                 ],
             ]);
 
             return $response;
         } catch (GuzzleException $guzzleException) {
             Log::error($guzzleException->getMessage(), [$guzzleException->getCode()]);
+
             return null;
         }
     }
 
     /**
-     * @param array $payload
-     * @return CreateShipmentResponse
      * @throws Exception
      */
     public function createShipment(array $payload): CreateShipmentResponse
@@ -131,7 +113,7 @@ class ApiClient
         if ($shipmentResponse->errors()) {
             $shipmentResponse->errors()->each(function ($error) {
                 throw new Exception(
-                    $error['obj'] . ': ' . $error['errorMessage'],
+                    $error['obj'].': '.$error['errorMessage'],
                     $error['errorCode']
                 );
             });
@@ -141,8 +123,6 @@ class ApiClient
     }
 
     /**
-     * @param int $shipmentId
-     * @return GetShippingLabelResponse
      * @throws Exception
      */
     public function getShipmentLabel(int $shipmentId): GetShippingLabelResponse
@@ -150,7 +130,7 @@ class ApiClient
         $response = Http::withHeaders([
             'Accept' => 'text/vnd.eltron-epl',
             'GeoSession' => $this->getGeoSession(),
-        ])->get('https://api.dpd.co.uk/shipping/shipment/' . $shipmentId . '/label/');
+        ])->get('https://api.dpd.co.uk/shipping/shipment/'.$shipmentId.'/label/');
 
         return new GetShippingLabelResponse(
             $response
@@ -158,7 +138,6 @@ class ApiClient
     }
 
     /**
-     * @return AuthenticationResponse
      * @throws Exception
      */
     private function postAuthenticationsRequest(): AuthenticationResponse
@@ -177,7 +156,7 @@ class ApiClient
 
         $response = Http::withBasicAuth($this->connection->username, $this->connection->password)
             ->withHeaders([
-                'GeoClient' => 'account/' . $this->connection->account_number,
+                'GeoClient' => 'account/'.$this->connection->account_number,
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
             ])->post('https://api.dpd.co.uk/user/?action=login');
@@ -188,8 +167,6 @@ class ApiClient
     }
 
     /**
-     * @param array $payload
-     * @return string
      * @throws Exception
      */
     private function getNetworkCode(array $payload): string
@@ -203,6 +180,6 @@ class ApiClient
             'query' => $query,
         ]);
 
-        return "1^12";
+        return '1^12';
     }
 }

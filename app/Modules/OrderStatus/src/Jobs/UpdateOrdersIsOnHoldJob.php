@@ -34,9 +34,9 @@ class UpdateOrdersIsOnHoldJob implements ShouldQueue
     public function handle()
     {
         Order::where([
-                'status_code' => $this->orderStatus->code,
-                'is_on_hold'   => ! $this->orderStatus->order_on_hold
-            ])
+            'status_code' => $this->orderStatus->code,
+            'is_on_hold' => ! $this->orderStatus->order_on_hold,
+        ])
             ->each(function (Order $order) {
                 $order->update(['is_on_hold' => $this->orderStatus->order_on_hold]);
             });

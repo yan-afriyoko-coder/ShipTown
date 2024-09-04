@@ -10,20 +10,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- *
  * @property int $type
  * @property int $inventory_id
  * @property int $product_id
  * @property string $warehouse_code
- * @property double $last7days_quantity_delta
- * @property int    $last7days_max_movement_id
- * @property int    $last7days_min_movement_id
- * @property double $last14days_quantity_delta
- * @property int    $last14days_max_movement_id
- * @property int    $last14days_min_movement_id
- * @property double $last28days_quantity_delta
- * @property int    $last28days_max_movement_id
- * @property int    $last28days_min_movement_id
+ * @property float $last7days_quantity_delta
+ * @property int $last7days_max_movement_id
+ * @property int $last7days_min_movement_id
+ * @property float $last14days_quantity_delta
+ * @property int $last14days_max_movement_id
+ * @property int $last14days_min_movement_id
+ * @property float $last28days_quantity_delta
+ * @property int $last28days_max_movement_id
+ * @property int $last28days_min_movement_id
  */
 class InventoryMovementsStatistic extends Model
 {

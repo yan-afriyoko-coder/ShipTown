@@ -15,14 +15,13 @@ use Illuminate\Support\Carbon;
  * @property string $payload
  * @property int last_activity
  * @property Carbon $created_at
- *
  * @property-read User $user
  */
 class Session extends Model
 {
     protected $hidden = [
         'id',
-        'payload'
+        'payload',
     ];
 
     protected $casts = [

@@ -4,7 +4,6 @@ namespace App\Modules\Reports\src\Models;
 
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
-use Spatie\QueryBuilder\AllowedFilter;
 
 class OrderReport extends Report
 {

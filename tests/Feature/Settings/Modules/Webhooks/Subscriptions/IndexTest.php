@@ -6,24 +6,12 @@ use App\Modules\Webhooks\src\WebhooksServiceProviderBase;
 use App\User;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
-    /**
-     * @var string
-     */
     protected string $uri = '/settings/modules/webhooks/subscriptions';
 
-    /**
-     * @var User
-     */
     protected User $user;
 
-    /**
-     *
-     */
     protected function setUp(): void
     {
         parent::setUp();

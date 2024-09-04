@@ -35,7 +35,7 @@ class BasicModuleTest extends TestCase
         DispatchEveryMinuteEventJob::dispatch();
 
         $this->assertDatabaseHas('heartbeats', [
-            'code' => EveryMinuteEventListener::class
+            'code' => EveryMinuteEventListener::class,
         ]);
     }
 
@@ -45,7 +45,7 @@ class BasicModuleTest extends TestCase
         DispatchEveryFiveMinutesEventJob::dispatch();
 
         $this->assertDatabaseHas('heartbeats', [
-            'code' => EveryFiveMinutesEventListener::class
+            'code' => EveryFiveMinutesEventListener::class,
         ]);
     }
 
@@ -55,17 +55,17 @@ class BasicModuleTest extends TestCase
         EveryTenMinutesEvent::dispatch();
 
         $this->assertDatabaseHas('heartbeats', [
-            'code' => EveryTenMinutesEventListener::class
+            'code' => EveryTenMinutesEventListener::class,
         ]);
     }
 
-        /** @test */
+    /** @test */
     public function test_hourlyEvent_heartbeat()
     {
         DispatchEveryHourEventJobs::dispatch();
 
         $this->assertDatabaseHas('heartbeats', [
-            'code' => EveryHourEventListener::class
+            'code' => EveryHourEventListener::class,
         ]);
     }
 
@@ -75,7 +75,7 @@ class BasicModuleTest extends TestCase
         EveryDayEvent::dispatch();
 
         $this->assertDatabaseHas('heartbeats', [
-            'code' => EveryDayEventListener::class
+            'code' => EveryDayEventListener::class,
         ]);
     }
 }

@@ -2,12 +2,12 @@
 
 namespace App\Modules\Api2cart\src\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Services\Api2cartService;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
@@ -50,6 +50,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Api2cartProductLink whereLastFetchedData($value)
  * @method static Builder|Api2cartProductLink whereProductId($value)
  * @method static Builder|Api2cartProductLink whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class Api2cartProductLink extends BaseModel
@@ -77,33 +78,32 @@ class Api2cartProductLink extends BaseModel
         'api2cart_sale_price_end_date',
         'last_fetched_data',
     ];
+
     /**
      * @var string[]
      */
     protected $casts = [
         'sale_price_start_date' => 'datetime',
         'sale_price_end_date' => 'datetime',
-        'api2cart_product_id'  => 'integer',
+        'api2cart_product_id' => 'integer',
         'last_pushed_response' => 'array',
-        'last_fetched_data'    => 'array',    ];
+        'last_fetched_data' => 'array',    ];
 
     public function setLastFetchedDataAttribute($value)
     {
         $sprice_create = data_get($value, 'sprice_create', '2000-01-01 00:00:00');
         $sprice_expire = data_get($value, 'sprice_expire', '2000-01-01 00:00:00');
 
-        $this->last_fetched_at                = $value ? now() : null;
-        $this->api2cart_quantity              = data_get($value, 'quantity');
-        $this->api2cart_price                 = data_get($value, 'price');
-        $this->api2cart_sale_price            = data_get($value, 'special_price');
+        $this->last_fetched_at = $value ? now() : null;
+        $this->api2cart_quantity = data_get($value, 'quantity');
+        $this->api2cart_price = data_get($value, 'price');
+        $this->api2cart_sale_price = data_get($value, 'special_price');
         $this->api2cart_sale_price_start_date = Carbon::createFromTimeString($sprice_create)->format('Y-m-d H:i:s');
-        $this->api2cart_sale_price_end_date   = Carbon::createFromTimeString($sprice_expire)->format('Y-m-d H:i:s');
+        $this->api2cart_sale_price_end_date = Carbon::createFromTimeString($sprice_expire)->format('Y-m-d H:i:s');
 
         $this->attributes['last_fetched_data'] = json_encode($value);
     }
 
-    /**
-     */
     public function updateTypeAndId(): Api2cartProductLink
     {
         $store_key = $this->api2cartConnection->bridge_api_key;
@@ -116,17 +116,11 @@ class Api2cartProductLink extends BaseModel
         return $this;
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function api2cartConnection(): BelongsTo
     {
         return $this->belongsTo(Api2cartConnection::class, 'api2cart_connection_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

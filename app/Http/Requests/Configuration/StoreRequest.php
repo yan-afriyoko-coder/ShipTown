@@ -24,7 +24,7 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'business_name' => 'sometimes|string|max:200'
+            'business_name' => 'sometimes|string|max:200',
         ];
     }
 }

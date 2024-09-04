@@ -14,15 +14,8 @@ use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-/**
- *
- */
 class BoxTopService
 {
-    /**
-     * @param Order $order
-     * @return ApiResponse
-     */
     public static function postOrder(Order $order): ApiResponse
     {
         self::refreshBoxTopWarehouseStock();
@@ -40,22 +33,15 @@ class BoxTopService
         }
     }
 
-    /**
-     * @return ApiClient
-     */
     public static function apiClient(): ApiClient
     {
-        return new ApiClient();
+        return new ApiClient;
     }
 
-    /**
-     * @param Order $order
-     * @return array
-     */
     private static function convertToBoxTopFormat(Order $order): array
     {
         $pickItems = $order->orderProducts->map(function (OrderProduct $orderProduct) {
-            $apiClient = new ApiClient();
+            $apiClient = new ApiClient;
             $apiClient->getSkuQuantity($orderProduct->sku_ordered);
 
             $aliases = $orderProduct->product->aliases()
@@ -77,46 +63,46 @@ class BoxTopService
             }
 
             return [
-                "Warehouse"     => $warehouseStock->Warehouse,
-                "SKUGroupID"    => null,
-                "SKUNumber"     => $warehouseStock->SKUNumber,
-                "SKUName"       => $warehouseStock->SKUName,
-                "Quantity"      => $orderProduct->quantity_ordered,
-                "Add1"          => "",
-                "Add2"          => "",
-                "Add3"          => "",
-                "Add4"          => "",
-                "Add5"          => "",
-                "Add6"          => "",
-                "Comments"      => ""
+                'Warehouse' => $warehouseStock->Warehouse,
+                'SKUGroupID' => null,
+                'SKUNumber' => $warehouseStock->SKUNumber,
+                'SKUName' => $warehouseStock->SKUName,
+                'Quantity' => $orderProduct->quantity_ordered,
+                'Add1' => '',
+                'Add2' => '',
+                'Add3' => '',
+                'Add4' => '',
+                'Add5' => '',
+                'Add6' => '',
+                'Comments' => '',
             ];
         })->toArray();
 
-        $contactName = Str::substr($order->shippingAddress->full_name . ' ' . $order->shippingAddress->email, 0, 49);
+        $contactName = Str::substr($order->shippingAddress->full_name.' '.$order->shippingAddress->email, 0, 49);
 
         return [
-            "DeliveryCompanyName"   => $order->shippingAddress->company,
-            "DeliveryAddress1"      => $order->shippingAddress->address1,
-            "DeliveryAddress2"      => $order->shippingAddress->address2,
-            "DeliveryCity"          => $order->shippingAddress->city,
-            "DeliveryCounty"        => $order->shippingAddress->state_code,
-            "DeliveryPostCode"      => $order->shippingAddress->postcode,
-            "DeliveryCountry"       => $order->shippingAddress->country_code,
-            "DeliveryPhone"         => $order->shippingAddress->phone,
-            "DeliveryContact"       => $contactName,
-            "OutboundRef"           => $order->order_number,
-            "ReleaseDate"           => Carbon::today(),
-            "DeliveryDate"          => "",
-            "DeliveryTime"          => "",
-            "Haulier"               => "",
-            "PickItems"             => $pickItems,
-            "BranchID"              => env('TEST_BOXTOP_BRANCH_ID', ''),
-            "CustomerID"            => env('TEST_BOXTOP_CUSTACCNUM', ''),
-            "NOP"                   => 1,
-            "Weight"                => 1,
-            "Cube"                  => 1,
-            "CustRef"               => $order->order_number,
-            "Remarks"               => ""
+            'DeliveryCompanyName' => $order->shippingAddress->company,
+            'DeliveryAddress1' => $order->shippingAddress->address1,
+            'DeliveryAddress2' => $order->shippingAddress->address2,
+            'DeliveryCity' => $order->shippingAddress->city,
+            'DeliveryCounty' => $order->shippingAddress->state_code,
+            'DeliveryPostCode' => $order->shippingAddress->postcode,
+            'DeliveryCountry' => $order->shippingAddress->country_code,
+            'DeliveryPhone' => $order->shippingAddress->phone,
+            'DeliveryContact' => $contactName,
+            'OutboundRef' => $order->order_number,
+            'ReleaseDate' => Carbon::today(),
+            'DeliveryDate' => '',
+            'DeliveryTime' => '',
+            'Haulier' => '',
+            'PickItems' => $pickItems,
+            'BranchID' => env('TEST_BOXTOP_BRANCH_ID', ''),
+            'CustomerID' => env('TEST_BOXTOP_CUSTACCNUM', ''),
+            'NOP' => 1,
+            'Weight' => 1,
+            'Cube' => 1,
+            'CustRef' => $order->order_number,
+            'Remarks' => '',
         ];
     }
 
@@ -127,6 +113,7 @@ class BoxTopService
 
         $stockRecords = $stockRecords->map(function ($record) {
             $record['Attributes'] = json_encode($record['Attributes']);
+
             return $record;
         });
 

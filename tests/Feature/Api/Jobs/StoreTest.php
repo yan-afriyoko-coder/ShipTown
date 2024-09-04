@@ -23,7 +23,7 @@ class StoreTest extends TestCase
 
         $response->assertJsonStructure([
             'message',
-            'job_class'
+            'job_class',
         ]);
     }
 

@@ -10,9 +10,9 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\RmsapiProductImport.
  *
- * @property int         $id
- * @property int         $connection_id
- * @property array       $raw_import
+ * @property int $id
+ * @property int $connection_id
+ * @property array $raw_import
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *

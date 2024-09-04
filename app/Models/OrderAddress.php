@@ -2,41 +2,41 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Crypt;
 
 /**
  * App\Models\OrderAddress.
  *
- * @property int         $id
- * @property string      $company
- * @property string      $gender
- * @property string      $first_name
- * @property string      $last_name
- * @property string      $full_name
- * @property string      $email
- * @property string      $address1
- * @property string      $address2
- * @property string      $postcode
- * @property string      $city
- * @property string      $state_code
- * @property string      $state_name
- * @property string      $country_code
- * @property string      $country_name
- * @property string      $phone
- * @property string      $fax
- * @property string      $website
- * @property string      $region
+ * @property int $id
+ * @property string $company
+ * @property string $gender
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $full_name
+ * @property string $email
+ * @property string $address1
+ * @property string $address2
+ * @property string $postcode
+ * @property string $city
+ * @property string $state_code
+ * @property string $state_name
+ * @property string $country_code
+ * @property string $country_name
+ * @property string $phone
+ * @property string $fax
+ * @property string $website
+ * @property string $region
  * @property string|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Order|null $order
- * @property boolean encrypted
+ * @property bool encrypted
  *
  * @method static Builder|OrderAddress newModelQuery()
  * @method static Builder|OrderAddress newQuery()
@@ -61,6 +61,7 @@ use Illuminate\Support\Facades\Crypt;
  * @method static Builder|OrderAddress whereStateName($value)
  * @method static Builder|OrderAddress whereUpdatedAt($value)
  * @method static Builder|OrderAddress whereWebsite($value)
+ *
  * @mixin Eloquent
  */
 class OrderAddress extends BaseModel
@@ -90,7 +91,7 @@ class OrderAddress extends BaseModel
     ];
 
     protected $casts = [
-        'phone_encrypted' => 'encrypted'
+        'phone_encrypted' => 'encrypted',
     ];
 
     protected $appends = [
@@ -99,7 +100,6 @@ class OrderAddress extends BaseModel
         'phone',
         'email',
     ];
-
 
     public function getFirstNameAttribute(): string
     {
@@ -157,18 +157,11 @@ class OrderAddress extends BaseModel
         $this->attributes['email_encrypted'] = Crypt::encryptString($value);
     }
 
-    /**
-     * @return string
-     */
     public function getFullNameAttribute(): string
     {
         return $this->first_name.' '.$this->last_name;
     }
 
-    /**
-     * @param string $value
-     * @return void
-     */
     protected function setFullNameAttribute(string $value): void
     {
         $this->first_name = explode(' ', $value)[0];

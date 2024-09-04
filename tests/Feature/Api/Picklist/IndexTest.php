@@ -16,7 +16,7 @@ class IndexTest extends TestCase
     public function test_index_call_returns_ok()
     {
         $warehouse = Warehouse::factory()->create();
-//        OrderProduct::query()->forceDelete();
+        //        OrderProduct::query()->forceDelete();
         $orderProduct = OrderProduct::factory()->create();
 
         $user = User::factory()->create();

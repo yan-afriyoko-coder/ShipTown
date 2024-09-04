@@ -8,9 +8,6 @@ use App\User;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-/**
- *
- */
 class StoreTest extends TestCase
 {
     private string $uri = 'api/quantity-discount-product/';

@@ -13,7 +13,6 @@ class ProductObserver
     /**
      * Handle the product "created" event.
      *
-     * @param Product $product
      *
      * @return void
      */
@@ -25,11 +24,10 @@ class ProductObserver
     /**
      * Handle the product "updated" event.
      *
-     * @param Product $product
-     *
-     * @throws Exception
      *
      * @return void
+     *
+     * @throws Exception
      */
     public function updated(Product $product)
     {
@@ -38,9 +36,6 @@ class ProductObserver
         ProductUpdatedEvent::dispatch($product);
     }
 
-    /**
-     * @param Product $product
-     */
     private function upsertProductAliasRecords(Product $product): void
     {
         ProductAlias::updateOrCreate(

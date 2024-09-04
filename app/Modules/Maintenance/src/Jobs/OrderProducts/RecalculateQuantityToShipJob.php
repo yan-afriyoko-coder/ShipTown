@@ -33,7 +33,7 @@ class RecalculateQuantityToShipJob implements ShouldQueue
         $records->each(function (OrderProduct $orderProduct) {
             Log::warning('Incorrect quantity to ship detected', [
                 'order' => $orderProduct->order->order_number,
-                'sku'   => $orderProduct->sku_ordered,
+                'sku' => $orderProduct->sku_ordered,
             ]);
 
             $orderProduct->log('Incorrect quantity to ship detected')

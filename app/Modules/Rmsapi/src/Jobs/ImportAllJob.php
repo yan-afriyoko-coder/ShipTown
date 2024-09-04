@@ -17,7 +17,7 @@ class ImportAllJob extends UniqueJob
 
             Log::debug('RMSAPI Sync jobs dispatched', [
                 'warehouse_code' => $rmsapiConnection->location_id,
-                'connection_id' => $rmsapiConnection->id
+                'connection_id' => $rmsapiConnection->id,
             ]);
         }
 

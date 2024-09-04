@@ -37,9 +37,6 @@ class OrderProductObserver
         OrderProductDeletedEvent::dispatch($orderProduct);
     }
 
-    /**
-     * @param OrderProduct $orderProduct
-     */
     private function setOrdersPickedAtIfAllPicked(OrderProduct $orderProduct): void
     {
         $orderHasMoreToPick = OrderProduct::query()

@@ -25,11 +25,11 @@ class NewOrdersCounts extends AbstractWidget
         $orders_counts = Order::query()
             ->select([
                 DB::raw('date(order_placed_at) as date_placed_at'),
-                DB::raw('count(*) as order_count')
+                DB::raw('count(*) as order_count'),
             ])
             ->whereDate('order_placed_at', '>', Carbon::now()->subDays(7))
             ->groupBy([
-                DB::raw('date(order_placed_at)')
+                DB::raw('date(order_placed_at)'),
             ])
             ->orderByDesc('date_placed_at')
             ->get();

@@ -30,8 +30,10 @@ class TwoFactorController extends Controller
         if ($request->has('two_factor_code')) {
             if ($user->two_factor_code === $request->input('two_factor_code')) {
                 $user->resetTwoFactorCode();
+
                 return redirect('/')->withCookie(cookie('device_guid', Guid::uuid4(), $this->lifetimeInMinutes));
             }
+
             return $this->resetTwoFactorCodeAndRedirectToLogin($user);
         }
 
@@ -39,7 +41,7 @@ class TwoFactorController extends Controller
             $user->generateTwoFactorCode();
 
             dispatch(function () use ($user) {
-                $user->notify(new TwoFactorCode());
+                $user->notify(new TwoFactorCode);
             })->afterResponse();
         }
 
@@ -73,6 +75,7 @@ class TwoFactorController extends Controller
     {
         Auth::logoutCurrentDevice();
         $user->resetTwoFactorCode();
+
         return redirect()->route('login')->withErrors(['two_factor_code' => 'Invalid code']);
     }
 }

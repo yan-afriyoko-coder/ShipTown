@@ -3,7 +3,6 @@
 namespace App\Modules\Reports\src\Models;
 
 use App\Models\DataCollectionRecord;
-use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class InventoryTransferReport extends Report
@@ -36,36 +35,36 @@ class InventoryTransferReport extends Report
             'product_sku',
             'product_name',
             'total_transferred_in',
-            'product_cost' ,
+            'product_cost',
             'warehouse_code',
             'department',
             'category',
             'transfer_name',
-            'updated_at'
+            'updated_at',
         ];
 
         $this->fields = [
-            'product_sku'           => 'products.sku',
-            'product_name'          => 'products.name',
-            'total_transferred_in'  => 'data_collection_records.total_transferred_in',
-            'product_cost'          => 'products_prices.cost',
-            'department'            => 'products.department',
-            'category'              => 'products.category',
-            'warehouse_code'        => 'warehouses.code',
-            'transfer_name'         => 'data_collections.name',
-            'updated_at'            => 'data_collection_records.updated_at',
+            'product_sku' => 'products.sku',
+            'product_name' => 'products.name',
+            'total_transferred_in' => 'data_collection_records.total_transferred_in',
+            'product_cost' => 'products_prices.cost',
+            'department' => 'products.department',
+            'category' => 'products.category',
+            'warehouse_code' => 'warehouses.code',
+            'transfer_name' => 'data_collections.name',
+            'updated_at' => 'data_collection_records.updated_at',
         ];
 
         $this->casts = [
-            'warehouse_code'        => 'string',
-            'department'            => 'string',
-            'category'              => 'string',
-            'transfer_name'         => 'string',
-            'product_sku'           => 'string',
-            'product_name'          => 'string',
-            'product_cost'          => 'float',
-            'total_transferred_in'  => 'float',
-            'updated_at'            => 'datetime',
+            'warehouse_code' => 'string',
+            'department' => 'string',
+            'category' => 'string',
+            'transfer_name' => 'string',
+            'product_sku' => 'string',
+            'product_name' => 'string',
+            'product_cost' => 'float',
+            'total_transferred_in' => 'float',
+            'updated_at' => 'datetime',
         ];
 
         $this->addFilter(

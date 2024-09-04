@@ -2,7 +2,6 @@
 
 namespace App\Modules\StocktakeSuggestions\src\Reports;
 
-use App\Models\StocktakeSuggestion;
 use App\Models\Warehouse;
 use App\Modules\Reports\src\Models\Report;
 use Illuminate\Support\Facades\DB;
@@ -21,12 +20,12 @@ class StocktakeSuggestionsTotalsReport extends Report
         $this->defaultSort = 'warehouse_code';
 
         $this->fields = [
-            'warehouse_code'      => DB::raw('warehouses.code'),
-            'count'               => DB::raw('SELECT count(DISTINCT inventory_id) FROM stocktake_suggestions WHERE stocktake_suggestions.warehouse_id = warehouses.id'),
+            'warehouse_code' => DB::raw('warehouses.code'),
+            'count' => DB::raw('SELECT count(DISTINCT inventory_id) FROM stocktake_suggestions WHERE stocktake_suggestions.warehouse_id = warehouses.id'),
         ];
 
         $this->casts = [
-            'count'             => 'integer',
+            'count' => 'integer',
         ];
 
         $this->addFilter(

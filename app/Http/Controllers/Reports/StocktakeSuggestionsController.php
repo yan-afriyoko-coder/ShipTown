@@ -9,7 +9,7 @@ class StocktakeSuggestionsController
 {
     public function index(Request $request): mixed
     {
-        $report = new StocktakeSuggestionReport();
+        $report = new StocktakeSuggestionReport;
 
         return $report->response($request);
     }

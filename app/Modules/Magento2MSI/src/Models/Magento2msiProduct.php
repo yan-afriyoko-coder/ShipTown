@@ -8,7 +8,6 @@ use App\Modules\InventoryTotals\src\Models\InventoryTotalByWarehouseTag;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- *
  * @property Product $product
  * @property InventoryTotalByWarehouseTag $inventoryTotalByWarehouseTag
  * @property string $sku
@@ -37,7 +36,7 @@ class Magento2msiProduct extends BaseModel
 
     protected $casts = [
         'inventory_source_items_fetched_at' => 'datetime',
-        'inventory_source_items'            => 'array',
+        'inventory_source_items' => 'array',
     ];
 
     public function product(): BelongsTo

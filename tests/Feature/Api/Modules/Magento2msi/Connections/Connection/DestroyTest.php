@@ -17,7 +17,7 @@ class DestroyTest extends TestCase
 
         $connection = Magento2msiConnection::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->delete($this->uri . $connection->getKey(), []);
+        $response = $this->actingAs($user, 'api')->delete($this->uri.$connection->getKey(), []);
 
         ray($response->json());
 
@@ -25,7 +25,7 @@ class DestroyTest extends TestCase
 
         $response->assertJsonStructure([
             'data' => [
-                'id'
+                'id',
             ],
         ]);
     }
@@ -37,7 +37,7 @@ class DestroyTest extends TestCase
 
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->deleteJson($this->uri . $connection->getKey(), []);
+        $response = $this->actingAs($user, 'api')->deleteJson($this->uri.$connection->getKey(), []);
 
         ray($response->json());
 

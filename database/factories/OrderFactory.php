@@ -30,15 +30,15 @@ class OrderFactory extends Factory
         } while ($dateTime === null);
 
         $newOrder = [
-            'order_number'         => (string) (10000000 + $this->faker->unique()->randomNumber(7)),
-            'total_products'       => $this->faker->randomNumber(2),
-            'total_shipping'       => $this->faker->randomElement([5, 10, 15, 20]),
-            'shipping_address_id'  => $shippingAddress->getKey(),
-            'billing_address_id'   => $billingAddress->getKey(),
+            'order_number' => (string) (10000000 + $this->faker->unique()->randomNumber(7)),
+            'total_products' => $this->faker->randomNumber(2),
+            'total_shipping' => $this->faker->randomElement([5, 10, 15, 20]),
+            'shipping_address_id' => $shippingAddress->getKey(),
+            'billing_address_id' => $billingAddress->getKey(),
             'shipping_method_code' => $this->faker->randomElement(['next_day', 'store_pickup', 'express']),
             'shipping_method_name' => $this->faker->randomElement(['method_name_1', 'method_name_2', 'method_name_3']),
-            'order_placed_at'      => $dateTime,
-            'status_code'          => $orderStatus->code,
+            'order_placed_at' => $dateTime,
+            'status_code' => $orderStatus->code,
         ];
 
         if (! $orderStatus->order_active) {

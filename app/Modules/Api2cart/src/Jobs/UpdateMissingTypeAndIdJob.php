@@ -26,8 +26,8 @@ class UpdateMissingTypeAndIdJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
-     * @throws GuzzleException
      *
+     * @throws GuzzleException
      * @throws Exception
      */
     public function handle()
@@ -51,7 +51,6 @@ class UpdateMissingTypeAndIdJob implements ShouldQueue
     }
 
     /**
-     * @param Api2cartProductLink $link
      * @throws Exception|GuzzleException
      */
     private function updateTypeAndIdOrCreate(Api2cartProductLink $link): void
@@ -62,9 +61,9 @@ class UpdateMissingTypeAndIdJob implements ShouldQueue
         );
 
         Api2cartProductLink::query()->where([
-                'api2cart_connection_id' => $link->api2cart_connection_id,
-                'api2cart_product_id' => $typeAndId['id']
-            ])
+            'api2cart_connection_id' => $link->api2cart_connection_id,
+            'api2cart_product_id' => $typeAndId['id'],
+        ])
             ->delete();
 
         $link->update([
@@ -83,13 +82,13 @@ class UpdateMissingTypeAndIdJob implements ShouldQueue
                 throw new Exception(implode(' ', [
                     'API2CART Failed to create simple product -',
                     $response->getReturnCode(),
-                    $response->getReturnMessage()
+                    $response->getReturnMessage(),
                 ]));
             }
 
             $link->update([
                 'api2cart_product_type' => 'simple',
-                'api2cart_product_id' => data_get($response->asArray(), 'result.product_id')
+                'api2cart_product_id' => data_get($response->asArray(), 'result.product_id'),
             ]);
         }
     }

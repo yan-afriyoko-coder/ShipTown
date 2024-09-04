@@ -3,7 +3,6 @@
 namespace App\Widgets;
 
 use App\Models\Order;
-use App\Models\OrderStatus;
 
 class Apt extends AbstractDateSelectorWidget
 {
@@ -29,13 +28,13 @@ class Apt extends AbstractDateSelectorWidget
     {
         $this->statuses = Order::groupBy('status_code')->pluck('status_code')->toArray();
 
-        $apt_seconds  = (integer) Order::query()
-            ->selectRaw("AVG(TIME_TO_SEC(TIMEDIFF(order_closed_at, order_placed_at))) as apt")
+        $apt_seconds = (int) Order::query()
+            ->selectRaw('AVG(TIME_TO_SEC(TIMEDIFF(order_closed_at, order_placed_at))) as apt')
             ->where(['is_active' => false])
             ->whereRaw('order_closed_at > order_placed_at')
             ->whereBetween('order_closed_at', [
                 $this->getStartingDateTime(),
-                $this->getEndingDateTime()
+                $this->getEndingDateTime(),
             ])
             ->value('apt');
 
@@ -44,7 +43,7 @@ class Apt extends AbstractDateSelectorWidget
             'apt_string' => $this->timeDiffForPrez($apt_seconds),
             'statuses' => $this->statuses,
             'widget_id' => $this->widgetId,
-            'widget_name' => $this->name
+            'widget_name' => $this->name,
         ]);
     }
 
@@ -55,13 +54,13 @@ class Apt extends AbstractDateSelectorWidget
         $data = [
             'd' => 86400,
             'h' => 3600,
-            'm' => 60
+            'm' => 60,
         ];
 
         foreach ($data as $k => $v) {
             if ($diffInSeconds >= $v) {
                 $diff = floor($diffInSeconds / $v);
-                $result .= " $diff" . ($diff > 1 ? $k : substr($k, 0, -1));
+                $result .= " $diff".($diff > 1 ? $k : substr($k, 0, -1));
                 $diffInSeconds -= $v * $diff;
             }
         }

@@ -16,6 +16,7 @@ class NormalOvernightTest extends TestCase
 
     /**
      * @test
+     *
      * @throws AuthorizationException
      * @throws ConsignmentValidationException
      * @throws GuzzleException
@@ -25,27 +26,27 @@ class NormalOvernightTest extends TestCase
     {
         $consignment = new Consignment([
             'DeliveryAddress' => [
-                'Contact'          => 'John Smith',
+                'Contact' => 'John Smith',
                 'ContactTelephone' => '12345678901',
-                'ContactEmail'     => 'john.smith@ie.ie',
-                'BusinessName'     => 'JS Business',
-                'AddressLine1'     => 'DPD Ireland, Westmeath',
-                'AddressLine2'     => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3'     => 'Kilbeggan',
-                'AddressLine4'     => 'Westmeath',
-                'CountryCode'      => 'IE',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'CountryCode' => 'IE',
             ],
             'CollectionAddress' => [
-                'Contact'          => 'John Smith',
+                'Contact' => 'John Smith',
                 'ContactTelephone' => '12345678901',
-                'ContactEmail'     => 'john.smith@ie.ie',
-                'BusinessName'     => 'JS Business',
-                'AddressLine1'     => 'DPD Ireland, Westmeath',
-                'AddressLine2'     => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3'     => 'Kilbeggan',
-                'AddressLine4'     => 'Westmeath',
-                'PostCode'         => 'XYZ1234',
-                'CountryCode'      => 'IE',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'PostCode' => 'XYZ1234',
+                'CountryCode' => 'IE',
             ],
         ]);
 
@@ -56,6 +57,7 @@ class NormalOvernightTest extends TestCase
 
     /**
      * @test
+     *
      * @throws AuthorizationException
      * @throws ConsignmentValidationException
      * @throws GuzzleException
@@ -64,29 +66,29 @@ class NormalOvernightTest extends TestCase
     public function normal_overnight_consignment_between_2_and_10_parcels()
     {
         $consignment = new Consignment([
-            'TotalParcels'    => rand(2, 10),
+            'TotalParcels' => rand(2, 10),
             'DeliveryAddress' => [
-                'Contact'          => 'John Smith',
+                'Contact' => 'John Smith',
                 'ContactTelephone' => '12345678901',
-                'ContactEmail'     => 'john.smith@ie.ie',
-                'BusinessName'     => 'JS Business',
-                'AddressLine1'     => 'DPD Ireland, Westmeath',
-                'AddressLine2'     => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3'     => 'Kilbeggan',
-                'AddressLine4'     => 'Westmeath',
-                'CountryCode'      => 'IE',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'CountryCode' => 'IE',
             ],
             'CollectionAddress' => [
-                'Contact'          => 'John Smith',
+                'Contact' => 'John Smith',
                 'ContactTelephone' => '12345678901',
-                'ContactEmail'     => 'john.smith@ie.ie',
-                'BusinessName'     => 'JS Business',
-                'AddressLine1'     => 'DPD Ireland, Westmeath',
-                'AddressLine2'     => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3'     => 'Kilbeggan',
-                'AddressLine4'     => 'Westmeath',
-                'PostCode'         => 'XYZ1234',
-                'CountryCode'      => 'IE',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'PostCode' => 'XYZ1234',
+                'CountryCode' => 'IE',
             ],
         ]);
 
@@ -97,6 +99,7 @@ class NormalOvernightTest extends TestCase
 
     /**
      * @test
+     *
      * @throws AuthorizationException
      * @throws ConsignmentValidationException
      * @throws GuzzleException
@@ -105,29 +108,29 @@ class NormalOvernightTest extends TestCase
     public function normal_overnight_consignment_more_than_10_parcels()
     {
         $consignment = new Consignment([
-            'TotalParcels'    => rand(11, 20),
+            'TotalParcels' => rand(11, 20),
             'DeliveryAddress' => [
-                'Contact'          => 'John Smith',
+                'Contact' => 'John Smith',
                 'ContactTelephone' => '12345678901',
-                'ContactEmail'     => 'john.smith@ie.ie',
-                'BusinessName'     => 'JS Business',
-                'AddressLine1'     => 'DPD Ireland, Westmeath',
-                'AddressLine2'     => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3'     => 'Kilbeggan',
-                'AddressLine4'     => 'Westmeath',
-                'CountryCode'      => 'IE',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'CountryCode' => 'IE',
             ],
             'CollectionAddress' => [
-                'Contact'          => 'John Smith',
+                'Contact' => 'John Smith',
                 'ContactTelephone' => '12345678901',
-                'ContactEmail'     => 'john.smith@ie.ie',
-                'BusinessName'     => 'JS Business',
-                'AddressLine1'     => 'DPD Ireland, Westmeath',
-                'AddressLine2'     => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3'     => 'Kilbeggan',
-                'AddressLine4'     => 'Westmeath',
-                'PostCode'         => 'XYZ1234',
-                'CountryCode'      => 'IE',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'PostCode' => 'XYZ1234',
+                'CountryCode' => 'IE',
             ],
         ]);
 
@@ -145,27 +148,27 @@ class NormalOvernightTest extends TestCase
     {
         $consignment = new Consignment([
             'DeliveryAddress' => [
-                'Contact'          => 'John Smith',
+                'Contact' => 'John Smith',
                 'ContactTelephone' => '12345678901',
-                'ContactEmail'     => 'john.smith@ie.ie',
-                'BusinessName'     => 'JS Business',
-                'AddressLine1'     => 'DPD Ireland, Westmeath',
-                'AddressLine2'     => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3'     => 'Kilbeggan',
-                'AddressLine4'     => 'Westmeath',
-                'PostCode'         => 'wrong_postcode_format', // should be 7 characters like 1234XYZ
-                'CountryCode'      => 'IE',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'PostCode' => 'wrong_postcode_format', // should be 7 characters like 1234XYZ
+                'CountryCode' => 'IE',
             ],
             'CollectionAddress' => [
-                'Contact'          => 'John Smith',
+                'Contact' => 'John Smith',
                 'ContactTelephone' => '12345678901',
-                'ContactEmail'     => 'john.smith@ie.ie',
-                'BusinessName'     => 'JS Business',
-                'AddressLine1'     => 'DPD Ireland, Westmeath',
-                'AddressLine2'     => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3'     => 'Kilbeggan',
-                'AddressLine4'     => 'Westmeath',
-                'CountryCode'      => 'IE',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'CountryCode' => 'IE',
             ],
         ]);
 
@@ -181,27 +184,27 @@ class NormalOvernightTest extends TestCase
     {
         $consignment = new Consignment([
             'DeliveryAddress' => [
-                'Contact'          => 'John Smith',
+                'Contact' => 'John Smith',
                 'ContactTelephone' => '12345678901',
-                'ContactEmail'     => 'john.smith@ie.ie',
-                'BusinessName'     => 'JS Business',
-                'AddressLine1'     => 'DPD Ireland, Westmeath',
-                'AddressLine2'     => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3'     => 'Kilbeggan',
-                'AddressLine4'     => 'Westmeath',
-                'PostCode'         => '1234XYZ',
-                'CountryCode'      => 'IE',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'PostCode' => '1234XYZ',
+                'CountryCode' => 'IE',
             ],
             'CollectionAddress' => [
-                'Contact'          => 'John Smith',
+                'Contact' => 'John Smith',
                 'ContactTelephone' => '12345678901',
-                'ContactEmail'     => 'john.smith@ie.ie',
-                'BusinessName'     => 'JS Business',
-                'AddressLine1'     => 'DPD Ireland, Westmeath',
-                'AddressLine2'     => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3'     => 'Kilbeggan',
-                'AddressLine4'     => 'Westmeath',
-                'CountryCode'      => 'IE',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'CountryCode' => 'IE',
             ],
         ]);
 
@@ -210,6 +213,7 @@ class NormalOvernightTest extends TestCase
 
     /**
      * @test
+     *
      * @throws ConsignmentValidationException
      * @throws AuthorizationException
      * @throws PreAdviceRequestException
@@ -218,30 +222,30 @@ class NormalOvernightTest extends TestCase
     public function if_succeeds_with_wrong_postcode()
     {
         $consignment = new Consignment([
-            'TotalParcels'    => rand(11, 20),
+            'TotalParcels' => rand(11, 20),
             'DeliveryAddress' => [
-                'Contact'          => 'John Smith',
+                'Contact' => 'John Smith',
                 'ContactTelephone' => '12345678901',
-                'ContactEmail'     => 'john.smith@ie.ie',
-                'BusinessName'     => 'JS Business',
-                'AddressLine1'     => 'DPD Ireland, Westmeath',
-                'AddressLine2'     => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3'     => 'Kilbeggan',
-                'AddressLine4'     => 'Westmeath',
-                'PostCode'         => 'XYZ12345678901234',
-                'CountryCode'      => 'IE',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'PostCode' => 'XYZ12345678901234',
+                'CountryCode' => 'IE',
             ],
             'CollectionAddress' => [
-                'Contact'          => 'John Smith',
+                'Contact' => 'John Smith',
                 'ContactTelephone' => '12345678901',
-                'ContactEmail'     => 'john.smith@ie.ie',
-                'BusinessName'     => 'JS Business',
-                'AddressLine1'     => 'DPD Ireland, Westmeath',
-                'AddressLine2'     => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3'     => 'Kilbeggan',
-                'AddressLine4'     => 'Westmeath',
-                'PostCode'         => 'XYZ1234',
-                'CountryCode'      => 'IE',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'PostCode' => 'XYZ1234',
+                'CountryCode' => 'IE',
             ],
         ]);
 

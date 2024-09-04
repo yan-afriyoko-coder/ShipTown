@@ -33,7 +33,7 @@ class GetQuantityTest extends TestCase
         $api2cartConnection = Api2cartConnection::factory()
             ->create(['inventory_source_warehouse_tag' => 'magento_stock']);
 
-        $this->productLink = new Api2cartProductLink();
+        $this->productLink = new Api2cartProductLink;
         $this->productLink->api2cart_connection_id = $api2cartConnection->getKey();
         $this->productLink->product_id = $product1->getKey();
         $this->productLink->save();
@@ -63,10 +63,10 @@ class GetQuantityTest extends TestCase
             ->get()
             ->map(function (Warehouse $warehouse) {
                 $warehouse->attachTag('magento_stock');
+
                 return $warehouse->getKey();
             })
             ->toArray();
-
 
         $toApi2cartPayload = ProductTransformer::toApi2cartPayload($this->productLink);
 

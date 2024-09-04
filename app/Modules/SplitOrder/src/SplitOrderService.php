@@ -6,33 +6,16 @@ use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Warehouse;
-use App\Modules\OrderTotals\src\Services\OrderTotalsService;
-use App\Services\OrderService;
 use Exception;
 
-/**
- *
- */
 class SplitOrderService
 {
-    /**
-     * @var Warehouse
-     */
     private Warehouse $warehouse;
 
-    /**
-     * @var Order|null
-     */
     private ?Order $newOrder = null;
 
-    /**
-     * @var string|null
-     */
     private ?string $newOrderStatus;
 
-    /**
-     * @var Order
-     */
     private Order $originalOrder;
 
     public function split(Order $order, Warehouse $warehouse, string $newOrderStatus)
@@ -47,9 +30,6 @@ class SplitOrderService
         }
     }
 
-    /**
-     * @return void
-     */
     private function extractFulfillableProducts(): void
     {
         $this->originalOrder->orderProducts
@@ -69,27 +49,25 @@ class SplitOrderService
                 }
 
                 $this->extractOrderProduct($orderProduct, $quantityToExtract, $inventory);
+
                 return true;
             });
 
         $this->newOrder?->unlockFromEditing();
     }
 
-    /**
-     * @return Order
-     */
     private function getNewOrderOrCreate(): Order
     {
         if ($this->newOrder) {
             return $this->newOrder;
         }
 
-        $newOrderNumber = $this->originalOrder->order_number . '-PARTIAL-' . $this->warehouse->code;
+        $newOrderNumber = $this->originalOrder->order_number.'-PARTIAL-'.$this->warehouse->code;
 
         /** @var Order newOrder */
         $this->newOrder = Order::query()
             ->where(['order_number' => $newOrderNumber])
-            ->firstOr(function () use ($newOrderNumber) {
+            ->firstOr(function () {
                 return $this->originalOrder->replicate(['total_paid', 'is_fully_paid', 'total_outstanding', 'total_order']);
             });
 
@@ -105,7 +83,7 @@ class SplitOrderService
                 ->byAnonymous()
                 ->withProperties([
                     'order_number' => $this->originalOrder->order_number,
-                    'status_code' => $this->newOrder->status_code
+                    'status_code' => $this->newOrder->status_code,
                 ])
                 ->log('extracted from order');
 
@@ -121,12 +99,7 @@ class SplitOrderService
         return $this->newOrder;
     }
 
-    /**
-     * @param OrderProduct $orderProduct
-     * @param int $quantity
-     * @param Inventory $inventory
-     */
-    private function extractOrderProduct(OrderProduct $orderProduct, int$quantity, Inventory $inventory): void
+    private function extractOrderProduct(OrderProduct $orderProduct, int $quantity, Inventory $inventory): void
     {
         $newOrderProduct = $orderProduct->replicate([
             'custom_unique_reference_id',

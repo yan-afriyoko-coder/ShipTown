@@ -5,24 +5,12 @@ namespace Tests\Feature\Reports\InventoryMovementsSummary;
 use App\User;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
-    /**
-     * @var string
-     */
     protected string $uri = 'reports/inventory-movements-summary';
 
-    /**
-     * @var User
-     */
     protected User $user;
 
-    /**
-     *
-     */
     protected function setUp(): void
     {
         parent::setUp();

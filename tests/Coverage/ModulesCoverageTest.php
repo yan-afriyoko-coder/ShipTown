@@ -20,6 +20,7 @@ class ModulesCoverageTest extends TestCase
                 $testFileName = app()->basePath();
                 $testFileName .= Str::replaceArray('app/', ['/tests/Unit/'], $moduleDirectory);
                 $testFileName .= '/BasicModuleTest.php';
+
                 return $testFileName;
             })
             ->each(function ($fileName) {

@@ -10,7 +10,7 @@ class EnsureAllProductPriceRecordsExistsJob extends UniqueJob
     public function handle(): void
     {
         do {
-            $recordsAffected = DB::affectingStatement("
+            $recordsAffected = DB::affectingStatement('
                 INSERT INTO products_prices
                 (
                     product_id,
@@ -41,7 +41,7 @@ class EnsureAllProductPriceRecordsExistsJob extends UniqueJob
                     WHERE products_prices.warehouse_id = warehouses.id AND products_prices.product_id = products.id
                 )
                 LIMIT 1000
-            ");
+            ');
 
             usleep(200000); // 200ms
         } while ($recordsAffected > 0);

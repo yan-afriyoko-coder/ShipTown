@@ -2,18 +2,17 @@
 
 namespace App\Modules\Automations\src\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\Models\Order;
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property integer automation_id
+ * @property int automation_id
  * @property string condition_class
  * @property string condition_value
  * @property Automation automation
- *
  */
 class Condition extends BaseModel
 {
@@ -42,9 +41,6 @@ class Condition extends BaseModel
         return $condition;
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function automation(): BelongsTo
     {
         return $this->belongsTo(Automation::class);

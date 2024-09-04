@@ -37,9 +37,6 @@ class ClearArcadiaStockJob extends UniqueJob
         return true;
     }
 
-    /**
-     * @param Inventory $inventory
-     */
     private function clearToO(Inventory $inventory): void
     {
         $inventory->refresh();

@@ -13,23 +13,11 @@ use Illuminate\Support\Str;
 
 class OrderService
 {
-    /**
-     * @param Order $order
-     * @param $sourceLocationId
-     *
-     * @return bool
-     */
     public static function canNotFulfill(Order $order, $sourceLocationId = null): bool
     {
-        return !self::canFulfill($order, $sourceLocationId);
+        return ! self::canFulfill($order, $sourceLocationId);
     }
 
-    /**
-     * @param Order $order
-     * @param $warehouse_code
-     *
-     * @return bool
-     */
     public static function canFulfill(Order $order, $warehouse_code = null): bool
     {
         $orderProducts = $order->orderProducts()->get();
@@ -58,11 +46,7 @@ class OrderService
     }
 
     /**
-     * @param array $orderAttributes
-     *
      * @throws Exception
-     *
-     * @return Order
      */
     public static function updateOrCreate(array $orderAttributes): Order
     {
@@ -99,7 +83,6 @@ class OrderService
         return $order;
     }
 
-
     public static function updateOrCreateBillingAddress(Order $order, mixed $attributes): Order
     {
         $billing_address = OrderAddress::query()->findOrNew($order->billing_address_id ?: 0);
@@ -112,35 +95,27 @@ class OrderService
         return $order;
     }
 
-
     /**
-     * @param array $orderProductAttributes
-     *
      * @return null
      */
     private static function getProductId(array $orderProductAttributes)
     {
         $product = ProductService::find($orderProductAttributes['sku_ordered']);
         if ($product) {
-            return  $product->id;
+            return $product->id;
         }
 
         $extractedSku = Str::substr($orderProductAttributes['sku_ordered'], 0, 6);
         $product = ProductService::find($extractedSku);
         if ($product) {
-            return  $product->id;
+            return $product->id;
         }
 
         return null;
     }
 
     /**
-     * @param $order_products
-     * @param Order $order
-     *
      * @throws Exception
-     *
-     * @return Order
      */
     private static function syncOrderProducts($order_products, Order $order): Order
     {
@@ -160,7 +135,7 @@ class OrderService
                         ->toArray(),
                     // values
                     [
-                        'order_id'   => $order->getKey(),
+                        'order_id' => $order->getKey(),
                         'product_id' => self::getProductId($orderProductAttributes),
                         'price' => $orderProductAttributes['price'],
                     ]
@@ -178,9 +153,7 @@ class OrderService
     }
 
     /**
-     * @param OrderProduct $orderProduct
-     * @param null $warehouse_code
-     * @return bool
+     * @param  null  $warehouse_code
      */
     public static function canFulfillOrderProduct(OrderProduct $orderProduct, $warehouse_code = null): bool
     {
@@ -196,13 +169,11 @@ class OrderService
     }
 
     /**
-     * @param OrderProduct $orderProduct
-     * @param null $warehouse_code
-     * @return bool
+     * @param  null  $warehouse_code
      */
     public static function canNotFulfillOrderProduct(OrderProduct $orderProduct, $warehouse_code = null): bool
     {
-        return !self::canFulfillOrderProduct($orderProduct, $warehouse_code);
+        return ! self::canFulfillOrderProduct($orderProduct, $warehouse_code);
     }
 
     public static function canFulfillProduct(int $product_id, float $quantity_requested, ?string $warehouse_code = null): bool
@@ -222,6 +193,6 @@ class OrderService
             return false;
         }
 
-        return (float)$totalQuantityAvailable >= $quantity_requested;
+        return (float) $totalQuantityAvailable >= $quantity_requested;
     }
 }

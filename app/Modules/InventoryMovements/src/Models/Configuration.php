@@ -5,9 +5,9 @@ namespace App\Modules\InventoryMovements\src\Models;
 use App\BaseModel;
 
 /**
- * @property integer $quantity_before_job_last_movement_id_checked
- * @property integer $quantity_before_basic_job_last_movement_id_checked
- * @property integer $quantity_before_stocktake_job_last_movement_id_checked
+ * @property int $quantity_before_job_last_movement_id_checked
+ * @property int $quantity_before_basic_job_last_movement_id_checked
+ * @property int $quantity_before_stocktake_job_last_movement_id_checked
  */
 class Configuration extends BaseModel
 {

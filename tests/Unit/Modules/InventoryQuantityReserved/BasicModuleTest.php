@@ -43,7 +43,7 @@ class BasicModuleTest extends TestCase
             'warehouse_code' => $inventory->warehouse_code,
             'quantity_reserved' => 10,
             'comment' => 'test',
-            'custom_uuid' => 'test'
+            'custom_uuid' => 'test',
         ]);
 
         $this->assertDatabaseHas('inventory', [

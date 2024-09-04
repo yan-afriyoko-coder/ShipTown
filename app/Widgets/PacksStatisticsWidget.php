@@ -39,9 +39,9 @@ class PacksStatisticsWidget extends AbstractWidget
         }
 
         return view('widgets.packs_statistics_widget', [
-            'config'         => $this->config,
+            'config' => $this->config,
             'count_per_user' => $count_per_user,
-            'total_count'    => $total_count,
+            'total_count' => $total_count,
         ]);
     }
 }

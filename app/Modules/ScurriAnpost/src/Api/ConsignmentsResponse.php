@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Modules\ScurriAnpost\src\Api;
 
 use Illuminate\Http\Client\Response;
@@ -10,19 +9,10 @@ class ConsignmentsResponse
 {
     private Response $response;
 
-    /**
-     * @var array
-     */
     public array $body;
 
-    /**
-     * @var Collection
-     */
     public Collection $errors;
 
-    /**
-     * @var Collection
-     */
     public Collection $success;
 
     public function __construct(Response $response)

@@ -10,19 +10,18 @@ class OrderStatusResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request $request
-     * @return array
+     * @param  Request  $request
      */
     public function toArray($request): array
     {
         return [
-            'id'                => $this->getKey(),
-            'name'              => $this->name,
-            'code'              => $this->code,
-            'order_active'      => $this->order_active,
-            'order_on_hold'     => $this->order_on_hold,
-            'hidden'            => $this->hidden,
-            'sync_ecommerce'    => $this->sync_ecommerce,
+            'id' => $this->getKey(),
+            'name' => $this->name,
+            'code' => $this->code,
+            'order_active' => $this->order_active,
+            'order_on_hold' => $this->order_on_hold,
+            'hidden' => $this->hidden,
+            'sync_ecommerce' => $this->sync_ecommerce,
         ];
     }
 }

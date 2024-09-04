@@ -16,12 +16,12 @@ class WarehouseFactory extends Factory
             $this->faker->randomLetter(),
             $this->faker->randomLetter(),
             $this->faker->randomLetter(),
-            $this->faker->randomLetter()
+            $this->faker->randomLetter(),
         ]);
 
         return [
-            'name'  => $this->faker->city(),
-            'code'  => Str::upper($randomCode),
+            'name' => $this->faker->city(),
+            'code' => Str::upper($randomCode),
             'address_id' => $address_id,
         ];
     }

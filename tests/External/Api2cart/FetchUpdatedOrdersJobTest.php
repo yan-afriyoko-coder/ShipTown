@@ -22,11 +22,11 @@ class FetchUpdatedOrdersJobTest extends TestCase
 
         // we set key to api2cart demo store
         $api2cartConnection = new Api2cartConnection([
-            'location_id'    => '99',
-            'type'           => 'opencart',
-            'url'            => 'http://demo.api2cart.com/opencart',
+            'location_id' => '99',
+            'type' => 'opencart',
+            'url' => 'http://demo.api2cart.com/opencart',
             'bridge_api_key' => config('api2cart.api2cart_test_store_key'),
-            'inventory_source_warehouse_tag' => 'magento_stock'
+            'inventory_source_warehouse_tag' => 'magento_stock',
         ]);
 
         $api2cartConnection->save();

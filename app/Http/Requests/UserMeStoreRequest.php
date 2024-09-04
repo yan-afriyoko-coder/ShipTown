@@ -24,9 +24,9 @@ class UserMeStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'                    => ['sometimes', 'string'],
-            'printer_id'              => ['sometimes', 'numeric'],
-            'address_label_template'  => ['sometimes', 'nullable','string', 'exists:"shipping_services",code'],
+            'name' => ['sometimes', 'string'],
+            'printer_id' => ['sometimes', 'numeric'],
+            'address_label_template' => ['sometimes', 'nullable', 'string', 'exists:"shipping_services",code'],
             'ask_for_shipping_number' => ['sometimes', 'boolean'],
         ];
     }

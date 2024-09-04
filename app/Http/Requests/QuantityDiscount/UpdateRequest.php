@@ -41,7 +41,7 @@ class UpdateRequest extends FormRequest
                     BuyXGetYForZPriceDiscount::class,
                     VolumePurchasePercentDiscount::class,
                     VolumePurchasePriceDiscount::class,
-                ])
+                ]),
             ],
         ];
     }

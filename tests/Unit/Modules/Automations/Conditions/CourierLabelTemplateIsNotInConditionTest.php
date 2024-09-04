@@ -19,15 +19,15 @@ class CourierLabelTemplateIsNotInConditionTest extends TestCase
         $automation = Automation::factory()->create();
 
         Condition::factory()->create([
-            'automation_id'     => $automation->getKey(),
-            'condition_class'   => CourierLabelTemplateIsNotInCondition::class,
-            'condition_value'   => 'next_day'
+            'automation_id' => $automation->getKey(),
+            'condition_class' => CourierLabelTemplateIsNotInCondition::class,
+            'condition_value' => 'next_day',
         ]);
 
         Action::factory()->create([
-            'automation_id'     => $automation->getKey(),
-            'action_class'      => SetLabelTemplateAction::class,
-            'action_value'      => 'next_day'
+            'automation_id' => $automation->getKey(),
+            'action_class' => SetLabelTemplateAction::class,
+            'action_value' => 'next_day',
         ]);
 
         $automation->update(['enabled' => true]);

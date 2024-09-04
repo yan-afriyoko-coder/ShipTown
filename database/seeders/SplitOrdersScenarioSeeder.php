@@ -32,33 +32,31 @@ class SplitOrdersScenarioSeeder extends Seeder
     public function run()
     {
         $this->ensurePackingStatusExists();
-//        $this->createSampleWarehouses(3);
+        //        $this->createSampleWarehouses(3);
         $this->createWarehouseAutomations();
         $this->createSampleProducts(3);
         $this->createSampleSplitOrders(1);
         $this->createSampleSplitSingleProductsOrders(1);
     }
 
-    /**
-     */
     private function createWarehouseAutomations(): void
     {
         Warehouse::all()->each(function (Warehouse $warehouse) {
-            $automation = new Automation();
+            $automation = new Automation;
             $automation->enabled = false;
-            $automation->name = 'packing to packing_' . $warehouse->code;
+            $automation->name = 'packing to packing_'.$warehouse->code;
             $automation->save();
 
-            $condition = new Condition();
+            $condition = new Condition;
             $condition->automation_id = $automation->getKey();
             $condition->condition_class = StatusCodeEqualsCondition::class;
             $condition->condition_value = 'packing';
             $condition->save();
 
-            $action = new Action();
+            $action = new Action;
             $action->automation_id = $automation->getKey();
             $action->action_class = SplitOrderToWarehouseCodeAction::class;
-            $action->action_value = $warehouse->code.',packing_' . $warehouse->code;
+            $action->action_value = $warehouse->code.',packing_'.$warehouse->code;
             $action->save();
 
             $automation->enabled = true;
@@ -73,17 +71,11 @@ class SplitOrdersScenarioSeeder extends Seeder
         OrderStatus::firstOrCreate(['code' => 'packing'], $newStatus->toArray());
     }
 
-    /**
-     * @param int $count
-     */
     protected function createSampleProducts(int $count)
     {
         $this->sampleProducts = Product::factory()->count($count)->create();
     }
 
-    /**
-     * @param int $count
-     */
     protected function createSampleSplitOrders(int $count)
     {
         /** @var Order $order */
@@ -106,10 +98,10 @@ class SplitOrdersScenarioSeeder extends Seeder
                     'warehouse_id' => $warehouse->getKey(),
                     'location_id' => $warehouse->code,
                 ], [
-                    'quantity' => 100
+                    'quantity' => 100,
                 ]);
 
-                $orderProduct = new OrderProduct();
+                $orderProduct = new OrderProduct;
                 $orderProduct->order_id = $order->getKey();
                 $orderProduct->product_id = $product->getKey();
                 $orderProduct->name_ordered = $product->name;
@@ -124,9 +116,6 @@ class SplitOrdersScenarioSeeder extends Seeder
         });
     }
 
-    /**
-     * @param int $count
-     */
     protected function createSampleSplitSingleProductsOrders(int $count)
     {
         /** @var Order $order */
@@ -148,7 +137,7 @@ class SplitOrdersScenarioSeeder extends Seeder
                     'warehouse_id' => $warehouse->getKey(),
                     'location_id' => $warehouse->code,
                 ], [
-                    'quantity' => 3
+                    'quantity' => 3,
                 ]);
 
                 $warehouse = $warehouses->last();
@@ -157,10 +146,10 @@ class SplitOrdersScenarioSeeder extends Seeder
                     'warehouse_id' => $warehouse->getKey(),
                     'location_id' => $warehouse->code,
                 ], [
-                    'quantity' => 3
+                    'quantity' => 3,
                 ]);
 
-                $orderProduct = new OrderProduct();
+                $orderProduct = new OrderProduct;
                 $orderProduct->order_id = $order->getKey();
                 $orderProduct->product_id = $product->getKey();
                 $orderProduct->name_ordered = $product->name;

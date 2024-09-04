@@ -15,7 +15,7 @@ class FulfilmentCenterSeeder extends Seeder
     public function run()
     {
         /** @var Warehouse $fulfilmentCenter */
-        $fulfilmentCenter = Warehouse::firstOrCreate(['code' => '99'], ['name'  => 'Warehouse']);
+        $fulfilmentCenter = Warehouse::firstOrCreate(['code' => '99'], ['name' => 'Warehouse']);
 
         $fulfilmentCenter->attachTag('fulfilment');
     }

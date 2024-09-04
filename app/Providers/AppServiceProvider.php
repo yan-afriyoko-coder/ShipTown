@@ -93,7 +93,7 @@ class AppServiceProvider extends ServiceProvider
 
         $enabled_modules->each(function (Module $module) {
             try {
-                if (!class_exists($module->service_provider_class)) {
+                if (! class_exists($module->service_provider_class)) {
                     return;
                 }
                 $this->app->singleton($module->service_provider_class, $module->service_provider_class);

@@ -26,12 +26,12 @@ class StocktakeSuggestionsSeeder extends Seeder
                     ->limit(10)
                     ->get()
                     ->each(function (Inventory $inventory) {
-                        $stocktakeSuggestion = new StocktakeSuggestion();
-                        $stocktakeSuggestion->product_id  = $inventory->product_id;
-                        $stocktakeSuggestion->inventory_id  = $inventory->getKey();
-                        $stocktakeSuggestion->warehouse_id  = $inventory->warehouse_id;
-                        $stocktakeSuggestion->points  = 20;
-                        $stocktakeSuggestion->reason  = 'Manual stocktake request';
+                        $stocktakeSuggestion = new StocktakeSuggestion;
+                        $stocktakeSuggestion->product_id = $inventory->product_id;
+                        $stocktakeSuggestion->inventory_id = $inventory->getKey();
+                        $stocktakeSuggestion->warehouse_id = $inventory->warehouse_id;
+                        $stocktakeSuggestion->points = 20;
+                        $stocktakeSuggestion->reason = 'Manual stocktake request';
                         $stocktakeSuggestion->save();
                     });
             });

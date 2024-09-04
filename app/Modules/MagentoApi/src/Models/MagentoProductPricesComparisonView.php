@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property MagentoProduct $magentoProduct
- * @property integer $magento_store_id
+ * @property int $magento_store_id
  * @property string $sku
- * @property double $expected_price
- * @property double $expected_sale_price
+ * @property float $expected_price
+ * @property float $expected_sale_price
  * @property Carbon $expected_sale_price_start_date
  * @property Carbon $expected_sale_price_end_date
  */

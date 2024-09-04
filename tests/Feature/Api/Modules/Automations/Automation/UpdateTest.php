@@ -25,12 +25,12 @@ class UpdateTest extends TestCase
         $route = route('api.modules.automations.update', $automation->getKey());
 
         $this->put($route, [
-                'name' => 'Test Automation',
-                'enabled' => true,
-                'priority' => rand(1, 100),
-                'conditions' => [],
-                'actions' => [],
-            ])
+            'name' => 'Test Automation',
+            'enabled' => true,
+            'priority' => rand(1, 100),
+            'conditions' => [],
+            'actions' => [],
+        ])
             ->assertStatus(200);
 
         $this->assertTrue(true);
@@ -52,20 +52,20 @@ class UpdateTest extends TestCase
             'conditions' => [
                 [
                     'condition_class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition::class,
-                    'condition_value' => 'paid'
+                    'condition_value' => 'paid',
                 ],
                 [
                     'condition_class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition::class,
-                    'condition_value' => 'paid'
-                ]
+                    'condition_value' => 'paid',
+                ],
             ],
             'actions' => [
                 [
                     'priority' => 1,
                     'action_class' => \App\Modules\Automations\src\Actions\Order\SetStatusCodeAction::class,
                     'action_value' => 'store_pickup',
-                ]
-            ]
+                ],
+            ],
         ];
 
         $response = $this->put(route('api.modules.automations.update', $automation->id), $data);
@@ -74,8 +74,8 @@ class UpdateTest extends TestCase
             'data' => [
                 'id',
                 'name',
-                'enabled'
-            ]
+                'enabled',
+            ],
         ]);
     }
 }

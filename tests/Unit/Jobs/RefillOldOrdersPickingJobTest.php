@@ -6,7 +6,6 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Modules\AutoStatusPicking\src\Jobs\RefillPickingIfEmptyJob;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class RefillOldOrdersPickingJobTest extends TestCase
@@ -21,7 +20,7 @@ class RefillOldOrdersPickingJobTest extends TestCase
         /** @var Order $order */
         $order = Order::factory()->create([
             'order_placed_at' => Carbon::now()->subDays(100),
-            'status_code'     => 'processing',
+            'status_code' => 'processing',
         ]);
 
         OrderProduct::factory(2)->create([

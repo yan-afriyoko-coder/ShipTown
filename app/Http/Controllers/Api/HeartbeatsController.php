@@ -9,9 +9,6 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class HeartbeatsController extends Controller
 {
-    /**
-     * @return AnonymousResourceCollection
-     */
     public function index(): AnonymousResourceCollection
     {
         $expiredHeartbeats = Heartbeat::expired()->limit(2)->get();
@@ -21,7 +18,7 @@ class HeartbeatsController extends Controller
                 ->whereNotNull('auto_heal_job_class')
                 ->each(function (Heartbeat $heartbeat) {
                     try {
-                        (new $heartbeat->auto_heal_job_class())->handle();
+                        (new $heartbeat->auto_heal_job_class)->handle();
                     } catch (\Throwable $exception) {
                         report($exception);
                     }

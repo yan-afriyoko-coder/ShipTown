@@ -22,6 +22,7 @@ class OrderProductCreatedEventListener
 
         if ($config->warehouse_id === null) {
             ActiveOrdersInventoryReservationsServiceProvider::disableModule();
+
             return;
         }
 
@@ -32,7 +33,7 @@ class OrderProductCreatedEventListener
             'product_sku' => $event->orderProduct->product->sku,
             'warehouse_code' => $inventory->warehouse_code,
             'quantity_reserved' => $event->orderProduct->quantity_to_ship,
-            'comment' => 'Order #' . $event->orderProduct->order->order_number,
+            'comment' => 'Order #'.$event->orderProduct->order->order_number,
             'custom_uuid' => ReservationsService::getUuid($event->orderProduct),
         ]);
     }

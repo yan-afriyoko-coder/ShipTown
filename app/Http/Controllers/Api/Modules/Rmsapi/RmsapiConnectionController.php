@@ -28,8 +28,6 @@ class RmsapiConnectionController extends Controller
     }
 
     /**
-     * @param RmsapiConnectionStoreRequest $request
-     *
      * @return RmsapiConnectionResource
      */
     public function store(RmsapiConnectionStoreRequest $request)
@@ -41,11 +39,9 @@ class RmsapiConnectionController extends Controller
     }
 
     /**
-     * @param RmsapiConnection $connection
+     * @return Application|ResponseFactory|Response
      *
      * @throws Exception
-     *
-     * @return Application|ResponseFactory|Response
      */
     public function destroy(RmsapiConnectionDestroyRequest $request, RmsapiConnection $connection)
     {

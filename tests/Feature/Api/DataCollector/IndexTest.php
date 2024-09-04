@@ -19,7 +19,7 @@ class IndexTest extends TestCase
 
         DataCollection::factory()->create([
             'warehouse_id' => $warehouse->id,
-            'name' => 'test'
+            'name' => 'test',
         ]);
 
         $response = $this->actingAs($user, 'api')->getJson(route('api.data-collector.index'));
@@ -33,7 +33,7 @@ class IndexTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'id'
+                    'id',
                 ],
             ],
         ]);

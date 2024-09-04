@@ -25,8 +25,8 @@ class ReservationsService
     {
         return implode(';', [
             self::UUID_PREFIX,
-            "order_id:". $orderProduct->order_id,
-            "order_product_id:". $orderProduct->getKey()
+            'order_id:'.$orderProduct->order_id,
+            'order_product_id:'.$orderProduct->getKey(),
         ]);
     }
 }

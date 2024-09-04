@@ -23,16 +23,16 @@ class CompletedOrdersCountByDateWidget extends AbstractWidget
     public function run()
     {
         $data = Order::query()
-        ->select([
-            DB::raw('date(order_closed_at) as date_closed_at'),
-            DB::raw('count(*) as order_count')
-        ])
-        ->whereDate('order_closed_at', '>', Carbon::now()->subDays(7))
-        ->groupBy([
-            DB::raw('date(order_closed_at)')
-        ])
-        ->orderByDesc('date_closed_at')
-        ->get();
+            ->select([
+                DB::raw('date(order_closed_at) as date_closed_at'),
+                DB::raw('count(*) as order_count'),
+            ])
+            ->whereDate('order_closed_at', '>', Carbon::now()->subDays(7))
+            ->groupBy([
+                DB::raw('date(order_closed_at)'),
+            ])
+            ->orderByDesc('date_closed_at')
+            ->get();
 
         $total_count = $data->sum(function ($day) {
             return $day['order_count'];

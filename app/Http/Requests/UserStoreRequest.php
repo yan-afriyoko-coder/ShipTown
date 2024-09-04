@@ -18,7 +18,7 @@ class UserStoreRequest extends FormRequest
             'name' => [
                 'required', 'string',
                 'max:255',
-                Rule::unique('users', 'name')->whereNull('deleted_at')
+                Rule::unique('users', 'name')->whereNull('deleted_at'),
             ],
 
             'email' => [
@@ -26,7 +26,7 @@ class UserStoreRequest extends FormRequest
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('users', 'email')->whereNull('deleted_at')
+                Rule::unique('users', 'email')->whereNull('deleted_at'),
             ],
 
             'role_id' => [
@@ -47,7 +47,7 @@ class UserStoreRequest extends FormRequest
             'default_dashboard_uri' => [
                 'nullable',
                 'string',
-                'max:255'
+                'max:255',
             ],
         ];
     }

@@ -15,7 +15,7 @@ class DpdUKSeeder extends Seeder
 {
     public function run()
     {
-        if(empty(env('TEST_DPDUK_USERNAME'))) {
+        if (empty(env('TEST_DPDUK_USERNAME'))) {
             return;
         }
 
@@ -55,15 +55,15 @@ class DpdUKSeeder extends Seeder
         $testAddress->first_name = 'Artur';
         $testAddress->last_name = 'Hanusek';
         $testAddress->phone = '12345678901';
-        $testAddress->company = "DPD Group Ltd";
-        $testAddress->country_code = "GBR";
-        $testAddress->country_name = "United Kingdom";
-        $testAddress->postcode = "BN6 8QQ";
-        $testAddress->address1 = "28 Stafford Way";
-        $testAddress->address2 = "";
-        $testAddress->city = "Hassocks";
-        $testAddress->state_code = "";
-        $testAddress->state_name = "SUSSEX";
+        $testAddress->company = 'DPD Group Ltd';
+        $testAddress->country_code = 'GBR';
+        $testAddress->country_name = 'United Kingdom';
+        $testAddress->postcode = 'BN6 8QQ';
+        $testAddress->address1 = '28 Stafford Way';
+        $testAddress->address2 = '';
+        $testAddress->city = 'Hassocks';
+        $testAddress->state_code = '';
+        $testAddress->state_name = 'SUSSEX';
         $testAddress->email = fake()->email;
 
         $testAddress->save();

@@ -20,11 +20,11 @@ class WebRoutesCoverageTest extends TestCase
 
         collect(json_decode(Artisan::output()))
             ->filter(function ($route) {
-                $isNotApiRoute  = ! Str::startsWith($route->uri, 'api');
-                $isNotDevRoute  = ! Str::startsWith($route->uri, '_');
-                $isGetMethod    = $route->method === 'GET|HEAD';
+                $isNotApiRoute = ! Str::startsWith($route->uri, 'api');
+                $isNotDevRoute = ! Str::startsWith($route->uri, '_');
+                $isGetMethod = $route->method === 'GET|HEAD';
 
-                return $isNotApiRoute && $isNotDevRoute && $isGetMethod ;
+                return $isNotApiRoute && $isNotDevRoute && $isGetMethod;
             })
             ->map(function ($route) {
                 $fullFileName = app()->basePath();

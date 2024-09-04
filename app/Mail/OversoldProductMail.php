@@ -10,7 +10,7 @@ use Spatie\MailTemplates\TemplateMailable;
 
 class OversoldProductMail extends TemplateMailable
 {
-    use Queueable, SerializesModels, LogsActivityTrait;
+    use LogsActivityTrait, Queueable, SerializesModels;
 
     public array $variables;
 

@@ -12,7 +12,6 @@ class TemplatePageTest extends DuskTestCase
 {
     private string $uri = '/pdf/orders/{order_number}/{template}';
 
-
     protected function setUp(): void
     {
         parent::setUp();

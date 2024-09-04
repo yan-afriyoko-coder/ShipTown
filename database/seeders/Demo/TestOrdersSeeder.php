@@ -41,17 +41,17 @@ class TestOrdersSeeder extends Seeder
             'status_code' => 'new',
             'order_number' => 'T100001',
             'order_placed_at' => now()->subDays(3),
-            'shipping_address_id' => $this->createIrishShippingAddress()->getKey()
+            'shipping_address_id' => $this->createIrishShippingAddress()->getKey(),
         ]);
 
         OrderComment::create([
             'order_id' => $order->getKey(),
-            'comment' => 'Product with SKU ordered does not exist in the system. This simulates scenario when product exists in remote system (Magento, Shopify etc) but no in our system.'
+            'comment' => 'Product with SKU ordered does not exist in the system. This simulates scenario when product exists in remote system (Magento, Shopify etc) but no in our system.',
         ]);
 
         OrderComment::create([
             'order_id' => $order->getKey(),
-            'comment' => 'Test order'
+            'comment' => 'Test order',
         ]);
 
         OrderProduct::create([
@@ -72,7 +72,7 @@ class TestOrdersSeeder extends Seeder
             'status_code' => 'new',
             'order_number' => 'T100002 - Packsheet',
             'order_placed_at' => now()->subDays(3),
-            'shipping_address_id' => $this->createIrishShippingAddress()->getKey()
+            'shipping_address_id' => $this->createIrishShippingAddress()->getKey(),
         ]);
 
         Product::query()
@@ -99,7 +99,7 @@ class TestOrdersSeeder extends Seeder
             'order_number' => 'T100002 - Unpaid order',
             'order_placed_at' => now()->subDays(3),
             'total_paid' => 0,
-            'shipping_address_id' => $this->createIrishShippingAddress()->getKey()
+            'shipping_address_id' => $this->createIrishShippingAddress()->getKey(),
         ]);
 
         Product::query()
@@ -132,12 +132,12 @@ class TestOrdersSeeder extends Seeder
             'status_code' => 'new',
             'shipping_address_id' => $orderAddress->getKey(),
             'order_number' => 'T100003 - Incorrect address',
-            'order_placed_at' => now()->subDays(3)
+            'order_placed_at' => now()->subDays(3),
         ]);
 
         OrderComment::create([
             'order_id' => $order->getKey(),
-            'comment' => 'Test with incorrect address (too long)'
+            'comment' => 'Test with incorrect address (too long)',
         ]);
 
         Product::query()
@@ -163,7 +163,7 @@ class TestOrdersSeeder extends Seeder
         $order = Order::factory()->create([
             'status_code' => 'new',
             'order_placed_at' => now()->subDays(3),
-            'shipping_address_id' => $this->createIrishShippingAddress()->getKey()
+            'shipping_address_id' => $this->createIrishShippingAddress()->getKey(),
         ]);
 
         Product::query()

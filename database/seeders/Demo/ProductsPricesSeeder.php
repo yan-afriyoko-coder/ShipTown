@@ -20,7 +20,7 @@ class ProductsPricesSeeder extends Seeder
                 foreach ($productsList as $product) {
                     $randomPrice = rand(1, 100) - (0.05 * rand(0, 1));
 
-                    $salesPrice = $randomPrice * ([1, 1, 2/3, 0.5][rand(0, 3)]);
+                    $salesPrice = $randomPrice * ([1, 1, 2 / 3, 0.5][rand(0, 3)]);
                     $saleStartDate = today()->subDays(rand(10, 30));
                     $salePriceEndDate = today()->subDays(9)->addDays(rand(0, 20));
 
@@ -41,7 +41,7 @@ class ProductsPricesSeeder extends Seeder
                 'price' => 10,
                 'sale_price' => 17.99,
                 'sale_price_start_date' => now()->subDays(14),
-                'sale_price_end_date' => now()->subDays(7)
+                'sale_price_end_date' => now()->subDays(7),
             ]);
 
         Product::skuOrAlias('4002')->first()->prices()
@@ -49,7 +49,7 @@ class ProductsPricesSeeder extends Seeder
                 'price' => 20,
                 'sale_price' => 8.99,
                 'sale_price_start_date' => now()->subDays(3),
-                'sale_price_end_date' => now()->addDays(4)
+                'sale_price_end_date' => now()->addDays(4),
             ]);
 
         Product::skuOrAlias('4005')->first()->prices()
@@ -57,7 +57,7 @@ class ProductsPricesSeeder extends Seeder
                 'price' => 50,
                 'sale_price' => 17.99,
                 'sale_price_start_date' => now()->subDays(14),
-                'sale_price_end_date' => now()->subDays(7)
+                'sale_price_end_date' => now()->subDays(7),
             ]);
     }
 }

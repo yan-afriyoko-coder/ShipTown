@@ -18,12 +18,12 @@ class BarcodeGeneratorPageTest extends DuskTestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-//        $user->assignRole('user');
+        //        $user->assignRole('user');
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->disableFitOnFailure();
             $browser->loginAs($user);
-            $browser->visit($this->uri . '?content=1234567890');
+            $browser->visit($this->uri.'?content=1234567890');
             $browser->assertPathIs($this->uri);
             $browser->assertSourceMissing('Server Error');
         });

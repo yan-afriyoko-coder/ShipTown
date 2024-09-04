@@ -45,7 +45,7 @@ class InventoryMovementsStatisticsService
                 now() as updated_at
             FROM inventory_movements
             LEFT JOIN warehouses ON warehouses.id = inventory_movements.warehouse_id
-            WHERE inventory_movements.inventory_id IN ('. $inventory->implode(',') .')
+            WHERE inventory_movements.inventory_id IN ('.$inventory->implode(',').')
             GROUP BY inventory_movements.type, inventory_movements.inventory_id
         ');
     }

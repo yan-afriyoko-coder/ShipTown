@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Jobs\Maintenance;
 
-use App\Jobs\DispatchEveryDayEventJob;
 use App\Models\AutoStatusPickingConfiguration;
 use App\Models\Order;
 use App\Models\OrderProduct;

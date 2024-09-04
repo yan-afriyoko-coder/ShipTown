@@ -5,14 +5,8 @@ namespace Tests\Feature\Settings\Modules\Magento2msi\InventorySourceItems;
 use App\User;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
-    /**
-     * @var string
-     */
     protected string $uri = '/settings/modules/magento2msi/inventory-source-items';
 
     protected mixed $user;

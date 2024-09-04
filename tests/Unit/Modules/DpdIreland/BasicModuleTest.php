@@ -19,10 +19,10 @@ class BasicModuleTest extends TestCase
         }
 
         DpdIreland::factory()->create([
-            'token'     => env('TEST_DPD_TOKEN'),
-            'user'      => env('TEST_DPD_USER'),
-            'password'  => env('TEST_DPD_PASSWORD'),
-            'live'      => true,
+            'token' => env('TEST_DPD_TOKEN'),
+            'user' => env('TEST_DPD_USER'),
+            'password' => env('TEST_DPD_PASSWORD'),
+            'live' => true,
         ]);
 
         DpdIrelandServiceProvider::enableModule();
@@ -32,13 +32,13 @@ class BasicModuleTest extends TestCase
         $testAddress->first_name = 'John';
         $testAddress->last_name = 'Smith';
         $testAddress->phone = '12345678901';
-        $testAddress->company = "DPD Group Ltd";
-        $testAddress->country_code = "IE";
-        $testAddress->postcode = "B661BY";
-        $testAddress->address1 = "DPD Ireland";
-        $testAddress->address2 = "Unit 2B Midland Gateway Bus";
-        $testAddress->city = "Westmeath";
-        $testAddress->state_code = "Kilbeggan";
+        $testAddress->company = 'DPD Group Ltd';
+        $testAddress->country_code = 'IE';
+        $testAddress->postcode = 'B661BY';
+        $testAddress->address1 = 'DPD Ireland';
+        $testAddress->address2 = 'Unit 2B Midland Gateway Bus';
+        $testAddress->city = 'Westmeath';
+        $testAddress->state_code = 'Kilbeggan';
         $testAddress->email = 'john.smith@dpd.ie';
         $testAddress->save();
 
@@ -53,7 +53,7 @@ class BasicModuleTest extends TestCase
 
         $response = $this->post('api/shipping-labels', [
             'order_id' => $order->getKey(),
-            'shipping_service_code' => $order->label_template
+            'shipping_service_code' => $order->label_template,
         ]);
 
         ray($response->json());

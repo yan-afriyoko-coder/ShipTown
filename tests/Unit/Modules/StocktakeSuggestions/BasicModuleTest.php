@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Modules\StocktakeSuggestions;
 
-use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\StocktakeSuggestion;
 use App\Models\Warehouse;
@@ -18,7 +17,7 @@ class BasicModuleTest extends TestCase
         StocktakeSuggestionsServiceProvider::enableModule();
 
         StocktakeSuggestionsConfiguration::query()->updateOrCreate([], [
-            'min_count_date' => now()->subWeek()
+            'min_count_date' => now()->subWeek(),
         ]);
 
         Warehouse::factory()->create();
@@ -136,10 +135,10 @@ class BasicModuleTest extends TestCase
             ->inventory()
             ->first()
             ->update([
-            'last_counted_at' => now()->subMonth(),
-            'in_stock_since' => now()->subMonth(),
-            'quantity' => 1,
-        ]);
+                'last_counted_at' => now()->subMonth(),
+                'in_stock_since' => now()->subMonth(),
+                'quantity' => 1,
+            ]);
 
         Product::factory()->create()
             ->inventory()

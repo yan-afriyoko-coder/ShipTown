@@ -54,7 +54,7 @@ class OrderStatusChangedTest extends TestCase
         $order->update(['is_active' => false, 'status_code' => $orderStatusClosed->code]);
         $this->assertDatabaseMissing('inventory_reservations', ['custom_uuid' => ReservationsService::getUuid($orderProduct)]);
 
-//        $order->update(['is_active' => true, 'status_code' => $orderStatusActive->code]);
-//        $this->assertDatabaseHas('inventory_reservations', ['custom_uuid' => ReservationsService::getUuid($orderProduct)]);
+        //        $order->update(['is_active' => true, 'status_code' => $orderStatusActive->code]);
+        //        $this->assertDatabaseHas('inventory_reservations', ['custom_uuid' => ReservationsService::getUuid($orderProduct)]);
     }
 }

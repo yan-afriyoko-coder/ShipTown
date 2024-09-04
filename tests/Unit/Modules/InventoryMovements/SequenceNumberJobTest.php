@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Modules\InventoryMovements;
 
-use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\Warehouse;

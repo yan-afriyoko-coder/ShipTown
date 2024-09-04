@@ -3,27 +3,14 @@
 namespace Tests\Feature\Csv\Products\Picked;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
-    /**
-     * @var string
-     */
     protected string $uri = 'csv/products/picked';
 
-    /**
-     * @var User
-     */
     protected User $user;
 
-    /**
-     *
-     */
     protected function setUp(): void
     {
         parent::setUp();

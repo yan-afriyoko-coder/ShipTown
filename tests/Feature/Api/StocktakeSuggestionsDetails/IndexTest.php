@@ -23,9 +23,9 @@ class IndexTest extends TestCase
         $warehouse = Warehouse::factory()->create();
 
         $inventory = Inventory::query()->where([
-                'product_id' => $product->id,
-                'warehouse_id' => $warehouse->id,
-            ])
+            'product_id' => $product->id,
+            'warehouse_id' => $warehouse->id,
+        ])
             ->first();
 
         StocktakeSuggestion::query()->create([
@@ -46,7 +46,7 @@ class IndexTest extends TestCase
             'data' => [
                 '*' => [
                     'points',
-                    'reason'
+                    'reason',
                 ],
             ],
         ]);

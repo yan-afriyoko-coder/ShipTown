@@ -19,9 +19,9 @@ class StoreTest extends TestCase
     {
         $params = [
             'location_id' => rand(1, 99),
-            'url'         => 'https://demo.rmsapi.products.management',
-            'username'    => 'demo@products.management',
-            'password'    => 'secret123',
+            'url' => 'https://demo.rmsapi.products.management',
+            'username' => 'demo@products.management',
+            'password' => 'secret123',
         ];
 
         $response = $this->post(route('api.modules.rmsapi.connections.store'), $params);

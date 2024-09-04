@@ -22,7 +22,7 @@ class ImportAsStocktakeController extends Controller
 
         return JsonResource::make([
             'data_collection_id' => $dataCollection->id,
-            'currently_running_task' => $dataCollection->currently_running_task
+            'currently_running_task' => $dataCollection->currently_running_task,
         ]);
     }
 }

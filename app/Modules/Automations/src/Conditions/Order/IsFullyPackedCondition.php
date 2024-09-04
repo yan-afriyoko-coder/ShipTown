@@ -6,9 +6,6 @@ use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
-/**
- *
- */
 class IsFullyPackedCondition extends BaseOrderConditionAbstract
 {
     public static function addQueryScope(Builder $query, $expected_value): Builder

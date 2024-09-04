@@ -23,14 +23,14 @@ class ProductsShippedByUserWidget extends AbstractDateSelectorWidget
         $data = OrderProductShipment::query()
             ->select([
                 'user_id',
-                DB::raw('SUM(quantity_shipped) as quantity_shipped')
+                DB::raw('SUM(quantity_shipped) as quantity_shipped'),
             ])
             ->with(['user' => function ($query) {
                 $query->select('id', 'name');
             }])
             ->whereBetween('created_at', [
                 $this->getStartingDateTime(),
-                $this->getEndingDateTime()
+                $this->getEndingDateTime(),
             ])
             ->groupBy('user_id')
             ->get();

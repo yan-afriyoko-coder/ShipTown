@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class PrintJob.
  *
- * @property int    $printer_id
+ * @property int $printer_id
  * @property string $title
  * @property string $content_type
  * @property string $content
  * @property string $pdf
  * @property string $pdf_url
- * @property int    $expire_after
+ * @property int $expire_after
  *
  * @method static Builder|PrintJob newModelQuery()
  * @method static Builder|PrintJob newQuery()
@@ -29,9 +29,9 @@ class PrintJob extends Model
     ];
 
     protected $attributes = [
-        'title'        => '',
+        'title' => '',
         'content_type' => 'pdf_uri',
-        'expire_after'  => 15,
+        'expire_after' => 15,
     ];
 
     public function setPdfAttribute($value)
@@ -53,12 +53,12 @@ class PrintJob extends Model
     public function toPrintNodePayload(): array
     {
         return [
-            'source'      => 'ShipTown',
+            'source' => 'ShipTown',
             'expireAfter' => $this->expire_after, // seconds
-            'printerId'   => $this->printer_id,
-            'title'       => $this->title,
+            'printerId' => $this->printer_id,
+            'title' => $this->title,
             'contentType' => $this->content_type,
-            'content'     => $this->content,
+            'content' => $this->content,
         ];
     }
 }

@@ -8,10 +8,6 @@ use Illuminate\Support\Facades\Log;
 
 class AddOrderCommentAction extends BaseOrderActionAbstract
 {
-    /**
-     * @param string $options
-     * @return bool
-     */
     public function handle(string $options = ''): bool
     {
         Log::debug('Automation Action', [
@@ -20,7 +16,7 @@ class AddOrderCommentAction extends BaseOrderActionAbstract
             'comment' => $options,
         ]);
 
-        $comment = new OrderComment();
+        $comment = new OrderComment;
         $comment->comment = $options;
         $comment->order_id = $this->order->getKey();
         $comment->save();

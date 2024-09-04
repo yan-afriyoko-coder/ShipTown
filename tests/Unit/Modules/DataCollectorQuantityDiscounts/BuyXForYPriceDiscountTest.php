@@ -33,7 +33,7 @@ class BuyXForYPriceDiscountTest extends TestCase
                 'price' => 30,
                 'sale_price' => '25.99',
                 'sale_price_start_date' => now()->subDays(14),
-                'sale_price_end_date' => now()->addDays(7)
+                'sale_price_end_date' => now()->addDays(7),
             ]);
 
         $this->product4003->prices()
@@ -41,7 +41,7 @@ class BuyXForYPriceDiscountTest extends TestCase
                 'price' => 40,
                 'sale_price' => '35.99',
                 'sale_price_start_date' => now()->subDays(14),
-                'sale_price_end_date' => now()->addDays(7)
+                'sale_price_end_date' => now()->addDays(7),
             ]);
 
         $quantityDiscount = QuantityDiscount::factory()->create([

@@ -8,7 +8,7 @@ class ReportService
 {
     public static function fromQuery($query): Report
     {
-        $report = new Report();
+        $report = new Report;
 
         $report->baseQuery = $query;
 

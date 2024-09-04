@@ -11,19 +11,10 @@ class IndexTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @var string
-     */
     protected string $uri = '/settings/modules/quantity-discounts/{id}';
 
-    /**
-     * @var User
-     */
     protected User $user;
 
-    /**
-     *
-     */
     protected function setUp(): void
     {
         parent::setUp();

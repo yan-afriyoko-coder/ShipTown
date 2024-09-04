@@ -45,6 +45,7 @@ class FetchStockItemsJob extends UniqueJob
                 'connection_id' => $connection->getKey(),
                 'response' => $response->json(),
             ]);
+
             return false;
         }
 
@@ -54,7 +55,7 @@ class FetchStockItemsJob extends UniqueJob
                 'source_assigned' => 0,
                 'inventory_source_items_fetched_at' => now(),
                 'inventory_source_items' => null,
-                'sync_required' => null
+                'sync_required' => null,
             ]);
 
         $map = collect($response->json('items', []))
@@ -64,7 +65,7 @@ class FetchStockItemsJob extends UniqueJob
                     'source_assigned' => 1,
                     'sync_required' => null,
                     'sku' => $item['sku'],
-                    'custom_uuid' => $item['sku'] . '-' . $item['source_code'],
+                    'custom_uuid' => $item['sku'].'-'.$item['source_code'],
                     'source_code' => $item['source_code'],
                     'quantity' => $item['quantity'],
                     'status' => $item['status'],
@@ -83,7 +84,7 @@ class FetchStockItemsJob extends UniqueJob
             'status',
             'inventory_source_items_fetched_at',
             'inventory_source_items',
-            'updated_at'
+            'updated_at',
         ]);
 
         Log::info('Magento2msi - Fetched stock items', [

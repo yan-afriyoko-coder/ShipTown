@@ -18,15 +18,14 @@ use Spatie\QueryBuilder\QueryBuilder;
 /**
  * App\Models\Warehouse.
  *
- * @property int                $id
- * @property string             $code
- * @property string             $name
- * @property int|null           $address_id
- * @property string|null        $deleted_at
- * @property Carbon|null        $created_at
- * @property Carbon|null        $updated_at
- *
- * @property OrderAddress|null  $address
+ * @property int $id
+ * @property string $code
+ * @property string $name
+ * @property int|null $address_id
+ * @property string|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property OrderAddress|null $address
  *
  * @method static Builder|Warehouse newModelQuery()
  * @method static Builder|Warehouse newQuery()
@@ -44,9 +43,8 @@ use Spatie\QueryBuilder\QueryBuilder;
 class Warehouse extends BaseModel
 {
     use HasFactory;
-
-    use LogsActivityTrait;
     use HasTagsTrait;
+    use LogsActivityTrait;
     use SoftDeletes;
 
     protected $fillable = [
@@ -59,9 +57,6 @@ class Warehouse extends BaseModel
         'id' => 'integer',
     ];
 
-    /**
-     * @return QueryBuilder
-     */
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(Warehouse::class)
@@ -85,9 +80,6 @@ class Warehouse extends BaseModel
             ]);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function address(): BelongsTo
     {
         return $this->belongsTo(OrderAddress::class);

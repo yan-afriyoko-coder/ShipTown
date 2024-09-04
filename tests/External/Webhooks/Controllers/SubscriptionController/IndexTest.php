@@ -50,9 +50,9 @@ class IndexTest extends TestCase
                 'response' => [
                     'Subscriptions' => [
                         '*' => [
-                            'SubscriptionArn'
-                        ]
-                    ]
+                            'SubscriptionArn',
+                        ],
+                    ],
                 ],
             ],
         ]);

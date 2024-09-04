@@ -18,15 +18,18 @@ use Throwable;
 class PagesWalkthroughTest extends DuskTestCase
 {
     private Order $order;
+
     private User $user;
 
     private Product $product1;
+
     private Product $product2;
 
     /**
      * A Dusk test example.
      *
      * @return void
+     *
      * @throws Throwable
      */
     public function testExample()
@@ -61,7 +64,7 @@ class PagesWalkthroughTest extends DuskTestCase
         $this->user = User::factory()->create([
             'warehouse_code' => $warehouse->code,
             'warehouse_id' => $warehouse->getKey(),
-            'password' => bcrypt('password')
+            'password' => bcrypt('password'),
         ]);
 
         $this->product1 = Product::query()->where(['sku' => '111576'])->first() ?? Product::factory()->create(['sku' => '111576']);
@@ -75,7 +78,7 @@ class PagesWalkthroughTest extends DuskTestCase
             'sku_ordered' => $this->product1->sku,
             'name_ordered' => $this->product1->name,
             'product_id' => $this->product1->getKey(),
-            'quantity_ordered' => 1
+            'quantity_ordered' => 1,
         ]);
 
         /** @var OrderProduct $orderProduct2 */
@@ -84,7 +87,7 @@ class PagesWalkthroughTest extends DuskTestCase
             'sku_ordered' => $this->product2->sku,
             'name_ordered' => $this->product2->name,
             'product_id' => $this->product2->getKey(),
-            'quantity_ordered' => 3
+            'quantity_ordered' => 3,
         ]);
     }
 
@@ -95,7 +98,6 @@ class PagesWalkthroughTest extends DuskTestCase
             ->pause($this->shortDelay)->clickLink('Packlist')
             ->pause($this->shortDelay)->clickLink('Status: paid')
             ->pause($this->longDelay);
-
 
         while (OrderProduct::query()->where(['order_id' => $this->order->getKey()])
             ->where('quantity_to_ship', '>', 0)->exists()) {

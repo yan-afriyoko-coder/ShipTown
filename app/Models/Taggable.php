@@ -11,7 +11,6 @@ use Spatie\Tags\Tag;
  * @property int $tag_id
  * @property int $taggable_id
  * @property string $taggable_type
- *
  */
 class Taggable extends BaseModel
 {

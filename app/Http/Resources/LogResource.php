@@ -14,22 +14,19 @@ class LogResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'created_at'   => data_get($this, 'created_at'),
-            'id'           => data_get($this, 'id'),
-            'description'  => data_get($this, 'description'),
-            'subject_id'   => data_get($this, 'subject_id'),
+            'created_at' => data_get($this, 'created_at'),
+            'id' => data_get($this, 'id'),
+            'description' => data_get($this, 'description'),
+            'subject_id' => data_get($this, 'subject_id'),
             'subject_type' => data_get($this, 'subject_type'),
-            'causer_id'    => data_get($this, 'causer_id'),
-            'causer_type'  => data_get($this, 'causer_type'),
-            'properties'   => data_get($this, 'properties'),
-            'changes'      => $this->getChanges(),
-            'causer'       => $this->whenLoaded('causer'),
+            'causer_id' => data_get($this, 'causer_id'),
+            'causer_type' => data_get($this, 'causer_type'),
+            'properties' => data_get($this, 'properties'),
+            'changes' => $this->getChanges(),
+            'causer' => $this->whenLoaded('causer'),
         ];
     }
 
-    /**
-     * @return array
-     */
     private function getChanges(): array
     {
         $result = [];

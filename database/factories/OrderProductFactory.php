@@ -18,14 +18,14 @@ class OrderProductFactory extends Factory
         $product = Product::query()->inRandomOrder()->first() ?? Product::factory()->create();
 
         return [
-            'order_id'         => function () {
+            'order_id' => function () {
                 return Order::factory()->create()->getKey();
             },
-            'product_id'       => $product->getKey(),
-            'sku_ordered'      => $product->sku,
-            'name_ordered'     => $product->name,
+            'product_id' => $product->getKey(),
+            'sku_ordered' => $product->sku,
+            'name_ordered' => $product->name,
             'quantity_ordered' => $randomQuantityOrdered,
-            'price'            => $product->price,
+            'price' => $product->price,
         ];
     }
 }

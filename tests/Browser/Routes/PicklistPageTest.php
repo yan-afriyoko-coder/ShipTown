@@ -19,4 +19,3 @@ class PicklistPageTest extends DuskTestCase
         $this->basicGuestAccessTest($this->uri);
     }
 }
-

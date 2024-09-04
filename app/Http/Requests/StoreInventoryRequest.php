@@ -14,11 +14,11 @@ class StoreInventoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'                => ['required', 'integer', 'exists:inventory,id'],
-            'reorder_point'     => ['sometimes','numeric'],
-            'restock_level'     => ['sometimes','numeric'],
-            'shelve_location'   => ['sometimes','string'],
-            'shelf_location'    => ['sometimes','string'],
+            'id' => ['required', 'integer', 'exists:inventory,id'],
+            'reorder_point' => ['sometimes', 'numeric'],
+            'restock_level' => ['sometimes', 'numeric'],
+            'shelve_location' => ['sometimes', 'string'],
+            'shelf_location' => ['sometimes', 'string'],
         ];
     }
 }

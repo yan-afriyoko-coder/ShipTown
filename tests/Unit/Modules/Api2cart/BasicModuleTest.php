@@ -3,7 +3,6 @@
 namespace Tests\Unit\Modules\Api2cart;
 
 use App\Jobs\DispatchEveryFiveMinutesEventJob;
-use App\Jobs\DispatchEveryMinuteEventJob;
 use App\Modules\Api2cart\src\Api2cartServiceProvider;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -25,7 +24,7 @@ class BasicModuleTest extends TestCase
 
         Bus::fake();
 
-        $job = new DispatchEveryFiveMinutesEventJob();
+        $job = new DispatchEveryFiveMinutesEventJob;
         $job->handle();
 
         Bus::assertDispatched(DispatchImportOrdersJobs::class);

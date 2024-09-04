@@ -8,9 +8,6 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-/**
- *
- */
 class MailTemplatePreviewController extends Controller
 {
     public function index(Request $request, int $mailTemplate_id): Response|Application|ResponseFactory

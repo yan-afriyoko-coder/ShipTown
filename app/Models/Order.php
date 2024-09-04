@@ -25,59 +25,50 @@ use Spatie\Tags\Tag;
 /**
  * App\Models\Order.
  *
- * @property int              $id
- * @property string|null      $custom_unique_reference_id
- * @property string           $order_number
- * @property string           $status_code
- * @property string           $label_template
- * @property string           $shipping_method_code
- * @property string           $shipping_method_name
- *
- * @property bool             $is_editing
- * @property bool             $is_active
- * @property bool             $is_on_hold
- * @property bool             $is_fully_paid
- *
- * @property int|null         $packer_user_id
- * @property int|null         $shipping_address_id
- * @property int|null         $billing_address_id
- *
- * @property int              $product_line_count
- * @property float            $total
- * @property float            $total_products
- * @property float            $total_shipping
- * @property float            $total_discounts
- * @property float            $total_order
- * @property float            $total_paid
- * @property float            $total_outstanding
- *
- * @property float            $total_quantity_ordered
- * @property float            $total_quantity_to_ship
- *
- * @property Carbon|null      $picked_at
- * @property Carbon|null      $packed_at
- * @property Carbon|null      $order_placed_at
- * @property Carbon|null      $order_closed_at
- * @property Carbon|null      $deleted_at
- * @property Carbon|null      $created_at
- * @property Carbon|null      $updated_at
- *
- * @property-read boolean     $is_packed
- * @property-read boolean     $is_paid
- * @property-read boolean     $is_not_paid
- * @property-read boolean     $is_picked
- * @property-read boolean     $isPaid
- * @property-read boolean     $isNotPaid
- *
+ * @property int $id
+ * @property string|null $custom_unique_reference_id
+ * @property string $order_number
+ * @property string $status_code
+ * @property string $label_template
+ * @property string $shipping_method_code
+ * @property string $shipping_method_name
+ * @property bool $is_editing
+ * @property bool $is_active
+ * @property bool $is_on_hold
+ * @property bool $is_fully_paid
+ * @property int|null $packer_user_id
+ * @property int|null $shipping_address_id
+ * @property int|null $billing_address_id
+ * @property int $product_line_count
+ * @property float $total
+ * @property float $total_products
+ * @property float $total_shipping
+ * @property float $total_discounts
+ * @property float $total_order
+ * @property float $total_paid
+ * @property float $total_outstanding
+ * @property float $total_quantity_ordered
+ * @property float $total_quantity_to_ship
+ * @property Carbon|null $picked_at
+ * @property Carbon|null $packed_at
+ * @property Carbon|null $order_placed_at
+ * @property Carbon|null $order_closed_at
+ * @property Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read bool     $is_packed
+ * @property-read bool     $is_paid
+ * @property-read bool     $is_not_paid
+ * @property-read bool     $is_picked
+ * @property-read bool     $isPaid
+ * @property-read bool     $isNotPaid
  * @property-read int $age_in_days
- *
  * @property OrderStatus $orderStatus
  * @property OrderStatus $order_status
  * @property-read OrderAddress|null          $shippingAddress
  * @property-read OrderAddress|null          $billingAddress
  * @property-read OrderProductTotal          $orderProductsTotals
  * @property-read User|null                  $packer
- *
  * @property-read Collection|Tag[]           $tags
  * @property-read Collection|OrderComment[]  $orderComments
  * @property-read Collection|OrderProduct[]  $orderProducts
@@ -113,7 +104,6 @@ use Spatie\Tags\Tag;
  * @method static Builder|Order whereTotalPaid($value)
  * @method static Builder|Order whereTotalQuantityOrdered($value)
  * @method static Builder|Order whereUpdatedAt($value)
- *
  * @method static Builder|Order hasTags($tags)
  * @method static Builder|Order whereIsActive()
  * @method static Builder|Order packedBetween($fromDateTime, $toDateTime)
@@ -129,9 +119,8 @@ use Spatie\Tags\Tag;
 class Order extends BaseModel
 {
     use HasFactory;
-
-    use LogsActivityTrait;
     use HasTagsTrait;
+    use LogsActivityTrait;
 
     protected $fillable = [
         'order_number',
@@ -169,20 +158,20 @@ class Order extends BaseModel
     ];
 
     protected $casts = [
-        'is_active'         => 'boolean',
-        'is_on_hold'        => 'boolean',
-        'is_editing'        => 'boolean',
-        'is_fully_paid'     => 'boolean',
-        'total_products'    => 'float',
-        'total_shipping'    => 'float',
-        'total_paid'        => 'float',
-        'total_discounts'   => 'float',
-        'total_order'       => 'float',
+        'is_active' => 'boolean',
+        'is_on_hold' => 'boolean',
+        'is_editing' => 'boolean',
+        'is_fully_paid' => 'boolean',
+        'total_products' => 'float',
+        'total_shipping' => 'float',
+        'total_paid' => 'float',
+        'total_discounts' => 'float',
+        'total_order' => 'float',
         'total_outstanding' => 'float',
-        'order_placed_at'   => 'datetime',
-        'picked_at'         => 'datetime',
-        'packed_at'         => 'datetime',
-        'order_closed_at'   => 'datetime',
+        'order_placed_at' => 'datetime',
+        'picked_at' => 'datetime',
+        'packed_at' => 'datetime',
+        'order_closed_at' => 'datetime',
     ];
 
     // we use attributes to set default values
@@ -190,9 +179,9 @@ class Order extends BaseModel
     // as this is then not populated
     // correctly to events
     protected $attributes = [
-        'status_code'   => 'new',
-        'is_active'     => 1,
-        'is_editing'    => 0,
+        'status_code' => 'new',
+        'is_active' => 1,
+        'is_editing' => 0,
     ];
 
     protected $appends = [
@@ -221,9 +210,9 @@ class Order extends BaseModel
         // successful update means order is not currently updating by any other action
         // when editing finished, you should unlock
         $recordsUpdated = Order::where([
-                'id' => $this->getKey(),
-                'is_editing' => false
-            ])
+            'id' => $this->getKey(),
+            'is_editing' => false,
+        ])
             ->update(['is_editing' => true]);
 
         if ($recordsUpdated !== 1) {
@@ -231,6 +220,7 @@ class Order extends BaseModel
         }
 
         $this->is_editing = true;
+
         return true;
     }
 
@@ -243,23 +233,15 @@ class Order extends BaseModel
         }
 
         $this->is_editing = false;
+
         return true;
     }
 
-    /**
-     * @return OrderStatus
-     */
     public function getPreviousOrderStatus(): OrderStatus
     {
         return OrderStatus::whereCode($this->getOriginal('status_code'))->first();
     }
 
-    /**
-     * @param $query
-     * @param $text
-     *
-     * @return mixed
-     */
     public function scopeWhereHasText($query, $text): mixed
     {
         return $query->where('order_number', 'like', '%'.$text.'%')
@@ -269,21 +251,11 @@ class Order extends BaseModel
             });
     }
 
-    /**
-     * @return int
-     */
     public function getAgeInDaysAttribute(): int
     {
         return Carbon::now()->ceilDay()->diffInDays($this->order_placed_at);
     }
 
-    /**
-     * @param mixed   $query
-     * @param string  $fromDateTime
-     * @param string  $toDateTime
-     *
-     * @return mixed
-     */
     public function scopePackedBetween(mixed $query, string $fromDateTime, string $toDateTime): mixed
     {
         try {
@@ -301,13 +273,6 @@ class Order extends BaseModel
         return $query->whereBetween('packed_at', $dates);
     }
 
-    /**
-     * @param mixed   $query
-     * @param string  $fromDateTime
-     * @param string  $toDateTime
-     *
-     * @return mixed
-     */
     public function scopeCreatedBetween(mixed $query, string $fromDateTime, string $toDateTime): mixed
     {
         try {
@@ -325,12 +290,6 @@ class Order extends BaseModel
         return $query->whereBetween('created_at', $dates);
     }
 
-    /**
-     * @param mixed $query
-     * @param int $age
-     *
-     * @return mixed
-     */
     public function scopeWhereAgeInDays(mixed $query, int $age): mixed
     {
         return $query->whereBetween('order_placed_at', [
@@ -339,11 +298,6 @@ class Order extends BaseModel
         ]);
     }
 
-    /**
-     * @param mixed $query
-     * @param int $warehouse_id
-     * @return mixed
-     */
     public function scopeAddInventorySource(mixed $query, int $warehouse_id): mixed
     {
         $source_inventory = OrderProduct::query()
@@ -364,41 +318,21 @@ class Order extends BaseModel
         });
     }
 
-    /**
-     * @param string $expected
-     *
-     * @return bool
-     */
     public function isNotStatusCode(string $expected): bool
     {
-        return !$this->isStatusCode($expected);
+        return ! $this->isStatusCode($expected);
     }
 
-    /**
-     * @param string $expected
-     *
-     * @return bool
-     */
     public function isStatusCode(string $expected): bool
     {
         return $this->getAttribute('status_code') === $expected;
     }
 
-    /**
-     * @param array $statusCodes
-     *
-     * @return bool
-     */
     public function isStatusCodeNotIn(array $statusCodes): bool
     {
-        return !$this->isStatusCodeIn($statusCodes);
+        return ! $this->isStatusCodeIn($statusCodes);
     }
 
-    /**
-     * @param array $statusCodes
-     *
-     * @return bool
-     */
     public function isStatusCodeIn(array $statusCodes): bool
     {
         $statusCode = $this->getAttribute('status_code');
@@ -406,12 +340,6 @@ class Order extends BaseModel
         return array_search($statusCode, $statusCodes) > -1;
     }
 
-    /**
-     * @param mixed $query
-     * @param bool $expected
-     *
-     * @return mixed
-     */
     public function scopeHasPacker(mixed $query, bool $expected): mixed
     {
         if ($expected === false) {
@@ -421,12 +349,6 @@ class Order extends BaseModel
         return $query->whereNotNull('packer_user_id');
     }
 
-    /**
-     * @param mixed $query
-     * @param bool $expected
-     *
-     * @return mixed
-     */
     public function scopeIsPicked(mixed $query, bool $expected): mixed
     {
         if ($expected === true) {
@@ -436,12 +358,6 @@ class Order extends BaseModel
         return $query->whereIsNotPicked();
     }
 
-    /**
-     * @param mixed $query
-     * @param bool $is_packing
-     *
-     * @return mixed
-     */
     public function scopeIsPacking(mixed $query, bool $is_packing): mixed
     {
         if ($is_packing) {
@@ -451,21 +367,11 @@ class Order extends BaseModel
         return $query->whereNull('packer_user_id');
     }
 
-    /**
-     * @param mixed $query
-     *
-     * @return mixed
-     */
     public function scopeWhereIsPicked(mixed $query): mixed
     {
         return $query->whereNotNull('picked_at');
     }
 
-    /**
-     * @param mixed $query
-     *
-     * @return mixed
-     */
     public function scopeWhereIsNotPicked(mixed $query): mixed
     {
         return $query->whereNull('picked_at');
@@ -496,82 +402,51 @@ class Order extends BaseModel
         $this->picked_at = $value ? now() : null;
     }
 
-
-    /**
-     * @return BelongsTo
-     */
     public function orderStatus(): BelongsTo
     {
         return $this->belongsTo(OrderStatus::class, 'status_code', 'code');
     }
 
-    /**
-     * @return HasMany
-     */
     public function orderProducts(): HasMany
     {
         return $this->hasMany(OrderProduct::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function packlist(): HasMany
     {
         return $this->hasMany(Packlist::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function shippingAddress(): BelongsTo
     {
         return $this->belongsTo(OrderAddress::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function billingAddress(): BelongsTo
     {
         return $this->belongsTo(OrderAddress::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function packer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'packer_user_id');
     }
 
-    /**
-     * @return HasOne
-     */
     public function orderProductsTotals(): HasOne
     {
         return $this->hasOne(OrderProductTotal::class, 'order_id', 'id');
     }
 
-    /**
-     * @return HasMany
-     */
     public function orderShipments(): HasMany
     {
         return $this->hasMany(ShippingLabel::class)->latest();
     }
 
-    /**
-     * @return HasMany|OrderComment
-     */
     public function orderComments(): HasMany|OrderComment
     {
         return $this->hasMany(OrderComment::class)->orderByDesc('id');
     }
 
-    /**
-     * @return QueryBuilder
-     */
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(Order::class)

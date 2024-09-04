@@ -22,7 +22,7 @@ class UpdateTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->putJson(route('api.orders.update', [$order]), [
-            'status_code'    => 'test_status_code',
+            'status_code' => 'test_status_code',
             'packer_user_id' => $user->getKey(),
         ]);
 

@@ -19,7 +19,7 @@ class QuantityBeforeCheckJob extends UniqueJob
     public function handle()
     {
         do {
-            $recordsUpdated =  DB::update('
+            $recordsUpdated = DB::update('
                 UPDATE inventory_movements
 
                 INNER JOIN inventory_movements as previous_movement
@@ -35,10 +35,9 @@ class QuantityBeforeCheckJob extends UniqueJob
                 WHERE inventory_movements.occurred_at BETWEEN ? AND ?;
             ', [$this->date->toDateTimeLocalString(), $this->date->addDay()->toDateTimeLocalString()]);
 
-
             Log::info('Job processing', [
                 'job' => self::class,
-                'recordsUpdated' => $recordsUpdated
+                'recordsUpdated' => $recordsUpdated,
             ]);
 
             usleep(100000); // 0.1 seconds

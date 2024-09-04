@@ -26,6 +26,7 @@ class FetchSimpleProductsInfoJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     *
      * @throws GuzzleException
      * @throws RequestException
      */
@@ -55,7 +56,7 @@ class FetchSimpleProductsInfoJob implements ShouldQueue
         if ($response->isNotSuccess()) {
             throw new RequestException(implode(' ', [
                 $response->getReturnCode(),
-                $response->getReturnMessage()
+                $response->getReturnMessage(),
             ]));
         }
 
@@ -67,7 +68,7 @@ class FetchSimpleProductsInfoJob implements ShouldQueue
                     $transformedProduct = Api2cartService::transformProduct($product, $conn);
                     Log::debug('API2CART Saving simple product data', [
                         'original' => $product,
-                        'transformed' => $transformedProduct
+                        'transformed' => $transformedProduct,
                     ]);
                     $model = Api2cartSimpleProduct::query()
                         ->where([
@@ -78,8 +79,8 @@ class FetchSimpleProductsInfoJob implements ShouldQueue
                     Log::debug('model', $model->toArray());
 
                     $model->update([
-                            'last_fetched_data' => $transformedProduct
-                        ]);
+                        'last_fetched_data' => $transformedProduct,
+                    ]);
                 } catch (Exception $e) {
                     report($e);
                 }

@@ -3,9 +3,7 @@
 namespace App\Widgets;
 
 use App\Models\Order;
-use App\Models\OrderStatus;
 use Arrilot\Widgets\AbstractWidget;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class OrdersOnHoldByStatusWidget extends AbstractWidget
@@ -26,7 +24,7 @@ class OrdersOnHoldByStatusWidget extends AbstractWidget
         $order_status_counts = Order::query()
             ->select([
                 'orders.status_code',
-                DB::raw('count(*) as order_count')
+                DB::raw('count(*) as order_count'),
             ])
             ->where(['is_active' => true])
             ->where(['is_on_hold' => true])

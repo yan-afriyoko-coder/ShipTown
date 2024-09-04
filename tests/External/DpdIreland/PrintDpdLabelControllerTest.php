@@ -23,13 +23,13 @@ class PrintDpdLabelControllerTest extends TestCase
     public function storeReturnsOkResponse()
     {
         $address = OrderAddress::factory()->create([
-            'company'      => 'TEST COMPANY',
-            'address1'     => 'ATHLONE BUISNESS PARK',
-            'address2'     => 'DUBLIN ROAD',
-            'phone'        => '12345678901',
-            'city'         => 'Dublin',
-            'state_name'   => 'Co. Dublin',
-            'postcode'     => 'N37KD81',
+            'company' => 'TEST COMPANY',
+            'address1' => 'ATHLONE BUISNESS PARK',
+            'address2' => 'DUBLIN ROAD',
+            'phone' => '12345678901',
+            'city' => 'Dublin',
+            'state_name' => 'Co. Dublin',
+            'postcode' => 'N37KD81',
             'country_code' => 'IRL',
             'country_name' => 'Ireland',
         ]);
@@ -61,9 +61,9 @@ class PrintDpdLabelControllerTest extends TestCase
                         'RecordID',
                         'TrackingNumber',
                         'LabelImage',
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ]);
     }
 }

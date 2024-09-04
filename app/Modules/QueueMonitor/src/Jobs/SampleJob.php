@@ -15,7 +15,6 @@ class SampleJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-
     public function handle(): bool
     {
         //

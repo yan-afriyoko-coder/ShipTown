@@ -15,7 +15,7 @@ class BasicModuleTest extends TestCase
         /** @var Order $order */
         $order = Order::factory()->create();
 
-        $shippingService = new AddressLabelShippingService();
+        $shippingService = new AddressLabelShippingService;
         $shippingLabelCollection = $shippingService->ship($order->getKey());
 
         $this->assertCount(1, $shippingLabelCollection);

@@ -19,9 +19,9 @@ class BasicModuleTest extends TestCase
 
         /** @var Inventory $inventory */
         $inventory = Inventory::query()->where([
-                'product_id' => $product->getKey(),
-                'warehouse_id' => $warehouse->getKey(),
-            ])
+            'product_id' => $product->getKey(),
+            'warehouse_id' => $warehouse->getKey(),
+        ])
             ->first();
 
         ray($inventory->toArray());
@@ -61,9 +61,9 @@ class BasicModuleTest extends TestCase
 
         /** @var Inventory $inventory */
         $inventory = Inventory::query()->where([
-                'product_id' => $product->getKey(),
-                'warehouse_id' => $warehouse->getKey(),
-            ])
+            'product_id' => $product->getKey(),
+            'warehouse_id' => $warehouse->getKey(),
+        ])
             ->first();
 
         $quantityBefore = $inventory->quantity;
@@ -99,9 +99,9 @@ class BasicModuleTest extends TestCase
 
         /** @var Inventory $inventory */
         $inventory = Inventory::query()->where([
-                'product_id' => $product->getKey(),
-                'warehouse_id' => $sourceWarehouse->getKey(),
-            ])
+            'product_id' => $product->getKey(),
+            'warehouse_id' => $sourceWarehouse->getKey(),
+        ])
             ->first();
 
         $quantityBefore = $inventory->quantity;

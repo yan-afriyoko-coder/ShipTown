@@ -13,12 +13,12 @@ use Spatie\QueryBuilder\QueryBuilder;
 /**
  * App\Models\OrderStatus.
  *
- * @property int         $id
- * @property string      $code
- * @property string      $name
- * @property bool        $order_active
- * @property bool        $order_on_hold
- * @property bool        $sync_ecommerce
+ * @property int $id
+ * @property string $code
+ * @property string $name
+ * @property bool $order_active
+ * @property bool $order_on_hold
+ * @property bool $sync_ecommerce
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -27,7 +27,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 class OrderStatus extends BaseModel
 {
     use HasFactory;
-
     use SoftDeletes;
 
     protected $table = 'orders_statuses';
@@ -42,27 +41,24 @@ class OrderStatus extends BaseModel
     ];
 
     protected $casts = [
-        'order_active'      => 'boolean',
-        'order_on_hold'     => 'boolean',
-        'hidden'            => 'boolean',
-        'sync_ecommerce'    => 'boolean',
+        'order_active' => 'boolean',
+        'order_on_hold' => 'boolean',
+        'hidden' => 'boolean',
+        'sync_ecommerce' => 'boolean',
     ];
 
     protected $attributes = [
-        'order_active'   => true,
-        'order_on_hold'  => false,
-        'hidden'         => false,
+        'order_active' => true,
+        'order_on_hold' => false,
+        'hidden' => false,
         'sync_ecommerce' => false,
     ];
 
-    /**
-     * @return QueryBuilder
-     */
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(OrderStatus::class)
             ->allowedFilters([
-                AllowedFilter::exact('hidden')
+                AllowedFilter::exact('hidden'),
             ])
             ->allowedIncludes([])
             ->allowedSorts([

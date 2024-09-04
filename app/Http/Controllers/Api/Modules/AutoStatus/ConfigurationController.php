@@ -7,7 +7,6 @@ use App\Http\Requests\AutoStatusConfigurationIndexRequest;
 use App\Http\Requests\AutoStatusConfigurationStoreRequest;
 use App\Http\Resources\AutoStatusConfigurationResource;
 use App\Models\AutoStatusPickingConfiguration;
-use Illuminate\Http\Request;
 
 class ConfigurationController extends Controller
 {

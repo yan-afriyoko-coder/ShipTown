@@ -30,11 +30,11 @@ class UpdateTest extends TestCase
 
         $response = $this->actingAs($user, 'api')
             ->json('put', route('api.modules.magento-api.connections.update', $connection), [
-                'base_url'                          => 'https://magento2.test',
-                'magento_store_id'                  => 123456,
-                'tag'                               => 'some-tag',
-                'pricing_source_warehouse_id'       => $warehouse->id,
-                'access_token_encrypted'            => 'some-token',
+                'base_url' => 'https://magento2.test',
+                'magento_store_id' => 123456,
+                'tag' => 'some-tag',
+                'pricing_source_warehouse_id' => $warehouse->id,
+                'access_token_encrypted' => 'some-token',
             ]);
 
         $response->assertSuccessful();

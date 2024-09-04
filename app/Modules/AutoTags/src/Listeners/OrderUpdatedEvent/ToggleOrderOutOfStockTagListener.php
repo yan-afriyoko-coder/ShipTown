@@ -10,7 +10,6 @@ class ToggleOrderOutOfStockTagListener
     /**
      * Handle the event.
      *
-     * @param OrderUpdatedEvent $event
      *
      * @return void
      */

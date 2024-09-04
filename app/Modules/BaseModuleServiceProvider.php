@@ -13,35 +13,24 @@ use Illuminate\Support\Facades\Log;
  */
 abstract class BaseModuleServiceProvider extends EventServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = '';
 
-    /**
-     * @var string
-     */
     public static string $module_description = '';
 
-    /**
-     * @var string
-     */
     public static string $settings_link = '';
 
     /**
      * Should we automatically enable it
      * When module first registered.
-     *
-     * @var bool
      */
     public static bool $autoEnable = false;
 
     /**
      * Register any events for your application.
      *
-     * @throws Exception
-     *
      * @return void
+     *
+     * @throws Exception
      */
     public function boot()
     {
@@ -80,9 +69,6 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
         return true;
     }
 
-    /**
-     * @return bool
-     */
     public static function isEnabled(): bool
     {
         try {
@@ -95,6 +81,7 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
             return $module->enabled;
         } catch (Exception $exception) {
             report($exception);
+
             return false;
         }
     }
@@ -104,9 +91,6 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
         return ! self::isEnabled();
     }
 
-    /**
-     * @return bool
-     */
     public static function enableModule(): bool
     {
         $module = Module::firstOrCreate(['service_provider_class' => get_called_class()], ['enabled' => false]);
@@ -130,9 +114,6 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
         return true;
     }
 
-    /**
-     * @return bool
-     */
     public static function uninstallModule(): bool
     {
         try {
@@ -144,25 +125,23 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
             return true;
         } catch (Exception $exception) {
             report($exception);
+
             return false;
         }
     }
 
-    /**
-     * @return bool
-     */
     public static function installModule(): bool
     {
         try {
             /** @var BaseModuleServiceProvider $moduleServiceProvider */
             $moduleServiceProvider = get_called_class();
 
-            if (!$moduleServiceProvider::installing()) {
+            if (! $moduleServiceProvider::installing()) {
                 return false;
             }
 
             Module::query()->firstOrCreate([
-                'service_provider_class' => $moduleServiceProvider
+                'service_provider_class' => $moduleServiceProvider,
             ], [
                 'enabled' => $moduleServiceProvider::$autoEnable,
             ]);
@@ -170,6 +149,7 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
             return true;
         } catch (Exception $exception) {
             Log::emergency($exception);
+
             return false;
         }
     }
@@ -177,9 +157,9 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
     public static function disableModule(): void
     {
         $module = Module::query()->firstOrCreate([
-            'service_provider_class' => get_called_class()
+            'service_provider_class' => get_called_class(),
         ], [
-            'enabled' => false
+            'enabled' => false,
         ]);
 
         if ($module->enabled) {

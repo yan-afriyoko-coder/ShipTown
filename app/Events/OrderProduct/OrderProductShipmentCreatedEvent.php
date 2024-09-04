@@ -7,16 +7,10 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-/**
- *
- */
 class OrderProductShipmentCreatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var OrderProductShipment
-     */
     public OrderProductShipment $orderProductShipment;
 
     /**

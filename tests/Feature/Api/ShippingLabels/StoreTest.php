@@ -27,7 +27,7 @@ class StoreTest extends TestCase
 
         ShippingService::factory()->create([
             'code' => 'test_service',
-            'service_provider_class' => TestShipmentService::class
+            'service_provider_class' => TestShipmentService::class,
         ]);
 
         $response = $this->actingAs($user, 'api')
@@ -40,7 +40,7 @@ class StoreTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'id'
+                    'id',
                 ],
             ],
         ]);

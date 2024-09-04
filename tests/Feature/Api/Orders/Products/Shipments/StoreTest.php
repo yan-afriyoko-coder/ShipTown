@@ -26,8 +26,8 @@ class StoreTest extends TestCase
         $orderProduct = OrderProduct::factory()->create(['order_id' => $order->getKey()]);
 
         $response = $this->postJson('/api/orders/products/shipments', [
-            'product_id'       => $orderProduct->product_id,
-            'order_id'         => $orderProduct->order_id,
+            'product_id' => $orderProduct->product_id,
+            'order_id' => $orderProduct->order_id,
             'order_product_id' => $orderProduct->getKey(),
             'quantity_shipped' => $orderProduct->quantity_to_ship,
         ]);

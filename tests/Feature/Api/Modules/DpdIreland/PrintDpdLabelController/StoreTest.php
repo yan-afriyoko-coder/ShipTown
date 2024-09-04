@@ -20,6 +20,6 @@ class StoreTest extends TestCase
     /** @test */
     public function test_store_call_returns_ok()
     {
-        $this->assertTrue(true,'Tested in External/DpdIreland/PrintDpdLabelControllerTest.php');
+        $this->assertTrue(true, 'Tested in External/DpdIreland/PrintDpdLabelControllerTest.php');
     }
 }

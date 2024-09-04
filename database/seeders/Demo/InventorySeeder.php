@@ -25,11 +25,11 @@ class InventorySeeder extends Seeder
             ->get()
             ->map(function (Inventory $inventory) {
                 $restock_level = fake()->randomElement([1, 6, 6, 6, 12, 12, 12, 12, 24, 24, 24, 36, 72]);
-                $random_location = Str::upper(fake()->randomLetter . fake()->randomNumber(2));
+                $random_location = Str::upper(fake()->randomLetter.fake()->randomNumber(2));
                 $inventory->updateQuietly([
-                    'restock_level'     => $restock_level,
-                    'reorder_point'     => round($restock_level / 3),
-                    'shelve_location'   => $random_location
+                    'restock_level' => $restock_level,
+                    'reorder_point' => round($restock_level / 3),
+                    'shelve_location' => $random_location,
                 ]);
 
                 return [
@@ -50,12 +50,12 @@ class InventorySeeder extends Seeder
             });
 
         InventoryMovement::query()->insert($movements->toArray());
-//
-//        $product_id = Product::findBySKU('45')->getKey();
-//
-//        Inventory::query()
-//            ->where(['product_id' => $product_id])
-//            ->update(['shelve_location' => 'A1']);
+        //
+        //        $product_id = Product::findBySKU('45')->getKey();
+        //
+        //        Inventory::query()
+        //            ->where(['product_id' => $product_id])
+        //            ->update(['shelve_location' => 'A1']);
 
         SequenceNumberJob::dispatch();
     }

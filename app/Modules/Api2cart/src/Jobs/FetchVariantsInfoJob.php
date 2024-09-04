@@ -23,6 +23,7 @@ class FetchVariantsInfoJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     *
      * @throws GuzzleException
      */
     public function handle()
@@ -33,8 +34,8 @@ class FetchVariantsInfoJob implements ShouldQueue
                 Api2cartVariant::query()
                     ->where(['api2cart_connection_id' => $conn->id])
                     ->whereRaw('(last_fetched_at IS NULL OR last_fetched_data IS NULL)')
-                    ->chunkById(5, function ($chunk) use ($conn) {
-                        $chunk->each(function (Api2cartVariant $variant) use ($conn) {
+                    ->chunkById(5, function ($chunk) {
+                        $chunk->each(function (Api2cartVariant $variant) {
                             $product_now = Api2cartService::getVariantInfoByID(
                                 $variant->api2cartConnection,
                                 $variant->api2cart_product_id

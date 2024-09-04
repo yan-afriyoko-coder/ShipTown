@@ -18,11 +18,11 @@ class StoreTest extends TestCase
         $warehouse = Warehouse::firstOrCreate(['code' => '999'], ['name' => '999']);
 
         $response = $this->actingAs($user, 'api')->json('post', route('api.modules.magento-api.connections.store'), [
-            'base_url'                          => 'https://magento2.test',
-            'magento_store_id'                  => 123456,
-            'tag'                               => 'some-tag',
-            'pricing_source_warehouse_id'       => $warehouse->id,
-            'api_access_token'            => 'some-token',
+            'base_url' => 'https://magento2.test',
+            'magento_store_id' => 123456,
+            'tag' => 'some-tag',
+            'pricing_source_warehouse_id' => $warehouse->id,
+            'api_access_token' => 'some-token',
         ]);
 
         $response->assertSuccessful();

@@ -11,7 +11,6 @@ class ProductPriceUpdatedEventListener
     /**
      * Handle the event.
      *
-     * @param ProductPriceUpdatedEvent $event
      *
      * @return void
      */

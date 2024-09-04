@@ -38,9 +38,9 @@ class UserPickCounts extends AbstractWidget
         }
 
         return view('widgets.user_pick_counts', [
-            'config'         => $this->config,
+            'config' => $this->config,
             'count_per_user' => $count_per_user,
-            'total_count'    => $total_count,
+            'total_count' => $total_count,
         ]);
     }
 }

@@ -12,24 +12,19 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
- * @property integer id
+ * @property int id
  * @property string name
  * @property string job_class
  * @property array configuration
- *
  * @property float quantity_at_full_price
  * @property float quantity_at_discounted_price
  * @property float quantity_required
  * @property float total_quantity_per_discount
- *
- * @property boolean is_multibuy_discount
- *
+ * @property bool is_multibuy_discount
  * @property string deleted_at
  * @property string updated_at
  * @property string created_at
- *
  * @property QuantityDiscountsProduct[] products
- *
  */
 class QuantityDiscount extends Model
 {
@@ -73,7 +68,8 @@ class QuantityDiscount extends Model
     public function getIsMultibuyDiscountAttribute(): bool
     {
         $ranges = data_get($this->configuration, 'multibuy_discount_ranges', []);
-        return !!count($ranges);
+
+        return (bool) count($ranges);
     }
 
     public static function getSpatieQueryBuilder(): QueryBuilder
@@ -84,31 +80,19 @@ class QuantityDiscount extends Model
             ->allowedIncludes(['products']);
     }
 
-    /**
-     * @param mixed $query
-     * @param string $text
-     *
-     * @return mixed
-     */
     public function scopeWhereHasText(mixed $query, string $text): mixed
     {
         return $query->where('name', $text)
             ->orWhere('type', $text)
-            ->orWhere('name', 'like', '%' . $text . '%')
-            ->orWhere('job_class', 'like', '%' . $text . '%');
+            ->orWhere('name', 'like', '%'.$text.'%')
+            ->orWhere('job_class', 'like', '%'.$text.'%');
     }
 
-    /**
-     * @return HasMany
-     */
     public function products(): HasMany
     {
         return $this->hasMany(QuantityDiscountsProduct::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function dataCollectionRecords(): HasMany
     {
         return $this->hasMany(DataCollectionRecord::class, 'price_source_id', 'id');

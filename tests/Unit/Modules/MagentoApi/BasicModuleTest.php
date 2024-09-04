@@ -18,6 +18,7 @@ class BasicModuleTest extends TestCase
 
         EventServiceProviderBase::enableModule();
     }
+
     /** @test */
     public function test_module_basic_functionality()
     {

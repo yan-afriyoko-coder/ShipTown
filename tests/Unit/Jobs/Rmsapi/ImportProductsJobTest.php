@@ -10,9 +10,9 @@ use Tests\TestCase;
 class ImportProductsJobTest extends TestCase
 {
     /**
-     * @throws \Exception
-     *
      * @return void
+     *
+     * @throws \Exception
      */
     public function testBatchSaving()
     {

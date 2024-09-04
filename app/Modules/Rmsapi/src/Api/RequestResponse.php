@@ -10,6 +10,7 @@ class RequestResponse
      * @var ResponseInterface
      */
     private $response;
+
     /**
      * @var string
      */
@@ -17,8 +18,6 @@ class RequestResponse
 
     /**
      * Api2CartResponse constructor.
-     *
-     * @param ResponseInterface $response
      */
     public function __construct(ResponseInterface $response)
     {
@@ -58,7 +57,7 @@ class RequestResponse
      */
     public function isNotSuccess()
     {
-        return !$this->isSuccess();
+        return ! $this->isSuccess();
     }
 
     /**

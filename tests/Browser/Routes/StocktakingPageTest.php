@@ -46,6 +46,7 @@ class StocktakingPageTest extends DuskTestCase
                 ->assertFocused('@barcode-input-field');
         });
     }
+
     /**
      * @throws Throwable
      */

@@ -19,12 +19,12 @@ class NavigationMenu extends Model
     {
         return QueryBuilder::for(NavigationMenu::class)
             ->allowedFilters([
-                'group'
+                'group',
             ])
             ->allowedSorts([
                 'id',
                 'group',
-                'name'
+                'name',
             ]);
     }
 }

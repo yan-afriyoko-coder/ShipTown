@@ -15,8 +15,6 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 class InventoryController extends Controller
 {
     /**
-     * @param Request $request
-     *
      * @return mixed
      */
     public function index(Request $request)
@@ -26,11 +24,6 @@ class InventoryController extends Controller
         return InventoryResource::collection($this->getPaginatedResult($query));
     }
 
-    /**
-     * @param StoreInventoryRequest $request
-     *
-     * @return AnonymousResourceCollection
-     */
     public function store(StoreInventoryRequest $request): AnonymousResourceCollection
     {
         /** @var Inventory $inventory */

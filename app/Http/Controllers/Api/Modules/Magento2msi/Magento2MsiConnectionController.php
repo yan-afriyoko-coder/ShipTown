@@ -25,7 +25,7 @@ class Magento2MsiConnectionController extends Controller
     {
         $connections = Magento2msiConnection::getSpatieQueryBuilder()
             ->allowedSorts([
-                'tag.name.en'
+                'tag.name.en',
             ])
             ->get()
             ->collect();
@@ -34,7 +34,7 @@ class Magento2MsiConnectionController extends Controller
             $sourceCodes = MagentoApi::getInventorySources($connection);
 
             return array_merge($connection->toArray(), [
-                'inventory_sources' => data_get($sourceCodes, 'items', [])
+                'inventory_sources' => data_get($sourceCodes, 'items', []),
             ]);
         });
 

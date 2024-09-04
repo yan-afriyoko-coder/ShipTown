@@ -49,8 +49,8 @@ class StoreTest extends TestCase
                     'created_at',
                     'id',
                     'quantity_available',
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 
@@ -76,8 +76,8 @@ class StoreTest extends TestCase
         $inventory = Inventory::first();
 
         $update = [
-            'id'                => $inventory->getKey(),
-            'quantity'          => rand(100, 200),
+            'id' => $inventory->getKey(),
+            'quantity' => rand(100, 200),
             'quantity_reserved' => rand(10, 50),
         ];
 

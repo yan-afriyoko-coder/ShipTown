@@ -24,13 +24,13 @@ class StoreOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'order_number'        => 'required|string',
-            'label_template'      => 'sometimes|exists:shipping_services,code',
-            'products'            => 'required|array',
-            'products.*.sku'      => 'required|string',
-            'products.*.name'     => 'required|string',
+            'order_number' => 'required|string',
+            'label_template' => 'sometimes|exists:shipping_services,code',
+            'products' => 'required|array',
+            'products.*.sku' => 'required|string',
+            'products.*.name' => 'required|string',
             'products.*.quantity' => 'required|numeric',
-            'products.*.price'    => 'required|numeric',
+            'products.*.price' => 'required|numeric',
         ];
     }
 }

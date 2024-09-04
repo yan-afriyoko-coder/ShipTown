@@ -18,8 +18,6 @@ class DataCollectionCommentController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return LengthAwarePaginator
      */
     public function index(): LengthAwarePaginator
     {
@@ -28,11 +26,6 @@ class DataCollectionCommentController extends Controller
         return $this->getPaginatedResult($query);
     }
 
-    /**
-     * @param DataCollectionCommentStoreRequest $request
-     *
-     * @return AnonymousResourceCollection
-     */
     public function store(DataCollectionCommentStoreRequest $request): AnonymousResourceCollection
     {
         $shipment = new DataCollectionComment($request->validated());

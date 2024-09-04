@@ -5,14 +5,8 @@ namespace Tests\Feature\QuickConnect\Magento;
 use App\User;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
-    /**
-     * @var string
-     */
     protected string $uri = '/quick-connect/magento';
 
     protected mixed $user;

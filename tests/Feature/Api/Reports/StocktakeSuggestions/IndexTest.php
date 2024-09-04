@@ -24,7 +24,7 @@ class IndexTest extends TestCase
                 [
                     'inventory_id' => Inventory::first()->getKey(),
                     'points' => 1,
-                    'reason' => 'test' . $index,
+                    'reason' => 'test'.$index,
                 ],
             );
         }

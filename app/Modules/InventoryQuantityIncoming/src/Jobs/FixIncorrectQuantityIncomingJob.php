@@ -7,9 +7,6 @@ use App\Models\DataCollectionTransferIn;
 use App\Models\Inventory;
 use Illuminate\Support\Facades\DB;
 
-/**
- *
- */
 class FixIncorrectQuantityIncomingJob extends UniqueJob
 {
     public function handle()
@@ -20,7 +17,7 @@ class FixIncorrectQuantityIncomingJob extends UniqueJob
 
     private function zeroQuantityIncomingIfNotComing(): void
     {
-        $inventoryRecords = DB::select("
+        $inventoryRecords = DB::select('
             SELECT inventory.id as id,
                     MAX(inventory.product_id) as product_id,
                     MAX(inventory.warehouse_id) as warehouse_id,
@@ -43,7 +40,7 @@ class FixIncorrectQuantityIncomingJob extends UniqueJob
            GROUP BY inventory.id
 
            HAVING actual_quantity_incoming != expected_quantity_incoming
-        ", [DataCollectionTransferIn::class]);
+        ', [DataCollectionTransferIn::class]);
 
         collect($inventoryRecords)
             ->each(function ($incorrectRecord) {
@@ -59,7 +56,7 @@ class FixIncorrectQuantityIncomingJob extends UniqueJob
 
     private function fixIncorrectQuantityIncoming(): void
     {
-        $inventoryRecords = DB::select("
+        $inventoryRecords = DB::select('
             SELECT inventory.id as id,
                     MAX(inventory.product_id) as product_id,
                     MAX(inventory.warehouse_id) as warehouse_id,
@@ -82,7 +79,7 @@ class FixIncorrectQuantityIncomingJob extends UniqueJob
            GROUP BY inventory.id
 
            HAVING actual_quantity_incoming <> expected_quantity_incoming
-        ", [DataCollectionTransferIn::class]);
+        ', [DataCollectionTransferIn::class]);
 
         collect($inventoryRecords)
             ->each(function ($incorrectRecord) {

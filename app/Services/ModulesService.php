@@ -12,8 +12,6 @@ class ModulesService
 
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public static function updateModulesTable(): void
     {
@@ -21,7 +19,7 @@ class ModulesService
 
         collect(self::$modules)->each(function (BaseModuleServiceProvider|string $module_class) {
             Module::firstOrCreate([
-                'service_provider_class' => $module_class
+                'service_provider_class' => $module_class,
             ], [
                 'enabled' => $module_class::$autoEnable,
             ]);

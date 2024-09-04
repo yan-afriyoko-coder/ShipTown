@@ -161,5 +161,5 @@ return [
             'class' => \App\Modules\Slack\src\Automations\SendSlackNotificationAction::class,
             'description' => 'Send Slack notification',
         ],
-    ]
+    ],
 ];

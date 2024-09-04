@@ -49,4 +49,3 @@ class DashboardPageTest extends DuskTestCase
         });
     }
 }
-

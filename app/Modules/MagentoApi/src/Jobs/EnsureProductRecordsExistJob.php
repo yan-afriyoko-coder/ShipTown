@@ -16,7 +16,7 @@ class EnsureProductRecordsExistJob extends UniqueJob
     {
         $tag = Tag::findOrCreate(['name' => 'Available Online']);
 
-        DB::statement("
+        DB::statement('
             INSERT INTO modules_magento2api_products (connection_id, product_id, product_price_id, created_at, updated_at)
             SELECT
                 modules_magento2api_connections.id,
@@ -32,6 +32,6 @@ class EnsureProductRecordsExistJob extends UniqueJob
             AND taggables.taggable_id NOT IN (
                 SELECT modules_magento2api_products.product_id FROM modules_magento2api_products
             )
-        ", [$tag->first()->getKey(), Product::class]);
+        ', [$tag->first()->getKey(), Product::class]);
     }
 }

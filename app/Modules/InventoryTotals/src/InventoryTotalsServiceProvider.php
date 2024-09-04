@@ -6,7 +6,6 @@ use App\Events\EveryDayEvent;
 use App\Events\EveryMinuteEvent;
 use App\Events\EveryTenMinutesEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
-use App\Events\Inventory\RecalculateInventoryRequestEvent;
 use App\Events\Product\ProductCreatedEvent;
 use App\Events\Warehouse\WarehouseTagAttachedEvent;
 use App\Models\ManualRequestJob;
@@ -17,19 +16,10 @@ use App\Modules\BaseModuleServiceProvider;
  */
 class InventoryTotalsServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = '.CORE - Inventory Totals';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'Tracks inventory totals for each product';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = true;
 
     /**

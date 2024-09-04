@@ -14,7 +14,7 @@ return new class extends Migration
                 User::query()
                     ->whereIn('id', $users->pluck('id'))
                     ->withTrashed()
-                    ->update(['warehouse_code' =>  DB::raw('(SELECT code FROM warehouses WHERE warehouses.id = warehouse_id)')]);
+                    ->update(['warehouse_code' => DB::raw('(SELECT code FROM warehouses WHERE warehouses.id = warehouse_id)')]);
             });
     }
 };

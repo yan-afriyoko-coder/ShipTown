@@ -13,26 +13,26 @@ class ManifestController extends Controller
         $config = Configuration::first();
 
         return response()->json([
-            'name'       => 'ShipTown ' . $config->business_name,
-            'short_name' => empty($config->business_name) ? 'ShipTown' : 'ST ' . $config->business_name,
-            "description" => "Order and Inventory Management made simple",
-            "categories" => ["ecommerce", "business", "productivity", "utilities"],
-            'icons'      => [
+            'name' => 'ShipTown '.$config->business_name,
+            'short_name' => empty($config->business_name) ? 'ShipTown' : 'ST '.$config->business_name,
+            'description' => 'Order and Inventory Management made simple',
+            'categories' => ['ecommerce', 'business', 'productivity', 'utilities'],
+            'icons' => [
                 [
-                    'src'   => '/img/icons/android-chrome-192x192.png',
+                    'src' => '/img/icons/android-chrome-192x192.png',
                     'sizes' => '192x192',
-                    'type'  => 'image/png',
+                    'type' => 'image/png',
                 ],
                 [
-                    'src'   => '/img/icons/android-chrome-512x512.png',
+                    'src' => '/img/icons/android-chrome-512x512.png',
                     'sizes' => '512x512',
-                    'type'  => 'image/png',
+                    'type' => 'image/png',
                 ],
             ],
-            'start_url'        => '/index.php',
-            'display'          => 'standalone',
+            'start_url' => '/index.php',
+            'display' => 'standalone',
             'background_color' => '#348fdc',
-            'theme_color'      => '#348fdc',
+            'theme_color' => '#348fdc',
         ]);
     }
 }

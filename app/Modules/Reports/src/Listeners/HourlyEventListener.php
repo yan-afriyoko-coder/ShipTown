@@ -8,7 +8,7 @@ class HourlyEventListener
 {
     public function handle()
     {
-        $report = new InventoryDashboardReport();
+        $report = new InventoryDashboardReport;
 
         $report->saveSnapshotToActivity();
     }

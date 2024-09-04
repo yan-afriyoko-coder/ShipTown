@@ -29,10 +29,6 @@ class UserController extends Controller
 
     /**
      * PUT api/admin/users.
-     *
-     * @param UserStoreRequest $request
-     *
-     * @return UserResource
      */
     public function store(UserStoreRequest $request): UserResource
     {
@@ -41,7 +37,7 @@ class UserController extends Controller
         if ($user) {
             $user->restore();
         } else {
-            $user = new User();
+            $user = new User;
         }
 
         $attributes = $request->validated();

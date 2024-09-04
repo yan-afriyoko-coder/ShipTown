@@ -65,9 +65,9 @@ class BasicModuleTest extends TestCase
         $webhooks = Webhook::query()->whereNull('sns_message_id')->get();
 
         $this->assertEmpty($webhooks);
-//        $this->assertDatabaseHas('modules_webhooks_pending_webhooks', [
-//            'sns_message_id' => 'blue',
-//        ]);
+        //        $this->assertDatabaseHas('modules_webhooks_pending_webhooks', [
+        //            'sns_message_id' => 'blue',
+        //        ]);
     }
 
     /** @test */

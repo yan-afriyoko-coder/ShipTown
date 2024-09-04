@@ -12,13 +12,13 @@ class IntegrationTest extends TestCase
     public function test_if_store_returns_ok_response()
     {
         $address = OrderAddress::factory()->create([
-            'company'      => 'TEST COMPANY',
-            'address1'     => 'ATHLONE BUISNESS PARK',
-            'address2'     => 'DUBLIN ROAD',
-            'phone'        => '12345678901',
-            'city'         => 'Dublin',
-            'state_name'   => 'Co. Dublin',
-            'postcode'     => 'N37KD81',
+            'company' => 'TEST COMPANY',
+            'address1' => 'ATHLONE BUISNESS PARK',
+            'address2' => 'DUBLIN ROAD',
+            'phone' => '12345678901',
+            'city' => 'Dublin',
+            'state_name' => 'Co. Dublin',
+            'postcode' => 'N37KD81',
             'country_code' => 'IRL',
             'country_name' => 'Ireland',
         ]);
@@ -37,7 +37,7 @@ class IntegrationTest extends TestCase
 
         $this->assertTrue(
             $response->getStatusCode() === 201,
-            'Expected status 201, '. $response->getStatusCode(). ' received'
+            'Expected status 201, '.$response->getStatusCode().' received'
         );
 
         $response->assertJsonStructure([
@@ -49,7 +49,7 @@ class IntegrationTest extends TestCase
                 'service',
                 'shipping_number',
                 'tracking_url',
-            ]
+            ],
         ]);
     }
 }

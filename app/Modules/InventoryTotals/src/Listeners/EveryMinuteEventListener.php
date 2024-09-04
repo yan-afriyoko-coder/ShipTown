@@ -9,7 +9,7 @@ class EveryMinuteEventListener
 {
     public function handle(): void
     {
-//        RecalculateInventoryRecordsJob::dispatch();
+        //        RecalculateInventoryRecordsJob::dispatch();
         RecalculateInventoryTotalsTableJob::dispatch();
         RecalculateInventoryTotalsByWarehouseTagJob::dispatch();
     }

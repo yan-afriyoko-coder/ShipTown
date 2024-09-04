@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-
 use App\Http\Requests\QuantityDiscount\StoreRequest;
 use App\Http\Requests\QuantityDiscount\UpdateRequest;
 use App\Http\Resources\QuantityDiscountsResource;
@@ -17,12 +16,14 @@ class QuantityDiscountsController extends Controller
     public function index(Request $request): AnonymousResourceCollection
     {
         $query = QuantityDiscount::getSpatieQueryBuilder()->defaultSort('id');
+
         return QuantityDiscountsResource::collection($this->getPaginatedResult($query, 999));
     }
 
     public function store(StoreRequest $request): QuantityDiscountsResource
     {
         $discount = QuantityDiscount::create($request->validated());
+
         return QuantityDiscountsResource::make($discount);
     }
 
@@ -41,6 +42,7 @@ class QuantityDiscountsController extends Controller
                         $discountProduct = $discountProducts->firstWhere('product_id', $product->id);
                         $product = $product->toArray();
                         $product['discount_product_id'] = $discountProduct ? $discountProduct->id : null;
+
                         return $product;
                     })
                     ->toArray();

@@ -28,7 +28,7 @@ class PickCounts extends AbstractWidget
             ->count();
 
         return view('widgets.pick_counts', [
-            'config'    => $this->config,
+            'config' => $this->config,
             'pickCount' => $picksCount,
         ]);
     }

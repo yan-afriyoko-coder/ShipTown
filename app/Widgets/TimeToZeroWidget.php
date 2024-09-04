@@ -3,7 +3,6 @@
 namespace App\Widgets;
 
 use App\Models\Order;
-use App\Models\OrderStatus;
 use Arrilot\Widgets\AbstractWidget;
 use Illuminate\Support\Facades\DB;
 
@@ -45,15 +44,15 @@ class TimeToZeroWidget extends AbstractWidget
         $data['staff_days_used'] = (int) DB::query()
             ->fromSub(
                 Order::query()
-                ->select([
-                    DB::raw('Date(order_closed_at) as date'),
-                    DB::raw('count(distinct(packer_user_id)) as packers_count'),
-                ])
-                ->where('order_closed_at', '>', $startDate)
-                ->whereNotNull('packer_user_id')
-                ->groupBy([
-                    'date',
-                ]),
+                    ->select([
+                        DB::raw('Date(order_closed_at) as date'),
+                        DB::raw('count(distinct(packer_user_id)) as packers_count'),
+                    ])
+                    ->where('order_closed_at', '>', $startDate)
+                    ->whereNotNull('packer_user_id')
+                    ->groupBy([
+                        'date',
+                    ]),
                 'staff_count_daily'
             )
             ->sum('packers_count');
@@ -68,7 +67,7 @@ class TimeToZeroWidget extends AbstractWidget
 
         return view('widgets.time_to_zero_widget', [
             'config' => $this->config,
-            'data'   => $data,
+            'data' => $data,
         ]);
     }
 }

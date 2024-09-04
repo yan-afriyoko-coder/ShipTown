@@ -56,7 +56,7 @@ class RestockingReport extends Report
 
         $this->baseQuery = Inventory::query()
             ->leftJoin('products', 'inventory.product_id', '=', 'products.id')
-            ->leftJoin('inventory_movements_statistics', function (JoinClause $join) use ($warehouseIds) {
+            ->leftJoin('inventory_movements_statistics', function (JoinClause $join) {
                 $join->on('inventory.id', '=', 'inventory_movements_statistics.inventory_id');
                 $join->where('inventory_movements_statistics.type', 'sale');
             })
@@ -70,6 +70,7 @@ class RestockingReport extends Report
                 $tags = Tag::containing($value)->get('id');
 
                 $productsQuery = Product::withAnyTags($tags)->select('id');
+
                 return $query->whereIn('inventory.product_id', $productsQuery);
             })
         );
@@ -79,6 +80,7 @@ class RestockingReport extends Report
                 $tags = Tag::findFromStringOfAnyType($value);
 
                 $productsQuery = Product::withAnyTags($tags)->select('id');
+
                 return $query->whereIn('inventory.product_id', $productsQuery);
             })
         );

@@ -25,7 +25,7 @@ class AutoStatusConfigurationStoreRequest extends FormRequest
     {
         return [
             'max_batch_size' => 'sometimes|integer',
-            'max_order_age'  => 'sometimes|integer',
+            'max_order_age' => 'sometimes|integer',
         ];
     }
 }

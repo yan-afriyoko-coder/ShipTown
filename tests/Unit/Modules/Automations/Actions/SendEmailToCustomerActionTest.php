@@ -12,8 +12,6 @@ use Tests\TestCase;
 
 class SendEmailToCustomerActionTest extends TestCase
 {
-    /**
-     */
     public function test_successful_notification()
     {
         $order = Order::factory()->create();
@@ -28,6 +26,7 @@ class SendEmailToCustomerActionTest extends TestCase
 
         Mail::assertSent(OrderMail::class, function ($mail) {
             $this->assertEquals('ready_for_collection_notification', $mail->getMailTemplate()->code);
+
             return true;
         });
 
@@ -35,8 +34,6 @@ class SendEmailToCustomerActionTest extends TestCase
         $this->assertTrue($actionSucceeded, 'Action failed');
     }
 
-    /**
-     */
     public function test_success_when_template_specified()
     {
         /** @var MailTemplate $template */
@@ -44,7 +41,7 @@ class SendEmailToCustomerActionTest extends TestCase
             'code' => 'shipment_confirmation',
             'subject' => 'test email',
             'mailable' => OrderMail::class,
-            'html_template' => ''
+            'html_template' => '',
         ]);
 
         $order = Order::factory()->create();

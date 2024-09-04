@@ -13,19 +13,10 @@ use App\Modules\BaseModuleServiceProvider;
  */
 class EventServiceProviderBase extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = 'Automation - AutoTags';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'Automatically manages Out Of Stock & Oversold tags';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = false;
 
     /**

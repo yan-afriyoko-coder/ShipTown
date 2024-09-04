@@ -27,7 +27,7 @@ class DataCollectionsSeeder extends Seeder
                     ->get()
                     ->each(function ($destinationWarehouse) use ($sourceWarehouse) {
                         $dataCollection = DataCollection::factory()->create([
-                            'warehouse_id' =>  $destinationWarehouse->getKey(),
+                            'warehouse_id' => $destinationWarehouse->getKey(),
                             'name' => implode(' ', [
                                 $sourceWarehouse->code,
                                 'to',

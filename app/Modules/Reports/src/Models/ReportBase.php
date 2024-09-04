@@ -92,9 +92,6 @@ class ReportBase extends Model
         return $queryBuilder;
     }
 
-    /**
-     * @return array
-     */
     public function getMetaData(): array
     {
         return [
@@ -109,7 +106,7 @@ class ReportBase extends Model
                     'display_name' => Str::headline($field),
                     'type' => $this->getFieldType($field),
                     'operators' => $this->getFieldTypeOperators($field),
-                ])
+                ]),
         ];
     }
 
@@ -128,7 +125,6 @@ class ReportBase extends Model
     }
 
     /**
-     * @return array
      * @throws Exception
      */
     private function getAllowedFilters(): array
@@ -151,8 +147,6 @@ class ReportBase extends Model
     }
 
     /**
-     * @param QueryBuilder $queryBuilder
-     * @return QueryBuilder
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      * @throws InvalidSelectException
@@ -181,16 +175,17 @@ class ReportBase extends Model
                 $fieldValue = data_get($this->fields, $selectFieldName);
 
                 if ($fieldValue === null) {
-                    throw new InvalidSelectException('Requested select field(s) `' . $selectFieldName . '` are not allowed.
-                    Allowed select(s) are ' . collect(array_keys($this->fields))->implode(','));
+                    throw new InvalidSelectException('Requested select field(s) `'.$selectFieldName.'` are not allowed.
+                    Allowed select(s) are '.collect(array_keys($this->fields))->implode(','));
                 }
 
                 if ($fieldValue instanceof Expression) {
-                    $queryBuilder->addSelect(DB::raw('(' . $fieldValue . ') as ' . $selectFieldName));
+                    $queryBuilder->addSelect(DB::raw('('.$fieldValue.') as '.$selectFieldName));
+
                     return;
                 }
 
-                $queryBuilder->addSelect($fieldValue . ' as ' . $selectFieldName);
+                $queryBuilder->addSelect($fieldValue.' as '.$selectFieldName);
             });
 
         return $queryBuilder;
@@ -223,7 +218,7 @@ class ReportBase extends Model
                 return in_array($type, ['string', null]);
             })
             ->each(function ($record, $alias) use (&$allowedFilters) {
-                $filterName = $alias . '_contains';
+                $filterName = $alias.'_contains';
 
                 $allowedFilters[] = AllowedFilter::partial($filterName, $record);
             });
@@ -238,21 +233,23 @@ class ReportBase extends Model
         collect($this->fields)
             ->filter(function ($fieldQuery, $fieldName) {
                 $type = data_get($this->casts, $fieldName, 'string');
+
                 return $type === 'float';
             })
             ->each(function ($fieldType, $fieldAlias) use (&$allowedFilters) {
-                $filterName = $fieldAlias . '_between';
+                $filterName = $fieldAlias.'_between';
                 $fieldQuery = $this->fields[$fieldAlias];
 
-                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fieldType, $fieldAlias, $fieldQuery) {
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fieldQuery) {
                     // we add this to make sure query returns no records if array of two values is not specified
-                    if ((!is_array($value)) or (count($value) != 2)) {
+                    if ((! is_array($value)) or (count($value) != 2)) {
                         $query->whereRaw('1=2');
+
                         return;
                     }
 
                     if ($fieldQuery instanceof Expression) {
-                        $query->whereBetween(DB::raw('(' . $fieldQuery . ')'), [floatval($value[0]), floatval($value[1])]);
+                        $query->whereBetween(DB::raw('('.$fieldQuery.')'), [floatval($value[0]), floatval($value[1])]);
 
                         return;
                     }
@@ -270,7 +267,7 @@ class ReportBase extends Model
 
         collect($this->fields)
             ->each(function ($fullFieldName, $alias) use (&$allowedFilters) {
-                $filterName = $alias . '_not equal';
+                $filterName = $alias.'_not equal';
 
                 $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fullFieldName) {
                     return $query->where($fullFieldName, '!=', $value);
@@ -290,21 +287,22 @@ class ReportBase extends Model
         collect($this->fields)
             ->filter(function ($fieldQuery, $fieldName) {
                 $type = data_get($this->casts, $fieldName, 'string');
+
                 return in_array($type, ['datetime', 'date']);
             })
             ->each(function ($fieldType, $fieldAlias) use (&$allowedFilters) {
-                $filterName = $fieldAlias . '_between';
+                $filterName = $fieldAlias.'_between';
                 $fieldQuery = data_get($this->fields, $fieldAlias);
 
-                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fieldType, $fieldAlias, $filterName, $fieldQuery) {
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($filterName, $fieldQuery) {
                     // we add this to make sure query returns no records if array of two values is not specified
-                    if ((!is_array($value)) or (count($value) != 2)) {
-                        throw new Exception($filterName . ': Invalid filter value, expected array of two values');
+                    if ((! is_array($value)) or (count($value) != 2)) {
+                        throw new Exception($filterName.': Invalid filter value, expected array of two values');
                     }
 
                     if ($fieldQuery instanceof Expression) {
                         $query->whereBetween(
-                            DB::raw('(' . $fieldQuery . ')'),
+                            DB::raw('('.$fieldQuery.')'),
                             [Carbon::parse($value[0]), Carbon::parse($value[1])]
                         );
 
@@ -328,12 +326,13 @@ class ReportBase extends Model
         collect($this->fields)
             ->filter(function ($fieldQuery, $fieldName) {
                 $type = data_get($this->casts, $fieldName, 'string');
+
                 return in_array($type, ['string', 'datetime', 'float']);
             })
             ->each(function ($record, $alias) use (&$allowedFilters) {
-                $filterName = $alias . '_greater_than';
+                $filterName = $alias.'_greater_than';
 
-                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias, $filterName) {
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias) {
                     $query->where($this->fields[$alias], '>', $value);
                 });
             });
@@ -342,7 +341,6 @@ class ReportBase extends Model
     }
 
     /**
-     * @return array
      * @throws Exception
      */
     private function addGreaterThanFloat(): array
@@ -354,9 +352,9 @@ class ReportBase extends Model
                 return $type === 'float';
             })
             ->each(function ($record, $alias) use (&$allowedFilters) {
-                $filterName = $alias . '_greater_than';
+                $filterName = $alias.'_greater_than';
 
-                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias, $filterName) {
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias) {
                     $query->where($this->fields[$alias], '>', floatval($value));
                 });
             });
@@ -373,11 +371,12 @@ class ReportBase extends Model
                 return in_array($type, ['string', 'datetime', 'float']);
             })
             ->each(function ($type, $alias) use (&$allowedFilters) {
-                $filterName = $alias . '_lower_than';
+                $filterName = $alias.'_lower_than';
 
                 $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($type, $alias) {
                     if ($type === 'float') {
                         $query->where($this->fields[$alias], '<', floatval($value));
+
                         return;
                     }
 
@@ -411,21 +410,23 @@ class ReportBase extends Model
         collect($this->fields)
             ->filter(function ($fieldQuery, $fieldName) {
                 $type = data_get($this->casts, $fieldName, 'string');
+
                 return $type === 'string';
             })
             ->each(function ($fieldType, $fieldAlias) use (&$allowedFilters) {
-                $filterName = $fieldAlias . '_between';
+                $filterName = $fieldAlias.'_between';
                 $fieldQuery = $this->fields[$fieldAlias];
 
-                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fieldType, $fieldAlias, $fieldQuery) {
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fieldQuery) {
                     // we add this to make sure query returns no records if array of two values is not specified
-                    if ((!is_array($value)) or (count($value) != 2)) {
+                    if ((! is_array($value)) or (count($value) != 2)) {
                         $query->whereRaw('1=2');
+
                         return;
                     }
 
                     if ($fieldQuery instanceof Expression) {
-                        $query->whereBetween(DB::raw('(' . $fieldQuery . ')'), [floatval($value[0]), floatval($value[1])]);
+                        $query->whereBetween(DB::raw('('.$fieldQuery.')'), [floatval($value[0]), floatval($value[1])]);
 
                         return;
                     }
@@ -443,9 +444,9 @@ class ReportBase extends Model
 
         collect($this->fields)
             ->each(function ($type, $alias) use (&$allowedFilters) {
-                $filterName = $alias . '_not_in';
+                $filterName = $alias.'_not_in';
 
-                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($type, $alias) {
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias) {
                     $query->whereNotIn($this->fields[$alias], explode(',', $value));
                 });
             });
@@ -459,9 +460,9 @@ class ReportBase extends Model
 
         collect($this->fields)
             ->each(function ($type, $alias) use (&$allowedFilters) {
-                $filterName = $alias . '_in';
+                $filterName = $alias.'_in';
 
-                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($type, $alias) {
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias) {
                     $query->whereIn($this->fields[$alias], explode(',', $value));
                 });
             });

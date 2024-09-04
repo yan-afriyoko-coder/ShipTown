@@ -13,9 +13,6 @@ class SplitBundleSkuActionTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @var Order
-     */
     private Order $order;
 
     protected function setUp(): void
@@ -59,22 +56,20 @@ class SplitBundleSkuActionTest extends TestCase
         ]);
     }
 
-    /**
-     */
-//    public function test_successful_action()
-//    {
-//        $event = new ActiveOrderCheckEvent($this->order);
-//        $action = new SplitBundleSkuAction($event);
-//
-//        // act
-//        $actionSucceeded = $action->handle('BUNDLE_SKU,BUNDLE_PRODUCT_1,BUNDLE_PRODUCT_2');
-//
-//        // validate
-//        $this->assertTrue($actionSucceeded, 'Action failed');
-//
-//        $this->assertEquals(4, $this->order->orderProducts()->count(), 'Incorrect order products count');
-//        $this->assertEquals(200, $this->order->orderTotals()->first()->total_ordered);
-//    }
+    //    public function test_successful_action()
+    //    {
+    //        $event = new ActiveOrderCheckEvent($this->order);
+    //        $action = new SplitBundleSkuAction($event);
+    //
+    //        // act
+    //        $actionSucceeded = $action->handle('BUNDLE_SKU,BUNDLE_PRODUCT_1,BUNDLE_PRODUCT_2');
+    //
+    //        // validate
+    //        $this->assertTrue($actionSucceeded, 'Action failed');
+    //
+    //        $this->assertEquals(4, $this->order->orderProducts()->count(), 'Incorrect order products count');
+    //        $this->assertEquals(200, $this->order->orderTotals()->first()->total_ordered);
+    //    }
 
     public function test_incorrect_inputs()
     {

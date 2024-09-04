@@ -25,8 +25,8 @@ class StoreTest extends TestCase
         $warehouse = Warehouse::factory()->make();
 
         $data = [
-            'name'  => $warehouse->name,
-            'code'  => $warehouse->code
+            'name' => $warehouse->name,
+            'code' => $warehouse->code,
         ];
 
         $response = $this->post(route('api.warehouses.index'), $data);

@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon max_updated_at
  * @property Carbon created_at
  * @property Carbon updated_at
- *
  */
 class OrderProductTotal extends Model
 {
@@ -42,30 +41,30 @@ class OrderProductTotal extends Model
     ];
 
     protected $casts = [
-        'count'                     => 'integer',
-        'quantity_ordered'          => 'float',
-        'quantity_split'            => 'float',
-        'total_price'               => 'float',
-        'quantity_picked'           => 'float',
-        'quantity_skipped_picking'  => 'float',
-        'quantity_not_picked'       => 'float',
-        'quantity_shipped'          => 'float',
-        'quantity_to_pick'          => 'float',
-        'quantity_to_ship'          => 'float',
-        'max_updated_at'            => 'timestamp',
+        'count' => 'integer',
+        'quantity_ordered' => 'float',
+        'quantity_split' => 'float',
+        'total_price' => 'float',
+        'quantity_picked' => 'float',
+        'quantity_skipped_picking' => 'float',
+        'quantity_not_picked' => 'float',
+        'quantity_shipped' => 'float',
+        'quantity_to_pick' => 'float',
+        'quantity_to_ship' => 'float',
+        'max_updated_at' => 'timestamp',
     ];
 
     protected $attributes = [
-        'count'                     => 0,
-        'quantity_ordered'          => 0,
-        'quantity_split'            => 0,
-        'total_price'               => 0,
-        'quantity_picked'           => 0,
-        'quantity_skipped_picking'  => 0,
-        'quantity_not_picked'       => 0,
-        'quantity_shipped'          => 0,
-        'quantity_to_pick'          => 0,
-        'quantity_to_ship'          => 0,
-        'max_updated_at'            => '2000-01-01 00:00:00',
+        'count' => 0,
+        'quantity_ordered' => 0,
+        'quantity_split' => 0,
+        'total_price' => 0,
+        'quantity_picked' => 0,
+        'quantity_skipped_picking' => 0,
+        'quantity_not_picked' => 0,
+        'quantity_shipped' => 0,
+        'quantity_to_pick' => 0,
+        'quantity_to_ship' => 0,
+        'max_updated_at' => '2000-01-01 00:00:00',
     ];
 }

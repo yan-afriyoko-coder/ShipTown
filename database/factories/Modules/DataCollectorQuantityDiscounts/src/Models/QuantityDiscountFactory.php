@@ -19,7 +19,7 @@ class QuantityDiscountFactory extends Factory
                 'quantity_full_price' => 2,
                 'quantity_discounted' => 1,
                 'discount_percent' => 50,
-            ]
+            ],
         ];
     }
 }

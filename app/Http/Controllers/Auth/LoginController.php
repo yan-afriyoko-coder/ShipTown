@@ -23,8 +23,6 @@ class LoginController extends Controller
 
     /**
      * Where to redirect users after login.
-     *
-     * @var string
      */
     protected string $redirectTo = '/dashboard';
 
@@ -40,7 +38,7 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-        if (!User::exists()) {
+        if (! User::exists()) {
             return redirect()->route('register');
         }
 

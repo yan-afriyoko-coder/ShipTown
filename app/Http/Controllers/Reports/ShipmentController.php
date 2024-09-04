@@ -10,7 +10,7 @@ class ShipmentController extends ReportController
 {
     public function index(Request $request): mixed
     {
-        $report = new OrderShipmentReport();
+        $report = new OrderShipmentReport;
 
         return $report->response($request);
     }

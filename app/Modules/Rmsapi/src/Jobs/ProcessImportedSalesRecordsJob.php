@@ -52,22 +52,22 @@ class ProcessImportedSalesRecordsJob extends UniqueJob
         $inventoryMovements = $records
             ->each(function (RmsapiSaleImport $salesRecord) {
                 InventoryMovement::query()->updateOrCreate([
-                        'custom_unique_reference_id' => $salesRecord->uuid,
-                    ], [
-                        'inventory_id' => $salesRecord->inventory_id,
-                        'warehouse_code' => $salesRecord->warehouse->code,
-                        'warehouse_id' => $salesRecord->warehouse_id,
-                        'product_id' => $salesRecord->product_id,
-                        'sequence_number' => null,
-                        'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time, 'Europe/Dublin')->utc(),
-                        'type' => $salesRecord->type === 'rms_sale' ? 'sale' : 'adjustment',
-                        'quantity_before' => 0,
-                        'quantity_delta' => $salesRecord->quantity,
-                        'quantity_after' => 0,
-                        'unit_cost' => data_get($salesRecord, 'unit_cost', 0),
-                        'unit_price' => data_get($salesRecord, 'price', 0),
-                        'description' => $salesRecord->type === 'rms_sale' ? 'rms_sale' : 'rmsapi_inventory_movement',
-                        'updated_at' => now()->utc()->toDateTimeLocalString(),
+                    'custom_unique_reference_id' => $salesRecord->uuid,
+                ], [
+                    'inventory_id' => $salesRecord->inventory_id,
+                    'warehouse_code' => $salesRecord->warehouse->code,
+                    'warehouse_id' => $salesRecord->warehouse_id,
+                    'product_id' => $salesRecord->product_id,
+                    'sequence_number' => null,
+                    'occurred_at' => Carbon::createFromTimeString($salesRecord->transaction_time, 'Europe/Dublin')->utc(),
+                    'type' => $salesRecord->type === 'rms_sale' ? 'sale' : 'adjustment',
+                    'quantity_before' => 0,
+                    'quantity_delta' => $salesRecord->quantity,
+                    'quantity_after' => 0,
+                    'unit_cost' => data_get($salesRecord, 'unit_cost', 0),
+                    'unit_price' => data_get($salesRecord, 'price', 0),
+                    'description' => $salesRecord->type === 'rms_sale' ? 'rms_sale' : 'rmsapi_inventory_movement',
+                    'updated_at' => now()->utc()->toDateTimeLocalString(),
                 ]);
             });
 

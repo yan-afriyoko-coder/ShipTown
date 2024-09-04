@@ -12,22 +12,21 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\OrderProduct.
  *
- * @property int         $id
- * @property int|null    $product_id
- * @property int|null    $user_id
- * @property int|null    $warehouse_id
- * @property int|null    $order_id
- * @property int|null    $order_product_id
- * @property string      $sku_shipped
- * @property float       $quantity_shipped
+ * @property int $id
+ * @property int|null $product_id
+ * @property int|null $user_id
+ * @property int|null $warehouse_id
+ * @property int|null $order_id
+ * @property int|null $order_product_id
+ * @property string $sku_shipped
+ * @property float $quantity_shipped
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
- * @property Product|null  $product
- * @property Warehouse|null  $warehouse
- * @property User|null   $user
- * @property Order|null  $order
- * @property OrderProduct|null  $orderProduct
+ * @property Product|null $product
+ * @property Warehouse|null $warehouse
+ * @property User|null $user
+ * @property Order|null $order
+ * @property OrderProduct|null $orderProduct
  * @property Inventory inventory
  *
  * @mixin Eloquent
@@ -51,52 +50,34 @@ class OrderProductShipment extends BaseModel
         'quantity_shipped' => 'float',
     ];
 
-    /**
-     * @return HasOne
-     */
     public function inventory(): HasOne
     {
         return $this->hasOne(Inventory::class, 'product_id', 'product_id')
             ->where([
-                'warehouse_id' => $this->warehouse_id
+                'warehouse_id' => $this->warehouse_id,
             ]);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function warehouse(): BelongsTo
     {
         return $this->belongsTo(Warehouse::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function orderProduct(): BelongsTo
     {
         return $this->belongsTo(OrderProduct::class);

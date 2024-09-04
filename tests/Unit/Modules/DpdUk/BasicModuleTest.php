@@ -47,7 +47,7 @@ class BasicModuleTest extends TestCase
 
         $response = $this->post('api/shipping-labels', [
             'order_id' => $order->getKey(),
-            'shipping_service_code' => $order->label_template
+            'shipping_service_code' => $order->label_template,
         ]);
 
         ray($response->json());

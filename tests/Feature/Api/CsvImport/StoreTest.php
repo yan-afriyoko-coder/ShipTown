@@ -23,7 +23,7 @@ class StoreTest extends TestCase
 
         $dataCollection = DataCollection::factory()->create([
             'warehouse_id' => $warehouse->id,
-            'name' => 'test'
+            'name' => 'test',
         ]);
 
         /** @var Product $product */
@@ -37,7 +37,7 @@ class StoreTest extends TestCase
                     'quantity_requested' => rand(0, 100),
                     'quantity_scanned' => rand(0, 100),
                 ],
-            ]
+            ],
         ]);
 
         ray($response->json());
@@ -46,7 +46,7 @@ class StoreTest extends TestCase
 
         $response->assertJsonStructure([
             'data' => [
-                'success'
+                'success',
             ],
         ]);
     }

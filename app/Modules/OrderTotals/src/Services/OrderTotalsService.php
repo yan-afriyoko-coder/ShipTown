@@ -3,7 +3,6 @@
 namespace App\Modules\OrderTotals\src\Services;
 
 use App\Models\Order;
-use App\Models\OrderProduct;
 use App\Models\OrderProductTotal;
 use App\Modules\OrderTotals\src\Jobs\EnsureAllRecordsExistsJob;
 use App\Modules\OrderTotals\src\Jobs\EnsureCorrectTotalsJob;
@@ -42,21 +41,22 @@ class OrderTotalsService
 
         if (empty($record)) {
             OrderProductTotal::query()->create(['order_id' => $order_id]);
+
             return;
         }
 
         $data = [
-            'count'                     => data_get($record, 'count_expected', 0),
-            'quantity_ordered'          => data_get($record, 'quantity_ordered_expected', 0),
-            'quantity_split'            => data_get($record, 'quantity_split_expected', 0),
-            'total_price'               => data_get($record, 'total_price_expected', 0),
-            'quantity_picked'           => data_get($record, 'quantity_picked_expected', 0),
-            'quantity_skipped_picking'  => data_get($record, 'quantity_skipped_picking_expected', 0),
-            'quantity_not_picked'       => data_get($record, 'quantity_not_picked_expected', 0),
-            'quantity_shipped'          => data_get($record, 'quantity_shipped_expected', 0),
-            'quantity_to_pick'          => data_get($record, 'quantity_to_pick_expected', 0),
-            'quantity_to_ship'          => data_get($record, 'quantity_to_ship_expected', 0),
-            'max_updated_at'            => data_get($record, 'max_updated_at_expected', now())
+            'count' => data_get($record, 'count_expected', 0),
+            'quantity_ordered' => data_get($record, 'quantity_ordered_expected', 0),
+            'quantity_split' => data_get($record, 'quantity_split_expected', 0),
+            'total_price' => data_get($record, 'total_price_expected', 0),
+            'quantity_picked' => data_get($record, 'quantity_picked_expected', 0),
+            'quantity_skipped_picking' => data_get($record, 'quantity_skipped_picking_expected', 0),
+            'quantity_not_picked' => data_get($record, 'quantity_not_picked_expected', 0),
+            'quantity_shipped' => data_get($record, 'quantity_shipped_expected', 0),
+            'quantity_to_pick' => data_get($record, 'quantity_to_pick_expected', 0),
+            'quantity_to_ship' => data_get($record, 'quantity_to_ship_expected', 0),
+            'max_updated_at' => data_get($record, 'max_updated_at_expected', now()),
         ];
 
         OrderProductTotal::query()
@@ -66,8 +66,8 @@ class OrderTotalsService
             ->where(['id' => $order_id])
             ->update([
                 'product_line_count' => data_get($record, 'count_expected', 0),
-                'total_products'     => data_get($record, 'total_price_expected'),
-                'updated_at'         => now()
+                'total_products' => data_get($record, 'total_price_expected'),
+                'updated_at' => now(),
             ]);
     }
 }

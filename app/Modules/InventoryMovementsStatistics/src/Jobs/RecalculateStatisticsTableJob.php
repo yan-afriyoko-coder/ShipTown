@@ -20,7 +20,7 @@ class RecalculateStatisticsTableJob extends UniqueJob
                 $this->recalculateInventoryStatistics($inventories->pluck('id'));
                 Log::info('Job processing', [
                     'job' => self::class,
-                    'records_updated' => $inventories->count()
+                    'records_updated' => $inventories->count(),
                 ]);
                 usleep(100000); // 0.1 second
             });
@@ -64,7 +64,7 @@ class RecalculateStatisticsTableJob extends UniqueJob
                 now() as updated_at
             FROM inventory_movements
             LEFT JOIN warehouses ON warehouses.id = inventory_movements.warehouse_id
-            WHERE inventory_movements.inventory_id IN ('. $inventory->implode(',') .')
+            WHERE inventory_movements.inventory_id IN ('.$inventory->implode(',').')
             GROUP BY inventory_movements.type, inventory_movements.inventory_id
         ');
     }

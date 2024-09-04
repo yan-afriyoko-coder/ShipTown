@@ -43,7 +43,6 @@ class PacklistPageTest extends DuskTestCase
         $orderProduct1 = OrderProduct::factory()->create(['order_id' => $order->getKey()]);
         $orderProduct2 = OrderProduct::factory()->create(['order_id' => $order->getKey()]);
 
-
         $orderProduct1->product
             ->inventory($user->warehouse->code)
             ->update([
@@ -59,7 +58,7 @@ class PacklistPageTest extends DuskTestCase
             $browser->disableFitOnFailure();
 
             $browser->loginAs($user)
-                ->pause($this->shortDelay)->visit($this->uri . '?step=select')
+                ->pause($this->shortDelay)->visit($this->uri.'?step=select')
                 ->pause($this->shortDelay)->waitForText('Status: paid', 1)
                 ->pause($this->shortDelay)->clickLink('Status: paid')
                 ->pause($this->shortDelay)->waitForText($order->order_number, 1)

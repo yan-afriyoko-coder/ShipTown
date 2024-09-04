@@ -13,7 +13,7 @@ class PickController extends Controller
 
     public function index(Request $request)
     {
-        $report = new PicksReport();
+        $report = new PicksReport;
         $report->setPerPage($request->get('per_page', 100));
 
         return $report->response($request);

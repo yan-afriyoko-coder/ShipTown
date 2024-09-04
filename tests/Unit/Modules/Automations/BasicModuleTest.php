@@ -33,13 +33,13 @@ class BasicModuleTest extends TestCase
         Condition::create([
             'automation_id' => $automation->getKey(),
             'condition_class' => StatusCodeEqualsCondition::class,
-            'condition_value' => 'paid'
+            'condition_value' => 'paid',
         ]);
 
         Action::create([
             'automation_id' => $automation->getKey(),
             'action_class' => SetStatusCodeAction::class,
-            'action_value' => 'new_status'
+            'action_value' => 'new_status',
         ]);
 
         $automation->enabled = true;

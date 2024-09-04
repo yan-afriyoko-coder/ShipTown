@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\DataCollectorActions;
 use App\Http\Requests\Api\DataCollectorActions\AddProductStoreRequest;
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
-use App\Models\Inventory;
 use App\Models\ProductAlias;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;

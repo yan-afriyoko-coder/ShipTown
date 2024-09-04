@@ -28,13 +28,13 @@ class AutomationsSeeder extends Seeder
         Condition::create([
             'automation_id' => $automation->getKey(),
             'condition_class' => StatusCodeEqualsCondition::class,
-            'condition_value' => 'paid'
+            'condition_value' => 'paid',
         ]);
 
         Condition::create([
             'automation_id' => $automation->getKey(),
             'condition_class' => ShippingMethodCodeEqualsCondition::class,
-            'condition_value' => 'store_pickup'
+            'condition_value' => 'store_pickup',
         ]);
 
         Action::create([

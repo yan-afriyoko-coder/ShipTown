@@ -148,8 +148,8 @@ return [
                  * Specify headers to be added to the example requests
                  */
                 'headers' => [
-                    'Content-Type'  => 'application/json',
-                    'Accept'        => 'application/json',
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
                     'Authorization' => 'Bearer {token}',
                     // 'Api-Version' => 'v2',
                 ],
@@ -173,7 +173,7 @@ return [
                      * during the documentation API calls
                      */
                     'config' => [
-                        'app.env'   => 'documentation',
+                        'app.env' => 'documentation',
                         'app.debug' => false,
                         // 'service.key' => 'value',
                     ],

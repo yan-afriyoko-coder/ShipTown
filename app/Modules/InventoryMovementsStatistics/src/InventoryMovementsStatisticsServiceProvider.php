@@ -9,19 +9,10 @@ use App\Modules\BaseModuleServiceProvider;
 
 class InventoryMovementsStatisticsServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = '.CORE - Inventory Movements Statistics';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'Statistics like "Quantity sold in last 7 days"';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = true;
 
     /**

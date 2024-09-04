@@ -24,11 +24,11 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'subject'       => ['required', 'string', 'max:300'],
+            'subject' => ['required', 'string', 'max:300'],
             'html_template' => ['required', 'string'],
             'text_template' => ['nullable', 'string'],
-            'reply_to'      => ['nullable', 'email'],
-            'to.*'          => ['email'],
+            'reply_to' => ['nullable', 'email'],
+            'to.*' => ['email'],
         ];
     }
 
@@ -39,10 +39,10 @@ class UpdateRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        $email = str_replace(" ", ",", $this->to);
-        $email = str_replace(",,", ",", $email);
-        $email = collect(explode(",", $email))->filter(function ($email) {
-            return $email != "";
+        $email = str_replace(' ', ',', $this->to);
+        $email = str_replace(',,', ',', $email);
+        $email = collect(explode(',', $email))->filter(function ($email) {
+            return $email != '';
         })->toArray();
 
         $this->merge([

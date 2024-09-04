@@ -7,9 +7,6 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
-/**
- *
- */
 class AppGenerateModulesTests extends Command
 {
     /**
@@ -29,8 +26,6 @@ class AppGenerateModulesTests extends Command
     /**
      * Command will not override existing files
      * It will only add new if do not exists.
-     *
-     * @return int
      */
     public function handle(): int
     {
@@ -38,18 +33,19 @@ class AppGenerateModulesTests extends Command
 
         $expectedTestsList = collect($modulesList)->map(function ($moduleDirectory) {
             $testPath = Str::replaceArray('app/modules/', ['Unit/Modules/'], $moduleDirectory);
-            return $testPath . '/BasicModuleTest';
+
+            return $testPath.'/BasicModuleTest';
         });
 
         $expectedTestsList->each(function ($route) {
             $testName = $route;
-            $testFileName = app()->basePath() . '/tests/'. $testName . '.php';
+            $testFileName = app()->basePath().'/tests/'.$testName.'.php';
 
             if (File::exists($testFileName)) {
                 return true;
             }
 
-            $command = 'app:make-test ' . $testName . ' --stub=test.module';
+            $command = 'app:make-test '.$testName.' --stub=test.module';
 
             Artisan::call($command);
             $this->info(Artisan::output());

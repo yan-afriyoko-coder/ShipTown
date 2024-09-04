@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Makeable\LaravelFactory\HasFactory;
 
 /**
- *
  * @property int inventory_id
  * @property int $product_id
  * @property int $warehouse_id

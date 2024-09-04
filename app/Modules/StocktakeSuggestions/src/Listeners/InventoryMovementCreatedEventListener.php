@@ -17,9 +17,6 @@ class InventoryMovementCreatedEventListener
         $this->checkForNegativeStock($event);
     }
 
-    /**
-     * @param InventoryMovementCreatedEvent $event
-     */
     protected function checkForNegativeStock(InventoryMovementCreatedEvent $event): void
     {
         $reason = 'negative stock - have you received in the stock correctly?';
@@ -41,7 +38,7 @@ class InventoryMovementCreatedEventListener
         if ($inventoryMovement->quantity_after >= 0 and $inventoryMovement->quantity_before < 0) {
             StocktakeSuggestion::query()->where([
                 'inventory_id' => $inventoryMovement->inventory_id,
-                'reason' => $reason
+                'reason' => $reason,
             ])->delete();
         }
     }

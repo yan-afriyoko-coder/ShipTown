@@ -23,19 +23,18 @@ class OrderNumberEqualsConditionTest extends TestCase
 
         ray()->clearAll();
 
-
         $automation = Automation::factory()->create();
 
         Condition::factory()->create([
-            'automation_id'     => $automation->getKey(),
-            'condition_class'   => OrderNumberEqualsCondition::class,
-            'condition_value'   => '123456'
+            'automation_id' => $automation->getKey(),
+            'condition_class' => OrderNumberEqualsCondition::class,
+            'condition_value' => '123456',
         ]);
 
         Action::factory()->create([
-            'automation_id'     => $automation->getKey(),
-            'action_class'   => SetStatusCodeAction::class,
-            'action_value'   => 'new_status_code'
+            'automation_id' => $automation->getKey(),
+            'action_class' => SetStatusCodeAction::class,
+            'action_value' => 'new_status_code',
         ]);
 
         $automation->update(['enabled' => true]);

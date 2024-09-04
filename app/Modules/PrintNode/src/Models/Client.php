@@ -2,8 +2,8 @@
 
 namespace App\Modules\PrintNode\src\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use GuzzleHttp\Client as GuzzleClient;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -13,8 +13,8 @@ use Spatie\QueryBuilder\QueryBuilder;
 /**
  * Class Client.
  *
- * @property int                             $id
- * @property string                          $api_key
+ * @property int $id
+ * @property string $api_key
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
@@ -25,6 +25,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static \Illuminate\Database\Eloquent\Builder|Client whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Client whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Client whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Client extends Model
@@ -41,30 +42,25 @@ class Client extends Model
      */
     protected $fillable = ['api_key'];
 
-    /**
-     * @var GuzzleClient
-     */
     private GuzzleClient $guzzleClient;
 
     /**
      * Client constructor.
-     *
-     * @param array $attributes
      */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
 
         $this->guzzleClient = new GuzzleClient([
-            'base_uri'   => 'https://api.printnode.com',
-            'timeout'    => 60,
+            'base_uri' => 'https://api.printnode.com',
+            'timeout' => 60,
             'exceptions' => true,
         ]);
     }
 
     public function fullUrl(string $uri): string
     {
-        return 'https://api.printnode.com/' . $uri;
+        return 'https://api.printnode.com/'.$uri;
     }
 
     public function getRequest(string $uri): ResponseInterface
@@ -87,16 +83,13 @@ class Client extends Model
      */
     public function generateHeaders(): array
     {
-        return  [
+        return [
             'Authorization' => 'Basic '.base64_encode($this->api_key),
-            'Content-Type'  => 'application/json',
-            'Accept'        => 'application/json',
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
         ];
     }
 
-    /**
-     * @return QueryBuilder
-     */
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(Client::class);

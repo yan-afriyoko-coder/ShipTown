@@ -8,26 +8,14 @@ use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @var string
-     */
     protected string $uri = '/reports/restocking';
 
-    /**
-     * @var User
-     */
     protected User $user;
 
-    /**
-     *
-     */
     protected function setUp(): void
     {
         parent::setUp();

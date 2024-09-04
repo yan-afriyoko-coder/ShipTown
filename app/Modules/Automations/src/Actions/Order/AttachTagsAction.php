@@ -6,10 +6,6 @@ use App\Modules\Automations\src\Abstracts\BaseOrderActionAbstract;
 
 class AttachTagsAction extends BaseOrderActionAbstract
 {
-    /**
-     * @param string $options
-     * @return bool
-     */
     public function handle(string $options = ''): bool
     {
         if (trim($options) === '') {

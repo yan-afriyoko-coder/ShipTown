@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\ConditionalRules;
 
 class ApiDataCollectorUpdateRequest extends FormRequest
 {
@@ -19,8 +18,6 @@ class ApiDataCollectorUpdateRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {
@@ -29,7 +26,7 @@ class ApiDataCollectorUpdateRequest extends FormRequest
             'action' => [
                 'sometimes',
                 'string',
-                'in:transfer_in_scanned,transfer_out_scanned,transfer_to_scanned,auto_scan_all_requested,transfer_between_warehouses,import_as_stocktake'
+                'in:transfer_in_scanned,transfer_out_scanned,transfer_to_scanned,auto_scan_all_requested,transfer_between_warehouses,import_as_stocktake',
             ],
             'custom_uuid' => 'nullable|string',
         ];

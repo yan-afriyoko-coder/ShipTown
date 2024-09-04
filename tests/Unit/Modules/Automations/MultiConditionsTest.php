@@ -37,13 +37,13 @@ class MultiConditionsTest extends TestCase
         Condition::create([
             'automation_id' => $automation1->getKey(),
             'condition_class' => LineCountEqualsCondition::class,
-            'condition_value' => '1'
+            'condition_value' => '1',
         ]);
 
         Action::create([
             'automation_id' => $automation1->getKey(),
             'action_class' => SetStatusCodeAction::class,
-            'action_value' => 'new_status'
+            'action_value' => 'new_status',
         ]);
     }
 

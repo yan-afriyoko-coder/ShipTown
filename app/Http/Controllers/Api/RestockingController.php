@@ -9,7 +9,7 @@ class RestockingController extends Controller
 {
     public function index()
     {
-        $report = new RestockingReport();
+        $report = new RestockingReport;
 
         return $report->toJsonResource();
     }

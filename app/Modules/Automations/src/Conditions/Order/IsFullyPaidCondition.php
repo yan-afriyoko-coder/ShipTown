@@ -17,6 +17,6 @@ class IsFullyPaidCondition extends BaseOrderConditionAbstract
 
         return $query->whereRaw('(is_fully_paid = ?)', [$expectedBoolValue])
             ->whereRaw('product_line_count > 0');
-//        return $query->whereRaw('(is_fully_paid = ? AND product_line_count > 0)', [$expectedBoolValue]);
+        //        return $query->whereRaw('(is_fully_paid = ? AND product_line_count > 0)', [$expectedBoolValue]);
     }
 }

@@ -69,7 +69,7 @@ class BasicModuleTest extends TestCase
             'warehouse_code' => $warehouse->code,
             'product_sku' => $orderProduct1->sku_ordered,
             'quantity_reserved' => $orderProduct1->quantity_to_ship,
-            'comment' => 'Order #' . $order->order_number, // Order #1
+            'comment' => 'Order #'.$order->order_number, // Order #1
         ]);
 
         $this->assertDatabaseHas('inventory_reservations', [
@@ -78,7 +78,7 @@ class BasicModuleTest extends TestCase
             'warehouse_code' => $warehouse->code,
             'product_sku' => $orderProduct2->sku_ordered,
             'quantity_reserved' => $orderProduct2->quantity_to_ship,
-            'comment' => 'Order #' . $order->order_number, // Order #1
+            'comment' => 'Order #'.$order->order_number, // Order #1
         ]);
     }
 
@@ -121,7 +121,7 @@ class BasicModuleTest extends TestCase
             'warehouse_code' => $warehouse->code,
             'product_sku' => $orderProduct1->sku_ordered,
             'quantity_reserved' => $orderProduct1->quantity_to_ship,
-            'comment' => 'Order #' . $order->order_number, // Order #1
+            'comment' => 'Order #'.$order->order_number, // Order #1
         ]);
 
         $this->assertDatabaseHas('inventory_reservations', [
@@ -130,7 +130,7 @@ class BasicModuleTest extends TestCase
             'warehouse_code' => $warehouse->code,
             'product_sku' => $orderProduct2->sku_ordered,
             'quantity_reserved' => $orderProduct2->quantity_to_ship,
-            'comment' => 'Order #' . $order->order_number, // Order #1
+            'comment' => 'Order #'.$order->order_number, // Order #1
         ]);
 
         $orderProduct1->delete();
@@ -181,7 +181,7 @@ class BasicModuleTest extends TestCase
             'warehouse_code' => $warehouse->code,
             'product_sku' => $orderProduct1->sku_ordered,
             'quantity_reserved' => $orderProduct1->quantity_to_ship,
-            'comment' => 'Order #' . $order->order_number, // Order #1
+            'comment' => 'Order #'.$order->order_number, // Order #1
         ]);
 
         $this->assertDatabaseHas('inventory_reservations', [
@@ -190,7 +190,7 @@ class BasicModuleTest extends TestCase
             'warehouse_code' => $warehouse->code,
             'product_sku' => $orderProduct2->sku_ordered,
             'quantity_reserved' => $orderProduct2->quantity_to_ship,
-            'comment' => 'Order #' . $order->order_number, // Order #1
+            'comment' => 'Order #'.$order->order_number, // Order #1
         ]);
     }
 

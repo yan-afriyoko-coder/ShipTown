@@ -18,7 +18,7 @@ use Tests\TestCase;
 
 class SplitOrderToWarehouseCodeActionTest extends TestCase
 {
-//    use RefreshDatabase;
+    //    use RefreshDatabase;
 
     /**
      * A basic feature test example.
@@ -27,7 +27,7 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
      */
     public function testExample()
     {
-        $random_number = rand(2,4);
+        $random_number = rand(2, 4);
 
         AutomationsServiceProvider::enableModule();
 
@@ -39,17 +39,16 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
             Inventory::updateOrCreate([
                 'product_id' => $product->getKey(),
                 'warehouse_id' => $warehouse->getKey(),
-            ],[
+            ], [
                 'quantity' => 100,
                 'warehouse_code' => $warehouse->code,
             ]);
         });
 
-        /** @var  $order */
         $order = Order::factory()->create(['status_code' => 'split_order']);
 
         Product::all()->each(function (Product $product) use ($order) {
-            $orderProduct = new OrderProduct();
+            $orderProduct = new OrderProduct;
             $orderProduct->order_id = $order->getKey();
             $orderProduct->product_id = $product->getKey();
             $orderProduct->name_ordered = $product->name;
@@ -62,21 +61,21 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
         $warehouses->each(function (Warehouse $warehouse) {
             $status_code_name = 'packing_'.$warehouse->code;
 
-            $automation = new Automation();
+            $automation = new Automation;
             $automation->enabled = false;
             $automation->name = 'split_order to '.$status_code_name;
             $automation->save();
 
-            $condition = new Condition();
+            $condition = new Condition;
             $condition->automation_id = $automation->getKey();
             $condition->condition_class = StatusCodeEqualsCondition::class;
             $condition->condition_value = 'split_order';
             $condition->save();
 
-            $action = new Action();
+            $action = new Action;
             $action->automation_id = $automation->getKey();
             $action->action_class = SplitOrderToWarehouseCodeAction::class;
-            $action->action_value = $warehouse->code .',packing_web';
+            $action->action_value = $warehouse->code.',packing_web';
             $action->save();
 
             $automation->enabled = true;

@@ -3,11 +3,8 @@
 namespace App\Modules\MagentoApi\src\Jobs;
 
 use App\Abstracts\UniqueJob;
-use App\Models\ProductPrice;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
-use Spatie\Tags\Tag;
 
 /**
  * Class SyncCheckFailedProductsJob.
@@ -28,7 +25,7 @@ class EnsureProductPriceIdIsFilledJob extends UniqueJob
                                 $join->on('products_prices.product_id', '=', 'modules_magento2api_products.product_id')
                                     ->on('products_prices.warehouse_id', '=', 'modules_magento2api_connections.pricing_source_warehouse_id');
                             })
-                            ->max('products_prices.id')
+                            ->max('products_prices.id'),
                     ]);
 
                 usleep(100000); // 0.1 second

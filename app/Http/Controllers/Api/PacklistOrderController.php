@@ -15,11 +15,6 @@ use Illuminate\Support\Facades\Auth;
  */
 class PacklistOrderController extends Controller
 {
-    /**
-     * @param PacklistOrderIndexRequest $request
-     *
-     * @return OrderResource
-     */
     public function index(PacklistOrderIndexRequest $request): OrderResource
     {
         // we clear packer ID from other orders first
@@ -31,17 +26,17 @@ class PacklistOrderController extends Controller
                 $order->update(['packer_user_id' => null]);
             });
 
-        $report = new Report();
+        $report = new Report;
         $report->fields = [
-            'id'                                => 'order.id',
-            'order_number'                      => 'order.order_number',
-            'status'                            => 'order.status_code',
-            'status_code'                       => 'order.status_code',
-            'order_placed_at'                   => 'order.order_placed_at',
-            'updated_at'                        => 'order.updated_at',
-            'inventory_source_warehouse_id'     => 'inventory_source.warehouse_id',
-            'inventory_source_warehouse_code'   => 'inventory_source.warehouse_code',
-            'inventory_source_shelf_location'   => 'inventory_source.shelve_location',
+            'id' => 'order.id',
+            'order_number' => 'order.order_number',
+            'status' => 'order.status_code',
+            'status_code' => 'order.status_code',
+            'order_placed_at' => 'order.order_placed_at',
+            'updated_at' => 'order.updated_at',
+            'inventory_source_warehouse_id' => 'inventory_source.warehouse_id',
+            'inventory_source_warehouse_code' => 'inventory_source.warehouse_code',
+            'inventory_source_shelf_location' => 'inventory_source.shelve_location',
         ];
 
         $report->baseQuery = OrderProduct::query()

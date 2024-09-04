@@ -5,14 +5,8 @@ namespace Tests\Feature\Settings\Modules\StocktakeSuggestions;
 use App\User;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
-    /**
-     * @var string
-     */
     protected string $uri = 'settings/modules/stocktake-suggestions';
 
     protected mixed $user;

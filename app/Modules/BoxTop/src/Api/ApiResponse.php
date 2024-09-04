@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 class ApiResponse
 {
     public ResponseInterface $http_response;
+
     public string $content;
 
     public function __construct(ResponseInterface $response)

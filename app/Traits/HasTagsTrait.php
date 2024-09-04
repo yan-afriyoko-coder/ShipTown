@@ -24,28 +24,17 @@ trait HasTagsTrait
         scopeWithAllTags as traitHasTagsScopeWithAllTags;
     }
 
-    /**
-     * @param $tag
-     */
     protected function onTagAttached($tag)
     {
         // override this function on model
     }
 
-    /**
-     * @param $tag
-     */
     protected function onTagDetached($tag)
     {
         // override this function on model
     }
 
-    /**
-     * @param array|null $tags
-     *
-     * @return bool
-     */
-    public function hasTags(array $tags = null): bool
+    public function hasTags(?array $tags = null): bool
     {
         return static::withAllTags($tags)->whereId($this->getKey())->exists();
     }
@@ -69,12 +58,12 @@ trait HasTagsTrait
     }
 
     /**
-     * @param array $tags
-     * @param string|null $type
+     * @param  array  $tags
      * @return $this
+     *
      * @throws Exception
      */
-    public function attachTags($tags, string $type = null): self
+    public function attachTags($tags, ?string $type = null): self
     {
         collect($tags)
             ->filter()
@@ -99,11 +88,10 @@ trait HasTagsTrait
     }
 
     /**
-     * @param array $tags
-     * @param string|null $type
+     * @param  array  $tags
      * @return $this
      */
-    public function detachTags($tags, string $type = null): self
+    public function detachTags($tags, ?string $type = null): self
     {
         collect($tags)
             ->filter()
@@ -120,12 +108,10 @@ trait HasTagsTrait
     }
 
     /**
-     * @param string|Tag  $tag
-     * @param string|null $type
-     *
+     * @param  string|Tag  $tag
      * @return $this
      */
-    public function detachTagSilently($tag, string $type = null): self
+    public function detachTagSilently($tag, ?string $type = null): self
     {
         activity()->withoutLogs(function () use ($tag, $type) {
             $this->detachTag($tag, $type);
@@ -135,13 +121,9 @@ trait HasTagsTrait
     }
 
     /**
-     * @param Builder               $query
-     * @param array|ArrayAccess|Tag $tags
-     * @param string|null           $type
-     *
-     * @return Builder
+     * @param  array|ArrayAccess|Tag  $tags
      */
-    public function scopeWithoutAllTags(Builder $query, $tags, string $type = null): Builder
+    public function scopeWithoutAllTags(Builder $query, $tags, ?string $type = null): Builder
     {
         $tags = static::convertToTags($tags, $type);
 
@@ -154,14 +136,9 @@ trait HasTagsTrait
         return $query;
     }
 
-    /**
-     * @param array|null $tags
-     *
-     * @return bool
-     */
-    public function doesNotHaveTags(array $tags = null): bool
+    public function doesNotHaveTags(?array $tags = null): bool
     {
-        return !$this->hasTags($tags);
+        return ! $this->hasTags($tags);
     }
 
     public function syncTagByType(string $tagType, string $tagName): void
@@ -170,6 +147,7 @@ trait HasTagsTrait
 
         if ($tag === null) {
             $this->attachTag($tagName, $tagType);
+
             return;
         }
 

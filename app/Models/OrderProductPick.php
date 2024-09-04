@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property int $pick_id
  * @property int $order_product_id
- * @property double $quantity_picked
- * @property double $quantity_skipped_picking
+ * @property float $quantity_picked
+ * @property float $quantity_skipped_picking
  * @property OrderProduct $orderProduct
  * @property Pick $pick
  */

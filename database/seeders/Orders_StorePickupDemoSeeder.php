@@ -19,8 +19,8 @@ class Orders_StorePickupDemoSeeder extends Seeder
             [
                 'name' => 'Status: store_pickup',
                 'url' => '/autopilot/packlist?inventory_source_location_id=1&status=store_pickup&address_label_template=address_label',
-                'group' => 'packlist'
-            ]
+                'group' => 'packlist',
+            ],
         ];
 
         NavigationMenu::insert($menu);

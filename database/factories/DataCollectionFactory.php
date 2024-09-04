@@ -10,6 +10,7 @@ class DataCollectionFactory extends Factory
     public function definition(): array
     {
         $warehouse = Warehouse::first() ?? Warehouse::factory()->create();
+
         return [
             'warehouse_code' => $warehouse->code,
             'warehouse_id' => $warehouse->getKey(),

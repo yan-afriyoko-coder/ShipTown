@@ -15,10 +15,10 @@ class RmsapiConnectionTest extends TestCase
     public function test_if_fetches_products()
     {
         $connection = RmsapiConnection::factory()->create([
-            'location_id'  => env('TEST_RMSAPI_WAREHOUSE_CODE'),
-            'url'          => env('TEST_RMSAPI_URL'),
-            'username'     => env('TEST_RMSAPI_USERNAME'),
-            'password'     => env('TEST_RMSAPI_PASSWORD'),
+            'location_id' => env('TEST_RMSAPI_WAREHOUSE_CODE'),
+            'url' => env('TEST_RMSAPI_URL'),
+            'username' => env('TEST_RMSAPI_USERNAME'),
+            'password' => env('TEST_RMSAPI_PASSWORD'),
         ]);
 
         $response = RmsapiClient::GET($connection, 'api/products');

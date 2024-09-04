@@ -40,10 +40,6 @@ class Api2cartService
     ];
 
     /**
-     * @param string $store_key
-     * @param string $sku
-     *
-     * @return int|null
      * @throws GuzzleException
      */
     public static function getVariantID(string $store_key, string $sku): ?int
@@ -62,11 +58,6 @@ class Api2cartService
     }
 
     /**
-     * @param string $store_key
-     * @param array $product_data
-     *
-     * @return RequestResponse
-     *
      * @throws GuzzleException
      */
     public static function createSimpleProduct(string $store_key, array $product_data): RequestResponse
@@ -82,7 +73,7 @@ class Api2cartService
 
         $product = Arr::only($product_data, $fields);
 
-        if (!Arr::has($product_data, 'model')) {
+        if (! Arr::has($product_data, 'model')) {
             $product['model'] = $product_data['sku'];
         }
 
@@ -94,9 +85,6 @@ class Api2cartService
     }
 
     /**
-     * @param string $store_key
-     * @param array $data
-     * @return RequestResponse
      * @throws GuzzleException
      */
     public static function updateSimpleProduct(string $store_key, array $data): RequestResponse
@@ -105,7 +93,7 @@ class Api2cartService
             ->only(self::PRODUCT_ALLOWED_KEYS)
             ->except(self::PRODUCT_DONT_UPDATE_KEYS)
             ->merge([
-                'reindex'     => 'False',
+                'reindex' => 'False',
                 'clear_cache' => 'False',
             ])
             ->toArray();
@@ -116,9 +104,6 @@ class Api2cartService
     /**
      * This will only update variant product, will not update simple product.
      *
-     * @param string $store_key
-     * @param array $data
-     * @return RequestResponse
      * @throws GuzzleException
      */
     public static function updateVariant(string $store_key, array $data): RequestResponse
@@ -127,7 +112,7 @@ class Api2cartService
             ->only(self::PRODUCT_ALLOWED_KEYS)
             ->except(self::PRODUCT_DONT_UPDATE_KEYS)
             ->merge([
-                'reindex'     => 'False',
+                'reindex' => 'False',
                 'clear_cache' => 'False',
             ])
             ->toArray();
@@ -136,8 +121,6 @@ class Api2cartService
     }
 
     /**
-     * @param Api2cartProductLink $product_link
-     * @return RequestResponse
      * @throws GuzzleException
      */
     private static function productUpdateOrCreate(Api2cartProductLink $product_link): RequestResponse
@@ -154,9 +137,10 @@ class Api2cartService
                     case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
                         $product_link->update([
                             'api2cart_product_type' => null,
-                            'api2cart_product_id' => null
+                            'api2cart_product_id' => null,
                         ]);
                 }
+
                 return $response;
             default:
                 $response = self::updateSimpleProduct($store_key, $properties);
@@ -173,9 +157,10 @@ class Api2cartService
 
                         $product_link->update([
                             'api2cart_product_type' => null,
-                            'api2cart_product_id' => null
+                            'api2cart_product_id' => null,
                         ]);
                 }
+
                 return $response;
         }
     }
@@ -183,14 +168,14 @@ class Api2cartService
     /**
      * @throws GuzzleException
      */
-    public static function getSimpleProductInfoByID(Api2cartConnection $conn, int $id, array $fields = null): ?array
+    public static function getSimpleProductInfoByID(Api2cartConnection $conn, int $id, ?array $fields = null): ?array
     {
         if (empty($id)) {
             return null;
         }
 
         $params = [
-            'id'     => $id,
+            'id' => $id,
             'params' => implode(
                 ',',
                 $fields ?? [
@@ -228,7 +213,7 @@ class Api2cartService
     /**
      * @throws GuzzleException
      */
-    public static function getProductsList(Api2cartConnection $conn, array $product_ids, array $params = null): RequestResponse
+    public static function getProductsList(Api2cartConnection $conn, array $product_ids, ?array $params = null): RequestResponse
     {
         $query = [
             'product_ids' => implode(',', $product_ids),
@@ -260,14 +245,9 @@ class Api2cartService
     }
 
     /**
-     * @param Api2cartConnection $conn
-     * @param string $sku
-     * @param array|null $fields
-     *
-     * @return array|null
      * @throws GuzzleException
      */
-    public static function getSimpleProductInfo(Api2cartConnection $conn, string $sku, array $fields = null): ?array
+    public static function getSimpleProductInfo(Api2cartConnection $conn, string $sku, ?array $fields = null): ?array
     {
         $product_id = self::getSimpleProductID($conn->bridge_api_key, $sku);
 
@@ -277,14 +257,14 @@ class Api2cartService
     /**
      * @throws GuzzleException
      */
-    public static function getVariantInfoByID(Api2cartConnection $connection, int $id, array $fields = null): ?array
+    public static function getVariantInfoByID(Api2cartConnection $connection, int $id, ?array $fields = null): ?array
     {
         if (empty($id)) {
             return null;
         }
 
         $params = [
-            'id'     => $id,
+            'id' => $id,
             'params' => implode(
                 ',',
                 $fields ?? [
@@ -320,15 +300,9 @@ class Api2cartService
     }
 
     /**
-     * @param Api2cartConnection $connection
-     * @param string $sku
-     * @param array|null $fields
-     *
-     * @return array|null
-     *
      * @throws GuzzleException
      */
-    public static function getVariantInfo(Api2cartConnection $connection, string $sku, array $fields = null): ?array
+    public static function getVariantInfo(Api2cartConnection $connection, string $sku, ?array $fields = null): ?array
     {
         $variant_id = self::getVariantID($connection->bridge_api_key, $sku);
 
@@ -336,26 +310,15 @@ class Api2cartService
     }
 
     /**
-     * @param Api2cartConnection $connection
-     * @param string $sku
-     * @param array|null $fields
-     *
-     * @return array|null
-     *
      * @throws GuzzleException
      */
-    public static function getProductInfo(Api2cartConnection $connection, string $sku, array $fields = null): ?array
+    public static function getProductInfo(Api2cartConnection $connection, string $sku, ?array $fields = null): ?array
     {
         return self::getSimpleProductInfo($connection, $sku, $fields)
             ?? self::getVariantInfo($connection, $sku, $fields);
     }
 
     /**
-     * @param string $store_key
-     * @param string $sku
-     *
-     * @return int|null
-     *
      * @throws GuzzleException
      */
     public static function getSimpleProductID(string $store_key, string $sku): ?int
@@ -363,7 +326,7 @@ class Api2cartService
         $response = Products::find($store_key, [
             'find_where' => 'model',
             'find_value' => $sku,
-            'store_id'   => 0,
+            'store_id' => 0,
         ]);
 
         if (isset($response) && ($response->isNotSuccess())) {
@@ -374,11 +337,6 @@ class Api2cartService
     }
 
     /**
-     * @param string $store_key
-     * @param string $sku
-     *
-     * @return array
-     *
      * @throws GuzzleException
      */
     public static function getProductTypeAndId(string $store_key, string $sku): array
@@ -389,34 +347,28 @@ class Api2cartService
         if ($product_id) {
             return [
                 'type' => 'simple',
-                'id'   => $product_id,
+                'id' => $product_id,
             ];
         }
 
         // try to get variant if simple product does not exist
         $variant_id = self::getVariantID($store_key, $sku);
 
-        if (!empty($variant_id)) {
+        if (! empty($variant_id)) {
             return [
                 'type' => 'variant',
-                'id'   => $variant_id,
+                'id' => $variant_id,
             ];
         }
 
         // returning null if nothing found
         return [
             'type' => null,
-            'id'   => null,
+            'id' => null,
         ];
     }
 
-    /**
-     * @param array       $product
-     * @param string|null $warehouse_id
-     *
-     * @return int
-     */
-    public static function getQuantity(array $product, string $warehouse_id = null): int
+    public static function getQuantity(array $product, ?string $warehouse_id = null): int
     {
         if (is_null($warehouse_id)) {
             return $product['quantity'];
@@ -434,11 +386,6 @@ class Api2cartService
         return $inventories->first()['quantity'];
     }
 
-    /**
-     * @param $product
-     * @param Api2cartConnection $connection
-     * @return array
-     */
     public static function transformProduct($product, Api2cartConnection $connection): array
     {
         $product['sku'] = empty($product['u_sku']) ? $product['u_model'] : $product['u_sku'];
@@ -458,10 +405,6 @@ class Api2cartService
         return $product;
     }
 
-    /**
-     * @param Api2cartProductLink $productLink
-     * @return bool
-     */
     public static function updateSku(Api2cartProductLink $productLink): bool
     {
         try {
@@ -473,25 +416,22 @@ class Api2cartService
 
             $productLink->product->log('eCommerce: Sync failed', [
                 'return_code' => $requestResponse->getReturnCode(),
-                'message' => $requestResponse->getReturnMessage()
+                'message' => $requestResponse->getReturnMessage(),
             ]);
         } catch (ConnectException $exception) {
             $productLink->product->log('eCommerce: Connection timeout, retry scheduled');
+
             return false;
         } catch (GuzzleException $exception) {
             report($exception);
             $productLink->product->log('eCommerce: Sync failed, see logs for more details');
+
             return false;
         }
 
         return false;
     }
 
-    /**
-     * @param $date
-     *
-     * @return string
-     */
     public static function formatDateForApi2cart($date): string
     {
         $carbon_date = new \Illuminate\Support\Carbon($date ?? '2000-01-01 00:00:00');

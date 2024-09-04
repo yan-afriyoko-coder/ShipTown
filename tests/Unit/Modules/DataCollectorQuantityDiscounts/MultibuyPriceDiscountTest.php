@@ -32,7 +32,7 @@ class MultibuyPriceDiscountTest extends TestCase
                 'price' => 25,
                 'sale_price' => 25,
                 'sale_price_start_date' => now()->subDays(14),
-                'sale_price_end_date' => now()->addDays(7)
+                'sale_price_end_date' => now()->addDays(7),
             ]);
 
         $quantityDiscount = QuantityDiscount::factory()->create([
@@ -51,7 +51,7 @@ class MultibuyPriceDiscountTest extends TestCase
                     [
                         'minimum_quantity' => 15,
                         'discounted_price' => 3,
-                    ]
+                    ],
                 ],
             ],
         ]);

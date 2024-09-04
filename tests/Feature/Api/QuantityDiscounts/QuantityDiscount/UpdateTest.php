@@ -21,7 +21,7 @@ class UpdateTest extends TestCase
         /** @var QuantityDiscount $discountToUpdate */
         $discountToUpdate = QuantityDiscount::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->putJson($this->uri . $discountToUpdate->id, [
+        $response = $this->actingAs($user, 'api')->putJson($this->uri.$discountToUpdate->id, [
             'name' => 'Test Discount',
             'type' => 'App\\Modules\\QuantityDiscounts\\src\\Jobs\\CalculateSoldPriceForBuyXGetYForZPriceDiscount',
             'configuration' => [
@@ -39,7 +39,7 @@ class UpdateTest extends TestCase
             'modules_quantity_discounts',
             [
                 'id' => $discountToUpdate->id,
-                'name' => 'Test Discount'
+                'name' => 'Test Discount',
             ]
         );
     }

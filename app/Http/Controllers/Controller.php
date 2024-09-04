@@ -15,18 +15,12 @@ class Controller extends BaseController
     use DispatchesJobs;
     use ValidatesRequests;
 
-    /**
-     * @var int
-     */
     private int $status_code = 200;
 
-    /**
-     * @param string $pdfString
-     */
     public function throwPdfResponse(string $pdfString)
     {
         $headers = [
-            'Content-Type'        => 'application/pdf',
+            'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline',
         ];
 
@@ -41,12 +35,6 @@ class Controller extends BaseController
         )->throwResponse();
     }
 
-    /**
-     * @param QueryBuilder $query
-     * @param int $defaultPerPage
-     *
-     * @return LengthAwarePaginator
-     */
     public function getPaginatedResult(QueryBuilder $query, int $defaultPerPage = 10): LengthAwarePaginator
     {
         $perPage = request()->get('per_page', $defaultPerPage);
@@ -80,7 +68,6 @@ class Controller extends BaseController
     {
         $this->setStatusCode(403)->throwJsonResponse($message);
     }
-
 
     public function respond503ServiceUnavailable($message = 'Service Unavailable')
     {

@@ -10,9 +10,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
-/**
- *
- */
 class RecalculateInventoryQuantityIncomingJob implements ShouldQueue
 {
     use Dispatchable;
@@ -21,6 +18,7 @@ class RecalculateInventoryQuantityIncomingJob implements ShouldQueue
     use SerializesModels;
 
     public ?int $product_id;
+
     public ?int $warehouse_id;
 
     public function __construct(int $product_id, int $warehouse_id)
@@ -36,7 +34,7 @@ class RecalculateInventoryQuantityIncomingJob implements ShouldQueue
      */
     public function handle()
     {
-        $inventoryRecords = DB::select("
+        $inventoryRecords = DB::select('
             SELECT inventory.id as id,
                     MAX(inventory.product_id) as product_id,
                     MAX(inventory.warehouse_id) as warehouse_id,
@@ -60,7 +58,7 @@ class RecalculateInventoryQuantityIncomingJob implements ShouldQueue
            GROUP BY inventory.id
 
            HAVING actual_quantity_incoming <> expected_quantity_incoming
-        ", [\App\Models\DataCollectionTransferIn::class, $this->warehouse_id, $this->product_id]);
+        ', [\App\Models\DataCollectionTransferIn::class, $this->warehouse_id, $this->product_id]);
 
         collect($inventoryRecords)
             ->each(function ($incorrectRecord) {

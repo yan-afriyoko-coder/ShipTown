@@ -36,7 +36,7 @@ class StoreTest extends TestCase
     public function test_store_call_returns_ok()
     {
         $response = $this->postJson(route('api.modules.webhooks.subscriptions.store'), [
-            'endpoint' => 'https://test.com'
+            'endpoint' => 'https://test.com',
         ]);
 
         ray($response->json());
@@ -48,7 +48,7 @@ class StoreTest extends TestCase
                 'service',
                 'method',
                 'response' => [
-                    'SubscriptionArn'
+                    'SubscriptionArn',
                 ],
             ],
         ]);

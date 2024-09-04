@@ -38,9 +38,9 @@ class ProductsPickedCountsWidget extends AbstractDateSelectorWidget
         }
 
         return view('widgets.products_picked_counts_widget', [
-            'config'         => $this->config,
+            'config' => $this->config,
             'count_per_user' => $count_per_user,
-            'total_count'    => $total_count,
+            'total_count' => $total_count,
         ]);
     }
 }

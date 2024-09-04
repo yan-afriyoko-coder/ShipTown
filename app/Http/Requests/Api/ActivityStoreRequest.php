@@ -34,9 +34,8 @@ class ActivityStoreRequest extends FormRequest
             'subject_id' => ['required_with:subject_type', 'integer'],
         ];
 
-
         if ($this->has('subject_type')) {
-            $modelClass = 'App\\Models\\' . Str::ucfirst($this->get('subject_type'));
+            $modelClass = 'App\\Models\\'.Str::ucfirst($this->get('subject_type'));
             $model = app($modelClass)->findOrFail($this->get('subject_id'));
 
             $rules['subject_id'][] = Rule::exists($model->getTable(), $model->getKeyName());

@@ -10,7 +10,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        if (!Schema::hasTable('users')) {
+        if (! Schema::hasTable('users')) {
             Schema::create('users', function (Blueprint $table) {
                 $table->id();
                 $table->integer('printer_id')->nullable();
@@ -31,7 +31,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('sessions')) {
+        if (! Schema::hasTable('sessions')) {
             Schema::create('sessions', function (Blueprint $table) {
                 $table->string('id')->unique();
                 $table->foreignId('user_id')->nullable();
@@ -48,7 +48,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('navigation_menu')) {
+        if (! Schema::hasTable('navigation_menu')) {
             Schema::create('navigation_menu', function (Blueprint $table) {
                 $table->id();
                 $table->string('name', 100);
@@ -61,7 +61,6 @@ return new class extends Migration
         $this->installSpatiePermissions();
         $this->createDefaultUserRoles();
     }
-
 
     private function createDefaultUserRoles(): void
     {
@@ -85,7 +84,7 @@ return new class extends Migration
             throw new \Exception('Error: config/permission.php not loaded. Run [php artisan config:clear] and try again.');
         }
 
-        if (!Schema::hasTable('permissions')) {
+        if (! Schema::hasTable('permissions')) {
             Schema::create($tableNames['permissions'], function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->string('name');
@@ -94,7 +93,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('roles')) {
+        if (! Schema::hasTable('roles')) {
             Schema::create($tableNames['roles'], function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->string('name');
@@ -103,7 +102,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('model_has_permissions')) {
+        if (! Schema::hasTable('model_has_permissions')) {
             Schema::create($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames, $columnNames) {
                 $table->unsignedBigInteger('permission_id');
 
@@ -123,7 +122,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('model_has_roles')) {
+        if (! Schema::hasTable('model_has_roles')) {
             Schema::create($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames, $columnNames) {
                 $table->unsignedBigInteger('role_id');
 
@@ -143,7 +142,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('role_has_permissions')) {
+        if (! Schema::hasTable('role_has_permissions')) {
             Schema::create($tableNames['role_has_permissions'], function (Blueprint $table) use ($tableNames) {
                 $table->unsignedBigInteger('permission_id');
                 $table->unsignedBigInteger('role_id');

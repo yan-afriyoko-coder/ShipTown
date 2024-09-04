@@ -6,9 +6,9 @@ use App\BaseModel;
 
 /**
  * Configuration
+ *
  * @property int $totals_max_product_id_checked
  * @property int totals_by_warehouse_tag_max_inventory_id_checked
- *
  */
 class Configuration extends BaseModel
 {

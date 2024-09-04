@@ -34,25 +34,25 @@ class MultiAutomationsTest extends TestCase
         Condition::create([
             'automation_id' => $automation1->getKey(),
             'condition_class' => StatusCodeEqualsCondition::class,
-            'condition_value' => 'status1'
+            'condition_value' => 'status1',
         ]);
 
         Action::create([
             'automation_id' => $automation1->getKey(),
             'action_class' => SetStatusCodeAction::class,
-            'action_value' => 'status2'
+            'action_value' => 'status2',
         ]);
 
         Condition::create([
             'automation_id' => $automation2->getKey(),
             'condition_class' => StatusCodeEqualsCondition::class,
-            'condition_value' => 'status2'
+            'condition_value' => 'status2',
         ]);
 
         Action::create([
             'automation_id' => $automation2->getKey(),
             'action_class' => SetStatusCodeAction::class,
-            'action_value' => 'status3'
+            'action_value' => 'status3',
         ]);
 
         OrderStatus::create(['name' => 'status1', 'code' => 'status1']);

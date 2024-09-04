@@ -20,4 +20,3 @@ class LoginPageTest extends DuskTestCase
         $this->basicGuestAccessTest($this->uri, true);
     }
 }
-

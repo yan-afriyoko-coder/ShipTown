@@ -12,6 +12,6 @@ class WebhooksConfiguration extends BaseModel
     protected $table = 'modules_webhooks_configuration';
 
     protected $fillable = [
-        'topic_arn'
+        'topic_arn',
     ];
 }

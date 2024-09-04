@@ -38,8 +38,8 @@ class ImportProductsJob extends UniqueJob
             $this->rmsConnection->refresh();
 
             $params = [
-                'per_page'            => $per_page,
-                'order_by'            => 'db_change_stamp:asc',
+                'per_page' => $per_page,
+                'order_by' => 'db_change_stamp:asc',
                 'min:db_change_stamp' => $this->rmsConnection->products_last_timestamp,
             ];
 
@@ -61,11 +61,11 @@ class ImportProductsJob extends UniqueJob
             }
 
             Log::info('Job processing', [
-                'job'                   => self::class,
-                'connection_id'         => $this->rmsConnection->getKey(),
-                'warehouse_code'        => $this->rmsConnection->location_id,
-                'records_downloaded'    => count($response->getResult()),
-                'records_to_download'   => $response->asArray()['total'] - count($response->getResult()),
+                'job' => self::class,
+                'connection_id' => $this->rmsConnection->getKey(),
+                'warehouse_code' => $this->rmsConnection->location_id,
+                'records_downloaded' => count($response->getResult()),
+                'records_to_download' => $response->asArray()['total'] - count($response->getResult()),
             ]);
 
             $roundsLeft--;
@@ -75,7 +75,7 @@ class ImportProductsJob extends UniqueJob
             'code' => 'models_rmsapi_successful_fetch_warehouseId_'.$this->rmsConnection->location_id,
         ], [
             'error_message' => 'RMSAPI not synced for last hour WarehouseID: '.$this->rmsConnection->location_id,
-            'expires_at' => now()->addHour()
+            'expires_at' => now()->addHour(),
         ]);
 
         return true;
@@ -91,41 +91,41 @@ class ImportProductsJob extends UniqueJob
 
         $productsCollection = collect($productList);
 
-        $insertData = $productsCollection->map(function ($product) use ($time) {
+        $insertData = $productsCollection->map(function ($product) {
             return [
-                'connection_id'         => $this->rmsConnection->getKey(),
-                'warehouse_id'          => $this->rmsConnection->warehouse_id,
-                'warehouse_code'        => $this->rmsConnection->location_id,
-                'batch_uuid'            => $this->batch_uuid,
-                'sku'                   => data_get($product, 'item_code'),
-                'name'                  => data_get($product, 'description'),
-                'rms_product_id'        => data_get($product, 'id'),
-                'quantity_on_hand'      => data_get($product, 'quantity_on_hand', 0),
-                'quantity_on_order'     => data_get($product, 'quantity_on_order', 0),
-                'quantity_available'    => data_get($product, 'quantity_available', 0),
-                'quantity_committed'    => data_get($product, 'quantity_committed', 0),
-                'reorder_point'         => data_get($product, 'reorder_point', 0),
-                'restock_level'         => data_get($product, 'restock_level', 0),
-                'price'                 => data_get($product, 'price', 0),
-                'price_a'               => data_get($product, 'price_a', 0),
-                'cost'                  => data_get($product, 'cost', 0),
-                'sale_price'            => data_get($product, 'sale_price', 0),
+                'connection_id' => $this->rmsConnection->getKey(),
+                'warehouse_id' => $this->rmsConnection->warehouse_id,
+                'warehouse_code' => $this->rmsConnection->location_id,
+                'batch_uuid' => $this->batch_uuid,
+                'sku' => data_get($product, 'item_code'),
+                'name' => data_get($product, 'description'),
+                'rms_product_id' => data_get($product, 'id'),
+                'quantity_on_hand' => data_get($product, 'quantity_on_hand', 0),
+                'quantity_on_order' => data_get($product, 'quantity_on_order', 0),
+                'quantity_available' => data_get($product, 'quantity_available', 0),
+                'quantity_committed' => data_get($product, 'quantity_committed', 0),
+                'reorder_point' => data_get($product, 'reorder_point', 0),
+                'restock_level' => data_get($product, 'restock_level', 0),
+                'price' => data_get($product, 'price', 0),
+                'price_a' => data_get($product, 'price_a', 0),
+                'cost' => data_get($product, 'cost', 0),
+                'sale_price' => data_get($product, 'sale_price', 0),
                 'sale_price_start_date' => data_get($product, 'sale_price_start_date', '2000-01-01'),
-                'sale_price_end_date'   => data_get($product, 'sale_price_end_date', '2000-01-01'),
-                'is_web_item'           => data_get($product, 'is_web_item', false),
-                'department_name'       => data_get($product, 'department_name', ''),
-                'category_name'         => data_get($product, 'category_name', ''),
-                'supplier_name'         => data_get($product, 'supplier_name', ''),
-                'sub_description_1'     => data_get($product, 'sub_description_1', ''),
-                'sub_description_3'     => data_get($product, 'sub_description_3', ''),
-                'sub_description_2'     => data_get($product, 'sub_description_2', ''),
-                'raw_import'            => json_encode($product)
+                'sale_price_end_date' => data_get($product, 'sale_price_end_date', '2000-01-01'),
+                'is_web_item' => data_get($product, 'is_web_item', false),
+                'department_name' => data_get($product, 'department_name', ''),
+                'category_name' => data_get($product, 'category_name', ''),
+                'supplier_name' => data_get($product, 'supplier_name', ''),
+                'sub_description_1' => data_get($product, 'sub_description_1', ''),
+                'sub_description_3' => data_get($product, 'sub_description_3', ''),
+                'sub_description_2' => data_get($product, 'sub_description_2', ''),
+                'raw_import' => json_encode($product),
             ];
         });
 
         DB::statement('DROP TEMPORARY TABLE IF EXISTS tempTable;');
 
-        DB::statement("
+        DB::statement('
             CREATE TEMPORARY TABLE tempTable
             (
                 `connection_id`         bigint unsigned DEFAULT NULL,
@@ -156,13 +156,13 @@ class ImportProductsJob extends UniqueJob
                 `sub_description_3`     varchar(255) DEFAULT NULL,
                 `raw_import`            json DEFAULT NULL
             ) COLLATE = utf8mb4_unicode_ci
-        ");
+        ');
         // we will use insert instead of create as this is way faster
         // method of inputting bulk of records to database
         // this won't invoke any events
         DB::table('tempTable')->insert($insertData->toArray());
 
-        DB::statement("
+        DB::statement('
             UPDATE modules_rmsapi_products_imports
             INNER JOIN tempTable
                 ON modules_rmsapi_products_imports.rms_product_id = tempTable.rms_product_id
@@ -197,9 +197,9 @@ class ImportProductsJob extends UniqueJob
                 modules_rmsapi_products_imports.sub_description_3 = tempTable.sub_description_3,
                 modules_rmsapi_products_imports.supplier_name = tempTable.supplier_name,
                 modules_rmsapi_products_imports.raw_import = tempTable.raw_import
-        ");
+        ');
 
-        DB::statement("
+        DB::statement('
             INSERT INTO modules_rmsapi_products_imports (
                 processed_at,
                 reserved_at,
@@ -273,7 +273,7 @@ class ImportProductsJob extends UniqueJob
                 AND modules_rmsapi_products_imports.connection_id = tempTable.connection_id
 
             WHERE modules_rmsapi_products_imports.id IS NULL
-        ");
+        ');
 
         $this->rmsConnection->update(['products_last_timestamp' => $productsCollection->last()['db_change_stamp']]);
     }

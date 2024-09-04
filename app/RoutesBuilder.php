@@ -6,29 +6,17 @@ use Illuminate\Routing\PendingResourceRegistration;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
-/**
- *
- */
 class RoutesBuilder
 {
-    /**
-     * @param string $name
-     * @param array $options
-     * @return PendingResourceRegistration
-     */
     public static function apiResource(string $name, array $options = []): PendingResourceRegistration
     {
-        $controllerClass  = static::getControllerClass($name);
+        $controllerClass = static::getControllerClass($name);
         $routeName = static::getRouteName($name);
         $options['as'] = $routeName;
 
         return Route::apiResource($name, $controllerClass, $options);
     }
 
-    /**
-     * @param string $name
-     * @return string
-     */
     private static function getControllerClass(string $name): string
     {
         // $name = modules/dpd-uk/dpduk-connections (sample)
@@ -63,13 +51,9 @@ class RoutesBuilder
         // $controllerPath = Api\Modules\DpdUk
 
         // $controllerClass = Api\Modules\CustomModuleController
-        return $controllerPath. '\\' . $controllerName;
+        return $controllerPath.'\\'.$controllerName;
     }
 
-    /**
-     * @param string $name
-     * @return string
-     */
     private static function getRouteName(string $name): string
     {
         // $name modules/dpd-uk-connections (sample)

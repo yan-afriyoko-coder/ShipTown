@@ -22,8 +22,6 @@ class ImportShippingAddressJob implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
-     * @param int $order_id
      */
     public function __construct(int $order_id)
     {
@@ -39,7 +37,7 @@ class ImportShippingAddressJob implements ShouldQueue
     {
         $order = Order::whereId($this->order_id)->first();
 
-        if (!$order) {
+        if (! $order) {
             return;
         }
 
@@ -48,7 +46,7 @@ class ImportShippingAddressJob implements ShouldQueue
             ->latest()
             ->first();
 
-        if (!$order_import) {
+        if (! $order_import) {
             return;
         }
 

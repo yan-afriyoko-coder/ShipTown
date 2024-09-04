@@ -9,17 +9,17 @@ class RecountTotalsJob extends UniqueJob
 {
     private ?int $dataCollectionId;
 
-    public function __construct(int $dataCollectionId = null)
+    public function __construct(?int $dataCollectionId = null)
     {
         $this->dataCollectionId = $dataCollectionId;
     }
 
     public function handle(): void
     {
-        DB::statement("DROP TEMPORARY TABLE IF EXISTS tempTable;");
-        DB::statement("DROP TEMPORARY TABLE IF EXISTS tempInventoryTotals;");
+        DB::statement('DROP TEMPORARY TABLE IF EXISTS tempTable;');
+        DB::statement('DROP TEMPORARY TABLE IF EXISTS tempInventoryTotals;');
 
-        DB::statement("
+        DB::statement('
             CREATE TEMPORARY TABLE tempTable AS
                 SELECT
                     data_collections.id as data_collection_id,
@@ -29,9 +29,9 @@ class RecountTotalsJob extends UniqueJob
                 WHERE recount_required = 1 OR (? IS NOT NULL AND data_collections.id = ?)
 
                 LIMIT 5;
-        ", [$this->dataCollectionId, $this->dataCollectionId]);
+        ', [$this->dataCollectionId, $this->dataCollectionId]);
 
-        DB::statement("
+        DB::statement('
             CREATE TEMPORARY TABLE tempInventoryTotals AS
                 SELECT
                      tempTable.data_collection_id as data_collection_id,
@@ -54,9 +54,9 @@ class RecountTotalsJob extends UniqueJob
                 WHERE data_collection_records.deleted_at IS NULL
 
                 GROUP BY tempTable.data_collection_id, tempTable.calculated_at;
-        ");
+        ');
 
-        DB::update("
+        DB::update('
             UPDATE data_collections
 
             INNER JOIN tempInventoryTotals
@@ -72,6 +72,6 @@ class RecountTotalsJob extends UniqueJob
                 data_collections.total_profit = tempInventoryTotals.total_profit,
                 data_collections.calculated_at = tempInventoryTotals.calculated_at,
                 data_collections.updated_at = NOW();
-        ");
+        ');
     }
 }

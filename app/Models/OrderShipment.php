@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\User;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
@@ -16,17 +16,16 @@ use Spatie\QueryBuilder\QueryBuilder;
 /**
  * App\Models\OrderShipment.
  *
- * @property int         $id
- * @property int         $order_id
- * @property string      $shipping_number
- * @property string      $carrier
- * @property string      $service
- * @property string      $tracking_url
- * @property int|null    $user_id
+ * @property int $id
+ * @property int $order_id
+ * @property string $shipping_number
+ * @property string $carrier
+ * @property string $service
+ * @property string $tracking_url
+ * @property int|null $user_id
  * @property string|null $base64_pdf_labels
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
  * @property-read Order $order
  * @property-read User|null $user
  * @property-read int $age_in_days
@@ -41,8 +40,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|OrderShipment whereUpdatedAt($value)
  * @method static Builder|OrderShipment whereUserId($value)
  * @method static Builder|OrderShipment whereAgeInDaysBetween($ageInDaysFrom, $ageInDaysTo)
- * @mixin Eloquent
  *
+ * @mixin Eloquent
  */
 class OrderShipment extends BaseModel
 {
@@ -68,32 +67,23 @@ class OrderShipment extends BaseModel
     // as this is then not populated
     // correctly to events
     protected $attributes = [
-        'base64_pdf_labels' => ''
+        'base64_pdf_labels' => '',
     ];
 
     protected $appends = [
         'age_in_days',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function orderShipmentProducts(): HasMany
     {
         return $this->hasMany(OrderProductShipment::class);
@@ -109,9 +99,6 @@ class OrderShipment extends BaseModel
         return $query->whereRaw('DATEDIFF(now(), `'.$this->getConnection()->getTablePrefix().$this->getTable()."`.`created_at`) BETWEEN $ageInDaysFrom AND $ageInDaysTo");
     }
 
-    /**
-     * @return QueryBuilder
-     */
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(OrderShipment::class)

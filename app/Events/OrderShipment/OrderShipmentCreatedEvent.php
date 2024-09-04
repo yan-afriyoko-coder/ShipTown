@@ -9,16 +9,10 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-/**
- *
- */
 class OrderShipmentCreatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var OrderShipment
-     */
     public OrderShipment $orderShipment;
 
     /**

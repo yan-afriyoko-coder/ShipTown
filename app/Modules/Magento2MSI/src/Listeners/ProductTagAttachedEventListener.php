@@ -11,7 +11,6 @@ class ProductTagAttachedEventListener
     /**
      * Handle the event.
      *
-     * @param ProductTagAttachedEvent $event
      *
      * @return void
      */
@@ -23,7 +22,7 @@ class ProductTagAttachedEventListener
                 ->each(function (Magento2msiConnection $connection) use ($event) {
                     Magento2msiProduct::firstOrCreate([
                         'connection_id' => $connection->getKey(),
-                        'product_id' => $event->product->id
+                        'product_id' => $event->product->id,
                     ], []);
                 });
         }

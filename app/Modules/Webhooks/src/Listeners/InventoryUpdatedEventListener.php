@@ -3,9 +3,7 @@
 namespace App\Modules\Webhooks\src\Listeners;
 
 use App\Events\Inventory\InventoryUpdatedEvent;
-use App\Http\Resources\InventoryResource;
 use App\Models\Inventory;
-use App\Modules\Webhooks\src\Jobs\PublishInventoryWebhooksJob;
 use App\Modules\Webhooks\src\Models\PendingWebhook;
 
 class InventoryUpdatedEventListener

@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Api\Heartbeats;
 
-use App\Jobs\DispatchEveryDayEventJob;
 use App\Models\Heartbeat;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -24,12 +23,12 @@ class IndexTest extends TestCase
     {
         // add expired heartbeat
         Heartbeat::updateOrCreate([
-                'code' => 'somealert'
-            ],
+            'code' => 'somealert',
+        ],
             [
                 'expires_at' => now()->subMinutes(10),
                 'error_message' => 'Some error message',
-                'auto_heal_job_class' => 'App\Jobs\DispatchEveryDayEventJob'
+                'auto_heal_job_class' => 'App\Jobs\DispatchEveryDayEventJob',
             ]
         );
 
@@ -41,7 +40,7 @@ class IndexTest extends TestCase
                     'code',
                     'expires_at',
                     'error_message',
-                    'auto_heal_job_class'
+                    'auto_heal_job_class',
                 ],
             ],
         ]);

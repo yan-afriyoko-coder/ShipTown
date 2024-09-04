@@ -11,9 +11,9 @@ class CsvStreamedResponse
     public static function fromQueryBuilder(QueryBuilder $query, string $filename): StreamedResponse|Writer
     {
         $hasExportedHeaders = false;
+
         return new StreamedResponse(function () use ($query, &$hasExportedHeaders) {
             $handle = fopen('php://output', 'w');
-
 
             $query->chunk(1000, function ($records) use ($handle, &$hasExportedHeaders) {
                 if (! $hasExportedHeaders) {
@@ -31,7 +31,7 @@ class CsvStreamedResponse
             'Cache-Control' => 'no-store, no-cache',
             'Content-Type' => 'text/csv',
             'Content-Transfer-Encoding' => 'binary',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
     }
 }

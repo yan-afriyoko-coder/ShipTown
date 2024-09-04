@@ -17,8 +17,6 @@ class OrderShipmentController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return LengthAwarePaginator
      */
     public function index(): LengthAwarePaginator
     {
@@ -29,10 +27,6 @@ class OrderShipmentController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param OrderShipmentStoreRequest $request
-     *
-     * @return OrderShipmentResource
      */
     public function store(OrderShipmentStoreRequest $request): OrderShipmentResource
     {

@@ -26,7 +26,7 @@ class AnPostShippingService extends ShippingServiceAbstract
         activity()
             ->on($order)
             ->by(auth()->user())
-            ->log('generated shipping label '. $orderShipment->shipping_number);
+            ->log('generated shipping label '.$orderShipment->shipping_number);
 
         return collect()->add($orderShipment);
     }

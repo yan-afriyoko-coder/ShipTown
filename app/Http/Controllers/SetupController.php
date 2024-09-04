@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Modules\MagentoApi\src\Models\MagentoConnection;
-use Illuminate\Http\Request;
 
 class SetupController extends Controller
 {

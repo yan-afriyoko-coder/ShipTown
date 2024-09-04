@@ -2,32 +2,18 @@
 
 namespace Tests\Feature\Reports\ActivityLog;
 
-use App\Models\Product;
-use App\Models\Warehouse;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @var string
-     */
     protected string $uri = '/reports/activity-log';
 
-    /**
-     * @var User
-     */
     protected User $user;
 
-    /**
-     *
-     */
     protected function setUp(): void
     {
         parent::setUp();

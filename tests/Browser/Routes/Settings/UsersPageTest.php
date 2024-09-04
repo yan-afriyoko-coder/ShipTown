@@ -3,7 +3,6 @@
 namespace Tests\Browser\Routes\Settings;
 
 use App\User;
-use Exception;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
@@ -31,4 +30,3 @@ class UsersPageTest extends DuskTestCase
         });
     }
 }
-

@@ -14,7 +14,7 @@ class UpdateWidgetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'   => 'sometimes|required',
+            'name' => 'sometimes|required',
             'config' => 'sometimes|array',
         ];
     }

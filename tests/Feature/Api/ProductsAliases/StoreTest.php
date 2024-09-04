@@ -19,7 +19,7 @@ class StoreTest extends TestCase
 
         $response = $this->actingAs($user, 'api')->postJson($this->uri, [
             'product_id' => $product->id,
-            'alias' => fake()->ean8()
+            'alias' => fake()->ean8(),
         ]);
 
         ray($response->json());
@@ -28,7 +28,7 @@ class StoreTest extends TestCase
 
         $response->assertJsonStructure([
             'data' => [
-                'id'
+                'id',
             ],
         ]);
     }

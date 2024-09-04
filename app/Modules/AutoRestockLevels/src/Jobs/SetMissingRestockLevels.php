@@ -10,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class SetMissingRestockLevels implements ShouldQueue, ShouldBeUniqueUntilProcessing
+class SetMissingRestockLevels implements ShouldBeUniqueUntilProcessing, ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -26,7 +26,7 @@ class SetMissingRestockLevels implements ShouldQueue, ShouldBeUniqueUntilProcess
         return implode('-', [get_class($this)]);
     }
 
-    public function __construct(int $inventory_id = null)
+    public function __construct(?int $inventory_id = null)
     {
         $this->inventory_id = $inventory_id;
     }

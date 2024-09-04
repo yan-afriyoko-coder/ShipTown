@@ -5,7 +5,7 @@ namespace App\Modules\ActiveOrdersInventoryReservations\src\Models;
 use App\BaseModel;
 
 /**
- * @property integer $warehouse_id
+ * @property int $warehouse_id
  */
 class Configuration extends BaseModel
 {

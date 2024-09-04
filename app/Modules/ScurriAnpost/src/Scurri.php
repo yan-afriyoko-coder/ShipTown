@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Modules\ScurriAnpost\src;
 
 use App\Exceptions\ShippingServiceException;
@@ -11,42 +10,40 @@ use App\Modules\ScurriAnpost\src\Api\Client;
 class Scurri
 {
     /**
-     * @param Order $order
-     * @return ShippingLabel
      * @throws ShippingServiceException
      */
     public static function makeShippingLabel(Order $order): ShippingLabel
     {
         $consignment_id = Client::createSingleConsignment([
-            "order_number" => $order->order_number,
-            "recipient" => [
-                "address" => [
-                    "country" => $order->shippingAddress->country_code,
-                    "postcode" => $order->shippingAddress->postcode,
-                    "city" => $order->shippingAddress->city,
-                    "address1" => $order->shippingAddress->address1,
-                    "address2" => $order->shippingAddress->address2,
-                    "state" => $order->shippingAddress->state_code
+            'order_number' => $order->order_number,
+            'recipient' => [
+                'address' => [
+                    'country' => $order->shippingAddress->country_code,
+                    'postcode' => $order->shippingAddress->postcode,
+                    'city' => $order->shippingAddress->city,
+                    'address1' => $order->shippingAddress->address1,
+                    'address2' => $order->shippingAddress->address2,
+                    'state' => $order->shippingAddress->state_code,
                 ],
-                "contact_number" => $order->shippingAddress->phone,
-                "email_address" => "",
-                "company_name" => $order->shippingAddress->company,
-                "name" => $order->shippingAddress->full_name,
+                'contact_number' => $order->shippingAddress->phone,
+                'email_address' => '',
+                'company_name' => $order->shippingAddress->company,
+                'name' => $order->shippingAddress->full_name,
             ],
-            "packages" => [
+            'packages' => [
                 [
-                    "items" => [
+                    'items' => [
                         [
-                            "sku" => "n/a",
-                            "quantity" => 1,
-                            "name" => "Shipment",
-                            "value" => 1,
-                        ]
+                            'sku' => 'n/a',
+                            'quantity' => 1,
+                            'name' => 'Shipment',
+                            'value' => 1,
+                        ],
                     ],
-                    "length" => 50,
-                    "height" => 50,
-                    "width" => 50,
-                    "reference" => ""
+                    'length' => 50,
+                    'height' => 50,
+                    'width' => 50,
+                    'reference' => '',
                 ],
             ],
         ]);
@@ -58,7 +55,7 @@ class Scurri
         $consignment = Client::getConsignment($consignment_id);
 
         if ($documents->failed()) {
-            throw new ShippingServiceException('AnPost: '. $consignment->json('current_status.rejection_reason'));
+            throw new ShippingServiceException('AnPost: '.$consignment->json('current_status.rejection_reason'));
         }
 
         return new ShippingLabel([

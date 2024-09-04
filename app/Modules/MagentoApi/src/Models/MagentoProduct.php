@@ -12,19 +12,17 @@ use Makeable\LaravelFactory\HasFactory;
 /**
  * @property MagentoConnection $magentoConnection
  * @property Product $product
- * @property boolean base_price_sync_required
- * @property boolean special_price_sync_required
- * @property double $magento_price
- * @property double $magento_sale_price
+ * @property bool base_price_sync_required
+ * @property bool special_price_sync_required
+ * @property float $magento_price
+ * @property float $magento_sale_price
  * @property Carbon $magento_sale_price_start_date
  * @property Carbon $magento_sale_price_end_date
- *
  * @property Carbon $base_prices_fetched_at
  * @property array $base_prices_raw_import
  * @property Carbon $special_prices_fetched_at
  * @property array $special_prices_raw_import
  * @property ProductPrice $prices
- *
  */
 class MagentoProduct extends BaseModel
 {
@@ -56,9 +54,9 @@ class MagentoProduct extends BaseModel
         'stock_items_fetched_at' => 'datetime',
         'base_prices_fetched_at' => 'datetime',
         'special_prices_fetched_at' => 'datetime',
-        'stock_items_raw_import'    => 'array',
-        'base_prices_raw_import'    => 'array',
-        'special_prices_raw_import'    => 'array',
+        'stock_items_raw_import' => 'array',
+        'base_prices_raw_import' => 'array',
+        'special_prices_raw_import' => 'array',
     ];
 
     public function product(): BelongsTo

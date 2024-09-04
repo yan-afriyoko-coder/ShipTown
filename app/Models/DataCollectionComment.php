@@ -26,9 +26,6 @@ class DataCollectionComment extends BaseModel
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * @return QueryBuilder
-     */
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(DataCollectionComment::class)

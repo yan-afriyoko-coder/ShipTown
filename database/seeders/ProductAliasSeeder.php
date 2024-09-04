@@ -29,7 +29,7 @@ class ProductAliasSeeder extends Seeder
         foreach ($aliasList as $alias) {
             $aliasExists = ProductAlias::query()->where(['alias' => $alias])->exists();
 
-            if (!$aliasExists) {
+            if (! $aliasExists) {
                 ProductAlias::factory()
                     ->create(['alias' => $alias]);
             }

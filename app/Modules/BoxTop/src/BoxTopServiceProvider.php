@@ -9,19 +9,10 @@ use App\Modules\BaseModuleServiceProvider;
  */
 class BoxTopServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = 'BoxTop API Integration';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'Seamless integration with https://api.boxtrax.com/Help';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = false;
 
     /**

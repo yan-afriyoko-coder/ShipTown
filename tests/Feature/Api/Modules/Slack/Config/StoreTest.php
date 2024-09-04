@@ -24,7 +24,7 @@ class StoreTest extends TestCase
 
         $response->assertJsonStructure([
             'data' => [
-                'id'
+                'id',
             ],
         ]);
     }

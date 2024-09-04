@@ -5,7 +5,6 @@ namespace Tests\Browser\Routes\Order\Packsheet;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\User;
-use Exception;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;

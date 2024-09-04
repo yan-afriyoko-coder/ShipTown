@@ -17,8 +17,6 @@ class OrderProductController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return AnonymousResourceCollection
      */
     public function index(): AnonymousResourceCollection
     {
@@ -29,11 +27,6 @@ class OrderProductController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param UpdateRequest $request
-     * @param OrderProduct  $product
-     *
-     * @return OrderProductResource
      */
     public function update(UpdateRequest $request, OrderProduct $product): OrderProductResource
     {

@@ -25,18 +25,18 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'sku_shipped'       => ['sometimes', 'string'],
-            'product_id'        => ['sometimes', 'integer', 'exists:products,id', 'nullable'],
-            'order_id'          => [
-                    'sometimes', 'integer',
-                    'exists:orders,id',
-//                    Rule::exists('orders', 'id')->where(function ($query) {
-//                        return $query->where('is_active', true);
-//                    }),
-                ],
-            'order_product_id'  => ['sometimes', 'integer', 'exists:orders_products,id'],
-            'warehouse_id'      => ['sometimes', 'integer', 'exists:warehouses,id'],
-            'quantity_shipped'  => ['sometimes', 'numeric'],
+            'sku_shipped' => ['sometimes', 'string'],
+            'product_id' => ['sometimes', 'integer', 'exists:products,id', 'nullable'],
+            'order_id' => [
+                'sometimes', 'integer',
+                'exists:orders,id',
+                //                    Rule::exists('orders', 'id')->where(function ($query) {
+                //                        return $query->where('is_active', true);
+                //                    }),
+            ],
+            'order_product_id' => ['sometimes', 'integer', 'exists:orders_products,id'],
+            'warehouse_id' => ['sometimes', 'integer', 'exists:warehouses,id'],
+            'quantity_shipped' => ['sometimes', 'numeric'],
             'order_shipment_id' => ['sometimes', 'integer', 'exists:orders_products_shipments,id'],
         ];
     }

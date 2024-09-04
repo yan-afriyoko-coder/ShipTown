@@ -9,7 +9,7 @@ class EveryMinuteListener
 {
     public function handle(): void
     {
-         DistributePicksJob::dispatch();
-         UnDistributeDeletedPicksJob::dispatch();
+        DistributePicksJob::dispatch();
+        UnDistributeDeletedPicksJob::dispatch();
     }
 }

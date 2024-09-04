@@ -9,7 +9,8 @@ use Tests\TestCase;
 
 class UpdateTest extends TestCase
 {
-    private function simulationTest() {
+    private function simulationTest()
+    {
         $orderStatus = OrderStatus::create([
             'name' => 'testing',
             'code' => 'testing',
@@ -18,9 +19,9 @@ class UpdateTest extends TestCase
             'sync_ecommerce' => 0,
         ]);
         $response = $this->put(route('api.orders-statuses.update', $orderStatus), [
-            'order_active'      => 0,
-            'reserves_stock'    => 0,
-            'sync_ecommerce'    => 0
+            'order_active' => 0,
+            'reserves_stock' => 0,
+            'sync_ecommerce' => 0,
         ]);
 
         return $response;

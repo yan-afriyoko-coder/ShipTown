@@ -7,7 +7,6 @@ use App\Http\Requests\StorePdfPrintRequest;
 use App\Modules\PrintNode\src\Models\PrintJob;
 use App\Modules\PrintNode\src\Resources\PrintJobResource;
 use App\Services\PdfService;
-use Illuminate\Http\Request;
 
 /**
  * Class PrintOrderController.
@@ -18,9 +17,9 @@ class PdfPrintController extends Controller
     {
         $pdfString = PdfService::fromView('pdf/'.$request->template, $request->data);
 
-        $printJob = new PrintJob();
+        $printJob = new PrintJob;
         $printJob->printer_id = $request->printer_id;
-        $printJob->title = $request->template.'_by_'. auth()->user()->id;
+        $printJob->title = $request->template.'_by_'.auth()->user()->id;
         $printJob->pdf = base64_encode($pdfString);
         $printJob->save();
 

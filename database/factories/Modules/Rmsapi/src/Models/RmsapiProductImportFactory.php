@@ -16,23 +16,23 @@ class RmsapiProductImportFactory extends Factory
         /** @var RmsapiConnection $connection */
         $connection = RmsapiConnection::factory()->create();
 
-        $random_department  = $this->faker->randomElement(['household', 'bedding', 'fashion', 'baby']);
-        $random_category    = $this->faker->randomElement(['category1', 'category2', 'category3', 'category4']);
-        $quantity_on_hand   = rand(0, 1000);
+        $random_department = $this->faker->randomElement(['household', 'bedding', 'fashion', 'baby']);
+        $random_category = $this->faker->randomElement(['category1', 'category2', 'category3', 'category4']);
+        $quantity_on_hand = rand(0, 1000);
         $quantity_committed = rand(0, $quantity_on_hand);
         $quantity_available = $quantity_on_hand - $quantity_committed;
-        $reorder_point      = rand(0, 100);
-        $restock_level      = rand(0, $reorder_point);
+        $reorder_point = rand(0, 100);
+        $restock_level = rand(0, $reorder_point);
 
         $randomSKU = $this->faker->randomNumber(6);
 
         return [
-            "connection_id" => $connection->getKey(),
-            'warehouse_id'  => $connection->warehouse_id,
-            'warehouse_code'=> $connection->location_id,
-            "sku"           => $randomSKU,
-            "name"          => "R/C Glider",
-            "raw_import"    => json_decode('{
+            'connection_id' => $connection->getKey(),
+            'warehouse_id' => $connection->warehouse_id,
+            'warehouse_code' => $connection->location_id,
+            'sku' => $randomSKU,
+            'name' => 'R/C Glider',
+            'raw_import' => json_decode('{
                 "id":1,
                 "cost":110.34,
                 "price":'.(rand(1, 100000) / 100).',
@@ -41,7 +41,7 @@ class RmsapiProductImportFactory extends Factory
                 "price_a":'.(rand(1, 100000) / 100).',
                 "price_b":'.(rand(1, 100000) / 100).',
                 "price_c":'.(rand(1, 100000) / 100).',
-                "item_code":"'. $randomSKU .'",
+                "item_code":"'.$randomSKU.'",
                 "sale_price":0,
                 "category_id":9,
                 "description":"R/C Glider",
@@ -49,10 +49,10 @@ class RmsapiProductImportFactory extends Factory
                 "supplier_id":2,
                 "date_created":"2003-06-03 17:17:23",
                 "department_id":5,
-                "department_name":"'. $random_department .'",
-                "category_name":"'. $random_category .'",
-                "reorder_point":'. $reorder_point .',
-                "restock_level":'. $restock_level .',
+                "department_name":"'.$random_department.'",
+                "category_name":"'.$random_category.'",
+                "reorder_point":'.$reorder_point.',
+                "restock_level":'.$restock_level.',
                 "sale_end_date":null,
                 "food_stampable":0,
                 "db_change_stamp":'.rand(1000, 100000).',
@@ -71,12 +71,12 @@ class RmsapiProductImportFactory extends Factory
                 "aliases": [
                      {
                          "id": 1,
-                         "alias": "'. $this->faker->unique()->ean13() . '",
+                         "alias": "'.$this->faker->unique()->ean13().'",
                          "item_id": 1
                      },
                      {
                          "id": 2,
-                         "alias": "'. $this->faker->unique()->ean13() . '",
+                         "alias": "'.$this->faker->unique()->ean13().'",
                          "item_id": 1
                      }
                 ]

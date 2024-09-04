@@ -20,19 +20,19 @@ use Spatie\QueryBuilder\QueryBuilder;
 /**
  * App\Models\Inventory.
  *
- * @property int         $id
- * @property string      $product_sku
- * @property int|null    $warehouse_id
- * @property int         $product_id
- * @property string      $warehouse_code
- * @property string      $shelve_location
- * @property float       $quantity
- * @property float       $quantity_reserved
- * @property float       $quantity_incoming
- * @property float       $quantity_required
- * @property float       $restock_level
- * @property float       $reorder_point
- * @property int|null    $last_movement_id
+ * @property int $id
+ * @property string $product_sku
+ * @property int|null $warehouse_id
+ * @property int $product_id
+ * @property string $warehouse_code
+ * @property string $shelve_location
+ * @property float $quantity
+ * @property float $quantity_reserved
+ * @property float $quantity_incoming
+ * @property float $quantity_required
+ * @property float $restock_level
+ * @property float $reorder_point
+ * @property int|null $last_movement_id
  * @property Carbon|null $first_movement_at
  * @property Carbon|null $last_movement_at
  * @property Carbon|null $first_received_at
@@ -47,10 +47,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property Carbon|null $updated_at
  * @property-read float $quantity_available
  * @property-read Product $product
- *
  * @property-read Warehouse $warehouse
  * @property-read ProductPrice $prices
- *
  * @property-read Collection|Activity[] $activities
  * @property-read int|null $activities_count
  * @property bool|null $recount_required
@@ -97,40 +95,37 @@ class Inventory extends BaseModel
     ];
 
     protected $attributes = [
-        'quantity'          => 0,
+        'quantity' => 0,
         'quantity_reserved' => 0,
         'quantity_incoming' => 0,
-        'restock_level'     => 0,
-        'reorder_point'     => 0,
+        'restock_level' => 0,
+        'reorder_point' => 0,
     ];
 
     protected $casts = [
-        'recount_required'   => 'boolean',
-        'quantity'           => 'float',
-        'quantity_reserved'  => 'float',
+        'recount_required' => 'boolean',
+        'quantity' => 'float',
+        'quantity_reserved' => 'float',
         'quantity_available' => 'float',
-        'quantity_incoming'  => 'float',
-        'restock_level'      => 'float',
-        'reorder_point'      => 'float',
-        'quantity_required'  => 'float',
-        'occurred_at'        => 'datetime',
-        'first_movement_at'  => 'datetime',
-        'last_movement_at'   => 'datetime',
-        'first_received_at'  => 'datetime',
-        'last_received_at'   => 'datetime',
-        'first_sold_at'      => 'datetime',
-        'last_sold_at'       => 'datetime',
-        'first_counted_at'   => 'datetime',
-        'last_counted_at'    => 'datetime',
-        'in_stock_since'     => 'datetime',
-        'deleted_at'         => 'datetime',
-        'created_at'         => 'datetime',
-        'updated_at'         => 'datetime',
+        'quantity_incoming' => 'float',
+        'restock_level' => 'float',
+        'reorder_point' => 'float',
+        'quantity_required' => 'float',
+        'occurred_at' => 'datetime',
+        'first_movement_at' => 'datetime',
+        'last_movement_at' => 'datetime',
+        'first_received_at' => 'datetime',
+        'last_received_at' => 'datetime',
+        'first_sold_at' => 'datetime',
+        'last_sold_at' => 'datetime',
+        'first_counted_at' => 'datetime',
+        'last_counted_at' => 'datetime',
+        'in_stock_since' => 'datetime',
+        'deleted_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
-    /**
-     * @return QueryBuilder
-     */
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(Inventory::class)
@@ -159,10 +154,10 @@ class Inventory extends BaseModel
                 'quantity_required',
                 'quantity_incoming',
                 'restock_level',
-                'shelve_location'
+                'shelve_location',
             ])
             ->allowedIncludes([
-                'product'
+                'product',
             ]);
     }
 
@@ -187,10 +182,9 @@ class Inventory extends BaseModel
     }
 
     /**
-     * @param mixed $query
-     * @param mixed $min
-     * @param mixed $max
-     *
+     * @param  mixed  $query
+     * @param  mixed  $min
+     * @param  mixed  $max
      * @return mixed
      */
     public function scopeQuantityBetween($query, $min, $max)
@@ -199,10 +193,9 @@ class Inventory extends BaseModel
     }
 
     /**
-     * @param mixed $query
-     * @param mixed $min
-     * @param mixed $max
-     *
+     * @param  mixed  $query
+     * @param  mixed  $min
+     * @param  mixed  $max
      * @return mixed
      */
     public function scopeQuantityAvailableBetween($query, $min, $max)
@@ -211,10 +204,9 @@ class Inventory extends BaseModel
     }
 
     /**
-     * @param mixed $query
-     * @param mixed $min
-     * @param mixed $max
-     *
+     * @param  mixed  $query
+     * @param  mixed  $min
+     * @param  mixed  $max
      * @return mixed
      */
     public function scopeQuantityRequiredBetween($query, $min, $max)
@@ -223,10 +215,9 @@ class Inventory extends BaseModel
     }
 
     /**
-     * @param mixed $query
-     * @param mixed $min
-     * @param mixed $max
-     *
+     * @param  mixed  $query
+     * @param  mixed  $min
+     * @param  mixed  $max
      * @return mixed
      */
     public function scopeRestockLevelBetween($query, $min, $max)
@@ -235,8 +226,6 @@ class Inventory extends BaseModel
     }
 
     /**
-     * @param $query
-     * @param $tags
      * @return mixed
      */
     public function scopeWithWarehouseTags($query, $tags)
@@ -246,10 +235,7 @@ class Inventory extends BaseModel
         });
     }
 
-
     /**
-     * @param $query
-     * @param $warehouse_code
      * @return mixed
      */
     public function scopeAddWarehouseSource($query, $warehouse_code)
@@ -270,10 +256,9 @@ class Inventory extends BaseModel
     }
 
     /**
-     * @param mixed $query
-     * @param mixed $min
-     * @param mixed $max
-     *
+     * @param  mixed  $query
+     * @param  mixed  $min
+     * @param  mixed  $max
      * @return mixed
      */
     public function scopeInventorySourceQuantityAvailableBetween($query, $min, $max)
@@ -281,9 +266,6 @@ class Inventory extends BaseModel
         return $query->whereBetween('inventory_source_quantity_available', [floatval($min), floatval($max)]);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
@@ -294,18 +276,11 @@ class Inventory extends BaseModel
         return $this->hasOne(ProductPrice::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function warehouse(): BelongsTo
     {
         return $this->belongsTo(Warehouse::class);
     }
 
-
-    /**
-     * @return HasMany
-     */
     public function productAliases(): HasMany
     {
         return $this->hasMany(ProductAlias::class, 'product_id', 'product_id');

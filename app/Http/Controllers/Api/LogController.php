@@ -17,10 +17,6 @@ class LogController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @param Request $request
-     *
-     * @return AnonymousResourceCollection
      */
     public function index(Request $request): AnonymousResourceCollection
     {

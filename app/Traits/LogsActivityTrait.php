@@ -15,7 +15,6 @@ trait LogsActivityTrait
 {
     use LogsActivity;
 
-
     public function log($message, array $properties = []): self
     {
         activity()->on($this)

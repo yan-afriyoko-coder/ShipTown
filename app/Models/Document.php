@@ -19,6 +19,7 @@ class Document extends Model
     use HasFactory;
 
     const TYPE_URL = 'url';
+
     const TYPE_PDF = 'pdf';
 
     protected $fillable = [

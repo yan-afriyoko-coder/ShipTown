@@ -52,9 +52,10 @@ class ImportAsStocktakeJob extends UniqueJob
             if ($dataCollectionRecords->isEmpty()) {
                 $dataCollection->update(['currently_running_task' => null]);
                 Bus::chain([
-                    new SequenceNumberJob(),
-                    new DispatchRecalculateInventoryRecordsJob(),
+                    new SequenceNumberJob,
+                    new DispatchRecalculateInventoryRecordsJob,
                 ])->dispatch();
+
                 return;
             }
 
@@ -75,7 +76,7 @@ class ImportAsStocktakeJob extends UniqueJob
                     'quantity_after' => $record->quantity_scanned,
                     'unit_cost' => $record->inventory->prices->cost,
                     'unit_price' => $record->inventory->prices->price,
-                    'description' => Str::substr('Data Collection - ' . $dataCollection->name, 0, 255),
+                    'description' => Str::substr('Data Collection - '.$dataCollection->name, 0, 255),
                     'user_id' => Auth::id(),
                     'created_at' => now()->utc()->toDateTimeLocalString(),
                     'updated_at' => now()->utc()->toDateTimeLocalString(),

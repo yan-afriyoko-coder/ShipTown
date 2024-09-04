@@ -7,23 +7,13 @@ use App\Modules\BaseModuleServiceProvider;
 
 /**
  * Class ServiceProvider
- * @package App\Modules\OversoldProductNotification\src
  */
 class OversoldProductNotificationServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = 'Automation - Oversold Product Notification';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'Sends email  when "oversold" tag attached to product';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = false;
 
     /**
@@ -33,7 +23,7 @@ class OversoldProductNotificationServiceProvider extends BaseModuleServiceProvid
      */
     protected $listen = [
         ProductTagAttachedEvent::class => [
-            Listeners\ProductAttachedEvent\OversoldTagListener::class
-        ]
+            Listeners\ProductAttachedEvent\OversoldTagListener::class,
+        ],
     ];
 }

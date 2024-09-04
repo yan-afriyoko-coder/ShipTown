@@ -24,7 +24,7 @@ class ReportWidget extends AbstractWidget
         $report = app($this->config['report']);
 
         $report->defaultSort = data_get($this->config, 'sort', $report->defaultSort);
-        $report->view        = data_get($this->config, 'view', $report->view);
+        $report->view = data_get($this->config, 'view', $report->view);
         $report->setPerPage(data_get($this->config, 'per_page', request()->get('per_page', $report->getPerPage())));
 
         return $report->response();

@@ -50,23 +50,24 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
 
         InventoryUpdatedEvent::class => [
             Listeners\InventoryUpdatedEventListener::class,
-        ]
+        ],
     ];
 
     public function boot()
     {
         parent::boot();
 
-        $this->publishes([__DIR__ . '/../config/webhooks.php' => config_path('webhooks.php')], 'config');
-        $this->mergeConfigFrom(__DIR__ . '/../config/webhooks.php', 'webhooks');
+        $this->publishes([__DIR__.'/../config/webhooks.php' => config_path('webhooks.php')], 'config');
+        $this->mergeConfigFrom(__DIR__.'/../config/webhooks.php', 'webhooks');
 
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'webhooks');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'webhooks');
     }
 
     public static function enabling(): bool
     {
         if (empty(config('aws.credentials.secret'))) {
             Log::warning('AWS SNS not configured. Please set the SNS_TOPIC_PREFIX environment variable.');
+
             return false;
         }
 
@@ -85,6 +86,7 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
         } catch (Exception $exception) {
             ray($exception);
             report($exception);
+
             return false;
         }
 

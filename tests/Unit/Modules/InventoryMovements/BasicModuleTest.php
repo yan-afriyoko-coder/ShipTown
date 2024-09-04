@@ -24,7 +24,9 @@ use Tests\TestCase;
 class BasicModuleTest extends TestCase
 {
     private InventoryMovement $inventoryMovement01;
+
     private InventoryMovement $inventoryMovement02;
+
     private Inventory $inventory;
 
     protected function setUp(): void

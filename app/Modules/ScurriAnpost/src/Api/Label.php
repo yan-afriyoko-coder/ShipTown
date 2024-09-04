@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Modules\ScurriAnpost\src\Api;
 
 use Illuminate\Http\Client\Response;

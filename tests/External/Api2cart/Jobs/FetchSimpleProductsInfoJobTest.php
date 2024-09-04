@@ -17,9 +17,9 @@ class FetchSimpleProductsInfoJobTest extends TestCase
     /**
      * A basic feature test example.
      *
-     * @throws RequestException
-     *
      * @return void
+     *
+     * @throws RequestException
      */
     public function testExample()
     {
@@ -27,7 +27,7 @@ class FetchSimpleProductsInfoJobTest extends TestCase
         $warehouse = Warehouse::factory()->create();
 
         $api2cartConnection = Api2cartConnection::factory()->create([
-            'pricing_source_warehouse_id' => $warehouse->getKey()
+            'pricing_source_warehouse_id' => $warehouse->getKey(),
         ]);
 
         $productLink1 = Api2cartProductLink::factory()->create([

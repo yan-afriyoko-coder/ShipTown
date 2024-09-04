@@ -16,7 +16,7 @@ class DestroyTest extends TestCase
 
         $connection = \App\Modules\DpdUk\src\Models\Connection::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->delete($this->uri . $connection->getKey());
+        $response = $this->actingAs($user, 'api')->delete($this->uri.$connection->getKey());
 
         ray($response->json());
 
@@ -24,7 +24,7 @@ class DestroyTest extends TestCase
 
         $response->assertJsonStructure([
             'data' => [
-                'id'
+                'id',
             ],
         ]);
     }

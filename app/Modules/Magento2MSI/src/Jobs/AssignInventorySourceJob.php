@@ -49,6 +49,7 @@ class AssignInventorySourceJob extends UniqueJob
                 'connection_id' => $magento2msiConnection->getKey(),
                 'response' => $response->json(),
             ]);
+
             return false;
         }
 

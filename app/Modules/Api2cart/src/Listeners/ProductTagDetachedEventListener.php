@@ -3,7 +3,6 @@
 namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\Product\ProductTagDetachedEvent;
-use App\Modules\Api2cart\src\Jobs\SyncProduct;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 
@@ -12,7 +11,6 @@ class ProductTagDetachedEventListener
     /**
      * Handle the event.
      *
-     * @param ProductTagDetachedEvent $event
      *
      * @return void
      */

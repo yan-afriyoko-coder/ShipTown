@@ -10,7 +10,7 @@ class InventoryDashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $report = new InventoryDashboardReport();
+        $report = new InventoryDashboardReport;
 
         return $report->response($request);
     }

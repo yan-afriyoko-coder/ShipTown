@@ -14,24 +14,12 @@ use App\Modules\Rmsapi\src\Jobs\UpdateImportedSalesRecordsJob;
 
 class RmsapiModuleServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = 'eCommerce - RMSAPI Integration';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'Provides connectivity to Microsoft RMS 2.0';
 
-    /**
-     * @var string
-     */
     public static string $settings_link = '/settings/rmsapi';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = false;
 
     /**

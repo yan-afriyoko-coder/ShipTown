@@ -12,7 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class RunEnabledAutomationsOnSpecificOrderJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
+class RunEnabledAutomationsOnSpecificOrderJob implements ShouldBeUniqueUntilProcessing, ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;

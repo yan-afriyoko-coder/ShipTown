@@ -7,7 +7,6 @@ use App\Http\Resources\OrderProductShipmentResource;
 use App\Models\OrderProductShipment;
 use App\Models\Warehouse;
 use App\Modules\Webhooks\src\Models\PendingWebhook;
-use App\Modules\Webhooks\src\Models\Webhook;
 use App\Modules\Webhooks\src\Services\SnsService;
 use Exception;
 use Illuminate\Support\Collection;
@@ -77,7 +76,6 @@ class PublishOrderProductShipmentWebhooksJob extends UniqueJob
         }
     }
 
-
     private function publishRecords(Collection $chunk)
     {
         $records = OrderProductShipmentResource::collection(
@@ -93,10 +91,10 @@ class PublishOrderProductShipmentWebhooksJob extends UniqueJob
         return SnsService::publishNew(
             $payload->toJson(),
             [
-                "warehouse_code" => [
-                    "DataType" => "String",
-                    "StringValue" => data_get($records->collection->first()->resource->toArray(), 'warehouse.code')
-                ]
+                'warehouse_code' => [
+                    'DataType' => 'String',
+                    'StringValue' => data_get($records->collection->first()->resource->toArray(), 'warehouse.code'),
+                ],
             ]
         );
     }

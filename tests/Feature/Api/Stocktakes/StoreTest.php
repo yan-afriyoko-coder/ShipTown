@@ -21,7 +21,7 @@ class StoreTest extends TestCase
             ->postJson(route('api.stocktakes.store'), [
                 'warehouse_id' => $warehouse->getKey(),
                 'product_id' => $product->getKey(),
-                'new_quantity' => 0
+                'new_quantity' => 0,
             ]);
 
         ray($response->json());
@@ -33,17 +33,17 @@ class StoreTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 '*' => [
-                    "id",
-                    "inventory_id",
-                    "product_id",
-                    "warehouse_id" ,
-                    "quantity_delta",
-                    "quantity_before",
-                    "quantity_after",
-                    "description",
-                    "user_id",
-                    "created_at",
-                    "updated_at",
+                    'id',
+                    'inventory_id',
+                    'product_id',
+                    'warehouse_id',
+                    'quantity_delta',
+                    'quantity_before',
+                    'quantity_after',
+                    'description',
+                    'user_id',
+                    'created_at',
+                    'updated_at',
                 ],
             ],
         ]);

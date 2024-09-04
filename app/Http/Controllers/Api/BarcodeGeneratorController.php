@@ -24,10 +24,10 @@ class BarcodeGeneratorController extends Controller
         return new Response(
             DNS1D::getBarcodeSVG($content, $barcode_type, $width, $height, $color, $show_code),
             200,
-            array(
-                'Content-Type'          => $content_type,
-                'Content-Disposition'   => 'inline; filename="' . $filename . '"'
-            )
+            [
+                'Content-Type' => $content_type,
+                'Content-Disposition' => 'inline; filename="'.$filename.'"',
+            ]
         );
     }
 }

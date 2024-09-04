@@ -21,7 +21,7 @@ class DestroyTest extends TestCase
         /** @var QuantityDiscount $discountToDelete */
         $discountToDelete = QuantityDiscount::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->delete($this->uri . $discountToDelete->id);
+        $response = $this->actingAs($user, 'api')->delete($this->uri.$discountToDelete->id);
 
         ray($response->json());
 

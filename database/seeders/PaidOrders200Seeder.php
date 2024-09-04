@@ -154,9 +154,6 @@ class PaidOrders200Seeder extends Seeder
             });
     }
 
-    /**
-     * @return mixed
-     */
     public function createIrishShippingAddress(): mixed
     {
         return OrderAddress::factory()->create(['country_name' => 'Ireland', 'country_code' => 'IE']);

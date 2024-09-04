@@ -35,20 +35,18 @@ class SplitOrderToWarehouseCodeAction_SplitSingleProductTest extends TestCase
         /** @var Product $product */
         $product = Product::factory()->create();
 
-
         $warehouses->each(function (Warehouse $warehouse) use ($product) {
             Inventory::updateOrCreate([
                 'product_id' => $product->getKey(),
                 'warehouse_id' => $warehouse->getKey(),
             ], [
-                'quantity' => 1
+                'quantity' => 1,
             ]);
         });
 
-        /** @var  $order */
         $order = Order::factory()->create(['status_code' => 'packing']);
 
-        $orderProduct = new OrderProduct();
+        $orderProduct = new OrderProduct;
         $orderProduct->order_id = $order->getKey();
         $orderProduct->product_id = $product->getKey();
         $orderProduct->name_ordered = $product->name;
@@ -60,18 +58,18 @@ class SplitOrderToWarehouseCodeAction_SplitSingleProductTest extends TestCase
         $warehouses->each(function (Warehouse $warehouse) {
             $status_code_name = 'packing_'.$warehouse->code;
 
-            $automation = new Automation();
+            $automation = new Automation;
             $automation->enabled = false;
             $automation->name = 'packing to '.$status_code_name;
             $automation->save();
 
-            $condition = new Condition();
+            $condition = new Condition;
             $condition->automation_id = $automation->getKey();
             $condition->condition_class = StatusCodeEqualsCondition::class;
             $condition->condition_value = 'packing';
             $condition->save();
 
-            $action = new Action();
+            $action = new Action;
             $action->automation_id = $automation->getKey();
             $action->action_class = SplitOrderToWarehouseCodeAction::class;
             $action->action_value = $warehouse->code.',packing_web';

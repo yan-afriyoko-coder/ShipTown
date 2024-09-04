@@ -8,6 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  *  Class DataCollectionResource
+ *
  * @mixin DataCollection
  */
 class DataCollectionResource extends JsonResource
@@ -16,7 +17,6 @@ class DataCollectionResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param  Request  $request
-     * @return array
      */
     public function toArray($request): array
     {

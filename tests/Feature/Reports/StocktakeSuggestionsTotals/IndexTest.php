@@ -5,9 +5,6 @@ namespace Tests\Feature\Reports\StocktakeSuggestionsTotals;
 use App\User;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
     protected string $uri = '/reports/stocktake-suggestions';

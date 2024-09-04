@@ -21,21 +21,21 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property int $product_id
  * @property string $warehouse_code
  * @property int $warehouse_id
- * @property double $total_transferred_in
- * @property double $total_transferred_out
- * @property double $quantity_requested
- * @property double $quantity_scanned
- * @property double $quantity_to_scan
- * @property double $unit_cost
- * @property double $unit_sold_price
- * @property double $unit_discount
- * @property double $unit_full_price
+ * @property float $total_transferred_in
+ * @property float $total_transferred_out
+ * @property float $quantity_requested
+ * @property float $quantity_scanned
+ * @property float $quantity_to_scan
+ * @property float $unit_cost
+ * @property float $unit_sold_price
+ * @property float $unit_discount
+ * @property float $unit_full_price
  * @property string $price_source
  * @property int $price_source_id
- * @property double $total_cost_price
- * @property double $total_sold_price
- * @property double $total_full_price
- * @property double $total_discount
+ * @property float $total_cost_price
+ * @property float $total_sold_price
+ * @property float $total_full_price
+ * @property float $total_discount
  * @property string $custom_uuid
  * @property bool $is_scanned
  * @property Carbon $created_at
@@ -99,7 +99,7 @@ class DataCollectionRecord extends Model
         'total_profit' => 'float',
     ];
 
-    public function replicate(array $except = null): self
+    public function replicate(?array $except = null): self
     {
         // these are computed columns or columns that should not be copied when replicating a record
         return parent::replicate(array_merge($except ?? [], [
@@ -116,7 +116,7 @@ class DataCollectionRecord extends Model
             'total_price',
             'is_requested',
             'is_fully_scanned',
-            'is_over_scanned'
+            'is_over_scanned',
         ]));
     }
 
@@ -147,7 +147,7 @@ class DataCollectionRecord extends Model
 
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
-        $allowedSort = AllowedSort::custom('has_quantity_required', new HasQuantityRequiredSort());
+        $allowedSort = AllowedSort::custom('has_quantity_required', new HasQuantityRequiredSort);
 
         return QueryBuilder::for(DataCollectionRecord::class)
             ->allowedFilters([])

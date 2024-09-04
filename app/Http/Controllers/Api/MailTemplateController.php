@@ -7,18 +7,14 @@ use App\Http\Requests\MailTemplate\UpdateRequest;
 use App\Http\Requests\MailTemplateIndexRequest;
 use App\Http\Resources\MailTemplateResource;
 use App\Models\MailTemplate;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class MailTemplateController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @param MailTemplateIndexRequest $request
-     * @return AnonymousResourceCollection
      */
-    public function index(MailTemplateIndexRequest $request) : AnonymousResourceCollection
+    public function index(MailTemplateIndexRequest $request): AnonymousResourceCollection
     {
         $mailTemplates = MailTemplate::all();
 
@@ -28,8 +24,6 @@ class MailTemplateController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param UpdateRequest $request
-     * @param MailTemplate $mailTemplate
      * @return MailTemplateResource
      */
     public function update(UpdateRequest $request, MailTemplate $mailTemplate)
@@ -37,7 +31,7 @@ class MailTemplateController extends Controller
         $data = $request->validated();
 
         if (isset($data['to'])) {
-            $data['to'] = implode(", ", $data['to']);
+            $data['to'] = implode(', ', $data['to']);
         }
 
         $mailTemplate->update($data);

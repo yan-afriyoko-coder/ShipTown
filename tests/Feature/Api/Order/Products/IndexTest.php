@@ -16,7 +16,7 @@ class IndexTest extends TestCase
         OrderProduct::factory()->create();
 
         $response = $this->actingAs($user, 'api')->getJson(route('order.products.index', [
-            'include'=> [
+            'include' => [
                 'order',
                 'product',
                 'product.aliases',
@@ -40,7 +40,7 @@ class IndexTest extends TestCase
                     'quantity_ordered',
                     'quantity_picked',
                     'quantity_shipped',
-                    'order'   => [],
+                    'order' => [],
                     'product' => [
                         'aliases' => [],
                     ],

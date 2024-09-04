@@ -12,8 +12,8 @@ use Spatie\QueryBuilder\QueryBuilder;
 /**
  * @property string $base_url
  * @property string $api_access_token
- * @property integer $magento_store_id
- * @property integer inventory_source_warehouse_tag_id
+ * @property int $magento_store_id
+ * @property int inventory_source_warehouse_tag_id
  */
 class MagentoConnection extends BaseModel
 {
@@ -53,7 +53,7 @@ class MagentoConnection extends BaseModel
     {
         return QueryBuilder::for(MagentoConnection::class)
             ->allowedIncludes([
-                'tags','warehouse'
+                'tags', 'warehouse',
             ]);
     }
 

@@ -30,8 +30,6 @@ class AppMakeDuskTest extends GeneratorCommand
 
     /**
      * Get the stub file for the generator.
-     *
-     * @return string
      */
     protected function getStub(): string
     {
@@ -42,7 +40,6 @@ class AppMakeDuskTest extends GeneratorCommand
      * Get the destination class path.
      *
      * @param  string  $name
-     * @return string
      */
     protected function getPath($name): string
     {
@@ -55,7 +52,6 @@ class AppMakeDuskTest extends GeneratorCommand
      * Get the default namespace for the class.
      *
      * @param  string  $rootNamespace
-     * @return string
      */
     protected function getDefaultNamespace($rootNamespace): string
     {
@@ -64,8 +60,6 @@ class AppMakeDuskTest extends GeneratorCommand
 
     /**
      * Get the root namespace for the class.
-     *
-     * @return string
      */
     protected function rootNamespace(): string
     {

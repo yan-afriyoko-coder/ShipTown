@@ -26,9 +26,9 @@ class TransfersFromWarehouseSeeder extends Seeder
             ->each(function ($destinationWarehouse) use ($sourceWarehouse) {
                 $dataCollection = DataCollection::factory()
                     ->create([
-                        'warehouse_id' =>  $destinationWarehouse->getKey(),
+                        'warehouse_id' => $destinationWarehouse->getKey(),
                         'warehouse_code' => $destinationWarehouse->code,
-                        'name' => 'Transfer from ' . $sourceWarehouse->name,
+                        'name' => 'Transfer from '.$sourceWarehouse->name,
                         'type' => DataCollectionTransferIn::class,
                         'created_at' => now()->subHours(rand(24, 48)),
                     ]);
@@ -36,7 +36,7 @@ class TransfersFromWarehouseSeeder extends Seeder
                 // not scanned yet
                 DataCollectionRecord::factory()->create([
                     'data_collection_id' => $dataCollection->getKey(),
-                    'warehouse_id' =>  $destinationWarehouse->getKey(),
+                    'warehouse_id' => $destinationWarehouse->getKey(),
                     'warehouse_code' => $destinationWarehouse->code,
                     'product_id' => Product::inRandomOrder('45')->first()->getKey(),
                     'quantity_requested' => 12,
@@ -45,7 +45,7 @@ class TransfersFromWarehouseSeeder extends Seeder
 
                 DataCollectionRecord::factory()->create([
                     'data_collection_id' => $dataCollection->getKey(),
-                    'warehouse_id' =>  $destinationWarehouse->getKey(),
+                    'warehouse_id' => $destinationWarehouse->getKey(),
                     'warehouse_code' => $destinationWarehouse->code,
                     'product_id' => Product::inRandomOrder('46')->first()->getKey(),
                     'quantity_requested' => 12,
@@ -54,7 +54,7 @@ class TransfersFromWarehouseSeeder extends Seeder
 
                 DataCollectionRecord::factory()->create([
                     'data_collection_id' => $dataCollection->getKey(),
-                    'warehouse_id' =>  $destinationWarehouse->getKey(),
+                    'warehouse_id' => $destinationWarehouse->getKey(),
                     'warehouse_code' => $destinationWarehouse->code,
                     'product_id' => Product::inRandomOrder('47')->first()->getKey(),
                     'quantity_requested' => 54,
@@ -64,7 +64,7 @@ class TransfersFromWarehouseSeeder extends Seeder
                 // fully scanned
                 DataCollectionRecord::factory()->create([
                     'data_collection_id' => $dataCollection->getKey(),
-                    'warehouse_id' =>  $destinationWarehouse->getKey(),
+                    'warehouse_id' => $destinationWarehouse->getKey(),
                     'warehouse_code' => $destinationWarehouse->code,
                     'product_id' => Product::inRandomOrder('48')->first()->getKey(),
                     'quantity_requested' => 6,
@@ -73,7 +73,7 @@ class TransfersFromWarehouseSeeder extends Seeder
 
                 DataCollectionRecord::factory()->create([
                     'data_collection_id' => $dataCollection->getKey(),
-                    'warehouse_id' =>  $destinationWarehouse->getKey(),
+                    'warehouse_id' => $destinationWarehouse->getKey(),
                     'warehouse_code' => $destinationWarehouse->code,
                     'product_id' => Product::query()->inRandomOrder()->first()->getKey(),
                     'quantity_requested' => 24,
@@ -82,7 +82,7 @@ class TransfersFromWarehouseSeeder extends Seeder
 
                 DataCollectionRecord::factory()->create([
                     'data_collection_id' => $dataCollection->getKey(),
-                    'warehouse_id' =>  $destinationWarehouse->getKey(),
+                    'warehouse_id' => $destinationWarehouse->getKey(),
                     'warehouse_code' => $destinationWarehouse->code,
                     'product_id' => Product::query()->inRandomOrder()->first()->getKey(),
                     'quantity_requested' => 1,
@@ -92,7 +92,7 @@ class TransfersFromWarehouseSeeder extends Seeder
                 // over scanned
                 DataCollectionRecord::factory()->create([
                     'data_collection_id' => $dataCollection->getKey(),
-                    'warehouse_id' =>  $destinationWarehouse->getKey(),
+                    'warehouse_id' => $destinationWarehouse->getKey(),
                     'warehouse_code' => $destinationWarehouse->code,
                     'product_id' => Product::query()->inRandomOrder()->first()->getKey(),
                     'quantity_requested' => 6,
@@ -101,7 +101,7 @@ class TransfersFromWarehouseSeeder extends Seeder
 
                 DataCollectionRecord::factory()->create([
                     'data_collection_id' => $dataCollection->getKey(),
-                    'warehouse_id' =>  $destinationWarehouse->getKey(),
+                    'warehouse_id' => $destinationWarehouse->getKey(),
                     'warehouse_code' => $destinationWarehouse->code,
                     'product_id' => Product::query()->inRandomOrder()->first()->getKey(),
                     'quantity_requested' => 24,
@@ -110,7 +110,7 @@ class TransfersFromWarehouseSeeder extends Seeder
 
                 DataCollectionRecord::factory()->create([
                     'data_collection_id' => $dataCollection->getKey(),
-                    'warehouse_id' =>  $destinationWarehouse->getKey(),
+                    'warehouse_id' => $destinationWarehouse->getKey(),
                     'warehouse_code' => $destinationWarehouse->code,
                     'product_id' => Product::query()->inRandomOrder()->first()->getKey(),
                     'quantity_requested' => 1,
@@ -120,7 +120,7 @@ class TransfersFromWarehouseSeeder extends Seeder
                 // under scanned
                 DataCollectionRecord::factory()->create([
                     'data_collection_id' => $dataCollection->getKey(),
-                    'warehouse_id' =>  $destinationWarehouse->getKey(),
+                    'warehouse_id' => $destinationWarehouse->getKey(),
                     'warehouse_code' => $destinationWarehouse->code,
                     'product_id' => Product::query()->inRandomOrder()->first()->getKey(),
                     'quantity_requested' => 6,
@@ -129,7 +129,7 @@ class TransfersFromWarehouseSeeder extends Seeder
 
                 DataCollectionRecord::factory()->create([
                     'data_collection_id' => $dataCollection->getKey(),
-                    'warehouse_id' =>  $destinationWarehouse->getKey(),
+                    'warehouse_id' => $destinationWarehouse->getKey(),
                     'warehouse_code' => $destinationWarehouse->code,
                     'product_id' => Product::query()->inRandomOrder()->first()->getKey(),
                     'quantity_requested' => 24,
@@ -138,7 +138,7 @@ class TransfersFromWarehouseSeeder extends Seeder
 
                 DataCollectionRecord::factory()->create([
                     'data_collection_id' => $dataCollection->getKey(),
-                    'warehouse_id' =>  $destinationWarehouse->getKey(),
+                    'warehouse_id' => $destinationWarehouse->getKey(),
                     'warehouse_code' => $destinationWarehouse->code,
                     'product_id' => Product::query()->inRandomOrder()->first()->getKey(),
                     'quantity_requested' => 3,
@@ -148,7 +148,7 @@ class TransfersFromWarehouseSeeder extends Seeder
                 // not requested
                 DataCollectionRecord::factory()->create([
                     'data_collection_id' => $dataCollection->getKey(),
-                    'warehouse_id' =>  $destinationWarehouse->getKey(),
+                    'warehouse_id' => $destinationWarehouse->getKey(),
                     'warehouse_code' => $destinationWarehouse->code,
                     'product_id' => Product::query()->inRandomOrder()->first()->getKey(),
                     'quantity_requested' => null,
@@ -157,7 +157,7 @@ class TransfersFromWarehouseSeeder extends Seeder
 
                 DataCollectionRecord::factory()->create([
                     'data_collection_id' => $dataCollection->getKey(),
-                    'warehouse_id' =>  $destinationWarehouse->getKey(),
+                    'warehouse_id' => $destinationWarehouse->getKey(),
                     'warehouse_code' => $destinationWarehouse->code,
                     'product_id' => Product::query()->inRandomOrder()->first()->getKey(),
                     'quantity_requested' => null,
@@ -166,7 +166,7 @@ class TransfersFromWarehouseSeeder extends Seeder
 
                 DataCollectionRecord::factory()->create([
                     'data_collection_id' => $dataCollection->getKey(),
-                    'warehouse_id' =>  $destinationWarehouse->getKey(),
+                    'warehouse_id' => $destinationWarehouse->getKey(),
                     'warehouse_code' => $destinationWarehouse->code,
                     'product_id' => Product::query()->inRandomOrder()->first()->getKey(),
                     'quantity_requested' => null,

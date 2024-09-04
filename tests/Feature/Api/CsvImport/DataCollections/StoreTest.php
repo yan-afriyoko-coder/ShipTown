@@ -27,7 +27,7 @@ class StoreTest extends TestCase
                     'product_sku' => $product->sku,
                     $warehouse->code => rand(0, 100),
                 ],
-            ]
+            ],
         ]);
 
         $response->assertSuccessful();

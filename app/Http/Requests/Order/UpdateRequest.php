@@ -25,11 +25,11 @@ class UpdateRequest extends FormRequest
     {
         return [
             'shipping_number' => ['sometimes'],
-            'label_template'  => ['sometimes','exists:shipping_services,code','nullable'],
-            'status_code'     => ['sometimes'],
-            'packed_at'       => ['sometimes', 'date'],
-            'packer_user_id'  => ['sometimes', 'integer', 'exists:users,id'],
-            'is_packed'       => ['sometimes', 'boolean'],
+            'label_template' => ['sometimes', 'exists:shipping_services,code', 'nullable'],
+            'status_code' => ['sometimes'],
+            'packed_at' => ['sometimes', 'date'],
+            'packer_user_id' => ['sometimes', 'integer', 'exists:users,id'],
+            'is_packed' => ['sometimes', 'boolean'],
         ];
     }
 }

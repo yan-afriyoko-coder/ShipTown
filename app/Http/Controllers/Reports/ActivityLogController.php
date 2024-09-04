@@ -10,7 +10,8 @@ class ActivityLogController extends ReportController
 {
     public function index(Request $request): mixed
     {
-        $report = new ActivityReport();
+        $report = new ActivityReport;
+
         return $report->response($request);
     }
 }

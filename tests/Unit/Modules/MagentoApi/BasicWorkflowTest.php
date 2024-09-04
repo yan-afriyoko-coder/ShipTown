@@ -25,6 +25,7 @@ class BasicWorkflowTest extends TestCase
 
         EventServiceProviderBase::enableModule();
     }
+
     /** @test */
     public function test_module_basic_functionality()
     {
@@ -55,7 +56,7 @@ class BasicWorkflowTest extends TestCase
             'product_id' => $product->id,
             'base_prices_fetched_at' => null,
             'base_prices_raw_import' => null,
-            'exists_in_magento' => 1
+            'exists_in_magento' => 1,
         ]);
 
         EnsureProductRecordsExistJob::dispatch();

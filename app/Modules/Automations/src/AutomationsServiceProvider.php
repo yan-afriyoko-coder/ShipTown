@@ -13,19 +13,10 @@ use App\Modules\BaseModuleServiceProvider;
 
 class AutomationsServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = 'Automations - Active Orders';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'Sporadically, when required, runs automations on active orders';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = true;
 
     /**
@@ -49,7 +40,7 @@ class AutomationsServiceProvider extends BaseModuleServiceProvider
         ],
 
         ShippingLabelCreatedEvent::class => [
-            Listeners\ShippingLabelCreatedListener::class
+            Listeners\ShippingLabelCreatedListener::class,
         ],
 
         OrderShipmentCreatedEvent::class => [

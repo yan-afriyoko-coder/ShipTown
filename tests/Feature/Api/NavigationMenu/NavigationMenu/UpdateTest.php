@@ -13,15 +13,15 @@ class UpdateTest extends TestCase
     {
         if (is_null($body)) {
             $body = [
-                'name'  => 'testing',
-                'url'   => 'testing',
+                'name' => 'testing',
+                'url' => 'testing',
                 'group' => 'picklist',
             ];
         }
 
         $navigationMenu = NavigationMenu::create([
-            'name'  => 'testing',
-            'url'   => 'testing',
+            'name' => 'testing',
+            'url' => 'testing',
             'group' => 'picklist',
         ]);
 
@@ -82,8 +82,8 @@ class UpdateTest extends TestCase
         );
 
         $response = $this->simulationTest([
-            'name'  => 'tes',
-            'url'   => 'tes',
+            'name' => 'tes',
+            'url' => 'tes',
             'group' => 'tes',
         ]);
 

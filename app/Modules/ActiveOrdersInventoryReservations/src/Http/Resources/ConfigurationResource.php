@@ -18,7 +18,7 @@ class ConfigurationResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'warehouse_id' => $this->warehouse_id
+            'warehouse_id' => $this->warehouse_id,
         ];
     }
 }

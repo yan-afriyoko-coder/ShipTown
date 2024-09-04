@@ -8,26 +8,14 @@ use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @var string
-     */
     protected string $uri = 'data-collector';
 
-    /**
-     * @var User
-     */
     protected User $user;
 
-    /**
-     *
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -55,10 +43,10 @@ class IndexTest extends TestCase
 
         $dataCollection = DataCollection::factory()->create([
             'warehouse_id' => Warehouse::factory()->create()->getKey(),
-            'name' => 'test'
+            'name' => 'test',
         ]);
 
-        $response = $this->get($this->uri . '/' . $dataCollection->id);
+        $response = $this->get($this->uri.'/'.$dataCollection->id);
 
         $response->assertSuccessful();
     }
@@ -72,10 +60,10 @@ class IndexTest extends TestCase
 
         $dataCollection = DataCollection::factory()->create([
             'warehouse_id' => Warehouse::factory()->create()->getKey(),
-            'name' => 'test'
+            'name' => 'test',
         ]);
 
-        $response = $this->get($this->uri . '/' . $dataCollection->id);
+        $response = $this->get($this->uri.'/'.$dataCollection->id);
 
         $response->assertSuccessful();
     }

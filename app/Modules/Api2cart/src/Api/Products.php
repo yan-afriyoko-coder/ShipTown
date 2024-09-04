@@ -2,20 +2,11 @@
 
 namespace App\Modules\Api2cart\src\Api;
 
-use App\Modules\Api2cart\src\Exceptions\RequestException;
-use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 
-/**
- *
- */
 class Products extends Entity
 {
     /**
-     * @param string $store_key
-     * @param array $params
-     *
-     * @return RequestResponse
      * @throws GuzzleException
      */
     public static function getProductList(string $store_key, array $params): RequestResponse
@@ -24,25 +15,17 @@ class Products extends Entity
     }
 
     /**
-     * @param string $store_key
-     * @param int $product_id
-     * @param int $store_id
-     *
-     * @return RequestResponse
      * @throws GuzzleException
      */
     public static function assignStore(string $store_key, int $product_id, int $store_id): RequestResponse
     {
         return Client::POST($store_key, 'product.store.assign.json', [
             'product_id' => $product_id,
-            'store_id'   => $store_id,
+            'store_id' => $store_id,
         ]);
     }
 
     /**
-     * @param string $store_key
-     * @param string $sku
-     * @return RequestResponse
      * @throws GuzzleException
      */
     public static function productChildItemFind(string $store_key, string $sku): RequestResponse
@@ -54,9 +37,6 @@ class Products extends Entity
     }
 
     /**
-     * @param $store_key
-     * @param $params
-     * @return RequestResponse
      * @throws GuzzleException
      */
     public static function find($store_key, $params): RequestResponse
@@ -65,9 +45,6 @@ class Products extends Entity
     }
 
     /**
-     * @param $store_key
-     * @param $params
-     * @return RequestResponse
      * @throws GuzzleException
      */
     public static function variantInfo($store_key, $params): RequestResponse
@@ -76,9 +53,6 @@ class Products extends Entity
     }
 
     /**
-     * @param string $store_key
-     * @param array $params
-     * @return RequestResponse
      * @throws GuzzleException
      */
     public static function add(string $store_key, array $params): RequestResponse

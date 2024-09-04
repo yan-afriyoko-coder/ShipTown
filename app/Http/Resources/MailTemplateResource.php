@@ -15,11 +15,11 @@ class MailTemplateResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'            => $this->getKey(),
-            'name'          => $this->name,
-            'subject'       => $this->subject,
-            'reply_to'      => $this->reply_to,
-            'to'            => $this->to,
+            'id' => $this->getKey(),
+            'name' => $this->name,
+            'subject' => $this->subject,
+            'reply_to' => $this->reply_to,
+            'to' => $this->to,
             'html_template' => $this->html_template,
             'text_template' => $this->text_template,
         ];

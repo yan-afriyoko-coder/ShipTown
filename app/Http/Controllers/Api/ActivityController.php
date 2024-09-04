@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ActivityIndexRequest;
 use App\Http\Requests\Api\ActivityStoreRequest;
 use App\Http\Resources\LogResource;
-use App\Http\Resources\ProductResource;
-use App\Models\Product;
 use App\Modules\Reports\src\Models\ActivityReport;
 use App\User;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -18,7 +16,7 @@ class ActivityController extends Controller
 {
     public function index(ActivityIndexRequest $request): AnonymousResourceCollection
     {
-        $report = new ActivityReport();
+        $report = new ActivityReport;
 
         return LogResource::collection($report->queryBuilder()->simplePaginate());
     }
@@ -26,15 +24,15 @@ class ActivityController extends Controller
     public function store(ActivityStoreRequest $request): JsonResource
     {
         $activityID = Activity::query()->insertGetId([
-            'log_name'      => data_get($request->validated(), 'log_name'),
-            'description'   => data_get($request->validated(), 'description'),
-            'properties'    => data_get($request->validated(), 'properties'),
-            'subject_type'  => data_get($request->validated(), 'subject_type'),
-            'subject_id'    => data_get($request->validated(), 'subject_id'),
-            'causer_type'   => $request->user() ? User::class : null,
-            'causer_id'     => data_get($request->user(), 'id'),
-            'created_at'    => now(),
-            'updated_at'    => now(),
+            'log_name' => data_get($request->validated(), 'log_name'),
+            'description' => data_get($request->validated(), 'description'),
+            'properties' => data_get($request->validated(), 'properties'),
+            'subject_type' => data_get($request->validated(), 'subject_type'),
+            'subject_id' => data_get($request->validated(), 'subject_id'),
+            'causer_type' => $request->user() ? User::class : null,
+            'causer_id' => data_get($request->user(), 'id'),
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         abort_unless($activityID, 500, 'activity not saved, try again');

@@ -38,13 +38,13 @@ class ShippingAddressCountryCodeInConditionTest extends TestCase
         Condition::create([
             'automation_id' => $automation->getKey(),
             'condition_class' => ShippingAddressCountryCodeInCondition::class,
-            'condition_value' => 'PL'
+            'condition_value' => 'PL',
         ]);
 
         Action::create([
             'automation_id' => $automation->getKey(),
             'action_class' => SetStatusCodeAction::class,
-            'action_value' => 'international'
+            'action_value' => 'international',
         ]);
 
         $address = OrderAddress::factory()->create(['country_code' => 'PL']);
@@ -53,7 +53,7 @@ class ShippingAddressCountryCodeInConditionTest extends TestCase
         $order = Order::factory()->create([
             'status_code' => 'paid',
             'shipping_method_code' => 'international',
-            'shipping_address_id' => $address->getKey()
+            'shipping_address_id' => $address->getKey(),
         ]);
 
         OrderProduct::factory()->create(['order_id' => $order->getKey()]);

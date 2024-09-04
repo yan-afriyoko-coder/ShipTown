@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 class NoMovementJob extends UniqueJob
 {
     private string $reason;
+
     private int $points;
 
     public function handle()
@@ -33,7 +34,7 @@ class NoMovementJob extends UniqueJob
             WHERE inventory.quantity > 0
             AND inventory.quantity_available > 100
             AND products_prices.price > 5
-            AND inventory.last_sold_at < '" . now()->subDays(7)->format('Y-m-d H:i:s') . "'
+            AND inventory.last_sold_at < '".now()->subDays(7)->format('Y-m-d H:i:s')."'
             AND inventory.last_movement_at > inventory.last_counted_at
             AND NOT EXISTS (
                 SELECT NULL
@@ -43,7 +44,6 @@ class NoMovementJob extends UniqueJob
             )
         ", [$this->points, $this->reason, $this->reason]);
     }
-
 
     private function deleteIncorrectSuggestions(): void
     {
@@ -60,7 +60,7 @@ class NoMovementJob extends UniqueJob
             WHERE stocktake_suggestions.reason = ? AND (
                 inventory.quantity_available < 100
                 OR products_prices.price < 5
-                OR inventory.last_sold_at > '" . now()->subDays(7)->format('Y-m-d H:i:s') . "'
+                OR inventory.last_sold_at > '".now()->subDays(7)->format('Y-m-d H:i:s')."'
                 OR inventory.last_movement_at < inventory.last_counted_at
             )
         ", [$this->reason]);

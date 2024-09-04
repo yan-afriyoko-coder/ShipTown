@@ -11,7 +11,7 @@ class RecheckIfProductsExistInMagentoJob extends UniqueJob
     public function handle(): void
     {
         do {
-            $recordsAffected = DB::affectingStatement("
+            $recordsAffected = DB::affectingStatement('
                 WITH tempTable AS (
                     SELECT
                       modules_magento2msi_inventory_source_items.id as modules_magento2msi_inventory_source_items_id
@@ -31,7 +31,7 @@ class RecheckIfProductsExistInMagentoJob extends UniqueJob
                 INNER JOIN tempTable ON tempTable.modules_magento2msi_inventory_source_items_id = modules_magento2msi_inventory_source_items.id
 
                 SET modules_magento2msi_inventory_source_items.exists_in_magento = null;
-            ");
+            ');
 
             Log::info('Job processing', [
                 'job' => self::class,

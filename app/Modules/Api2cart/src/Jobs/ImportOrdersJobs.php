@@ -39,8 +39,6 @@ class ImportOrdersJobs extends UniqueJob
     }
 
     /**
-     * @param Api2cartConnection $api2cartConnection
-     *
      * @throws Exception|GuzzleException
      */
     private function importOrders(Api2cartConnection $api2cartConnection): void
@@ -49,11 +47,11 @@ class ImportOrdersJobs extends UniqueJob
 
         // initialize params
         $params = [
-            'params'         => 'force_all',
-            'created_from'   => '2022-01-01 00:00:00',
-            'sort_by'        => 'modified_at',
+            'params' => 'force_all',
+            'created_from' => '2022-01-01 00:00:00',
+            'sort_by' => 'modified_at',
             'sort_direction' => 'asc',
-            'count'          => $batchSize,
+            'count' => $batchSize,
         ];
 
         if ($api2cartConnection->magento_store_id) {
@@ -71,7 +69,8 @@ class ImportOrdersJobs extends UniqueJob
         $orders = Orders::get($api2cartConnection->bridge_api_key, $params);
 
         if ($orders === null) {
-            Log::warning("API2CART: Could not fetch orders");
+            Log::warning('API2CART: Could not fetch orders');
+
             return;
         }
 
@@ -80,10 +79,10 @@ class ImportOrdersJobs extends UniqueJob
         $this->saveOrders($api2cartConnection, $orders);
 
         Heartbeat::query()->updateOrCreate([
-            'code' => implode('_', ['api2cart', 'ImportOrdersJob', $api2cartConnection->getKey()])
+            'code' => implode('_', ['api2cart', 'ImportOrdersJob', $api2cartConnection->getKey()]),
         ], [
             'error_message' => 'Web orders not fetched for last hour',
-            'expires_at' => now()->addHour()
+            'expires_at' => now()->addHour(),
         ]);
 
         // for better performance and no long blocking jobs
@@ -94,10 +93,6 @@ class ImportOrdersJobs extends UniqueJob
         }
     }
 
-    /**
-     * @param Api2cartConnection $api2cartConnection
-     * @param array              $ordersCollection
-     */
     private function saveOrders(Api2cartConnection $api2cartConnection, array $ordersCollection): void
     {
         foreach ($ordersCollection as $order) {
@@ -113,10 +108,6 @@ class ImportOrdersJobs extends UniqueJob
         }
     }
 
-    /**
-     * @param Api2cartConnection $connection
-     * @param $order
-     */
     private function updateLastSyncedTimestamp(Api2cartConnection $connection, $order)
     {
         if (empty($order)) {

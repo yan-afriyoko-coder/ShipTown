@@ -50,7 +50,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels'          => ['daily'],
+            'channels' => ['daily'],
             'ignore_exceptions' => false,
         ],
 
@@ -87,12 +87,12 @@ return [
         ],
 
         'insightOps' => [
-            'driver'       => 'monolog',
-            'level'        => env('INSIGHTOPS_LOG_LEVEL'),
-            'handler'      => \Monolog\Handler\InsightOpsHandler::class,
+            'driver' => 'monolog',
+            'level' => env('INSIGHTOPS_LOG_LEVEL'),
+            'handler' => \Monolog\Handler\InsightOpsHandler::class,
             'handler_with' => [
                 'region' => env('INSIGHTOPS_REGION'),
-                'token'  => env('INSIGHTOPS_TOKEN'),
+                'token' => env('INSIGHTOPS_TOKEN'),
             ],
         ],
 

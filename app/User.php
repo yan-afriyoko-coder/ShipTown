@@ -28,15 +28,15 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
 /**
  * App\User.
  *
- * @property int         $id
- * @property int|null    $printer_id
- * @property string      $address_label_template
- * @property string      $name
- * @property string      $email
- * @property int         $location_id
+ * @property int $id
+ * @property int|null $printer_id
+ * @property string $address_label_template
+ * @property string $name
+ * @property string $email
+ * @property int $location_id
  * @property Carbon|null $email_verified_at
- * @property string      $password
- * @property int|null    $warehouse_id
+ * @property string $password
+ * @property int|null $warehouse_id
  * @property string|null $warehouse_code
  * @property Warehouse|null $warehouse
  * @property string|null $remember_token
@@ -86,10 +86,10 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  */
 class User extends Authenticatable
 {
-    use HasFactory;
     use HasApiTokens;
-    use Notifiable;
+    use HasFactory;
     use HasRoles;
+    use Notifiable;
     use SnoozeNotifiable;
     use SoftDeletes;
 
@@ -112,9 +112,9 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
-        'email_verified_at'       => 'datetime',
+        'email_verified_at' => 'datetime',
         'ask_for_shipping_number' => 'bool',
-        'two_factor_expires_at'   => 'datetime',
+        'two_factor_expires_at' => 'datetime',
     ];
 
     public static function getSpatieQueryBuilder(): QueryBuilder

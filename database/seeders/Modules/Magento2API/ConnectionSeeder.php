@@ -33,4 +33,3 @@ class ConnectionSeeder extends Seeder
         EnsureProductRecordsExistJob::dispatch();
     }
 }
-

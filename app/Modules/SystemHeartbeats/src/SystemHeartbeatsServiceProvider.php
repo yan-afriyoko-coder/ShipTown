@@ -16,19 +16,10 @@ use App\Modules\BaseModuleServiceProvider;
  */
 class SystemHeartbeatsServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = 'System Heartbeats';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'This module monitors core system functionalities like events and jobs';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = true;
 
     /**

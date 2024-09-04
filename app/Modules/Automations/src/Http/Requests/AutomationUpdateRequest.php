@@ -10,8 +10,6 @@ class AutomationUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -20,8 +18,6 @@ class AutomationUpdateRequest extends FormRequest
 
     /**
      * Get the condition rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {
@@ -38,7 +34,7 @@ class AutomationUpdateRequest extends FormRequest
             'conditions.*.condition_value' => 'nullable|string',
             'actions' => 'array',
             'actions.*.action_class' => ['nullable', Rule::in($available_action_classes)],
-            'actions.*.action_value' => 'nullable|string'
+            'actions.*.action_value' => 'nullable|string',
         ];
     }
 }

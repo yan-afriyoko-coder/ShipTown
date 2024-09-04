@@ -9,9 +9,9 @@ class EnvVariablesTest extends TestCase
     /**
      * A basic feature test example.
      *
-     * @throws \Exception
-     *
      * @return void
+     *
+     * @throws \Exception
      */
     public function test_if_variables_set()
     {

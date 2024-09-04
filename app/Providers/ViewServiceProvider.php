@@ -33,7 +33,7 @@ class ViewServiceProvider extends ServiceProvider
 
             $navigationMenuPicklist = $navigationMenu->where('group', 'picklist')->sortBy('name');
             $navigationMenuPacklist = $navigationMenu->where('group', 'packlist')->sortBy('name');
-            $navigationMenuReports  = $navigationMenu->where('group', 'reports')->sortBy('name');
+            $navigationMenuReports = $navigationMenu->where('group', 'reports')->sortBy('name');
             $view->with(compact('navigationMenuPicklist', 'navigationMenuPacklist', 'navigationMenuReports'));
         });
     }

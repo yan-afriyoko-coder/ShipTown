@@ -18,8 +18,8 @@ class StoreTest extends TestCase
     public function test_store_call_returns_ok()
     {
         $params = [
-            'name'                    => 'User Test',
-            'printer_id'              => 1,
+            'name' => 'User Test',
+            'printer_id' => 1,
             'ask_for_shipping_number' => false,
         ];
 

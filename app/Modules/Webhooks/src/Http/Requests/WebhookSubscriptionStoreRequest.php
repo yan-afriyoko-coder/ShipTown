@@ -24,7 +24,7 @@ class WebhookSubscriptionStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'endpoint' => ['required', 'string', 'starts_with:https://']
+            'endpoint' => ['required', 'string', 'starts_with:https://'],
         ];
     }
 }

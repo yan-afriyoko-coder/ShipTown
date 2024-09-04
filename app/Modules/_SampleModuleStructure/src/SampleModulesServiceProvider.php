@@ -10,24 +10,12 @@ use Exception;
  */
 class SampleModulesServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = '';
 
-    /**
-     * @var string
-     */
     public static string $module_description = '';
 
-    /**
-     * @var string
-     */
     public static string $settings_link = '';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = false;
 
     /**
@@ -36,21 +24,21 @@ class SampleModulesServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-//        Every10minEvent::class => [],
-//
-//        HourlyEvent::class => [],
-//
-//        DailyEvent::class => [],
-//
-//        ProductPriceUpdatedEvent::class => [],
-//
-//        ProductTagAttachedEvent::class => [],
-//
-//        ProductTagDetachedEvent::class => [],
-//
-//        InventoryUpdatedEvent::class => [],
-//
-//        OrderUpdatedEvent::class => []
+        //        Every10minEvent::class => [],
+        //
+        //        HourlyEvent::class => [],
+        //
+        //        DailyEvent::class => [],
+        //
+        //        ProductPriceUpdatedEvent::class => [],
+        //
+        //        ProductTagAttachedEvent::class => [],
+        //
+        //        ProductTagDetachedEvent::class => [],
+        //
+        //        InventoryUpdatedEvent::class => [],
+        //
+        //        OrderUpdatedEvent::class => []
     ];
 
     /**
@@ -63,12 +51,12 @@ class SampleModulesServiceProvider extends BaseModuleServiceProvider
         $module_filename = '';
 
         $this->publishes(
-            [__DIR__. '/../config/' . $module_filename . '.php' => config_path('_SampleModuleStructure.php')],
+            [__DIR__.'/../config/'.$module_filename.'.php' => config_path('_SampleModuleStructure.php')],
             'config'
         );
 
         $this->mergeConfigFrom(
-            __DIR__.'/../config/' . $module_filename . '.php',
+            __DIR__.'/../config/'.$module_filename.'.php',
             $module_filename
         );
 

@@ -41,44 +41,36 @@ class QuantityDiscountsTest extends DuskTestCase
             $browser->disableFitOnFailure();
             $browser->loginAs($user);
             $browser->visit($this->uri)
-                    ->pause($this->shortDelay)->clickLink('Menu')
-                    ->pause($this->shortDelay)->clickLink('Settings')
-                    ->pause($this->shortDelay)->clickLink('Modules')
-                    ->pause($this->shortDelay)->clickLink('Quantity Discounts Configuration')
-
-                    ->pause($this->shortDelay)->clickLink('New')
-                    ->pause($this->shortDelay)->typeSlowly('name', 'Buy 2 get 3rd half price')
-                    ->pause($this->shortDelay)->select('type', 'Buy X, get Y for Z percent discount')
-                    ->pause($this->shortDelay)->clickLink('Create')
-
-                    ->pause($this->shortDelay)->clickLink('Edit Configuration')
-                    ->pause($this->shortDelay)->typeSlowly('Quantity Full Price', '2')
-                    ->pause($this->shortDelay)->typeSlowly('Quantity Discounted Price', '1')
-                    ->pause($this->shortDelay)->typeSlowly('Discount Percent', '50')
-                    ->pause($this->shortDelay)->clickLink('Save')
-
-                    ->pause($this->shortDelay)->typeSlowly('input', '4001')
-                    ->pause($this->shortDelay)->keys('input', 'enter')
-
-                    ->assertSee($product->description)
-                    ->assertSee("Price: 15.00")
-
-                    ->pause($this->shortDelay)->clickLink('Tools')
-                    ->pause($this->shortDelay)->clickLink('Point Of Sale')
-
-                    ->pause($this->shortDelay)->typeSlowly('input', '4001')
-                    ->pause($this->shortDelay)->keys('input', 'enter')
-                    ->pause($this->shortDelay)->keys('input', 'enter')
-                    ->pause($this->shortDelay)->keys('input', 'enter')
-                    ->assertSee('Total: 25.00')
-
-                    ->pause($this->shortDelay)->typeSlowly('input', '4001')
-                    ->pause($this->shortDelay)->keys('input', 'enter')
-                    ->pause($this->shortDelay)->keys('input', 'enter')
-                    ->pause($this->shortDelay)->keys('input', 'enter')
-                    ->assertSee('Total: 50.00')
-
-                    ->assertSourceMissing('Server Error');
+                ->pause($this->shortDelay)->clickLink('Menu')
+                ->pause($this->shortDelay)->clickLink('Settings')
+                ->pause($this->shortDelay)->clickLink('Modules')
+                ->pause($this->shortDelay)->clickLink('Quantity Discounts Configuration')
+                ->pause($this->shortDelay)->clickLink('New')
+                ->pause($this->shortDelay)->typeSlowly('name', 'Buy 2 get 3rd half price')
+                ->pause($this->shortDelay)->select('type', 'Buy X, get Y for Z percent discount')
+                ->pause($this->shortDelay)->clickLink('Create')
+                ->pause($this->shortDelay)->clickLink('Edit Configuration')
+                ->pause($this->shortDelay)->typeSlowly('Quantity Full Price', '2')
+                ->pause($this->shortDelay)->typeSlowly('Quantity Discounted Price', '1')
+                ->pause($this->shortDelay)->typeSlowly('Discount Percent', '50')
+                ->pause($this->shortDelay)->clickLink('Save')
+                ->pause($this->shortDelay)->typeSlowly('input', '4001')
+                ->pause($this->shortDelay)->keys('input', 'enter')
+                ->assertSee($product->description)
+                ->assertSee('Price: 15.00')
+                ->pause($this->shortDelay)->clickLink('Tools')
+                ->pause($this->shortDelay)->clickLink('Point Of Sale')
+                ->pause($this->shortDelay)->typeSlowly('input', '4001')
+                ->pause($this->shortDelay)->keys('input', 'enter')
+                ->pause($this->shortDelay)->keys('input', 'enter')
+                ->pause($this->shortDelay)->keys('input', 'enter')
+                ->assertSee('Total: 25.00')
+                ->pause($this->shortDelay)->typeSlowly('input', '4001')
+                ->pause($this->shortDelay)->keys('input', 'enter')
+                ->pause($this->shortDelay)->keys('input', 'enter')
+                ->pause($this->shortDelay)->keys('input', 'enter')
+                ->assertSee('Total: 50.00')
+                ->assertSourceMissing('Server Error');
         });
     }
 }

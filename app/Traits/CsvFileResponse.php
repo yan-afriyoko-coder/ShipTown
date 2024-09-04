@@ -12,16 +12,13 @@ use League\Csv\Writer;
 trait CsvFileResponse
 {
     /**
-     * @param Collection $recordSet
-     * @param string     $filename
+     * @return Application|ResponseFactory|Response
      *
      * @throws CannotInsertRecord
-     *
-     * @return Application|ResponseFactory|Response
      */
     private function toCsvFileResponse(Collection $recordSet, string $filename)
     {
-        $csv = Writer::createFromFileObject(new \SplTempFileObject());
+        $csv = Writer::createFromFileObject(new \SplTempFileObject);
 
         if ($recordSet->isNotEmpty()) {
             $csv->insertOne(array_keys($recordSet[0]->getAttributes()));
@@ -32,9 +29,9 @@ trait CsvFileResponse
         }
 
         return response((string) $csv, 200, [
-            'Content-Type'              => 'text/csv',
+            'Content-Type' => 'text/csv',
             'Content-Transfer-Encoding' => 'binary',
-            'Content-Disposition'       => 'attachment; filename="'.$filename.'"',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
     }
 }

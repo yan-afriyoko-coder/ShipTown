@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
 
 /**
  *  DataCollection
+ *
  * @property int $id
  * @property int $warehouse_code
  * @property int $warehouse_id
@@ -24,36 +25,30 @@ use Illuminate\Support\Carbon;
  * @property string $currently_running_task
  * @property int $shipping_address_id
  * @property int $billing_address_id
- * @property double $total_quantity_scanned
- * @property double $total_cost
- * @property double $total_full_price
- * @property double $total_discount
- * @property double $total_sold_price
- * @property double $total_profit
- *
- *
+ * @property float $total_quantity_scanned
+ * @property float $total_cost
+ * @property float $total_full_price
+ * @property float $total_discount
+ * @property float $total_sold_price
+ * @property float $total_profit
  * @property string $custom_uuid
  * @property Carbon $deleted_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property HasMany $records
- *
  * @property Warehouse $warehouse
  * @property DataCollection $destinationCollection
- *
- *
  */
 class DataCollection extends BaseModel
 {
     use HasFactory;
-
-    use SoftDeletes;
     use LogsActivityTrait;
+    use SoftDeletes;
 
     protected static $logAttributes = [
         'deleted_at',
         'type',
-        'currently_running_task'
+        'currently_running_task',
     ];
 
     protected $fillable = [
@@ -65,7 +60,7 @@ class DataCollection extends BaseModel
         'destination_collection_id',
         'name',
         'custom_uuid',
-        'currently_running_task'
+        'currently_running_task',
     ];
 
     protected $casts = [
@@ -92,15 +87,12 @@ class DataCollection extends BaseModel
         return $this->belongsTo(DataCollection::class, 'destination_collection_id');
     }
 
-    /**
-     * @return HasMany|DataCollectionComment
-     */
     public function comments(): HasMany|DataCollectionComment
     {
         return $this->hasMany(DataCollectionComment::class)->orderByDesc('id');
     }
 
-    public function firstOrCreateProductRecord(mixed $product_id, float $unit_sold_price = null): DataCollectionRecord
+    public function firstOrCreateProductRecord(mixed $product_id, ?float $unit_sold_price = null): DataCollectionRecord
     {
         $inventory = Inventory::query()
             ->with('prices')

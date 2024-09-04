@@ -36,7 +36,6 @@ class QuantityAfterTest extends TestCase
 
         $quantityAfterOriginal = $stocktakeMovement->quantity_after;
 
-
         $inventoryMovement01->update(['quantity_delta' => $inventoryMovement01->quantity_delta + 10]);
         $inventoryMovement02->update(['quantity_delta' => $inventoryMovement02->quantity_delta + 10]);
         $stocktakeMovement->update(['quantity_delta' => $stocktakeMovement->quantity_delta + 10]);

@@ -6,7 +6,7 @@ use App\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * @property integer automation_id
+ * @property int automation_id
  * @property string action_class
  * @property string action_value
  */

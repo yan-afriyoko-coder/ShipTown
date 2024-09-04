@@ -13,18 +13,17 @@ use Illuminate\Support\Collection;
 /**
  * App\Modules\Api2cart\src\Models\Api2cartOrderImports.
  *
- * @property int            $id
- * @property int|null       $connection_id
- * @property int|null       $order_id
- * @property string|null    $when_processed
- * @property string|null    $order_number
- * @property integer|null   $api2cart_order_id
- * @property string|null    $shipping_method_name
- * @property string|null    $shipping_method_code
- * @property array          $raw_import
- * @property Carbon|null    $created_at
- * @property Carbon|null    $updated_at
- *
+ * @property int $id
+ * @property int|null $connection_id
+ * @property int|null $order_id
+ * @property string|null $when_processed
+ * @property string|null $order_number
+ * @property int|null $api2cart_order_id
+ * @property string|null $shipping_method_name
+ * @property string|null $shipping_method_code
+ * @property array $raw_import
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read Api2cartConnection $api2cartConnection
  *
  * @method static Builder|Api2cartOrderImports newModelQuery()
@@ -38,6 +37,7 @@ use Illuminate\Support\Collection;
  * @method static Builder|Api2cartOrderImports whereRawImport($value)
  * @method static Builder|Api2cartOrderImports whereUpdatedAt($value)
  * @method static Builder|Api2cartOrderImports whereWhenProcessed($value)
+ *
  * @mixin Eloquent
  */
 class Api2cartOrderImports extends BaseModel
@@ -87,66 +87,57 @@ class Api2cartOrderImports extends BaseModel
         return parent::save($options);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function api2cartConnection(): BelongsTo
     {
         return $this->belongsTo(Api2cartConnection::class, 'connection_id');
     }
 
-    /**
-     * @return array
-     */
     public function extractShippingAddressAttributes(): array
     {
         return array_filter([
-            'company'       => data_get($this->raw_import, 'shipping_address.company', ''),
-            'gender'        => data_get($this->raw_import, 'shipping_address.gender', ''),
-            'first_name'    => data_get($this->raw_import, 'shipping_address.first_name', ''),
-            'last_name'     => data_get($this->raw_import, 'shipping_address.last_name', ''),
-            'email'         => data_get($this->raw_import, 'customer.email', ''),
-            'address1'      => data_get($this->raw_import, 'shipping_address.address1', ''),
-            'address2'      => data_get($this->raw_import, 'shipping_address.address2', ''),
-            'postcode'      => data_get($this->raw_import, 'shipping_address.postcode', ''),
-            'city'          => data_get($this->raw_import, 'shipping_address.city', ''),
-            'state_code'    => data_get($this->raw_import, 'shipping_address.state.code', ''),
-            'state_name'    => data_get($this->raw_import, 'shipping_address.state.name', ''),
-            'country_code'  => data_get($this->raw_import, 'shipping_address.country.code3', ''),
-            'country_name'  => data_get($this->raw_import, 'shipping_address.country.name', ''),
-            'phone'         => data_get($this->raw_import, 'shipping_address.phone', ''),
-            'fax'           => data_get($this->raw_import, 'shipping_address.fax', ''),
-            'website'       => data_get($this->raw_import, 'shipping_address.website', ''),
-            'region'        => data_get($this->raw_import, 'shipping_address.region', ''),
+            'company' => data_get($this->raw_import, 'shipping_address.company', ''),
+            'gender' => data_get($this->raw_import, 'shipping_address.gender', ''),
+            'first_name' => data_get($this->raw_import, 'shipping_address.first_name', ''),
+            'last_name' => data_get($this->raw_import, 'shipping_address.last_name', ''),
+            'email' => data_get($this->raw_import, 'customer.email', ''),
+            'address1' => data_get($this->raw_import, 'shipping_address.address1', ''),
+            'address2' => data_get($this->raw_import, 'shipping_address.address2', ''),
+            'postcode' => data_get($this->raw_import, 'shipping_address.postcode', ''),
+            'city' => data_get($this->raw_import, 'shipping_address.city', ''),
+            'state_code' => data_get($this->raw_import, 'shipping_address.state.code', ''),
+            'state_name' => data_get($this->raw_import, 'shipping_address.state.name', ''),
+            'country_code' => data_get($this->raw_import, 'shipping_address.country.code3', ''),
+            'country_name' => data_get($this->raw_import, 'shipping_address.country.name', ''),
+            'phone' => data_get($this->raw_import, 'shipping_address.phone', ''),
+            'fax' => data_get($this->raw_import, 'shipping_address.fax', ''),
+            'website' => data_get($this->raw_import, 'shipping_address.website', ''),
+            'region' => data_get($this->raw_import, 'shipping_address.region', ''),
         ]);
     }
 
     public function extractBillingAddressAttributes(): array
     {
         return array_filter([
-            'company'       => data_get($this->raw_import, 'billing_address.company', ''),
-            'gender'        => data_get($this->raw_import, 'billing_address.gender', ''),
-            'first_name'    => data_get($this->raw_import, 'billing_address.first_name', ''),
-            'last_name'     => data_get($this->raw_import, 'billing_address.last_name', ''),
-            'email'         => data_get($this->raw_import, 'customer.email', ''),
-            'address1'      => data_get($this->raw_import, 'billing_address.address1', ''),
-            'address2'      => data_get($this->raw_import, 'billing_address.address2', ''),
-            'postcode'      => data_get($this->raw_import, 'billing_address.postcode', ''),
-            'city'          => data_get($this->raw_import, 'billing_address.city', ''),
-            'state_code'    => data_get($this->raw_import, 'billing_address.state.code', ''),
-            'state_name'    => data_get($this->raw_import, 'billing_address.state.name', ''),
-            'country_code'  => data_get($this->raw_import, 'billing_address.country.code3', ''),
-            'country_name'  => data_get($this->raw_import, 'billing_address.country.name', ''),
-            'phone'         => data_get($this->raw_import, 'billing_address.phone', ''),
-            'fax'           => data_get($this->raw_import, 'billing_address.fax', ''),
-            'website'       => data_get($this->raw_import, 'billing_address.website', ''),
-            'region'        => data_get($this->raw_import, 'billing_address.region', ''),
+            'company' => data_get($this->raw_import, 'billing_address.company', ''),
+            'gender' => data_get($this->raw_import, 'billing_address.gender', ''),
+            'first_name' => data_get($this->raw_import, 'billing_address.first_name', ''),
+            'last_name' => data_get($this->raw_import, 'billing_address.last_name', ''),
+            'email' => data_get($this->raw_import, 'customer.email', ''),
+            'address1' => data_get($this->raw_import, 'billing_address.address1', ''),
+            'address2' => data_get($this->raw_import, 'billing_address.address2', ''),
+            'postcode' => data_get($this->raw_import, 'billing_address.postcode', ''),
+            'city' => data_get($this->raw_import, 'billing_address.city', ''),
+            'state_code' => data_get($this->raw_import, 'billing_address.state.code', ''),
+            'state_name' => data_get($this->raw_import, 'billing_address.state.name', ''),
+            'country_code' => data_get($this->raw_import, 'billing_address.country.code3', ''),
+            'country_name' => data_get($this->raw_import, 'billing_address.country.name', ''),
+            'phone' => data_get($this->raw_import, 'billing_address.phone', ''),
+            'fax' => data_get($this->raw_import, 'billing_address.fax', ''),
+            'website' => data_get($this->raw_import, 'billing_address.website', ''),
+            'region' => data_get($this->raw_import, 'billing_address.region', ''),
         ]);
     }
 
-    /**
-     * @return array
-     */
     public function extractOrderProducts(): array
     {
         $result = [];
@@ -163,13 +154,7 @@ class Api2cartOrderImports extends BaseModel
         return $result;
     }
 
-    /**
-     * @param array|null $order
-     * @param bool $chronological
-     *
-     * @return Collection
-     */
-    public function extractStatusHistory(array $order = null, bool $chronological = true): Collection
+    public function extractStatusHistory(?array $order = null, bool $chronological = true): Collection
     {
         $statuses = Collection::make($this['raw_import']['status']['history']);
 
@@ -185,9 +170,6 @@ class Api2cartOrderImports extends BaseModel
         return $statuses;
     }
 
-    /**
-     * @return Carbon
-     */
     public function ordersCreateAt(): Carbon
     {
         $create_at = $this->raw_import['create_at'];

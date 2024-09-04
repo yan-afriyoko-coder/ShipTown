@@ -13,9 +13,6 @@ class OrderProductUpdatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var OrderProduct
-     */
     public OrderProduct $orderProduct;
 
     /**

@@ -9,23 +9,18 @@ use Illuminate\Support\Facades\Log;
 class Client
 {
     /**
-     * @param string $store_key
-     * @param string $uri
-     * @param array $params
-     *
-     * @return RequestResponse
      * @throws GuzzleException
      */
     public static function GET(string $store_key, string $uri, array $params): RequestResponse
     {
         $query = array_merge($params, [
-            'api_key'   => self::getApiKey(),
+            'api_key' => self::getApiKey(),
             'store_key' => $store_key,
         ]);
 
         $response = new RequestResponse(
             self::getGuzzleClient()->get($uri, [
-                'query' => $query
+                'query' => $query,
             ])
         );
 
@@ -34,35 +29,30 @@ class Client
         $query['store_key'] = '***';
 
         Log::debug('API2CART GET', [
-            'success'           => $response->isSuccess(),
-            'uri'               => $uri,
-            'response_message'  => $response->asArray(),
-            'response_code'     => $response->getResponseRaw()->getStatusCode(),
-            'query'             => $query,
+            'success' => $response->isSuccess(),
+            'uri' => $uri,
+            'response_message' => $response->asArray(),
+            'response_code' => $response->getResponseRaw()->getStatusCode(),
+            'query' => $query,
         ]);
 
         return $response;
     }
 
     /**
-     * @param string $store_key
-     * @param string $uri
-     * @param array $data
-     *
-     * @return RequestResponse
      * @throws GuzzleException
      */
     public static function POST(string $store_key, string $uri, array $data): RequestResponse
     {
         $query = [
-            'api_key'   => self::getApiKey(),
+            'api_key' => self::getApiKey(),
             'store_key' => $store_key,
         ];
 
         $response = new RequestResponse(
             self::getGuzzleClient()->post($uri, [
                 'query' => $query,
-                'json'  => $data,
+                'json' => $data,
             ])
         );
 
@@ -71,29 +61,24 @@ class Client
         $query['store_key'] = '***';
 
         Log::debug('API2CART POST', [
-            'success'           => $response->isSuccess(),
-            'uri'               => $uri,
-            'response_message'  => $response->asArray(),
-            'response_code'     => $response->getResponseRaw()->getStatusCode(),
-            'query'             => $query,
-            'json'              => $data,
+            'success' => $response->isSuccess(),
+            'uri' => $uri,
+            'response_message' => $response->asArray(),
+            'response_code' => $response->getResponseRaw()->getStatusCode(),
+            'query' => $query,
+            'json' => $data,
         ]);
 
         return $response;
     }
 
     /**
-     * @param string $store_key
-     * @param string $uri
-     * @param array $params
-     *
-     * @return RequestResponse
      * @throws GuzzleException
      */
     public static function DELETE(string $store_key, string $uri, array $params): RequestResponse
     {
         $query = [
-            'api_key'   => self::getApiKey(),
+            'api_key' => self::getApiKey(),
             'store_key' => $store_key,
         ];
 
@@ -104,21 +89,15 @@ class Client
         return new RequestResponse($response);
     }
 
-    /**
-     * @return GuzzleClient
-     */
     public static function getGuzzleClient(): GuzzleClient
     {
         return new GuzzleClient([
-            'base_uri'   => 'https://api.api2cart.com/v1.1/',
-            'timeout'    => 60,
+            'base_uri' => 'https://api.api2cart.com/v1.1/',
+            'timeout' => 60,
             'exceptions' => false,
         ]);
     }
 
-    /**
-     * @return string
-     */
     public static function getApiKey(): string
     {
         return config('app.api2cart_api_key');

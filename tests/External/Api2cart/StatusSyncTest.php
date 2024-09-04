@@ -32,6 +32,7 @@ class StatusSyncTest extends TestCase
      * A basic feature test example.
      *
      * @return void
+     *
      * @throws RequestException
      * @throws GuzzleException
      */
@@ -41,9 +42,9 @@ class StatusSyncTest extends TestCase
 
         // we set key to api2cart demo store
         $api2cartConnection = new Api2cartConnection([
-            'location_id'    => '99',
-            'type'           => 'magento',
-            'url'            => 'https://demo.api2cart.com/opencart',
+            'location_id' => '99',
+            'type' => 'magento',
+            'url' => 'https://demo.api2cart.com/opencart',
             'bridge_api_key' => config('api2cart.api2cart_test_store_key'),
         ]);
         $api2cartConnection->save();
@@ -57,11 +58,11 @@ class StatusSyncTest extends TestCase
         $order = Order::first();
 
         do {
-            $randomStatus = $orderStatusList[rand(0, count($orderStatusList)-1)];
+            $randomStatus = $orderStatusList[rand(0, count($orderStatusList) - 1)];
         } while ($order->status_code === $randomStatus['id']);
 
         \App\Models\OrderStatus::updateOrCreate([
-            'code' => $randomStatus['id']
+            'code' => $randomStatus['id'],
         ], [
             'name' => $randomStatus['id'],
             'sync_ecommerce' => true,
@@ -79,6 +80,7 @@ class StatusSyncTest extends TestCase
      * A basic feature test example.
      *
      * @return void
+     *
      * @throws RequestException
      * @throws GuzzleException
      */
@@ -88,13 +90,12 @@ class StatusSyncTest extends TestCase
 
         // we set key to api2cart demo store
         $api2cartConnection = new Api2cartConnection([
-            'location_id'    => '99',
-            'type'           => 'magento',
-            'url'            => 'https://demo.api2cart.com/opencart',
+            'location_id' => '99',
+            'type' => 'magento',
+            'url' => 'https://demo.api2cart.com/opencart',
             'bridge_api_key' => config('api2cart.api2cart_test_store_key'),
         ]);
         $api2cartConnection->save();
-
 
         $response = OrderStatus::list($api2cartConnection->bridge_api_key);
 
@@ -104,15 +105,15 @@ class StatusSyncTest extends TestCase
         $order = Order::first();
 
         do {
-            $randomStatus = $orderStatusList[rand(0, count($orderStatusList)-1)];
+            $randomStatus = $orderStatusList[rand(0, count($orderStatusList) - 1)];
         } while ($order->status_code === $randomStatus['id']);
 
         \App\Models\OrderStatus::updateOrCreate([
-                'code' => $randomStatus['id']
-            ], [
-                'name' => $randomStatus['id'],
-                'sync_ecommerce' => false,
-            ]);
+            'code' => $randomStatus['id'],
+        ], [
+            'name' => $randomStatus['id'],
+            'sync_ecommerce' => false,
+        ]);
 
         $order->status_code = $randomStatus['id'];
         $order->save();

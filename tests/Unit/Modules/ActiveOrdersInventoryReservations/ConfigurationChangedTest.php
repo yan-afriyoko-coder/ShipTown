@@ -52,14 +52,14 @@ class ConfigurationChangedTest extends TestCase
 
         $this->assertDatabaseHas('inventory_reservations', [
             'inventory_id' => $inventory1->getKey(),
-            'custom_uuid' => ReservationsService::getUuid($orderProduct)
+            'custom_uuid' => ReservationsService::getUuid($orderProduct),
         ]);
 
         $config->update(['warehouse_id' => $warehouse2->getKey()]);
 
         $this->assertDatabaseHas('inventory_reservations', [
             'inventory_id' => $inventory2->getKey(),
-            'custom_uuid' => ReservationsService::getUuid($orderProduct)
+            'custom_uuid' => ReservationsService::getUuid($orderProduct),
         ]);
     }
 
@@ -73,7 +73,7 @@ class ConfigurationChangedTest extends TestCase
 
         ProductAlias::create([
             'product_id' => $product->getKey(),
-            'alias' => 'test_alias'
+            'alias' => 'test_alias',
         ]);
 
         $inventory1 = Inventory::find($product->getKey(), $warehouse1->getKey());
@@ -95,14 +95,14 @@ class ConfigurationChangedTest extends TestCase
 
         $this->assertDatabaseHas('inventory_reservations', [
             'inventory_id' => $inventory1->getKey(),
-            'custom_uuid' => ReservationsService::getUuid($orderProduct)
+            'custom_uuid' => ReservationsService::getUuid($orderProduct),
         ]);
 
         $config->update(['warehouse_id' => $warehouse2->getKey()]);
 
         $this->assertDatabaseHas('inventory_reservations', [
             'inventory_id' => $inventory2->getKey(),
-            'custom_uuid' => ReservationsService::getUuid($orderProduct)
+            'custom_uuid' => ReservationsService::getUuid($orderProduct),
         ]);
     }
 }

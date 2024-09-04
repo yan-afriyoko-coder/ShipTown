@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Schema;
 class EnsureCorrectTotalsJob extends UniqueJob
 {
     private Carbon $fromDateTime;
+
     private Carbon $toDateTime;
 
     public function __construct($fromDateTime = null, $toDateTime = null)

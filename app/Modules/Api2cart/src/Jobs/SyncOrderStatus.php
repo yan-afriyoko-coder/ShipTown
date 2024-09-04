@@ -26,22 +26,16 @@ class SyncOrderStatus implements ShouldQueue
 
     /**
      * The number of times the job may be attempted.
-     *
-     * @var int
      */
     public int $tries = 5;
 
     /**
      * The number of seconds to wait before retrying the job.
-     *
-     * @var int
      */
     public int $retryAfter = 60;
 
     /**
      * Create a new job instance.
-     *
-     * @param Order $order
      */
     public function __construct(Order $order)
     {
@@ -70,7 +64,7 @@ class SyncOrderStatus implements ShouldQueue
 
         $response = Orders::update($orderImport->api2cartConnection->bridge_api_key, [
             'order_id' => $orderImport->api2cart_order_id,
-            'order_status' => $this->order->status_code
+            'order_status' => $this->order->status_code,
         ]);
 
         return $response->isSuccess();

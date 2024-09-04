@@ -31,21 +31,21 @@ use Spatie\Tags\Tag;
 /**
  * App\Models\Product.
  *
- * @property int              $id
- * @property string           $sku
- * @property string           $name
- * @property string           $supplier
- * @property float            $price
- * @property float            $sale_price
- * @property Carbon           $sale_price_start_date
- * @property Carbon           $sale_price_end_date
- * @property float            $quantity
- * @property float            $quantity_reserved
- * @property float            $quantity_available
+ * @property int $id
+ * @property string $sku
+ * @property string $name
+ * @property string $supplier
+ * @property float $price
+ * @property float $sale_price
+ * @property Carbon $sale_price_start_date
+ * @property Carbon $sale_price_end_date
+ * @property float $quantity
+ * @property float $quantity_reserved
+ * @property float $quantity_available
  * @property Collection|Tag[] $tags
- * @property Carbon|null      $deleted_at
- * @property Carbon|null      $created_at
- * @property Carbon|null      $updated_at
+ * @property Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read Collection|Activity[] $activities
  * @property-read Collection|InventoryTotal[] $inventoryTotals
  * @property-read int|null $inventoryTotals_count
@@ -90,17 +90,17 @@ use Spatie\Tags\Tag;
  *
  * @method static Builder|Product hasTags($tags)
  * @method static Builder|Product whereQuantityAvailable($value)
+ *
  * @mixin Eloquent
  */
 class Product extends BaseModel
 {
     use HasFactory;
-
-    use LogsActivityTrait;
-    use HasTagsTrait;
-    use SoftDeletes;
-    use Notifiable;
     use HasManyKeyByRelationship;
+    use HasTagsTrait;
+    use LogsActivityTrait;
+    use Notifiable;
+    use SoftDeletes;
 
     protected static array $logAttributes = [
         'quantity',
@@ -127,20 +127,21 @@ class Product extends BaseModel
     // as this is then not populated
     // correctly to events
     protected $attributes = [
-        'name'                  => '',
-        'price'                 => 0,
-        'sale_price'            => 0,
+        'name' => '',
+        'price' => 0,
+        'sale_price' => 0,
         'sale_price_start_date' => '2001-01-01 00:00:00',
-        'sale_price_end_date'   => '2001-01-01 00:00:00',
-        'quantity'              => 0,
-        'quantity_reserved'     => 0,
-        'quantity_available'    => 0,
+        'sale_price_end_date' => '2001-01-01 00:00:00',
+        'quantity' => 0,
+        'quantity_reserved' => 0,
+        'quantity_available' => 0,
     ];
+
     protected $casts = [
         'sale_price_start_date' => 'datetime',
         'sale_price_end_date' => 'datetime',
-        'quantity'           => 'float',
-        'quantity_reserved'  => 'float',
+        'quantity' => 'float',
+        'quantity_reserved' => 'float',
         'quantity_available' => 'float',
     ];
 
@@ -157,13 +158,11 @@ class Product extends BaseModel
 
     public function getQuantityAttribute()
     {
-//        report(new \Exception('Quantity should be accessed via InventoryTotals->quantity'));
+        //        report(new \Exception('Quantity should be accessed via InventoryTotals->quantity'));
 
         return $this->attributes['quantity'];
     }
-    /**
-     * @return QueryBuilder
-     */
+
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(Product::class)
@@ -223,8 +222,6 @@ class Product extends BaseModel
     }
 
     /**
-     * @param float $quantity
-     *
      * @return $this
      */
     public function reserveStock(float $quantity): Product
@@ -243,26 +240,18 @@ class Product extends BaseModel
         return $this->hasMany(InventoryTotal::class);
     }
 
-    /**
-     * @param $tag
-     */
     protected function onTagAttached($tag)
     {
         ProductTagAttachedEvent::dispatch($this, $tag);
     }
 
-    /**
-     * @param $tag
-     */
     protected function onTagDetached($tag)
     {
         ProductTagDetachedEvent::dispatch($this, $tag);
     }
 
     /**
-     * @param mixed $query
-     * @param string $text
-     *
+     * @param  mixed  $query
      * @return mixed
      */
     public function scopeWhereHasText($query, string $text)
@@ -277,9 +266,8 @@ class Product extends BaseModel
     }
 
     /**
-     * @param mixed $query
-     * @param mixed $inventory_warehouse_code
-     *
+     * @param  mixed  $query
+     * @param  mixed  $inventory_warehouse_code
      * @return mixed
      */
     public function scopeAddInventorySource($query, $inventory_warehouse_code)
@@ -300,7 +288,7 @@ class Product extends BaseModel
         });
     }
 
-    public function inventory(string $warehouse_code = null): HasMany
+    public function inventory(?string $warehouse_code = null): HasMany
     {
         return $this->hasMany(Inventory::class)
             ->whereNull('deleted_at')
@@ -326,11 +314,7 @@ class Product extends BaseModel
             ->where(['warehouse_id' => $user->warehouse_id]);
     }
 
-    /**
-     * @param string|null $warehouse_code
-     * @return HasMany
-     */
-    public function prices(string $warehouse_code = null): HasMany
+    public function prices(?string $warehouse_code = null): HasMany
     {
         return $this->hasMany(ProductPrice::class)
             ->whereHas('warehouse', function ($query) {
@@ -342,9 +326,6 @@ class Product extends BaseModel
             ->keyBy('warehouse_code');
     }
 
-    /**
-     * @return HasMany
-     */
     public function aliases(): HasMany
     {
         return $this->hasMany(ProductAlias::class);
@@ -357,15 +338,12 @@ class Product extends BaseModel
             ->first();
     }
 
-    /**
-     * @return bool
-     */
     public function isInStock(): bool
     {
         return $this->quantity_available > 0;
     }
 
-    public function inventoryMovementsStatistics(string $warehouse_code = null): HasMany
+    public function inventoryMovementsStatistics(?string $warehouse_code = null): HasMany
     {
         return $this->hasMany(InventoryMovementsStatistic::class)
             ->when($warehouse_code, function ($query) use ($warehouse_code) {

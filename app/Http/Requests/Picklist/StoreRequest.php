@@ -25,7 +25,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'quantity_picked' => ['required', 'numeric'],
-            'is_picked'       => ['required', 'boolean'],
+            'is_picked' => ['required', 'boolean'],
         ];
     }
 }

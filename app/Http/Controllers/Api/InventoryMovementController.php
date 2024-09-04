@@ -15,7 +15,7 @@ class InventoryMovementController extends Controller
 {
     public function index(Request $request): AnonymousResourceCollection
     {
-        $report = new InventoryMovementsReport();
+        $report = new InventoryMovementsReport;
 
         $resource = $report->queryBuilder()
             ->simplePaginate($request->get('per_page', 10));

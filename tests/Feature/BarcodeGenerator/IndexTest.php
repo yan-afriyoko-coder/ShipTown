@@ -5,9 +5,6 @@ namespace Tests\Feature\BarcodeGenerator;
 use App\User;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
     protected string $uri = '/barcode-generator';
@@ -39,7 +36,7 @@ class IndexTest extends TestCase
     {
         $this->actingAs($this->user, 'web');
 
-        $response = $this->get($this->uri .  '?content=1234567890');
+        $response = $this->get($this->uri.'?content=1234567890');
 
         $response->assertSuccessful();
     }
@@ -51,7 +48,7 @@ class IndexTest extends TestCase
 
         $this->actingAs($this->user, 'web');
 
-        $response = $this->get($this->uri.  '?content=1234567890');
+        $response = $this->get($this->uri.'?content=1234567890');
 
         $response->assertSuccessful();
     }

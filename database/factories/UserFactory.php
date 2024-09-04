@@ -20,12 +20,12 @@ class UserFactory extends Factory
         }
 
         return [
-            'name'              => $this->faker->firstName() .' '. $this->faker->lastName(),
-            'warehouse_id'      => $warehouse->getKey(),
-            'email'             => $email,
+            'name' => $this->faker->firstName().' '.$this->faker->lastName(),
+            'warehouse_id' => $warehouse->getKey(),
+            'email' => $email,
             'email_verified_at' => now(),
-            'password'          => bcrypt('secret123'), // password
-            'remember_token'    => Str::random(10),
+            'password' => bcrypt('secret123'), // password
+            'remember_token' => Str::random(10),
         ];
     }
 

@@ -26,12 +26,12 @@ class PickFactory extends Factory
         $shouldSkipPick = (rand(1, 20) === 1); // 5% chance of skipping pick
 
         return [
-            'product_id'               => $product->getKey(),
-            'order_product_ids'        => $orderProducts->pluck('id')->toArray(),
-            'sku_ordered'              => $product->sku,
-            'name_ordered'             => $product->name,
-            'user_id'                  => $user->getKey(),
-            'quantity_picked'          => $shouldSkipPick ? 0 : $quantityToPick,
+            'product_id' => $product->getKey(),
+            'order_product_ids' => $orderProducts->pluck('id')->toArray(),
+            'sku_ordered' => $product->sku,
+            'name_ordered' => $product->name,
+            'user_id' => $user->getKey(),
+            'quantity_picked' => $shouldSkipPick ? 0 : $quantityToPick,
             'quantity_skipped_picking' => $shouldSkipPick ? $quantityToPick : 0,
         ];
     }

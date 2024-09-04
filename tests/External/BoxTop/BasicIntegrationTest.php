@@ -24,15 +24,15 @@ class BasicIntegrationTest extends TestCase
     {
         /** @var Order $order */
         $order = Order::factory()->create();
-        $order->shippingAddress->company = "BoxTop Technologies Ltd";
-        $order->shippingAddress->full_name = "Reece Ipient";
-        $order->shippingAddress->address1 = "Providence House";
-        $order->shippingAddress->address2 = "2 River Street";
-        $order->shippingAddress->city = "Windsor";
-        $order->shippingAddress->state_code = "Berkshire";
-        $order->shippingAddress->postcode = "SL4 1QT";
-        $order->shippingAddress->country_code = "GB";
-        $order->shippingAddress->phone = "+44 20 8400 2000";
+        $order->shippingAddress->company = 'BoxTop Technologies Ltd';
+        $order->shippingAddress->full_name = 'Reece Ipient';
+        $order->shippingAddress->address1 = 'Providence House';
+        $order->shippingAddress->address2 = '2 River Street';
+        $order->shippingAddress->city = 'Windsor';
+        $order->shippingAddress->state_code = 'Berkshire';
+        $order->shippingAddress->postcode = 'SL4 1QT';
+        $order->shippingAddress->country_code = 'GB';
+        $order->shippingAddress->phone = '+44 20 8400 2000';
         $order->shippingAddress->save();
 
         BoxTopService::refreshBoxTopWarehouseStock();
@@ -71,7 +71,7 @@ class BasicIntegrationTest extends TestCase
      */
     public function testExample()
     {
-        $boxtop = new ApiClient();
+        $boxtop = new ApiClient;
 
         $apiResponse = $boxtop->getAllProducts();
 

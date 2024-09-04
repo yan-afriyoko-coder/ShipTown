@@ -5,14 +5,8 @@ namespace Tests\Feature\Settings\Modules\ActiveOrdersInventoryReservations;
 use App\User;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
-    /**
-     * @var string
-     */
     protected string $uri = 'settings/modules/active-orders-inventory-reservations';
 
     protected mixed $user;

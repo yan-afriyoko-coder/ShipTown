@@ -39,7 +39,7 @@ class ActiveOrdersInventoryReservationsServiceProvider extends BaseModuleService
         ],
 
         ConfigurationUpdatedEvent::class => [
-            Listeners\ConfigurationUpdatedEventListener::class
+            Listeners\ConfigurationUpdatedEventListener::class,
         ],
     ];
 

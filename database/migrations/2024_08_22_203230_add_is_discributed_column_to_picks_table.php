@@ -14,7 +14,6 @@ return new class extends Migration
             // add order_product_ids array column
             $table->json('order_product_ids')->after('quantity_skipped_picking');
 
-
             $table->index('is_distributed');
         });
 

@@ -11,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 class PrintJobCreatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
     public PrintJob $printJob;
 
     /**

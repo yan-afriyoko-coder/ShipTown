@@ -17,7 +17,7 @@ class IndexTest extends TestCase
         InventoryMovement::factory()->create();
 
         $response = $this->actingAs($user, 'api')->getJson(route('api.inventory-movements.index', [
-            'include' => 'product,warehouse,user'
+            'include' => 'product,warehouse,user',
         ]));
 
         ray($response->json());
@@ -33,15 +33,15 @@ class IndexTest extends TestCase
                 '*' => [
                     'id',
                     'inventory_id',
-                    "product_id",
-                    "warehouse_id",
-                    "quantity_delta",
-                    "quantity_before",
-                    "quantity_after",
-                    "description",
+                    'product_id',
+                    'warehouse_id',
+                    'quantity_delta',
+                    'quantity_before',
+                    'quantity_after',
+                    'description',
                     'user',
                     'warehouse',
-                    'product'
+                    'product',
                 ],
             ],
         ]);

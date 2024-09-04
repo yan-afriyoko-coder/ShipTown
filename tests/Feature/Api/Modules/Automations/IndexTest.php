@@ -25,9 +25,9 @@ class IndexTest extends TestCase
                 '*' => [
                     'id',
                     'name',
-                    'enabled'
-                ]
-            ]
+                    'enabled',
+                ],
+            ],
         ]);
     }
 }

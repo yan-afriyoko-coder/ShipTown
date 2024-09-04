@@ -4,9 +4,6 @@ namespace Tests\Feature\Oauth\Authorize;
 
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
     /** @test */

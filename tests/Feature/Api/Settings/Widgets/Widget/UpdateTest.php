@@ -21,8 +21,8 @@ class UpdateTest extends TestCase
         $widget = Widget::create(['name' => 'testing', 'config' => []]);
 
         $response = $this->put(route('widgets.update', $widget), [
-            'name'   => 'Tes widget',
-            'config' => []
+            'name' => 'Tes widget',
+            'config' => [],
         ]);
 
         $response->assertStatus(200);
@@ -30,7 +30,7 @@ class UpdateTest extends TestCase
             'data' => [
                 'name',
                 'config' => [],
-                'id'
+                'id',
             ],
         ]);
     }

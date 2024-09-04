@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Modules\StockControl\src\Listeners;
 
 use App\Events\OrderProduct\OrderProductShipmentCreatedEvent;

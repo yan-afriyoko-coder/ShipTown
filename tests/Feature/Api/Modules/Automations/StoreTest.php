@@ -31,20 +31,20 @@ class StoreTest extends TestCase
             'conditions' => [
                 [
                     'condition_class' => CanFulfillFromLocationCondition::class,
-                    'condition_value' => 'paid'
+                    'condition_value' => 'paid',
                 ],
                 [
                     'condition_class' => ShippingMethodCodeEqualsCondition::class,
-                    'condition_value' => 'paid'
-                ]
+                    'condition_value' => 'paid',
+                ],
             ],
             'actions' => [
                 [
                     'priority' => 1,
                     'action_class' => SetStatusCodeAction::class,
                     'action_value' => 'store_pickup',
-                ]
-            ]
+                ],
+            ],
         ];
         $response = $this->post(route('api.modules.automations.store'), $data);
 
@@ -53,8 +53,8 @@ class StoreTest extends TestCase
             'data' => [
                 'id',
                 'name',
-                'enabled'
-            ]
+                'enabled',
+            ],
         ]);
     }
 }

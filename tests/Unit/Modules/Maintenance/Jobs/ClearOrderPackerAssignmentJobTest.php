@@ -19,9 +19,9 @@ class ClearOrderPackerAssignmentJobTest extends TestCase
         $user = User::factory()->create();
 
         Order::factory()->create([
-            'packed_at'      => null,
+            'packed_at' => null,
             'packer_user_id' => $user->getKey(),
-            'updated_at'     => Carbon::now()->subHours(11),
+            'updated_at' => Carbon::now()->subHours(11),
         ]);
 
         // act
@@ -50,9 +50,9 @@ class ClearOrderPackerAssignmentJobTest extends TestCase
         $this->actingAs($user);
 
         Order::factory()->create([
-            'packed_at'      => null,
+            'packed_at' => null,
             'packer_user_id' => $user->getKey(),
-            'updated_at'     => Carbon::now()->subHours(14),
+            'updated_at' => Carbon::now()->subHours(14),
         ]);
 
         ClearPackerIdJob::dispatchSync();

@@ -27,6 +27,7 @@ try {
     if (User::query()->exists()) {
         Auth::routes(['register' => false]);
         Route::redirect('register', 'login');
+
         return;
     }
 

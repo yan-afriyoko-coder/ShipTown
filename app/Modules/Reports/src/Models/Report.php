@@ -45,7 +45,7 @@ class Report extends ReportBase
 
     public static function json(): JsonResource
     {
-        $report = new static();
+        $report = new static;
 
         return $report->toJsonResource();
     }

@@ -18,7 +18,7 @@ class ProductsTagsSeeder extends Seeder
 
         $products->each(function (Product $product) {
             $product->attachTag('Available Online');
-            $product->attachTag('PRODUCT_ID_' . $product->id);
+            $product->attachTag('PRODUCT_ID_'.$product->id);
         });
     }
 }

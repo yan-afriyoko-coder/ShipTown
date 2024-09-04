@@ -26,8 +26,6 @@ class DataCollectionsImportController extends Controller
         'data.*.product_id' => ['required_if:product_sku,null', 'integer', 'exists:products,id'],
     ];
 
-    /**
-     */
     public function store(Request $request): JsonResource
     {
         $finalRules = $this->rules;
@@ -35,14 +33,14 @@ class DataCollectionsImportController extends Controller
         $warehouses = Warehouse::all();
 
         $warehouses->each(function ($warehouse) use (&$finalRules) {
-            $finalRules['data.*.' . $warehouse->code] = ['sometimes', 'numeric', 'nullable'];
+            $finalRules['data.*.'.$warehouse->code] = ['sometimes', 'numeric', 'nullable'];
         });
 
         $validatedData = Validator::make($request->all(), $finalRules)->validate();
 
         DB::transaction(function () use ($request, $warehouses, $validatedData) {
 
-            $tempTableName = 'temp_csv_import_' . rand(100000000000000000, 999999999999999999);
+            $tempTableName = 'temp_csv_import_'.rand(100000000000000000, 999999999999999999);
 
             Schema::create($tempTableName, function (Blueprint $table) use ($warehouses) {
                 $table->temporary();
@@ -60,10 +58,10 @@ class DataCollectionsImportController extends Controller
             DB::table($tempTableName)->insert($validatedData['data']);
 
             DB::statement('
-                UPDATE ' . $tempTableName . '
-                LEFT JOIN products_aliases ON ' . $tempTableName . '.product_sku = products_aliases.alias
-                SET ' . $tempTableName . '.product_id = products_aliases.product_id
-                WHERE ' . $tempTableName . '.product_id IS NULL
+                UPDATE '.$tempTableName.'
+                LEFT JOIN products_aliases ON '.$tempTableName.'.product_sku = products_aliases.alias
+                SET '.$tempTableName.'.product_id = products_aliases.product_id
+                WHERE '.$tempTableName.'.product_id IS NULL
             ');
 
             $skuNotFoundErrors = DB::table($tempTableName)
@@ -71,7 +69,7 @@ class DataCollectionsImportController extends Controller
                 ->select('product_sku')
                 ->get()
                 ->map(function ($item) use (&$errors) {
-                    return 'SKU not found: ' . $item->product_sku;
+                    return 'SKU not found: '.$item->product_sku;
                 })
                 ->filter();
 
@@ -85,7 +83,7 @@ class DataCollectionsImportController extends Controller
                         'warehouse_id' => $warehouse->id,
                         'warehouse_code' => $warehouse->code,
                         'name' => implode(' ', [$request->get('data_collection_name_prefix'), $warehouse->code]),
-                        'type' => DataCollectionTransferIn::class
+                        'type' => DataCollectionTransferIn::class,
                     ]);
 
                     DB::statement('
@@ -103,26 +101,26 @@ class DataCollectionsImportController extends Controller
                             updated_at
                         )
                         SELECT
-                            '. $dataCollector->getKey() .',
+                            '.$dataCollector->getKey().',
                             inventory.id,
                             inventory.warehouse_id,
                             inventory.warehouse_code,
                             inventory.product_id,
-                            IFNULL(`' .$warehouse->code. '`, 0) as quantity_requested,
+                            IFNULL(`'.$warehouse->code.'`, 0) as quantity_requested,
                             IFNULL(products_prices.cost, 0) as unit_cost,
                             IFNULL(products_prices.price, 0) as unit_full_price,
                             IFNULL(products_prices.price, 0) as unit_sold_price,
                             NOW(),
                             NOW()
 
-                        FROM ' . $tempTableName . '
+                        FROM '.$tempTableName.'
                         LEFT JOIN inventory
-                          ON ' . $tempTableName . '.product_id = inventory.product_id
-                          AND inventory.warehouse_id = ' . $warehouse->id . '
+                          ON '.$tempTableName.'.product_id = inventory.product_id
+                          AND inventory.warehouse_id = '.$warehouse->id.'
                         LEFT JOIN products_prices
                           ON inventory.id = products_prices.inventory_id
 
-                        WHERE IFNULL(`' .$warehouse->code. '`, 0) != 0
+                        WHERE IFNULL(`'.$warehouse->code.'`, 0) != 0
                     ');
                 }
             });

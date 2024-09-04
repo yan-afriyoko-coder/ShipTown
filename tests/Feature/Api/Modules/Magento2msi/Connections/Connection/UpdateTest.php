@@ -17,7 +17,7 @@ class UpdateTest extends TestCase
 
         $user = User::factory()->create()->assignRole('admin');
 
-        $response = $this->actingAs($user, 'api')->putJson($this->uri . $connection->getKey(), ['magento_source_code' => 'new_magento_source_code']);
+        $response = $this->actingAs($user, 'api')->putJson($this->uri.$connection->getKey(), ['magento_source_code' => 'new_magento_source_code']);
 
         ray($response->json());
 
@@ -25,7 +25,7 @@ class UpdateTest extends TestCase
 
         $response->assertJsonStructure([
             'data' => [
-                'id'
+                'id',
             ],
         ]);
     }
@@ -36,7 +36,7 @@ class UpdateTest extends TestCase
         $connection = Magento2msiConnection::factory()->create();
 
         $user = User::factory()->create();
-        $response = $this->actingAs($user, 'api')->putJson($this->uri . $connection->getKey(), []);
+        $response = $this->actingAs($user, 'api')->putJson($this->uri.$connection->getKey(), []);
 
         $response->assertForbidden();
     }

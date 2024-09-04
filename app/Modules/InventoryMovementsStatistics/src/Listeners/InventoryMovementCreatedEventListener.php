@@ -13,9 +13,6 @@ class InventoryMovementCreatedEventListener
         $this->extracted($event);
     }
 
-    /**
-     * @param InventoryMovementCreatedEvent $event
-     */
     private function extracted(InventoryMovementCreatedEvent $event): void
     {
         $inventoryMovement = $event->inventoryMovement;
@@ -25,14 +22,14 @@ class InventoryMovementCreatedEventListener
                 ->where('inventory_id', $inventoryMovement->inventory_id)
                 ->where('type', $inventoryMovement->type)
                 ->update([
-                    'last7days_quantity_delta' => DB::raw('last7days_quantity_delta + ' . $inventoryMovement->quantity_delta),
-                    'last7days_min_movement_id' => DB::raw('IFNULL(last7days_min_movement_id, ' . $inventoryMovement->id . ')'),
+                    'last7days_quantity_delta' => DB::raw('last7days_quantity_delta + '.$inventoryMovement->quantity_delta),
+                    'last7days_min_movement_id' => DB::raw('IFNULL(last7days_min_movement_id, '.$inventoryMovement->id.')'),
                     'last7days_max_movement_id' => $inventoryMovement->id,
-                    'last14days_quantity_delta' => DB::raw('last14days_quantity_delta + ' . $inventoryMovement->quantity_delta),
-                    'last14days_min_movement_id' => DB::raw('IFNULL(last7days_min_movement_id, ' . $inventoryMovement->id . ')'),
+                    'last14days_quantity_delta' => DB::raw('last14days_quantity_delta + '.$inventoryMovement->quantity_delta),
+                    'last14days_min_movement_id' => DB::raw('IFNULL(last7days_min_movement_id, '.$inventoryMovement->id.')'),
                     'last14days_max_movement_id' => $inventoryMovement->id,
-                    'last28days_quantity_delta' => DB::raw('last28days_quantity_delta + ' . $inventoryMovement->quantity_delta),
-                    'last28days_min_movement_id' => DB::raw('IFNULL(last7days_min_movement_id, ' . $inventoryMovement->id . ')'),
+                    'last28days_quantity_delta' => DB::raw('last28days_quantity_delta + '.$inventoryMovement->quantity_delta),
+                    'last28days_min_movement_id' => DB::raw('IFNULL(last7days_min_movement_id, '.$inventoryMovement->id.')'),
                     'last28days_max_movement_id' => $inventoryMovement->id,
                 ]);
 

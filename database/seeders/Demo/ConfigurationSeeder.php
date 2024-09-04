@@ -12,7 +12,7 @@ class ConfigurationSeeder extends Seeder
         Configuration::updateOrCreate([], [
             'business_name' => '',
             'ecommerce_connected' => true,
-            'disable_2fa' => true
+            'disable_2fa' => true,
         ]);
     }
 }

@@ -25,7 +25,7 @@ class DataCollectionCommentStoreRequest extends FormRequest
     {
         return [
             'data_collection_id' => ['required', 'numeric', 'exists:data_collections,id'],
-            'comment'  => ['required', 'string'],
+            'comment' => ['required', 'string'],
         ];
     }
 }

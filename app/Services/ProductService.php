@@ -5,8 +5,6 @@ namespace App\Services;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductAlias;
-use Barryvdh\LaravelIdeHelper\Alias;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -14,7 +12,7 @@ use Illuminate\Support\Facades\Log;
  */
 class ProductService
 {
-    public static function find(string $skuOrAlias): Product|null
+    public static function find(string $skuOrAlias): ?Product
     {
         /** @var Product $product */
         $product = Product::findBySKU($skuOrAlias);
@@ -26,7 +24,7 @@ class ProductService
         return self::findByAlias($skuOrAlias);
     }
 
-    public static function findByAlias(string $alias): Product|null
+    public static function findByAlias(string $alias): ?Product
     {
         /** @var ProductAlias $productAlias */
         $productAlias = ProductAlias::query()->where(['alias' => $alias])->with('product')->first();
@@ -39,10 +37,6 @@ class ProductService
     }
 
     /**
-     * @param string $sku
-     * @param float  $quantity
-     * @param string $message
-     *
      * @return bool
      */
     public static function reserve(string $sku, float $quantity, string $message)
@@ -61,10 +55,6 @@ class ProductService
     }
 
     /**
-     * @param string $sku
-     * @param float  $quantity
-     * @param string $message
-     *
      * @return bool
      */
     public static function release(string $sku, float $quantity, string $message)
@@ -105,16 +95,16 @@ class ProductService
                 $productToKeepInventory = Inventory::query()
                     ->where([
                         'product_id' => $productToKeep->id,
-                        'warehouse_id' => $productToMergeInventory->warehouse_id
+                        'warehouse_id' => $productToMergeInventory->warehouse_id,
                     ])
                     ->first();
 
                 InventoryService::adjust($productToKeepInventory, $productToMergeInventory->quantity, [
-                    'description' => 'merging from "'.$productToMerge->sku.'"'
+                    'description' => 'merging from "'.$productToMerge->sku.'"',
                 ]);
 
                 InventoryService::adjust($productToMergeInventory, -$productToMergeInventory->quantity, [
-                    'description' => 'merging to "'.$productToKeep->sku.'"'
+                    'description' => 'merging to "'.$productToKeep->sku.'"',
                 ]);
 
                 $productToMergeInventory->update(['quantity_reserved' => 0]);

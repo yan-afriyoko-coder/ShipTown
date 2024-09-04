@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string WarehouseQuantity
  * @property string AllocatedAllocated
  * @property string Available
- *
  */
 class WarehouseStock extends Model
 {
@@ -40,6 +39,6 @@ class WarehouseStock extends Model
      * @var string[]
      */
     protected $casts = [
-        'Attributes' => 'array'
+        'Attributes' => 'array',
     ];
 }

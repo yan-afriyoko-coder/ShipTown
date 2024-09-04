@@ -24,9 +24,9 @@ class ShippingLabelShowRequest extends FormRequest
     public function rules()
     {
         return [
-//            'id' => ['required',
-//                'integer','exists:orders_shipments,id'
-//            ]
+            //            'id' => ['required',
+            //                'integer','exists:orders_shipments,id'
+            //            ]
         ];
     }
 }

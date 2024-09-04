@@ -8,6 +8,7 @@ use Arrilot\Widgets\AbstractWidget;
 class BaseWidget extends AbstractWidget
 {
     protected $name = null;
+
     protected $widgetId = null;
 
     public function __construct(array $config = [])

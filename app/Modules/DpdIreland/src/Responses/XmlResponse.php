@@ -22,19 +22,12 @@ abstract class XmlResponse
 
     /**
      * PreAdviceResponse constructor.
-     *
-     * @param string $responseXml
      */
     public function __construct(string $responseXml)
     {
         $this->setXml($responseXml);
     }
 
-    /**
-     * @param string $responseXml
-     *
-     * @return XmlResponse
-     */
     public function setXml(string $responseXml): XmlResponse
     {
         $this->xml = $responseXml;
@@ -44,19 +37,11 @@ abstract class XmlResponse
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function toString(): string
     {
         return $this->xml;
     }
 
-    /**
-     * @param $key
-     *
-     * @return string
-     */
     public function getAttribute($key): string
     {
         $startTag = "<$key>";
@@ -65,17 +50,11 @@ abstract class XmlResponse
         return Str::before(Str::after($this->xml, $startTag), $endTag);
     }
 
-    /**
-     * @return string
-     */
     public function getPreAdviceErrorCode(): string
     {
         return $this->simpleXmlArray->PreAdviceErrorCode;
     }
 
-    /**
-     * @return string
-     */
     public function getPreAdviceErrorDetails(): string
     {
         return $this->simpleXmlArray->PreAdviceErrorDetails;

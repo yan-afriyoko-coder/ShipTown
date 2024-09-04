@@ -11,15 +11,8 @@ use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/**
- *
- */
 class ShippingLabelController extends Controller
 {
-    /**
-     * @param StoreShippingLabelRequest $request
-     * @return AnonymousResourceCollection
-     */
     public function store(StoreShippingLabelRequest $request): AnonymousResourceCollection
     {
         try {
@@ -32,6 +25,7 @@ class ShippingLabelController extends Controller
             $shipper = app($shippingService->service_provider_class);
 
             $shippingLabelCollection = $shipper->ship($request->validated()['order_id']);
+
             return JsonResource::collection($shippingLabelCollection);
         } catch (ShippingServiceException $exception) {
             $this->respondBadRequest($exception->getMessage());

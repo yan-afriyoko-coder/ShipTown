@@ -11,7 +11,7 @@ class UpdateTest extends TestCase
 {
     private function simulationTest()
     {
-        $mailTemplate = new MailTemplate();
+        $mailTemplate = new MailTemplate;
         $mailTemplate->mailable = \App\Mail\ShipmentConfirmationMail::class;
         $mailTemplate->subject = 'testing Subject';
         $mailTemplate->reply_to = 'test@example.com';
@@ -21,11 +21,11 @@ class UpdateTest extends TestCase
         $mailTemplate->save();
 
         $response = $this->put(route('api.mail-templates.update', $mailTemplate), [
-            'subject'       => 'update subject',
+            'subject' => 'update subject',
             'html_template' => '<p>update html</p>',
             'text_template' => 'update text',
-            'to'            => '',
-            'reply_to'      => 'test@example.com'
+            'to' => '',
+            'reply_to' => 'test@example.com',
         ]);
 
         return $response;

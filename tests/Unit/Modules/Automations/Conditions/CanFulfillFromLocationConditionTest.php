@@ -34,7 +34,7 @@ class CanFulfillFromLocationConditionTest extends TestCase
         /** @var Condition $condition */
         $condition = $automation->conditions()->create([
             'condition_class' => CanFulfillFromLocationCondition::class,
-            'condition_value' => '0' // we are using location_id = 0 for ALL locations
+            'condition_value' => '0', // we are using location_id = 0 for ALL locations
         ]);
 
         /** @var Order $order */
@@ -72,7 +72,7 @@ class CanFulfillFromLocationConditionTest extends TestCase
         /** @var Condition $condition */
         $condition = $automation->conditions()->create([
             'condition_class' => CanFulfillFromLocationCondition::class,
-            'condition_value' => '0' // we are using location_id = 0 for ALL locations
+            'condition_value' => '0', // we are using location_id = 0 for ALL locations
         ]);
 
         /** @var Order $order */
@@ -110,7 +110,7 @@ class CanFulfillFromLocationConditionTest extends TestCase
         /** @var Condition $condition */
         $condition = $automation->conditions()->create([
             'condition_class' => CanFulfillFromLocationCondition::class,
-            'condition_value' => $warehouse->code
+            'condition_value' => $warehouse->code,
         ]);
 
         /** @var Order $order */
@@ -123,7 +123,6 @@ class CanFulfillFromLocationConditionTest extends TestCase
             ->inventory()
             ->where(['warehouse_code' => $warehouse->code])
             ->update(['quantity' => 0]);
-
 
         $this->assertFalse($condition->isTrue($order));
     }
@@ -149,7 +148,7 @@ class CanFulfillFromLocationConditionTest extends TestCase
         /** @var Condition $condition */
         $condition = $automation->conditions()->create([
             'condition_class' => CanFulfillFromLocationCondition::class,
-            'condition_value' => $warehouse->code
+            'condition_value' => $warehouse->code,
         ]);
 
         /** @var Order $order */

@@ -40,9 +40,6 @@ class Client
      */
     const AUTHORIZATION_CACHE_KEY = 'dpd.authorization';
 
-    /**
-     * @return string
-     */
     private static function getBaseUrl(): string
     {
         $config = DpdIreland::firstOrFail();
@@ -51,9 +48,6 @@ class Client
     }
 
     /**
-     * @param string $xml
-     *
-     * @return string
      * @throws GuzzleException
      * @throws AuthorizationException
      */
@@ -62,8 +56,8 @@ class Client
         $options = [
             'headers' => [
                 'Authorization' => 'Bearer '.self::getAuthorizationToken(),
-                'Content-Type'  => 'application/xml; charset=UTF8',
-                'Accept'        => 'application/xml',
+                'Content-Type' => 'application/xml; charset=UTF8',
+                'Accept' => 'application/xml',
             ],
             'body' => $xml,
         ];
@@ -88,6 +82,7 @@ class Client
 
     /**
      * @return mixed
+     *
      * @throws AuthorizationException|GuzzleException
      */
     private static function getAuthorizationToken()
@@ -100,7 +95,6 @@ class Client
     /**
      * Using cache we will not need to reauthorize every time.
      *
-     * @return array
      * @throws AuthorizationException|GuzzleException
      */
     public static function getCachedAuthorization(): array
@@ -121,7 +115,6 @@ class Client
     }
 
     /**
-     * @return array
      * @throws AuthorizationException|GuzzleException
      */
     private static function getAuthorization(): array
@@ -131,16 +124,16 @@ class Client
         $config = DpdIreland::firstOrFail();
 
         $body = [
-            'User'     => $config->user,
+            'User' => $config->user,
             'Password' => $config->password,
-            'Type'     => 'CUST',
+            'Type' => 'CUST',
         ];
 
         $options = [
             'headers' => [
                 'Authorization' => 'Bearer '.$config->token,
-                'Content-Type'  => 'application/json',
-                'Accept'        => 'application/json',
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
             ],
             'json' => $body,
         ];
@@ -159,20 +152,17 @@ class Client
         }
 
         return [
-            'from_cache'             => false,
-            'authorization_time'     => Carbon::now(),
+            'from_cache' => false,
+            'authorization_time' => Carbon::now(),
             'authorization_response' => $authorization,
         ];
     }
 
-    /**
-     * @return GuzzleClient
-     */
     public static function getGuzzleClient(): GuzzleClient
     {
         return new GuzzleClient([
-            'base_uri'   => self::getBaseUrl(),
-            'timeout'    => 60,
+            'base_uri' => self::getBaseUrl(),
+            'timeout' => 60,
             'exceptions' => false,
         ]);
     }

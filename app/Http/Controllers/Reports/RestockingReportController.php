@@ -18,14 +18,12 @@ class RestockingReportController extends Controller
     use CsvFileResponse;
 
     /**
-     * @param Request $request
-     *
      * @return Application|ResponseFactory|Factory|Response|View
      */
     public function index(Request $request)
     {
         if ($request->has('filename')) {
-            $report = new RestockingReport();
+            $report = new RestockingReport;
             $report->view = 'reports.restocking-report';
 
             return $report->response($request);
@@ -35,7 +33,7 @@ class RestockingReportController extends Controller
             $keyName = implode('_', ['cached_restocking_report', 'user_id', auth()->id(), $request->get('cache_name')]);
 
             return view('reports.restocking-report', [
-                'cached_restocking_report' => Cache::get($keyName)
+                'cached_restocking_report' => Cache::get($keyName),
             ]);
         }
 

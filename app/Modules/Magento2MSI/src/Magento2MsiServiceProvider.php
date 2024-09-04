@@ -11,7 +11,6 @@ use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
 use App\Models\ManualRequestJob;
 use App\Modules\BaseModuleServiceProvider;
-use App\Modules\InventoryTotals\src\Jobs\RecalculateInventoryTotalsByWarehouseTagJob;
 
 class Magento2MsiServiceProvider extends BaseModuleServiceProvider
 {
@@ -33,11 +32,11 @@ class Magento2MsiServiceProvider extends BaseModuleServiceProvider
         ],
 
         EveryFiveMinutesEvent::class => [
-            Listeners\EveryFiveMinutesEventListener::class
+            Listeners\EveryFiveMinutesEventListener::class,
         ],
 
         EveryHourEvent::class => [
-            Listeners\EveryHourEventListener::class
+            Listeners\EveryHourEventListener::class,
         ],
 
         ProductTagAttachedEvent::class => [

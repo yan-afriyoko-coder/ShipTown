@@ -3,7 +3,6 @@
 namespace App\Modules\NonInventoryProductTag\src;
 
 use App\Events\EveryMinuteEvent;
-use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 use Exception;
 
@@ -12,24 +11,12 @@ use Exception;
  */
 class NonInventoryProductTagServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = 'Non-Inventory Product Tag';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'restricts inventory movements for products with "non-inventory" tag';
 
-    /**
-     * @var string
-     */
     public static string $settings_link = '';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = false;
 
     /**

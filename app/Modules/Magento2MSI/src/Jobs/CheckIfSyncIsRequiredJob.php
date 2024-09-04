@@ -3,11 +3,6 @@
 namespace App\Modules\Magento2MSI\src\Jobs;
 
 use App\Abstracts\UniqueJob;
-use App\Modules\Magento2MSI\src\Api\MagentoApi;
-use App\Modules\Magento2MSI\src\Models\Magento2msiConnection;
-use App\Modules\Magento2MSI\src\Models\Magento2msiProduct;
-use Exception;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -16,7 +11,7 @@ class CheckIfSyncIsRequiredJob extends UniqueJob
     public function handle(): void
     {
         do {
-            $recordsAffected = DB::affectingStatement("
+            $recordsAffected = DB::affectingStatement('
                 WITH tempTable AS (
                         SELECT modules_magento2msi_inventory_source_items.id
 
@@ -37,7 +32,7 @@ class CheckIfSyncIsRequiredJob extends UniqueJob
 
                 SET modules_magento2msi_inventory_source_items.sync_required = (modules_magento2msi_inventory_source_items.quantity != inventory_totals_by_warehouse_tag.quantity_available),
                     modules_magento2msi_inventory_source_items.updated_at = NOW()
-           ");
+           ');
 
             usleep(100000); // 0.1 second
             Log::info('Magento2msi - Job processing', [

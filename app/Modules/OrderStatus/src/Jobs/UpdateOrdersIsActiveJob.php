@@ -34,9 +34,9 @@ class UpdateOrdersIsActiveJob implements ShouldQueue
     public function handle()
     {
         Order::where([
-                'status_code' => $this->orderStatus->code,
-                'is_active'   => ! $this->orderStatus->order_active
-            ])
+            'status_code' => $this->orderStatus->code,
+            'is_active' => ! $this->orderStatus->order_active,
+        ])
             ->each(function (Order $order) {
                 $order->update(['is_active' => $this->orderStatus->order_active]);
             });

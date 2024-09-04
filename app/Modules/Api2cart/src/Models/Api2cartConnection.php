@@ -2,9 +2,9 @@
 
 namespace App\Modules\Api2cart\src\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
@@ -13,15 +13,15 @@ use Illuminate\Support\Collection;
 /**
  * App\Modules\Api2cart\src\Models\Api2cartConnection.
  *
- * @property int         $id
- * @property string      $location_id
- * @property string      $type
- * @property string      $url
- * @property string      $prefix
+ * @property int $id
+ * @property string $location_id
+ * @property string $type
+ * @property string $url
+ * @property string $prefix
  * @property string|null $bridge_api_key
- * @property int|null    $magento_store_id
+ * @property int|null $magento_store_id
  * @property string|null $magento_warehouse_id
- * @property string      $last_synced_modified_at
+ * @property string $last_synced_modified_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property int|null $inventory_location_id
@@ -49,8 +49,8 @@ use Illuminate\Support\Collection;
  * @method static Builder|Api2cartConnection whereUrl($value)
  * @method static Builder|Api2cartConnection whereInventoryLocationId($value)
  * @method static Builder|Api2cartConnection wherePricingLocationId($value)
- * @mixin Eloquent
  *
+ * @mixin Eloquent
  */
 class Api2cartConnection extends Model
 {
@@ -77,9 +77,6 @@ class Api2cartConnection extends Model
         parent::__construct($attributes);
     }
 
-    /**
-     * @return HasMany
-     */
     public function productLinks(): HasMany
     {
         return $this->hasMany(Api2cartProductLink::class);

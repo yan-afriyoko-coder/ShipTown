@@ -20,7 +20,6 @@ class SendEmailNotification implements ShouldQueue
 
     private int $product_id;
 
-
     /**
      * Create a new job instance.
      *
@@ -39,7 +38,7 @@ class SendEmailNotification implements ShouldQueue
     public function handle()
     {
         $mail = new OversoldProductMail([
-            'product' => Product::find($this->product_id)->toArray()
+            'product' => Product::find($this->product_id)->toArray(),
         ]);
 
         Mail::send($mail);

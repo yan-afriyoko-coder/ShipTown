@@ -9,7 +9,7 @@ class RmsapiConnectionTest extends TestCase
 {
     public function testEncryptsPassword()
     {
-        $config = new RmsapiConnection();
+        $config = new RmsapiConnection;
         $config->password = 'foo';
 
         // Tests that that password is encrypted before saving to the database.

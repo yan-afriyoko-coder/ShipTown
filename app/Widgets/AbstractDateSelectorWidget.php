@@ -9,16 +9,15 @@ use Illuminate\Support\Collection;
 
 /**
  * Class AbstractDateSelectorWidget
- * @package App\Widgets
  */
 abstract class AbstractDateSelectorWidget extends AbstractWidget
 {
     protected $name = null;
+
     protected $widgetId = null;
 
     /**
      * AbstractDateSelectorWidget constructor.
-     * @param array $config
      */
     public function __construct(array $config = [])
     {
@@ -50,9 +49,6 @@ abstract class AbstractDateSelectorWidget extends AbstractWidget
         return $this->config['ending_date'];
     }
 
-    /**
-     * @return Collection
-     */
     private function getDefaultValues(): Collection
     {
         return collect([
@@ -61,10 +57,6 @@ abstract class AbstractDateSelectorWidget extends AbstractWidget
         ]);
     }
 
-    /**
-     * @param string $stringFilterValue
-     * @return Collection
-     */
     private function getDates(string $stringFilterValue): Collection
     {
         try {
@@ -84,6 +76,7 @@ abstract class AbstractDateSelectorWidget extends AbstractWidget
         } catch (Exception $exception) {
             $datesCollection = $this->getDefaultValues();
         }
+
         return $datesCollection;
     }
 }

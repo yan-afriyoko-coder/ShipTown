@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- *
  * @property int    id
  * @property string warehouse_code
  * @property Carbon occurred_at
@@ -28,21 +27,24 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int    previous_movement_id
  * @property Carbon created_at
  * @property Carbon updated_at
- *
  * @property Product   product
  * @property Warehouse warehouse
  * @property Inventory inventory
- *
  */
 class InventoryMovement extends BaseModel
 {
     use HasFactory;
 
     const TYPE_ADJUSTMENT = 'adjustment';
+
     const TYPE_SALE = 'sale';
+
     const TYPE_RETURN = 'return';
+
     const TYPE_STOCKTAKE = 'stocktake';
+
     const TYPE_TRANSFER_IN = 'transfer in';
+
     const TYPE_TRANSFER_OUT = 'transfer out';
 
     protected $fillable = [

@@ -23,7 +23,7 @@ class OrdersProcessing extends AbstractWidget
 
         return view('widgets.orders_processing', [
             'config' => $this->config,
-            'count' => $count
+            'count' => $count,
         ]);
     }
 }

@@ -1,19 +1,12 @@
 <?php
 
-
 namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\Api2cart\src\Jobs\SyncOrderStatus;
 
-/**
- *
- */
 class OrderUpdatedEventListener
 {
-    /**
-     * @param OrderUpdatedEvent $event
-     */
     public function handle(OrderUpdatedEvent $event)
     {
         if ($event->order->isAttributeNotChanged('status_code')) {

@@ -7,15 +7,8 @@ use App\Models\MailTemplate;
 use App\Modules\Automations\src\Abstracts\BaseOrderActionAbstract;
 use Illuminate\Support\Facades\Mail;
 
-/**
- *
- */
 class SendOrderEmailAction extends BaseOrderActionAbstract
 {
-    /**
-     * @param string $options
-     * @return bool
-     */
     public function handle(string $options = ''): bool
     {
         parent::handle($options);

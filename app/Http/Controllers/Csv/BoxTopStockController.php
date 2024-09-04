@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Csv;
 
 use App\Http\Controllers\Controller;
-use App\Models\OrderShipment;
-use App\Modules\BoxTop\src\Models\WarehouseStock;
 use App\Modules\BoxTop\src\Services\BoxTopService;
 use App\Traits\CsvFileResponse;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use League\Csv\CannotInsertRecord;
@@ -26,7 +23,7 @@ class BoxTopStockController extends Controller
 
         BoxTopService::refreshBoxTopWarehouseStock();
 
-        $query = DB::select(DB::raw("
+        $query = DB::select(DB::raw('
 SELECT
  modules_boxtop_warehouse_stock.SKUNumber AS SKU_BoxTop,
  products.sku as SKU_RMS,
@@ -42,7 +39,7 @@ LEFT JOIN products
   ON products_aliases.product_id = products.id
 
 ORDER BY SKU_RMS, SKUName ASC
-"));
+'));
 
         $recordSet = collect($query)->map(function ($record) {
             return [
@@ -53,7 +50,7 @@ ORDER BY SKU_RMS, SKUName ASC
             ];
         });
 
-        $csv = Writer::createFromFileObject(new \SplTempFileObject());
+        $csv = Writer::createFromFileObject(new \SplTempFileObject);
 
         if ($recordSet->isNotEmpty()) {
             $csv->insertOne(array_keys($recordSet[0]));
@@ -64,9 +61,9 @@ ORDER BY SKU_RMS, SKUName ASC
         }
 
         return response((string) $csv, 200, [
-            'Content-Type'              => 'text/csv',
+            'Content-Type' => 'text/csv',
             'Content-Transfer-Encoding' => 'binary',
-            'Content-Disposition'       => 'attachment; filename="'.$filename.'"',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
     }
 }

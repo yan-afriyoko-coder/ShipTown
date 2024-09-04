@@ -8,8 +8,6 @@ class MagentoApiConnectionStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -24,11 +22,11 @@ class MagentoApiConnectionStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'base_url'                      => 'required|url',
-            'magento_store_id'              => 'required|numeric',
-            'tag'                           => 'nullable',
-            'pricing_source_warehouse_id'   => 'nullable|exists:warehouses,id',
-            'api_access_token'              => 'required',
+            'base_url' => 'required|url',
+            'magento_store_id' => 'required|numeric',
+            'tag' => 'nullable',
+            'pricing_source_warehouse_id' => 'nullable|exists:warehouses,id',
+            'api_access_token' => 'required',
         ];
     }
 }

@@ -10,14 +10,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
 
-/**
- *
- */
 class SplitBundleSkuAction extends BaseOrderActionAbstract
 {
-    /**
-     * @var MessageBag
-     */
     public MessageBag $validation_errors;
 
     /**
@@ -25,14 +19,11 @@ class SplitBundleSkuAction extends BaseOrderActionAbstract
      */
     public array $input_validation_rules = [
         'data' => ['array'],
-        'data.*' => ['string', 'distinct', 'exists:products_aliases,alias']
+        'data.*' => ['string', 'distinct', 'exists:products_aliases,alias'],
     ];
+
     private Collection $productsAdded;
 
-    /**
-     * @param string $options
-     * @return bool
-     */
     public function handle(string $options = ''): bool
     {
         parent::handle($options);
@@ -59,16 +50,13 @@ class SplitBundleSkuAction extends BaseOrderActionAbstract
         return true;
     }
 
-    /**
-     * @param string $options
-     * @return bool
-     */
     private function isValidInput(string $options): bool
     {
         $skus = array_filter(explode(',', $options));
 
         if (count($skus) < 2) {
             $this->order->log('Automation: Incorrect action value. Correct format: BundleSKU,SKU1,SKU2,SKU3...');
+
             return false;
         }
 
@@ -76,16 +64,13 @@ class SplitBundleSkuAction extends BaseOrderActionAbstract
 
         if ($validator->fails()) {
             $this->validation_errors = $validator->errors();
+
             return false;
         }
 
         return true;
     }
 
-    /**
-     * @param $skus
-     * @param $orderProducts
-     */
     private function splitBundles($skus, $orderProducts): void
     {
         $skusToAdd = collect($skus);
@@ -93,11 +78,11 @@ class SplitBundleSkuAction extends BaseOrderActionAbstract
         $orderProducts->each(function (OrderProduct $originalOrderProduct) use ($skusToAdd) {
             Log::debug('Splitting order product', [
                 'sku_ordered' => $originalOrderProduct->sku_ordered,
-                'quantity_to_ship' => $originalOrderProduct->quantity_to_ship
+                'quantity_to_ship' => $originalOrderProduct->quantity_to_ship,
             ]);
 
             $quantity_to_ship = $originalOrderProduct->quantity_to_ship;
-            $this->productsAdded = new Collection();
+            $this->productsAdded = new Collection;
             $newOrderProducts_totalPrice = 0;
 
             $originalOrderProduct->update(['quantity_split' => $quantity_to_ship]);
@@ -118,7 +103,7 @@ class SplitBundleSkuAction extends BaseOrderActionAbstract
             $priceMultiplier = $newOrderProducts_totalPrice / $originalOrderProduct->price;
 
             $this->productsAdded->each(function (OrderProduct $orderProduct) use ($priceMultiplier) {
-                $orderProduct->price = $priceMultiplier>0 ? $orderProduct->price / $priceMultiplier : 0;
+                $orderProduct->price = $priceMultiplier > 0 ? $orderProduct->price / $priceMultiplier : 0;
                 $orderProduct->save();
             });
         });

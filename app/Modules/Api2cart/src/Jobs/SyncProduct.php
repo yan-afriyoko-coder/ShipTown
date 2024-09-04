@@ -24,15 +24,10 @@ class SyncProduct implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /**
-     * @var Api2cartProductLink
-     */
     private Api2cartProductLink $product_link;
 
     /**
      * Create a new job instance.
-     *
-     * @param Api2cartProductLink $api2cartProductLink
      */
     public function __construct(Api2cartProductLink $api2cartProductLink)
     {
@@ -43,6 +38,7 @@ class SyncProduct implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     *
      * @throws GuzzleException
      */
     public function handle()
@@ -76,7 +72,7 @@ class SyncProduct implements ShouldQueue
 
                 $this->product_link->update([
                     'api2cart_product_type' => null,
-                    'api2cart_product_id' => null
+                    'api2cart_product_id' => null,
                 ]);
                 break;
             case RequestResponse::RETURN_CODE_OK:

@@ -3,17 +3,10 @@
 namespace Tests\Feature\Settings\Modules\Magento2msi;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
-    /**
-     * @var string
-     */
     protected string $uri = '/settings/modules/magento2msi';
 
     protected mixed $user;

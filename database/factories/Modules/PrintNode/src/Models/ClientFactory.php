@@ -12,7 +12,7 @@ class ClientFactory extends Factory
     public function definition(): array
     {
         return [
-            'api_key' => $this->faker->text(20)
+            'api_key' => $this->faker->text(20),
         ];
     }
 }

@@ -30,15 +30,15 @@ class IndexTest extends TestCase
             'conditions' => [
                 '*' => [
                     'class',
-                    'description'
-                ]
+                    'description',
+                ],
             ],
             'actions' => [
                 '*' => [
                     'class',
-                    'description'
-                ]
-            ]
+                    'description',
+                ],
+            ],
         ]);
     }
 }

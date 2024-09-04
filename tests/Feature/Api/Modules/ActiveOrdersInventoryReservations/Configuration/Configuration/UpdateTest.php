@@ -19,7 +19,7 @@ class UpdateTest extends TestCase
 
         $user = User::factory()->create()->assignRole('admin');
 
-        $fullUrl = $this->uri . $configuration->getKey();
+        $fullUrl = $this->uri.$configuration->getKey();
 
         $response = $this->actingAs($user, 'api')
             ->putJson($fullUrl, [
@@ -32,7 +32,7 @@ class UpdateTest extends TestCase
 
         $response->assertJsonStructure([
             'data' => [
-                'id'
+                'id',
             ],
         ]);
     }
@@ -41,7 +41,7 @@ class UpdateTest extends TestCase
     public function testUserAccess()
     {
         $configuration = Configuration::query()->firstOrCreate();
-        $fullUrl = $this->uri . $configuration->getKey();
+        $fullUrl = $this->uri.$configuration->getKey();
 
         $user = User::factory()->create();
         $response = $this->actingAs($user, 'api')->putJson($fullUrl, []);

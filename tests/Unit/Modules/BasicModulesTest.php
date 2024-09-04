@@ -23,6 +23,7 @@ class BasicModulesTest extends TestCase
                 ->get();
         } catch (Exception $exception) {
             report($exception);
+
             return;
         }
 

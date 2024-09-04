@@ -42,9 +42,9 @@ class OrderPackedCountsByUser extends AbstractDateSelectorWidget
         }
 
         return view('widgets.packed_today_by_user', [
-            'config'         => $this->config,
+            'config' => $this->config,
             'count_per_user' => $count_per_user,
-            'total_count'    => $total_count,
+            'total_count' => $total_count,
         ]);
     }
 }

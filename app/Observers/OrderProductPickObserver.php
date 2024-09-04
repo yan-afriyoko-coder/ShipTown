@@ -10,11 +10,11 @@ class OrderProductPickObserver
 {
     public function created(OrderProductPick $orderProductPick): void
     {
-         OrderProductPickCreatedEvent::dispatch($orderProductPick);
+        OrderProductPickCreatedEvent::dispatch($orderProductPick);
     }
 
     public function deleted(OrderProductPick $orderProductPick): void
     {
-         OrderProductPickDeletedEvent::dispatch($orderProductPick);
+        OrderProductPickDeletedEvent::dispatch($orderProductPick);
     }
 }

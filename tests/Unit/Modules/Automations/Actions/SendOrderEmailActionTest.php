@@ -14,8 +14,6 @@ class SendOrderEmailActionTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     */
     public function test_success_when_template_specified()
     {
         Mail::fake();
@@ -25,7 +23,7 @@ class SendOrderEmailActionTest extends TestCase
             'code' => 'shipment_confirmation',
             'subject' => 'We shipped your order!',
             'mailable' => OrderMail::class,
-            'html_template' => 'Hi Xyz, We shipped your order'
+            'html_template' => 'Hi Xyz, We shipped your order',
         ]);
 
         $order = Order::factory()->create();

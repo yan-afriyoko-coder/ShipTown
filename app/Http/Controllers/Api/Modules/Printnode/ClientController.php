@@ -24,7 +24,7 @@ class ClientController extends Controller
         $printNodeClient = Client::query()->firstOrNew([], []);
         $printNodeClient->fill($request->validated());
 
-        if (!PrintNode::noop($printNodeClient)) {
+        if (! PrintNode::noop($printNodeClient)) {
             abort(400, 'NOOP call failed');
         }
 

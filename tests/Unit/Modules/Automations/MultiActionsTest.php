@@ -37,13 +37,13 @@ class MultiActionsTest extends TestCase
         Action::create([
             'automation_id' => $automation1->getKey(),
             'action_class' => SetLabelTemplateAction::class,
-            'action_value' => 'label_template'
+            'action_value' => 'label_template',
         ]);
 
         Action::create([
             'automation_id' => $automation1->getKey(),
             'action_class' => SetStatusCodeAction::class,
-            'action_value' => 'new_status'
+            'action_value' => 'new_status',
         ]);
     }
 

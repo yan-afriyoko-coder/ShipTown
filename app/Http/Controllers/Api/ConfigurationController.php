@@ -12,8 +12,6 @@ class ConfigurationController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return ConfigurationResource
      */
     public function index(ConfigurationIndexRequest $request): ConfigurationResource
     {
@@ -25,7 +23,6 @@ class ConfigurationController extends Controller
     /**
      * Update resource in storage.
      *
-     * @param StoreRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreRequest $request)

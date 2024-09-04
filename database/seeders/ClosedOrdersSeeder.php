@@ -16,7 +16,7 @@ class ClosedOrdersSeeder extends Seeder
      */
     public function run()
     {
-        $count = rand(15,25);
+        $count = rand(15, 25);
 
         do {
             $orderClosedAt = Carbon::now()->subDays(rand(0, 7));
@@ -25,9 +25,9 @@ class ClosedOrdersSeeder extends Seeder
                 ->create([
                     'order_closed_at' => $orderClosedAt,
                     'order_placed_at' => $orderClosedAt->subDays(rand(1, 4)),
-                    'packed_at'       => $orderClosedAt,
-                    'packer_user_id'  => User::inRandomOrder()->first('id')->getKey(),
-                    'status_code'     => 'complete',
+                    'packed_at' => $orderClosedAt,
+                    'packer_user_id' => User::inRandomOrder()->first('id')->getKey(),
+                    'status_code' => 'complete',
                 ]);
             $count--;
         } while ($count > 0);

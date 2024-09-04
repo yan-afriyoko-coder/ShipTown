@@ -31,14 +31,14 @@ class IndexTest extends TestCase
             'data' => [
                 '*' => [
                     'id',
-                    "account_number",
-                    "username",
-                    "password",
-                    "collection_address_id",
-                    "geo_session",
-                    "collection_address" => [],
-                    "updated_at",
-                    "created_at",
+                    'account_number',
+                    'username',
+                    'password',
+                    'collection_address_id',
+                    'geo_session',
+                    'collection_address' => [],
+                    'updated_at',
+                    'created_at',
                 ],
             ],
         ]);

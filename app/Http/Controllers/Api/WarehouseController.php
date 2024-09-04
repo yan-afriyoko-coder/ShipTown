@@ -38,6 +38,7 @@ class WarehouseController extends Controller
 
         $tags = collect($tags)->filter()->map(function ($tag) use ($warehouse) {
             $warehouse->attachTag($tag);
+
             return Tag::findFromString($tag);
         });
 

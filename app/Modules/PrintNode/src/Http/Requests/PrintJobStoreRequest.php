@@ -14,12 +14,12 @@ class PrintJobStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'printer_id'    => ['int', 'required'],
-            'title'         => ['string', 'sometimes'],
-            'content_type'  => ['string', 'sometimes'],
-            'content'       => ['string', 'sometimes'],
-            'expire_after'  => ['int', 'sometimes'],
-            'pdf_url'       => ['sometimes'],
+            'printer_id' => ['int', 'required'],
+            'title' => ['string', 'sometimes'],
+            'content_type' => ['string', 'sometimes'],
+            'content' => ['string', 'sometimes'],
+            'expire_after' => ['int', 'sometimes'],
+            'pdf_url' => ['sometimes'],
         ];
     }
 }

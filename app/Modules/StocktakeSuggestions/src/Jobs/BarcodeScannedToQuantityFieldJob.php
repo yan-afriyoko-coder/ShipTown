@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class BarcodeScannedToQuantityFieldJob extends UniqueJob
 {
-
     public function handle(): bool
     {
         $reason = 'possible barcode scanned into quantity field';
@@ -19,10 +18,6 @@ class BarcodeScannedToQuantityFieldJob extends UniqueJob
         return true;
     }
 
-    /**
-     * @param int $points
-     * @param string $reason
-     */
     private function insertNewSuggestions(string $reason, int $points): void
     {
         DB::statement('
@@ -40,9 +35,6 @@ class BarcodeScannedToQuantityFieldJob extends UniqueJob
         ', [$points, $reason, $reason]);
     }
 
-    /**
-     * @param string $reason
-     */
     private function deleteIncorrectSuggestions(string $reason): void
     {
         DB::statement('

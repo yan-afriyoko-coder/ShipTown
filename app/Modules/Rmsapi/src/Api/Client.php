@@ -14,13 +14,7 @@ use Illuminate\Support\Facades\Log;
 class Client
 {
     /**
-     * @param RmsapiConnection $connection
-     * @param string           $uri
-     * @param array            $query
-     *
      * @throws GuzzleException
-     *
-     * @return RequestResponse
      */
     public static function GET(RmsapiConnection $connection, string $uri, array $query = []): RequestResponse
     {
@@ -29,9 +23,9 @@ class Client
         );
 
         logger('RMSAPI GET', [
-            'url'      => $connection->url,
-            'uri'      => $uri,
-            'query'    => $query,
+            'url' => $connection->url,
+            'uri' => $uri,
+            'query' => $query,
             'response' => [
                 'status_code' => $response->getResponseRaw()->getStatusCode(),
             ],
@@ -47,13 +41,7 @@ class Client
     }
 
     /**
-     * @param RmsapiConnection $connection
-     * @param string           $uri
-     * @param array            $data
-     *
      * @throws GuzzleException
-     *
-     * @return RequestResponse
      */
     public static function POST(RmsapiConnection $connection, string $uri, array $data): RequestResponse
     {
@@ -64,8 +52,8 @@ class Client
         );
 
         logger('RMSAPI POST', [
-            'uri'      => $uri,
-            'json'     => $data,
+            'uri' => $uri,
+            'json' => $data,
             'response' => [
                 'status_code' => $response->getResponseRaw()->getStatusCode(),
             ],
@@ -81,13 +69,7 @@ class Client
     }
 
     /**
-     * @param RmsapiConnection $connection
-     * @param string           $uri
-     * @param array            $query
-     *
      * @throws GuzzleException
-     *
-     * @return RequestResponse
      */
     public static function DELETE(RmsapiConnection $connection, string $uri, array $query): RequestResponse
     {
@@ -96,18 +78,13 @@ class Client
         return new RequestResponse($response);
     }
 
-    /**
-     * @param RmsapiConnection $connection
-     *
-     * @return GuzzleClient
-     */
     public static function getGuzzleClient(RmsapiConnection $connection): GuzzleClient
     {
         return new GuzzleClient([
-            'base_uri'   => $connection->url,
-            'timeout'    => 600,
+            'base_uri' => $connection->url,
+            'timeout' => 600,
             'exceptions' => false,
-            'auth'       => [
+            'auth' => [
                 $connection->username,
                 Crypt::decryptString($connection->password),
             ],

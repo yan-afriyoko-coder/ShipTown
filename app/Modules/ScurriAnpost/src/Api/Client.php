@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Modules\ScurriAnpost\src\Api;
 
 use Exception;
@@ -11,12 +10,10 @@ use Illuminate\Support\Facades\Http;
 
 /**
  * Class Client
- * @package App\Modules\ScurriAnpost\src\Api
  */
 class Client
 {
     /**
-     * @return PendingRequest
      * @throws Exception
      */
     private static function authenticatedClient(): PendingRequest
@@ -31,16 +28,12 @@ class Client
         return Http::withBasicAuth($username, $password);
     }
 
-    /**
-     * @param string $endpoint
-     * @return string
-     */
     private static function fullUrl(string $endpoint): string
     {
         $base_uri = config('scurri.base_uri');
         $company_slug = config('scurri.company_slug');
 
-        return $base_uri . $company_slug . '/' .$endpoint;
+        return $base_uri.$company_slug.'/'.$endpoint;
     }
 
     public static function getCarriers(): Response
@@ -50,7 +43,7 @@ class Client
 
     public static function getConsignment(string $consignment_id): Response
     {
-        return self::GET('consignment/' . $consignment_id);
+        return self::GET('consignment/'.$consignment_id);
     }
 
     public static function createMultipleConsignments(array $data): ?ConsignmentsResponse
@@ -66,13 +59,13 @@ class Client
 
     public static function getDocuments(string $consignment_id): Response
     {
-        return self::GET('consignment/' . $consignment_id . '/documents');
+        return self::GET('consignment/'.$consignment_id.'/documents');
     }
 
     public static function createSingleConsignment(array $data): string
     {
         $consignmentList = [
-            0 => $data
+            0 => $data,
         ];
 
         $response = self::createMultipleConsignments($consignmentList);

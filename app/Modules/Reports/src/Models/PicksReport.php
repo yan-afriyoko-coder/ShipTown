@@ -18,23 +18,23 @@ class PicksReport extends Report
             ->orderBy('picks.id', 'desc');
 
         $this->fields = [
-            'warehouse_code'    => 'picks.warehouse_code',
-            'picked_at'         => 'picks.created_at',
-            'picker'            => 'user.name',
-            'product_sku'       => 'product.sku',
-            'product_name'      => 'product.name',
-            'picked'            => 'picks.quantity_picked',
-            'skipped'           => 'picks.quantity_skipped_picking',
+            'warehouse_code' => 'picks.warehouse_code',
+            'picked_at' => 'picks.created_at',
+            'picker' => 'user.name',
+            'product_sku' => 'product.sku',
+            'product_name' => 'product.name',
+            'picked' => 'picks.quantity_picked',
+            'skipped' => 'picks.quantity_skipped_picking',
         ];
 
         $this->casts = [
-            'warehouse_code'    => 'string',
-            'picked_at'         => 'datetime',
-            'picker'            => 'string',
-            'product_sku'       => 'string',
-            'product_name'      => 'string',
-            'picked'            => 'float',
-            'skipped'           => 'float',
+            'warehouse_code' => 'string',
+            'picked_at' => 'datetime',
+            'picker' => 'string',
+            'product_sku' => 'string',
+            'product_name' => 'string',
+            'picked' => 'float',
+            'skipped' => 'float',
         ];
     }
 }

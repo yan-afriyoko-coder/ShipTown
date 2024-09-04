@@ -37,7 +37,7 @@ class RefillPickingByOldestJob implements ShouldQueue
     public function handle()
     {
         logger('Refilling "picking" status', [
-            'max_batch_size'       => $this->configuration->max_batch_size,
+            'max_batch_size' => $this->configuration->max_batch_size,
             'currently_in_process' => $this->configuration->current_count_with_status,
         ]);
 

@@ -24,8 +24,8 @@ class MagentoApiConnectionSetupRequest extends FormRequest
     public function rules()
     {
         return [
-            'base_url'                      => 'required|url',
-            'magento_store_id'              => 'required|numeric',
+            'base_url' => 'required|url',
+            'magento_store_id' => 'required|numeric',
             // 'access_token_encrypted'        => 'required',
         ];
     }

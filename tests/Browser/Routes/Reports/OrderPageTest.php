@@ -3,7 +3,6 @@
 namespace Tests\Browser\Routes\Reports;
 
 use App\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
@@ -15,7 +14,7 @@ class OrderPageTest extends DuskTestCase
      * @throws Throwable
      */
 
-     /**
+    /**
      * @group specification
      */
     public function testPage(): void
@@ -23,7 +22,7 @@ class OrderPageTest extends DuskTestCase
         /** @var User $user */
         $user = User::factory()->create();
         $user->assignRole('admin');
-        
+
         $this->browse(function (Browser $browser) use ($user) {
             $browser->disableFitOnFailure();
             $browser->loginAs($user);

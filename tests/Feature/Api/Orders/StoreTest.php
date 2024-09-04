@@ -19,20 +19,20 @@ class StoreTest extends TestCase
     public function test_store_call_returns_ok()
     {
         $data = [
-            'order_number'      => '0123456789',
-            'products'          => [
+            'order_number' => '0123456789',
+            'products' => [
                 [
-                    'sku'          => '123',
-                    'name'         => 'Test Product',
-                    'quantity'     => 2,
-                    'price'        => 4,
+                    'sku' => '123',
+                    'name' => 'Test Product',
+                    'quantity' => 2,
+                    'price' => 4,
                 ],
 
                 [
-                    'sku'          => '456',
-                    'name'         => 'Test Product',
-                    'quantity'     => 5,
-                    'price'        => 10,
+                    'sku' => '456',
+                    'name' => 'Test Product',
+                    'quantity' => 5,
+                    'price' => 10,
                 ],
             ],
         ];
@@ -49,8 +49,8 @@ class StoreTest extends TestCase
     public function testCorrectProductsSections()
     {
         $data = [
-            'order_number'      => '001241',
-            'products'          => [
+            'order_number' => '001241',
+            'products' => [
                 [], // blank products record
             ],
         ];
@@ -72,15 +72,15 @@ class StoreTest extends TestCase
             //'order_number'      => '001241',
             'products' => [
                 [
-                    'sku'          => '123',
-                    'quantity'     => 2,
-                    'price'        => 4,
+                    'sku' => '123',
+                    'quantity' => 2,
+                    'price' => 4,
                 ],
 
                 [
-                    'sku'          => '456',
-                    'quantity'     => 5,
-                    'price'        => 10,
+                    'sku' => '456',
+                    'quantity' => 5,
+                    'price' => 10,
                 ],
             ],
         ];
@@ -96,7 +96,7 @@ class StoreTest extends TestCase
     public function testIfMissingProductsSectionIsNotAllowed()
     {
         $data = [
-            'order_number'      => '001241',
+            'order_number' => '001241',
         ];
 
         Passport::actingAs(

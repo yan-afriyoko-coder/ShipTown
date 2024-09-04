@@ -6,9 +6,6 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
-/**
- *
- */
 class AppGenerateDuskTests extends Command
 {
     /**
@@ -28,8 +25,6 @@ class AppGenerateDuskTests extends Command
     /**
      * Command will not override existing files
      * It will only add new if do not exists.
-     *
-     * @return int
      */
     public function handle(): int
     {
@@ -38,18 +33,15 @@ class AppGenerateDuskTests extends Command
         return 0;
     }
 
-    /**
-     *
-     */
     private function generateDuskTestsFiles(): void
     {
         Artisan::call('route:list --json --env=production');
 
         $routes = collect(json_decode(Artisan::output()))
             ->filter(function ($route) {
-                $isNotApiRoute = !Str::startsWith($route->uri, 'api');
+                $isNotApiRoute = ! Str::startsWith($route->uri, 'api');
                 $isGetMethod = $route->method === 'GET|HEAD';
-                $isNotDevRoute = !Str::startsWith($route->uri, '_');
+                $isNotDevRoute = ! Str::startsWith($route->uri, '_');
 
                 return $isNotApiRoute && $isGetMethod && $isNotDevRoute;
             });
@@ -57,20 +49,15 @@ class AppGenerateDuskTests extends Command
         $routes->each(function ($route) {
             $testName = $this->getWebRouteTestName($route);
             $this->comment($testName);
-            Artisan::call('app:make-dusk-test ' . $testName . ' --uri=' . $route->uri);
+            Artisan::call('app:make-dusk-test '.$testName.' --uri='.$route->uri);
             $this->info(Artisan::output());
         });
     }
 
-
-    /**
-     * @param $route
-     * @return string
-     */
     private function getWebRouteTestName($route): string
     {
         $uri = Str::title($route->uri);
-        $routeName = 'Routes/' . $uri . 'PageTest';
+        $routeName = 'Routes/'.$uri.'PageTest';
 
         $routeName = str_replace('-', '', $routeName);
         $routeName = str_replace('_', '', $routeName);

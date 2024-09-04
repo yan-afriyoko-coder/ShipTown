@@ -15,8 +15,8 @@ class ExtractSkuProductIdJobTest extends TestCase
         Warehouse::factory()->create();
 
         RmsapiProductImport::factory()->count(1)->create([
-            'product_id'     => null,
-            'processed_at'   => null,
+            'product_id' => null,
+            'processed_at' => null,
         ]);
 
         // do

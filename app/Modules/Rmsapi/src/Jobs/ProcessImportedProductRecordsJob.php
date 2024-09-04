@@ -102,14 +102,14 @@ class ProcessImportedProductRecordsJob extends UniqueJob
 
     private function importAliases(RmsapiProductImport $importedProduct): void
     {
-        if (!Arr::has($importedProduct->raw_import, 'aliases')) {
+        if (! Arr::has($importedProduct->raw_import, 'aliases')) {
             return;
         }
 
         foreach ($importedProduct->raw_import['aliases'] as $alias) {
             $productAlias = ProductAlias::query()
                 ->firstOrCreate([
-                    'alias'      => $alias['alias'],
+                    'alias' => $alias['alias'],
                 ], [
                     'product_id' => $importedProduct->product->id,
                 ]);
@@ -123,13 +123,13 @@ class ProcessImportedProductRecordsJob extends UniqueJob
     private function importInventory(RmsapiProductImport $importedProduct): void
     {
         $importedProduct->inventory->update([
-            'reorder_point'     => data_get($importedProduct->raw_import, 'reorder_point', 0),
-            'restock_level'     => data_get($importedProduct->raw_import, 'restock_level', 0),
+            'reorder_point' => data_get($importedProduct->raw_import, 'reorder_point', 0),
+            'restock_level' => data_get($importedProduct->raw_import, 'restock_level', 0),
         ]);
 
         $reservationUuid = implode(';', [
             'rmsapi_imported_product',
-            'inventory_id' . $importedProduct->inventory->id,
+            'inventory_id'.$importedProduct->inventory->id,
         ]);
 
         $quantityCommittedInRMS = data_get($importedProduct->raw_import, 'quantity_committed', 0);
@@ -140,7 +140,7 @@ class ProcessImportedProductRecordsJob extends UniqueJob
             $inventoryReservation->delete();
         } elseif ($quantityCommittedInRMS > 0 && $inventoryReservation) {
             $inventoryReservation->update(['quantity_reserved' => $quantityCommittedInRMS]);
-        } elseif ($quantityCommittedInRMS > 0 && !$inventoryReservation) {
+        } elseif ($quantityCommittedInRMS > 0 && ! $inventoryReservation) {
             InventoryReservation::query()->create([
                 'inventory_id' => $importedProduct->inventory->id,
                 'warehouse_code' => $importedProduct->inventory->warehouse->code,
@@ -155,11 +155,11 @@ class ProcessImportedProductRecordsJob extends UniqueJob
     private function importPricing(RmsapiProductImport $importedProduct): void
     {
         $importedProduct->prices->update([
-            'price'                 => $importedProduct->raw_import[$importedProduct->rmsapiConnection->price_field_name],
-            'cost'                  => $importedProduct->raw_import['cost'],
-            'sale_price'            => $importedProduct->raw_import['sale_price'],
+            'price' => $importedProduct->raw_import[$importedProduct->rmsapiConnection->price_field_name],
+            'cost' => $importedProduct->raw_import['cost'],
+            'sale_price' => $importedProduct->raw_import['sale_price'],
             'sale_price_start_date' => $importedProduct->raw_import['sale_start_date'] ?? '2000-01-01',
-            'sale_price_end_date'   => $importedProduct->raw_import['sale_end_date'] ?? '2000-01-01',
+            'sale_price_end_date' => $importedProduct->raw_import['sale_end_date'] ?? '2000-01-01',
         ]);
     }
 

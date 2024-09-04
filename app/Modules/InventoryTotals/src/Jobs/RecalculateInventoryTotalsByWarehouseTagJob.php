@@ -19,14 +19,14 @@ class RecalculateInventoryTotalsByWarehouseTagJob extends UniqueJob
                     ->whereIn('id', $records->pluck('id'))
                     ->update([
                         'recalc_required' => false,
-                        'product_sku' => DB::raw("(
+                        'product_sku' => DB::raw('(
                             IFNULL(product_sku, (
                                     SELECT products.sku
                                     FROM products
                                     WHERE products.id = inventory_totals_by_warehouse_tag.product_id)
                                 )
-                        )"),
-                        'warehouse_tag_name' => DB::raw("(
+                        )'),
+                        'warehouse_tag_name' => DB::raw('(
                             IFNULL(warehouse_tag_name, (
                                     SELECT taggables.tag_name
                                     FROM taggables
@@ -34,7 +34,7 @@ class RecalculateInventoryTotalsByWarehouseTagJob extends UniqueJob
                                     LIMIT 1
                                 )
                             )
-                        )"),
+                        )'),
                         'quantity' => DB::raw("(
                             SELECT SUM(inventory.quantity)
                             FROM inventory
@@ -73,9 +73,8 @@ class RecalculateInventoryTotalsByWarehouseTagJob extends UniqueJob
                             WHERE inventory.product_id = inventory_totals_by_warehouse_tag.product_id
                         )"),
                         'calculated_at' => now(),
-                        'updated_at' => now()
+                        'updated_at' => now(),
                     ]);
-
 
                 $updatedInventoryTotalsByWarehouseTags = InventoryTotalByWarehouseTag::whereIn('id', $records->pluck('id'))->get();
 

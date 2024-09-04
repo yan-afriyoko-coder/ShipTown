@@ -19,7 +19,7 @@ class IndexTest extends TestCase
         $order = Order::factory()->create();
         $shippingLabel = ShippingLabel::factory()->create([
             'order_id' => $order->getKey(),
-            'shipping_number' => 'test'
+            'shipping_number' => 'test',
         ]);
         $this->uri = route('shipping-labels', [$shippingLabel->getKey()]);
         $this->user = User::factory()->create();

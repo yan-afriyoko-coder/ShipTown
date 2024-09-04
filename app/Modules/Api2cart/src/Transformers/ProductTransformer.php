@@ -2,19 +2,11 @@
 
 namespace App\Modules\Api2cart\src\Transformers;
 
-use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\Api2cart\src\Services\Api2cartService;
 
-/**
- *
- */
 class ProductTransformer
 {
-    /**
-     * @param Api2cartProductLink $api2cartProductLink
-     * @return array
-     */
     public static function toApi2cartPayload(Api2cartProductLink $api2cartProductLink): array
     {
         $data = collect();
@@ -27,11 +19,6 @@ class ProductTransformer
         return $data->toArray();
     }
 
-
-    /**
-     * @param Api2cartProductLink $productLink
-     * @return array
-     */
     private static function getBasicData(Api2cartProductLink $productLink): array
     {
         return [
@@ -43,10 +30,6 @@ class ProductTransformer
         ];
     }
 
-    /**
-     * @param Api2cartProductLink $productLink
-     * @return array
-     */
     private static function getMagentoStoreId(Api2cartProductLink $productLink): array
     {
         return [
@@ -54,10 +37,6 @@ class ProductTransformer
         ];
     }
 
-    /**
-     * @param Api2cartProductLink $api2cartProductLink
-     * @return array
-     */
     private static function getInventoryData(Api2cartProductLink $api2cartProductLink): array
     {
         $inventory_source_warehouse_tag = $api2cartProductLink->api2cartConnection->inventory_source_warehouse_tag;
@@ -74,10 +53,6 @@ class ProductTransformer
         ];
     }
 
-    /**
-     * @param Api2cartProductLink $api2cartProductLink
-     * @return array
-     */
     private static function getPricingData(Api2cartProductLink $api2cartProductLink): array
     {
         if ($api2cartProductLink->api2cartConnection->pricing_source_warehouse_id === null) {
@@ -90,7 +65,7 @@ class ProductTransformer
             ->first();
 
         return [
-            'price'         => $productPrice->price,
+            'price' => $productPrice->price,
             'special_price' => $productPrice->sale_price,
             'sprice_create' => Api2cartService::formatDateForApi2cart($productPrice->sale_price_start_date),
             'sprice_expire' => Api2cartService::formatDateForApi2cart($productPrice->sale_price_end_date),

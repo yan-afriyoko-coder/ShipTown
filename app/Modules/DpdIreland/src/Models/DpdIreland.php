@@ -15,20 +15,20 @@ use Illuminate\Support\Facades\Log;
 /**
  * App\Models\Configuration.
  *
- * @property int         $id
- * @property bool        $live
- * @property string      $token
- * @property string      $user
- * @property string      $password
- * @property string      $contact
- * @property string      $contact_telephone
- * @property string      $contact_email
- * @property string      $business_name
- * @property string      $address_line_1
- * @property string      $address_line_2
- * @property string      $address_line_3
- * @property string      $address_line_4
- * @property string      $country_code
+ * @property int $id
+ * @property bool $live
+ * @property string $token
+ * @property string $user
+ * @property string $password
+ * @property string $contact
+ * @property string $contact_telephone
+ * @property string $contact_email
+ * @property string $business_name
+ * @property string $address_line_1
+ * @property string $address_line_2
+ * @property string $address_line_3
+ * @property string $address_line_4
+ * @property string $country_code
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\Log;
  * @method static Builder|DpdIreland query()
  * @method static Builder|DpdIreland first()
  * @method static Builder|DpdIreland firstOrFail()
+ *
  * @mixin Eloquent
  *
  * @method static Builder|DpdIreland whereAddressLine1($value)
@@ -58,9 +59,8 @@ use Illuminate\Support\Facades\Log;
  */
 class DpdIreland extends BaseModel
 {
-    use HasFactory;
-
     use Encryptable;
+    use HasFactory;
 
     protected $table = 'modules_dpd_ireland_configuration';
 
@@ -86,8 +86,6 @@ class DpdIreland extends BaseModel
 
     /**
      * DpdIreland collection address as array.
-     *
-     * @return array
      */
     public function getCollectionAddress(): array
     {
@@ -97,17 +95,18 @@ class DpdIreland extends BaseModel
 
             if ($user && isset($user->warehouse->address)) {
                 $collectionAddress = $user->warehouse->address;
+
                 return [
-                    'Contact'          => $collectionAddress->full_name,
+                    'Contact' => $collectionAddress->full_name,
                     'ContactTelephone' => $collectionAddress->phone,
-                    'ContactEmail'     => $collectionAddress->email,
-                    'BusinessName'     => $collectionAddress->company,
-                    'AddressLine1'     => $collectionAddress->address1,
-                    'AddressLine2'     => $collectionAddress->address2,
-                    'AddressLine3'     => '',
-                    'AddressLine4'     => $collectionAddress->city,
-                    'PostCode'         => $collectionAddress->postcode,
-                    'CountryCode'      => $collectionAddress->country_code,
+                    'ContactEmail' => $collectionAddress->email,
+                    'BusinessName' => $collectionAddress->company,
+                    'AddressLine1' => $collectionAddress->address1,
+                    'AddressLine2' => $collectionAddress->address2,
+                    'AddressLine3' => '',
+                    'AddressLine4' => $collectionAddress->city,
+                    'PostCode' => $collectionAddress->postcode,
+                    'CountryCode' => $collectionAddress->country_code,
                 ];
             }
         } catch (Exception $exception) {
@@ -118,15 +117,15 @@ class DpdIreland extends BaseModel
         }
 
         return [
-            'Contact'          => $this->attributes['contact'],
+            'Contact' => $this->attributes['contact'],
             'ContactTelephone' => $this->attributes['contact_telephone'],
-            'ContactEmail'     => $this->attributes['contact_email'],
-            'BusinessName'     => $this->attributes['business_name'],
-            'AddressLine1'     => $this->attributes['address_line_1'],
-            'AddressLine2'     => $this->attributes['address_line_2'],
-            'AddressLine3'     => $this->attributes['address_line_3'],
-            'AddressLine4'     => $this->attributes['address_line_4'],
-            'CountryCode'      => $this->attributes['country_code'],
+            'ContactEmail' => $this->attributes['contact_email'],
+            'BusinessName' => $this->attributes['business_name'],
+            'AddressLine1' => $this->attributes['address_line_1'],
+            'AddressLine2' => $this->attributes['address_line_2'],
+            'AddressLine3' => $this->attributes['address_line_3'],
+            'AddressLine4' => $this->attributes['address_line_4'],
+            'CountryCode' => $this->attributes['country_code'],
         ];
     }
 }

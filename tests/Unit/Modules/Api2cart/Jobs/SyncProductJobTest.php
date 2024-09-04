@@ -25,9 +25,9 @@ class SyncProductJobTest extends TestCase
 
         $product = Product::factory()->create();
 
-         Api2cartConnection::factory()->create([
-            'pricing_location_id'   => $warehouse->code,
-         ]);
+        Api2cartConnection::factory()->create([
+            'pricing_location_id' => $warehouse->code,
+        ]);
 
         Api2cartProductLink::where(['product_id' => $product->getKey()])
             ->each(function (Api2cartProductLink $product_link) {

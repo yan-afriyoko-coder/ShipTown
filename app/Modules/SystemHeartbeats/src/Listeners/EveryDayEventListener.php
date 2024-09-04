@@ -17,7 +17,7 @@ class EveryDayEventListener
         ], [
             'error_message' => 'Every Day heartbeat missed',
             'expires_at' => now()->addDays()->addHour(),
-            'auto_heal_job_class' => DispatchEveryDayEventJob::class
+            'auto_heal_job_class' => DispatchEveryDayEventJob::class,
         ]);
     }
 }

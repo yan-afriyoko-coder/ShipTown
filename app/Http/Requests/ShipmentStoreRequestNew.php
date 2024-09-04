@@ -24,10 +24,10 @@ class ShipmentStoreRequestNew extends FormRequest
     public function rules()
     {
         return [
-            'order_id'          => ['required','exists:orders,id'],
-            'shipping_number'   => ['required', 'string'],
-            'carrier'           => ['sometimes', 'string'],
-            'service'           => ['sometimes', 'string'],
+            'order_id' => ['required', 'exists:orders,id'],
+            'shipping_number' => ['required', 'string'],
+            'carrier' => ['sometimes', 'string'],
+            'service' => ['sometimes', 'string'],
         ];
     }
 }

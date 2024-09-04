@@ -24,9 +24,9 @@ class Api2cartConnectionStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'location_id'    => 'required',
-            'url'            => 'required|url',
-            'type'           => 'required',
+            'location_id' => 'required',
+            'url' => 'required|url',
+            'type' => 'required',
             'bridge_api_key' => 'required',
         ];
     }

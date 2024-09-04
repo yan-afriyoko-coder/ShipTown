@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|UserConfiguration newModelQuery()
  * @method static Builder|UserConfiguration newQuery()
  * @method static Builder|UserConfiguration query()
+ *
  * @mixin Eloquent
  */
 class UserConfiguration extends Model

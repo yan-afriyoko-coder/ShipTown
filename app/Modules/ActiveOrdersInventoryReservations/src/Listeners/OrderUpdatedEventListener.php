@@ -34,6 +34,7 @@ class OrderUpdatedEventListener
 
         if ($config->warehouse_id === null) {
             ActiveOrdersInventoryReservationsServiceProvider::disableModule();
+
             return;
         }
 
@@ -49,7 +50,7 @@ class OrderUpdatedEventListener
                     'product_sku' => $orderProduct->sku_ordered,
                     'warehouse_code' => $inventory->warehouse_code,
                     'quantity_reserved' => $orderProduct->quantity_to_ship,
-                    'comment' => 'Order #' . $event->order->order_number,
+                    'comment' => 'Order #'.$event->order->order_number,
                     'custom_uuid' => ReservationsService::getUuid($orderProduct),
                 ];
             });
@@ -61,12 +62,12 @@ class OrderUpdatedEventListener
     {
         $uuidPrefix = implode(';', [
             ReservationsService::UUID_PREFIX,
-            'order_id_' . $event->order->getKey(),
+            'order_id_'.$event->order->getKey(),
         ]);
 
         InventoryReservation::query()
-            ->where('custom_uuid', 'like', $uuidPrefix . ';%')
+            ->where('custom_uuid', 'like', $uuidPrefix.';%')
             ->get()
-            ->each(fn(InventoryReservation $inventoryReservation) => $inventoryReservation->delete());
+            ->each(fn (InventoryReservation $inventoryReservation) => $inventoryReservation->delete());
     }
 }

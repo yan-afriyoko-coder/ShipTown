@@ -25,21 +25,21 @@ class StocktakesReport extends Report
             ->orderBy('inventory_movements.id', 'desc');
 
         $this->fields = [
-            'created_at'        => 'inventory_movements.created_at',
-            'warehouse_code'    => 'inventory.warehouse_code',
-            'user'              => 'user.name',
-            'product_sku'       => 'product.sku',
-            'product_name'      => 'product.name',
-            'quantity_delta'    => 'inventory_movements.quantity_delta',
-            'quantity_before'   => 'inventory_movements.quantity_before',
-            'quantity_after'    => 'inventory_movements.quantity_after',
+            'created_at' => 'inventory_movements.created_at',
+            'warehouse_code' => 'inventory.warehouse_code',
+            'user' => 'user.name',
+            'product_sku' => 'product.sku',
+            'product_name' => 'product.name',
+            'quantity_delta' => 'inventory_movements.quantity_delta',
+            'quantity_before' => 'inventory_movements.quantity_before',
+            'quantity_after' => 'inventory_movements.quantity_after',
         ];
 
         $this->casts = [
-            'date'              => 'datetime',
-            'quantity_delta'    => 'float',
-            'quantity_before'   => 'float',
-            'quantity_after'    => 'float',
+            'date' => 'datetime',
+            'quantity_delta' => 'float',
+            'quantity_before' => 'float',
+            'quantity_after' => 'float',
         ];
 
         $this->addFilter(

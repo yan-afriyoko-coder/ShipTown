@@ -40,7 +40,6 @@ class QueueMonitorServiceProvider extends BaseModuleServiceProvider
         ],
     ];
 
-
     public static function loaded(): bool
     {
         app()->extend(Dispatcher::class, function ($dispatcher, $app) {

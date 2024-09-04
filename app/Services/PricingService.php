@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class PricingService
 {
-    public static function updateProductPrice(string $skuOrAlias, float $price, int $warehouseId = null): Collection
+    public static function updateProductPrice(string $skuOrAlias, float $price, ?int $warehouseId = null): Collection
     {
         /** @var Product $product */
         $product = ProductService::find($skuOrAlias);

@@ -17,7 +17,7 @@ class EveryTenMinutesEventListener
         ], [
             'error_message' => 'Every Ten Minutes heartbeat missed',
             'expires_at' => now()->addMinutes(15),
-            'auto_heal_job_class' => DispatchEveryTenMinutesEventJob::class
+            'auto_heal_job_class' => DispatchEveryTenMinutesEventJob::class,
         ]);
     }
 }

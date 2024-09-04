@@ -8,7 +8,6 @@ trait Encryptable
      * If the attribute is in the encryptable array
      * then decrypt it.
      *
-     * @param  $key
      *
      * @return $value
      */
@@ -25,9 +24,6 @@ trait Encryptable
     /**
      * If the attribute is in the encryptable array
      * then encrypt it.
-     *
-     * @param $key
-     * @param $value
      */
     public function setAttribute($key, $value)
     {

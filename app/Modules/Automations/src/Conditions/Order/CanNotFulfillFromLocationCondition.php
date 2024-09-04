@@ -6,15 +6,8 @@ use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use App\Services\OrderService;
 use Illuminate\Support\Facades\Log;
 
-/**
- *
- */
 class CanNotFulfillFromLocationCondition extends BaseOrderConditionAbstract
 {
-    /**
-     * @param string|null $expected_value
-     * @return bool
-     */
     public function isValid(?string $expected_value = ''): bool
     {
         if ($expected_value === '0') {

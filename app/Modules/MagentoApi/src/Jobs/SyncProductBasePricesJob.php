@@ -5,7 +5,6 @@ namespace App\Modules\MagentoApi\src\Jobs;
 use App\Abstracts\UniqueJob;
 use App\Modules\Magento2MSI\src\Api\MagentoApi;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
-use App\Modules\MagentoApi\src\Services\MagentoService;
 
 /**
  * Class SyncCheckFailedProductsJob.
@@ -30,7 +29,7 @@ class SyncProductBasePricesJob extends UniqueJob
                         'base_price_sync_required' => null,
                         'base_prices_fetched_at' => null,
                         'base_prices_raw_import' => null,
-                        'magento_price'          => null,
+                        'magento_price' => null,
                     ]);
                 });
             });

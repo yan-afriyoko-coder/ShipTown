@@ -31,16 +31,16 @@ class ImportShippingsJobTest extends TestCase
     public function test_endpoint()
     {
         $connection = RmsapiConnection::factory()->create([
-            'location_id'  => env('TEST_RMSAPI_WAREHOUSE_CODE'),
-            'url'          => env('TEST_RMSAPI_URL'),
-            'username'     => env('TEST_RMSAPI_USERNAME'),
-            'password'     => env('TEST_RMSAPI_PASSWORD'),
+            'location_id' => env('TEST_RMSAPI_WAREHOUSE_CODE'),
+            'url' => env('TEST_RMSAPI_URL'),
+            'username' => env('TEST_RMSAPI_USERNAME'),
+            'password' => env('TEST_RMSAPI_PASSWORD'),
         ]);
 
         Product::create(['sku' => '45']);
         Warehouse::create([
             'code' => env('TEST_RMSAPI_WAREHOUSE_CODE'),
-            'name' => env('TEST_RMSAPI_WAREHOUSE_CODE')
+            'name' => env('TEST_RMSAPI_WAREHOUSE_CODE'),
         ]);
 
         ImportShippingsJob::dispatch($connection->getKey());

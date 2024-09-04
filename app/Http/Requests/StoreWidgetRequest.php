@@ -24,7 +24,7 @@ class StoreWidgetRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'   => 'required',
+            'name' => 'required',
             'config' => 'sometimes|array',
         ];
     }

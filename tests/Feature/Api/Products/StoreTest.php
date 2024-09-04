@@ -24,10 +24,10 @@ class StoreTest extends TestCase
         $params = [
             'sku' => 'TestSku',
             'name' => 'Product Name',
-            'price' => 200
+            'price' => 200,
         ];
 
-        $response = $this->post("api/products", $params);
+        $response = $this->post('api/products', $params);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'name',
@@ -50,10 +50,10 @@ class StoreTest extends TestCase
         $params = [
             'sku' => $produc->sku,
             'name' => 'Product Name',
-            'price' => 200
+            'price' => 200,
         ];
 
-        $response = $this->post("api/products", $params);
+        $response = $this->post('api/products', $params);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'name',

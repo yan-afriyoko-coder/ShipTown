@@ -10,24 +10,12 @@ use App\Modules\BaseModuleServiceProvider;
  */
 class DpdUkServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = 'Courier - DPD UK Integration';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'Provides seamless integration with DPD UK';
 
-    /**
-     * @var string
-     */
     public static string $settings_link = '/settings/modules/dpd-uk';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = false;
 
     /**
@@ -36,7 +24,6 @@ class DpdUkServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [];
-
 
     public static function enabling(): bool
     {

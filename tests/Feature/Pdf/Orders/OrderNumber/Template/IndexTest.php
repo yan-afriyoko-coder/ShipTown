@@ -6,36 +6,21 @@ use App\Models\Order;
 use App\User;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
-    /**
-     * @var string
-     */
     protected string $uri = 'this set in setUp() method';
 
-    /**
-     * @var User
-     */
     protected User $user;
 
-    /**
-     * @var Order
-     */
     protected Order $order;
 
-    /**
-     *
-     */
     protected function setUp(): void
     {
         parent::setUp();
         $this->user = User::factory()->create();
         $this->order = Order::factory()->create();
 
-        $this->uri = '/pdf/orders/'.$this->order->order_number. '/address_label';
+        $this->uri = '/pdf/orders/'.$this->order->order_number.'/address_label';
     }
 
     /** @test */

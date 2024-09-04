@@ -5,9 +5,9 @@ namespace App\Modules\Rmsapi\src\Models;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductPrice;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -15,16 +15,16 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\RmsapiProductImport.
  *
- * @property int         $id
- * @property int         $connection_id
+ * @property int $id
+ * @property int $connection_id
  * @property string|null $batch_uuid
  * @property Carbon|null $reserved_at
  * @property Carbon|null $when_processed
- * @property int|null    $product_id
- * @property int|null    $rms_product_id
+ * @property int|null $product_id
+ * @property int|null $rms_product_id
  * @property string|null $sku
  * @property string|null $name
- * @property array       $raw_import
+ * @property array $raw_import
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property RmsapiConnection $rmsapiConnection
@@ -44,6 +44,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|RmsapiProductImport whereSku($value)
  * @method static Builder|RmsapiProductImport whereUpdatedAt($value)
  * @method static Builder|RmsapiProductImport whereWhenProcessed($value)
+ *
  * @mixin Eloquent
  */
 class RmsapiProductImport extends Model

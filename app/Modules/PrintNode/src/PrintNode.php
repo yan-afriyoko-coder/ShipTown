@@ -9,18 +9,12 @@ use Exception;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Log;
 
-/**
- *
- */
 class PrintNode
 {
     /**
      * Noop: Quick "ping" to see if communication and authentication works
-     *
-     * @param Client|null $printNodeClient
-     * @return bool
      */
-    public static function noop(Client $printNodeClient = null): bool
+    public static function noop(?Client $printNodeClient = null): bool
     {
         $client = $printNodeClient ?: self::getFirstPrintNodeClient();
 
@@ -33,14 +27,11 @@ class PrintNode
         }
     }
 
-    /**
-     * @return array
-     */
     public static function getPrinters(): array
     {
         $printNodeClient = self::getFirstPrintNodeClient();
 
-        if (!$printNodeClient) {
+        if (! $printNodeClient) {
             return [];
         }
 
@@ -50,15 +41,13 @@ class PrintNode
     }
 
     /**
-     * @param PrintJob $printJob
-     * @return Response
      * @throws ShippingServiceException
      */
     public static function print(PrintJob $printJob): Response
     {
         $printNodeClient = self::getFirstPrintNodeClient();
 
-        if (!$printNodeClient) {
+        if (! $printNodeClient) {
             Log::warning('Print job failed, no PrintNode clients configured');
             throw new ShippingServiceException('PrintNode service not configured');
         }
@@ -66,9 +55,6 @@ class PrintNode
         return $printNodeClient->postRequest('printjobs', $printJob->toPrintNodePayload());
     }
 
-    /**
-     * @return Client|null
-     */
     public static function getFirstPrintNodeClient(): ?Client
     {
         $clients = Client::all();

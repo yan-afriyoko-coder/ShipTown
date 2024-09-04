@@ -18,12 +18,13 @@ class MagentoApiConnectionController extends Controller
     public function index(MagentoApiConnectionIndexRequest $request): AnonymousResourceCollection
     {
         $query = MagentoConnection::getSpatieQueryBuilder();
+
         return MagentoConnectionResource::collection($this->getPaginatedResult($query));
     }
 
     public function store(MagentoApiConnectionStoreRequest $request): MagentoConnectionResource
     {
-        $connection = new MagentoConnection();
+        $connection = new MagentoConnection;
         $connection->fill($request->only($connection->getFillable()));
 
         if ($request->has('tag')) {
@@ -46,6 +47,7 @@ class MagentoApiConnectionController extends Controller
             $connection->inventory_source_warehouse_tag_id = $tag->id;
             $connection->tags()->sync([$tag->id]);
         }
+
         return new MagentoConnectionResource($connection);
     }
 

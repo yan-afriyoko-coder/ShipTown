@@ -19,7 +19,7 @@ class CheckForIncorrectSequenceNumberJob extends UniqueJob
     public function handle()
     {
         do {
-            $recordsUpdated =  DB::update('
+            $recordsUpdated = DB::update('
                 WITH movementsWithIncorrectQuantityBefore AS (
                     SELECT inventory_movements.id FROM inventory_movements
 
@@ -42,10 +42,9 @@ class CheckForIncorrectSequenceNumberJob extends UniqueJob
                 UPDATE inventory_movements SET sequence_number = null WHERE id IN (SELECT id FROM movementsWithIncorrectQuantityBefore);
             ', [$this->date->toDateTimeLocalString(), $this->date->addDay()->toDateTimeLocalString()]);
 
-
             Log::info('Job processing', [
                 'job' => self::class,
-                'recordsUpdated' => $recordsUpdated
+                'recordsUpdated' => $recordsUpdated,
             ]);
 
             usleep(100000); // 0.1 seconds

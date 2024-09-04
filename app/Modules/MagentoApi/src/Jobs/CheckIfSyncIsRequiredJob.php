@@ -3,11 +3,6 @@
 namespace App\Modules\MagentoApi\src\Jobs;
 
 use App\Abstracts\UniqueJob;
-use App\Modules\Magento2MSI\src\Api\MagentoApi;
-use App\Modules\Magento2MSI\src\Models\Magento2msiConnection;
-use App\Modules\Magento2MSI\src\Models\Magento2msiProduct;
-use Exception;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -16,7 +11,7 @@ class CheckIfSyncIsRequiredJob extends UniqueJob
     public function handle(): void
     {
         do {
-            $recordsAffected = DB::affectingStatement("
+            $recordsAffected = DB::affectingStatement('
                 WITH tempTable AS (
                         SELECT modules_magento2api_products.id
 
@@ -42,7 +37,7 @@ class CheckIfSyncIsRequiredJob extends UniqueJob
                         AND modules_magento2api_products.magento_sale_price_end_date != products_prices.sale_price_end_date
                     ),
                     modules_magento2api_products.updated_at = NOW()
-           ");
+           ');
 
             usleep(100000); // 0.1 second
             Log::info('Job processing', [

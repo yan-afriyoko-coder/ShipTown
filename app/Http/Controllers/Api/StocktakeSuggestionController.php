@@ -12,7 +12,7 @@ class StocktakeSuggestionController extends Controller
 {
     public function index(Request $request): AnonymousResourceCollection
     {
-        $report = new StocktakeSuggestionReport();
+        $report = new StocktakeSuggestionReport;
 
         return JsonResource::collection($report->simplePaginatedCollection());
     }

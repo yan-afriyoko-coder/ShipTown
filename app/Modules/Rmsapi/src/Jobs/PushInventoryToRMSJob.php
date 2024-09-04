@@ -21,7 +21,6 @@ class PushInventoryToRMSJob extends UniqueJob
     /**
      * Execute the job.
      *
-     * @return boolean
      *
      * @throws Exception|GuzzleException
      */

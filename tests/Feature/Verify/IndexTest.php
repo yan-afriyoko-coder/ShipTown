@@ -6,9 +6,6 @@ use App\Models\Configuration;
 use App\User;
 use Tests\TestCase;
 
-/**
- *
- */
 class IndexTest extends TestCase
 {
     protected string $uri = '/verify';

@@ -33,17 +33,17 @@ class TotalsByWarehouseTagTest extends TestCase
 
         $inventory1_withTag = Inventory::query()->where([
             'product_id' => $product->getKey(),
-            'warehouse_id' => $warehouse1_withTag->getKey()
+            'warehouse_id' => $warehouse1_withTag->getKey(),
         ])->first();
 
         $inventory2_withTag = Inventory::query()->where([
             'product_id' => $product->getKey(),
-            'warehouse_id' => $warehouse2_withTag->getKey()
+            'warehouse_id' => $warehouse2_withTag->getKey(),
         ])->first();
 
         $inventory3_noTag = Inventory::query()->where([
             'product_id' => $product->getKey(),
-            'warehouse_id' => $warehouse3_noTag->getKey()
+            'warehouse_id' => $warehouse3_noTag->getKey(),
         ])->first();
 
         InventoryService::adjust($inventory1_withTag, 10);
@@ -62,7 +62,7 @@ class TotalsByWarehouseTagTest extends TestCase
         $this->assertDatabaseHas('inventory_totals_by_warehouse_tag', [
             'tag_id' => Tag::findFromString('test_tag')->getKey(),
             'product_id' => $product->getKey(),
-            'quantity' => 15
+            'quantity' => 15,
         ]);
 
         $this->assertDatabaseMissing('inventory_totals_by_warehouse_tag', [
@@ -107,19 +107,19 @@ class TotalsByWarehouseTagTest extends TestCase
         $product = Product::factory()->create();
 
         $inventory1_withTag = Inventory::query()->where([
-                'product_id' => $product->getKey(),
-                'warehouse_id' => $warehouse1_withTag->getKey()
-            ])->first();
+            'product_id' => $product->getKey(),
+            'warehouse_id' => $warehouse1_withTag->getKey(),
+        ])->first();
 
         $inventory2_withTag = Inventory::query()->where([
-                'product_id' => $product->getKey(),
-                'warehouse_id' => $warehouse2_withTag->getKey()
-            ])->first();
+            'product_id' => $product->getKey(),
+            'warehouse_id' => $warehouse2_withTag->getKey(),
+        ])->first();
 
         $inventory3_noTag = Inventory::query()->where([
-                'product_id' => $product->getKey(),
-                'warehouse_id' => $warehouse3_noTag->getKey()
-            ])->first();
+            'product_id' => $product->getKey(),
+            'warehouse_id' => $warehouse3_noTag->getKey(),
+        ])->first();
 
         InventoryService::adjust($inventory1_withTag, 10);
         InventoryService::adjust($inventory2_withTag, 5);
@@ -130,7 +130,7 @@ class TotalsByWarehouseTagTest extends TestCase
         $this->assertDatabaseHas('inventory_totals_by_warehouse_tag', [
             'tag_id' => Tag::findFromString('test_tag')->getKey(),
             'product_id' => $product->getKey(),
-            'quantity' => 15
+            'quantity' => 15,
         ]);
     }
 
@@ -151,7 +151,7 @@ class TotalsByWarehouseTagTest extends TestCase
         $this->assertDatabaseHas('inventory_totals_by_warehouse_tag', [
             'tag_id' => Tag::findFromString('test_tag')->getKey(),
             'product_id' => $product->getKey(),
-            'quantity' => 0
+            'quantity' => 0,
         ]);
     }
 }

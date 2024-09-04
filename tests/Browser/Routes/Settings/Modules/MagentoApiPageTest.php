@@ -34,4 +34,3 @@ class MagentoApiPageTest extends DuskTestCase
         });
     }
 }
-

@@ -18,8 +18,6 @@ class OrderCommentController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return LengthAwarePaginator
      */
     public function index(): LengthAwarePaginator
     {
@@ -28,11 +26,6 @@ class OrderCommentController extends Controller
         return $this->getPaginatedResult($query);
     }
 
-    /**
-     * @param OrderCommentStoreRequest $request
-     *
-     * @return AnonymousResourceCollection
-     */
     public function store(OrderCommentStoreRequest $request): AnonymousResourceCollection
     {
         $shipment = new OrderComment($request->validated());

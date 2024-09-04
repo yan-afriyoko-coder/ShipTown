@@ -20,24 +20,12 @@ use Exception;
  */
 class Api2cartServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = 'eCommerce - Api2cart Integration';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'Api2cart.com platform integration';
 
-    /**
-     * @var string
-     */
     public static string $settings_link = '/settings/api2cart';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = false;
 
     /**
@@ -47,35 +35,35 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
      */
     protected $listen = [
         EveryMinuteEvent::class => [
-            Listeners\EveryMinuteEventListener::class
+            Listeners\EveryMinuteEventListener::class,
         ],
 
         EveryFiveMinutesEvent::class => [
-            Listeners\EveryFiveMinutesEventListener::class
+            Listeners\EveryFiveMinutesEventListener::class,
         ],
 
         EveryDayEvent::class => [
             Listeners\DailyEventListener::class],
 
         ProductPriceUpdatedEvent::class => [
-            Listeners\ProductPriceUpdatedEventListener::class
+            Listeners\ProductPriceUpdatedEventListener::class,
         ],
 
         ProductTagAttachedEvent::class => [
-            Listeners\ProductTagAttachedEventListener::class
+            Listeners\ProductTagAttachedEventListener::class,
         ],
 
         ProductTagDetachedEvent::class => [
-            Listeners\ProductTagDetachedEventListener::class
+            Listeners\ProductTagDetachedEventListener::class,
         ],
 
         InventoryUpdatedEvent::class => [
-            Listeners\InventoryUpdatedEventListener::class
+            Listeners\InventoryUpdatedEventListener::class,
         ],
 
         OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedEventListener::class
-        ]
+            Listeners\OrderUpdatedEventListener::class,
+        ],
     ];
 
     public static function enabling(): bool

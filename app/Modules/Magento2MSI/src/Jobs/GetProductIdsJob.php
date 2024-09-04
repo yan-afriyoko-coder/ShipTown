@@ -47,6 +47,7 @@ class GetProductIdsJob extends UniqueJob
                 'connection_id' => $connection->getKey(),
                 'response' => $response->json(),
             ]);
+
             return false;
         }
 
@@ -69,7 +70,7 @@ class GetProductIdsJob extends UniqueJob
             'magento_product_type',
             'exists_in_magento',
             'sync_required',
-            'updated_at'
+            'updated_at',
         ]);
 
         Magento2msiProduct::query()

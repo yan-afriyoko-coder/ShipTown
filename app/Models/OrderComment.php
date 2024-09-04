@@ -14,10 +14,10 @@ use Spatie\QueryBuilder\QueryBuilder;
 /**
  * App\Models\OrderComment.
  *
- * @property int         $id
- * @property int         $order_id
- * @property int|null    $user_id
- * @property string      $comment
+ * @property int $id
+ * @property int $order_id
+ * @property int|null $user_id
+ * @property string $comment
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User|null $user
@@ -31,6 +31,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|OrderComment whereOrderId($value)
  * @method static Builder|OrderComment whereUpdatedAt($value)
  * @method static Builder|OrderComment whereUserId($value)
+ *
  * @mixin Eloquent
  */
 class OrderComment extends BaseModel
@@ -51,9 +52,6 @@ class OrderComment extends BaseModel
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * @return QueryBuilder
-     */
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(OrderComment::class)

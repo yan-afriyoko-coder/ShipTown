@@ -15,24 +15,12 @@ use App\Modules\BaseModuleServiceProvider;
  */
 class DpdIrelandServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = 'Courier - DPD Ireland Integration';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'Provides seamless integration with DPD Ireland';
 
-    /**
-     * @var string
-     */
     public static string $settings_link = '/settings/dpd-ireland';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = false;
 
     /**

@@ -5,10 +5,10 @@ namespace App\Modules\InventoryTotals\src\Models;
 use App\BaseModel;
 
 /**
- * @property double $quantity
- * @property double $quantity_reserved
- * @property double $quantity_incoming
- * @property double $quantity_available
+ * @property float $quantity
+ * @property float $quantity_reserved
+ * @property float $quantity_incoming
+ * @property float $quantity_available
  */
 class InventoryTotalByWarehouseTag extends BaseModel
 {

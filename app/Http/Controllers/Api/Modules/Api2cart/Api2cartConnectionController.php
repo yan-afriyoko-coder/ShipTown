@@ -20,22 +20,14 @@ use Illuminate\Http\Response;
  */
 class Api2cartConnectionController extends Controller
 {
-    /**
-     * @return AnonymousResourceCollection
-     */
     public function index(Api2cartConnectionIndexRequest $request): AnonymousResourceCollection
     {
         return JsonResource::collection(Api2cartConnection::all());
     }
 
-    /**
-     * @param Api2cartConnectionStoreRequest $request
-     *
-     * @return JsonResource
-     */
     public function store(Api2cartConnectionStoreRequest $request): JsonResource
     {
-        $config = new Api2cartConnection();
+        $config = new Api2cartConnection;
         $config->fill($request->only($config->getFillable()));
         $config->save();
 
@@ -45,15 +37,14 @@ class Api2cartConnectionController extends Controller
     }
 
     /**
-     * @param Api2cartConnection $connection
+     * @return Application|ResponseFactory|Response
      *
      * @throws Exception
-     *
-     * @return Application|ResponseFactory|Response
      */
     public function destroy(Api2cartConnectionDestroyRequest $request, Api2cartConnection $connection)
     {
         $connection->delete();
+
         return response('ok');
     }
 }

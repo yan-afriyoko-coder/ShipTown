@@ -38,9 +38,9 @@ class StoreTest extends TestCase
         $user->delete();
 
         $response = $this->post(route('users.store'), [
-            'name'      => $user->name,
-            'email'     => $user->email,
-            'role_id'   => Role::findOrCreate('user', 'web')->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role_id' => Role::findOrCreate('user', 'web')->id,
         ]);
 
         $response->assertStatus(200);

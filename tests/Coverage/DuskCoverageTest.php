@@ -28,9 +28,9 @@ class DuskCoverageTest extends TestCase
 
         $routesCollection = collect(json_decode(Artisan::output()))
             ->filter(function ($route) {
-                $isNotApiRoute  = !Str::startsWith($route->uri, 'api');
-                $isGetMethod    = $route->method === 'GET|HEAD';
-                $isNotDevRoute  = !Str::startsWith($route->uri, '_');
+                $isNotApiRoute = ! Str::startsWith($route->uri, 'api');
+                $isGetMethod = $route->method === 'GET|HEAD';
+                $isNotDevRoute = ! Str::startsWith($route->uri, '_');
 
                 return $isNotApiRoute && $isNotDevRoute && $isGetMethod;
             })
@@ -50,14 +50,10 @@ class DuskCoverageTest extends TestCase
         });
     }
 
-    /**
-     * @param $route
-     * @return string
-     */
     private function getWebRouteTestName($route): string
     {
         $uri = Str::title($route->uri);
-        $routeName = 'Routes/' . $uri . 'PageTest';
+        $routeName = 'Routes/'.$uri.'PageTest';
 
         $routeName = str_replace('-', '', $routeName);
         $routeName = str_replace('_', '', $routeName);

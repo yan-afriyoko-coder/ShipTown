@@ -29,12 +29,12 @@ class SyncProductSalePricesJob extends UniqueJob
                     );
 
                     $magentoProduct->update([
-                        'special_price_sync_required'   => null,
-                        'special_prices_fetched_at'     => null,
-                        'special_prices_raw_import'     => null,
-                        'magento_sale_price'            => null,
+                        'special_price_sync_required' => null,
+                        'special_prices_fetched_at' => null,
+                        'special_prices_raw_import' => null,
+                        'magento_sale_price' => null,
                         'magento_sale_price_start_date' => null,
-                        'magento_sale_price_end_date'   => null,
+                        'magento_sale_price_end_date' => null,
                     ]);
                 });
             });

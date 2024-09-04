@@ -6,9 +6,6 @@ use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use App\Services\OrderService;
 use Illuminate\Support\Facades\Log;
 
-/**
- *
- */
 class CanFulfillFromLocationCondition extends BaseOrderConditionAbstract
 {
     public function isValid(?string $expected_value = ''): bool

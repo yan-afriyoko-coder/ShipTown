@@ -12,7 +12,7 @@ class StocktakeSuggestionDetailController extends Controller
 {
     public function index(Request $request): AnonymousResourceCollection
     {
-        $report = new StoctakeSuggestionsDetailedReport();
+        $report = new StoctakeSuggestionsDetailedReport;
 
         $query = $report->queryBuilder()
             ->simplePaginate(request()->get('per_page', 10));

@@ -21,10 +21,10 @@ class RecalculateInventoryTotalsTableJob extends UniqueJob
 
     private function recalculateTotals(): int
     {
-        DB::statement("DROP TEMPORARY TABLE IF EXISTS tempTable;");
-        DB::statement("DROP TEMPORARY TABLE IF EXISTS tempInventoryTotals;");
+        DB::statement('DROP TEMPORARY TABLE IF EXISTS tempTable;');
+        DB::statement('DROP TEMPORARY TABLE IF EXISTS tempInventoryTotals;');
 
-        DB::statement("
+        DB::statement('
             CREATE TEMPORARY TABLE tempTable AS
                 SELECT
                     inventory_totals.product_id, NOW() as calculated_at
@@ -33,9 +33,9 @@ class RecalculateInventoryTotalsTableJob extends UniqueJob
                 WHERE recount_required = 1
 
                 LIMIT 500;
-        ");
+        ');
 
-        DB::statement("
+        DB::statement('
             CREATE TEMPORARY TABLE tempInventoryTotals AS
                 SELECT
                      tempTable.product_id as product_id,
@@ -53,9 +53,9 @@ class RecalculateInventoryTotalsTableJob extends UniqueJob
                     ON inventory.product_id = tempTable.product_id
 
                 GROUP BY tempTable.product_id, tempTable.calculated_at;
-        ");
+        ');
 
-        return DB::update("
+        return DB::update('
             UPDATE inventory_totals
 
             INNER JOIN tempInventoryTotals
@@ -69,6 +69,6 @@ class RecalculateInventoryTotalsTableJob extends UniqueJob
                 inventory_totals.max_inventory_updated_at = tempInventoryTotals.max_inventory_updated_at,
                 inventory_totals.calculated_at = tempInventoryTotals.calculated_at,
                 inventory_totals.updated_at = NOW();
-        ");
+        ');
     }
 }

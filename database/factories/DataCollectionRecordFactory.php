@@ -14,7 +14,7 @@ class DataCollectionRecordFactory extends Factory
     public function definition(): array
     {
         return [
-            'data_collection_id' =>  function () {
+            'data_collection_id' => function () {
                 return DataCollection::factory()->create();
             },
             'product_id' => function () {
@@ -32,15 +32,15 @@ class DataCollectionRecordFactory extends Factory
     {
         return $this->afterMaking(function (DataCollectionRecord $dataCollectionRecord) {
             $inventory = Inventory::query()->where([
-                    'product_id' => $dataCollectionRecord->product_id,
-                    'warehouse_id' => $dataCollectionRecord->dataCollection->warehouse_id,
-                ])
+                'product_id' => $dataCollectionRecord->product_id,
+                'warehouse_id' => $dataCollectionRecord->dataCollection->warehouse_id,
+            ])
                 ->first();
             $dataCollectionRecord->inventory_id = $inventory->id;
             $pricing = ProductPrice::query()->where([
-                    'product_id' => $dataCollectionRecord->product_id,
-                    'warehouse_id' => $dataCollectionRecord->dataCollection->warehouse_id,
-                ])
+                'product_id' => $dataCollectionRecord->product_id,
+                'warehouse_id' => $dataCollectionRecord->dataCollection->warehouse_id,
+            ])
                 ->first();
             $dataCollectionRecord->unit_full_price = $pricing->price;
             $dataCollectionRecord->unit_sold_price = $pricing->current_price;

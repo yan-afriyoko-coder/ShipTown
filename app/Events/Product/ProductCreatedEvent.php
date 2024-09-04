@@ -11,30 +11,21 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Class CreatedEvent
- * @package App\Events\Product
  */
 class ProductCreatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var Product
-     */
     public Product $product;
 
     /**
      * Create a new event instance.
-     *
-     * @param Product $product
      */
     public function __construct(Product $product)
     {
         $this->product = $product;
     }
 
-    /**
-     * @return Product
-     */
     public function getProduct(): Product
     {
         return $this->product;

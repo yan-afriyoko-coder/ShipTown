@@ -13,19 +13,10 @@ use App\Modules\OrderStatus\src\Jobs\EnsureCorrectIsActiveAndIsOnHoldJob;
  */
 class OrderStatusServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $module_name = '.CORE - Order Status';
 
-    /**
-     * @var string
-     */
     public static string $module_description = 'Manages orders Active & On Hold when status code changed';
 
-    /**
-     * @var bool
-     */
     public static bool $autoEnable = true;
 
     /**
@@ -42,7 +33,7 @@ class OrderStatusServiceProvider extends BaseModuleServiceProvider
 
         OrderStatusUpdatedEvent::class => [
             Listeners\OrderStatusUpdatedEventListener::class,
-        ]
+        ],
     ];
 
     public static function enabling(): bool

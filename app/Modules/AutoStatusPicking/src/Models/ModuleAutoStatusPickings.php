@@ -23,6 +23,7 @@ use phpseclib\Math\BigInteger;
  * @method static Builder|ModuleAutoStatusPickings whereId($value)
  * @method static Builder|ModuleAutoStatusPickings whereIsEnabled($value)
  * @method static Builder|ModuleAutoStatusPickings whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  *
  * @property int $id

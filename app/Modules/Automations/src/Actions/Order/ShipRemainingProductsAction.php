@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Log;
 
 class ShipRemainingProductsAction extends BaseOrderActionAbstract
 {
-    /**
-     * @param string $options
-     * @return bool
-     */
     public function handle(string $options = ''): bool
     {
         /** @var Warehouse $warehouse */
@@ -29,19 +25,18 @@ class ShipRemainingProductsAction extends BaseOrderActionAbstract
 
         $order->orderProducts()->each(function (OrderProduct $orderProduct) use ($warehouse) {
 
-            $orderProductShipment = new OrderProductShipment();
-            $orderProductShipment->sku_shipped      = $orderProduct->sku_ordered;
-            $orderProductShipment->order_id         = $orderProduct->order_id;
-            $orderProductShipment->product_id       = $orderProduct->product_id;
+            $orderProductShipment = new OrderProductShipment;
+            $orderProductShipment->sku_shipped = $orderProduct->sku_ordered;
+            $orderProductShipment->order_id = $orderProduct->order_id;
+            $orderProductShipment->product_id = $orderProduct->product_id;
             $orderProductShipment->order_product_id = $orderProduct->getKey();
             $orderProductShipment->quantity_shipped = $orderProduct->quantity_to_ship;
-            $orderProductShipment->warehouse_id     = $warehouse->id;
+            $orderProductShipment->warehouse_id = $warehouse->id;
             $orderProductShipment->save();
 
             $orderProduct->quantity_shipped += $orderProduct->quantity_to_ship;
             $orderProduct->save();
         });
-
 
         activity()->causedByAnonymous()->performedOn($order)->log('Automatically shipped all products');
 

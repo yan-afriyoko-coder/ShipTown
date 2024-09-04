@@ -11,4 +11,3 @@ class ScopesPageTest extends DuskTestCase
         $this->assertTrue(true, 'Default laravel passport route. Testing in vendor package');
     }
 }
-

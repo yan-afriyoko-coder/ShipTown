@@ -12,8 +12,8 @@ class StoreTest extends TestCase
     {
         if (is_null($body)) {
             $body = [
-                'name'  => 'testing',
-                'url'   => 'testing',
+                'name' => 'testing',
+                'url' => 'testing',
                 'group' => 'picklist',
             ];
         }
@@ -75,8 +75,8 @@ class StoreTest extends TestCase
         );
 
         $response = $this->simulationTest([
-            'name'  => 'tes',
-            'url'   => 'tes',
+            'name' => 'tes',
+            'url' => 'tes',
             'group' => 'tes',
         ]);
 

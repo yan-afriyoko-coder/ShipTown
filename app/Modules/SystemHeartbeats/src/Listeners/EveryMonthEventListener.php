@@ -17,7 +17,7 @@ class EveryMonthEventListener
         ], [
             'error_message' => 'Every Month heartbeat missed',
             'expires_at' => now()->addMonth()->addDay(),
-            'auto_heal_job_class' => DispatchEveryMinuteEventJob::class
+            'auto_heal_job_class' => DispatchEveryMinuteEventJob::class,
         ]);
     }
 }

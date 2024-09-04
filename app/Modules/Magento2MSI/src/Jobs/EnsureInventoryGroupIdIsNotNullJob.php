@@ -11,7 +11,7 @@ class EnsureInventoryGroupIdIsNotNullJob extends UniqueJob
     public function handle(): void
     {
         do {
-            $recordsAffected = DB::affectingStatement("
+            $recordsAffected = DB::affectingStatement('
                 WITH tempTable AS (
                     SELECT
                       magento_inventory.id as modules_magento2msi_inventory_source_items_id
@@ -37,7 +37,7 @@ class EnsureInventoryGroupIdIsNotNullJob extends UniqueJob
                   ON modules_magento2msi_inventory_source_items.id = tempTable.modules_magento2msi_inventory_source_items_id
 
                 SET modules_magento2msi_inventory_source_items.inventory_totals_by_warehouse_tag_id = tempTable.inventory_totals_by_warehouse_tag_id
-            ");
+            ');
 
             Log::info('Magento2msi - Job processing', [
                 'job' => self::class,

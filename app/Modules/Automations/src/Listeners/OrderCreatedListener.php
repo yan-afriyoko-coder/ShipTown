@@ -7,9 +7,6 @@ use App\Modules\Automations\src\Jobs\RunEnabledAutomationsOnSpecificOrderJob;
 
 class OrderCreatedListener
 {
-    /**
-     * @param OrderCreatedEvent $event
-     */
     public function handle(OrderCreatedEvent $event)
     {
         RunEnabledAutomationsOnSpecificOrderJob::dispatchSync($event->order->getKey());

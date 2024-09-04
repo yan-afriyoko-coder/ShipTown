@@ -5,19 +5,10 @@ namespace App\Modules\Automations\src\Abstracts;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Builder;
 
-/**
- *
- */
 abstract class BaseOrderConditionAbstract
 {
-    /**
-     * @var Order
-     */
     protected Order $order;
 
-    /**
-     * @param Order $order
-     */
     public function __construct(Order $order)
     {
         $this->order = $order;
@@ -40,10 +31,6 @@ abstract class BaseOrderConditionAbstract
         static::invalidateQueryIf($query, ! $shouldInvalidate);
     }
 
-    /**
-     * @param string|null $expected_value
-     * @return bool
-     */
     public function isValid(?string $expected_value = ''): bool
     {
         return true;

@@ -11,15 +11,11 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Class OrderProductCreatedEvent
- * @package App\Events\OrderProduct
  */
 class OrderProductCreatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var OrderProduct
-     */
     public OrderProduct $orderProduct;
 
     /**

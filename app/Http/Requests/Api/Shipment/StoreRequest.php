@@ -24,7 +24,7 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'order_id'        => ['required', 'numeric', 'exists:orders,id'],
+            'order_id' => ['required', 'numeric', 'exists:orders,id'],
             'shipping_number' => ['required', 'string'],
         ];
     }

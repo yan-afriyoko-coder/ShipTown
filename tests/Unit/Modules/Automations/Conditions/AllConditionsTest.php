@@ -29,9 +29,9 @@ class AllConditionsTest extends TestCase
             ->each(function ($condition_class) use ($automation) {
                 // add each condition to automation
                 Condition::factory()->create([
-                    'automation_id'     => $automation->getKey(),
-                    'condition_class'   => $condition_class,
-                    'condition_value'   => ''
+                    'automation_id' => $automation->getKey(),
+                    'condition_class' => $condition_class,
+                    'condition_value' => '',
                 ]);
             });
 

@@ -8,9 +8,6 @@ use App\Models\Order;
 use Exception;
 use Illuminate\Support\Collection;
 
-/**
- *
- */
 class NextDayShippingService extends ShippingServiceAbstract
 {
     /**
@@ -22,9 +19,9 @@ class NextDayShippingService extends ShippingServiceAbstract
         $order = Order::findOrFail($order_id);
 
         try {
-            $shipment = (new DpdUkService())->createShippingLabel($order);
+            $shipment = (new DpdUkService)->createShippingLabel($order);
         } catch (Exception $exception) {
-            throw new ShippingServiceException('DPD UK: '. $exception->getMessage());
+            throw new ShippingServiceException('DPD UK: '.$exception->getMessage());
         }
 
         return collect()->add($shipment);

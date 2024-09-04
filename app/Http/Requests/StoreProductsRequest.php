@@ -14,8 +14,8 @@ class StoreProductsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'sku'   => 'string|required|max:50',
-            'name'  => 'string|required|max:100',
+            'sku' => 'string|required|max:50',
+            'name' => 'string|required|max:100',
             'price' => 'required|numeric',
         ];
     }

@@ -5,8 +5,7 @@ namespace App\Modules\BoxTop\src\Models;
 use App\BaseModel;
 
 /**
- * @property integer order_id
- *
+ * @property int order_id
  */
 class OrderLock extends BaseModel
 {

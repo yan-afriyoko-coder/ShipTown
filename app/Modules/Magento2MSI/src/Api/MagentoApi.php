@@ -11,45 +11,46 @@ class MagentoApi
 {
     public static function postInventoryBulkProductSourceAssign(Magento2msiConnection $connection, array $productSkus, array $sourceCodes): ?Response
     {
-        return Client::post($connection->api_access_token, $connection->base_url . '/rest/all/V1/inventory/bulk-product-source-assign', [
-            "skus" => $productSkus,
-            'sourceCodes' => $sourceCodes
+        return Client::post($connection->api_access_token, $connection->base_url.'/rest/all/V1/inventory/bulk-product-source-assign', [
+            'skus' => $productSkus,
+            'sourceCodes' => $sourceCodes,
         ]);
     }
+
     public static function getModules(Magento2msiConnection $connection): ?Response
     {
-        return Client::get($connection->api_access_token, $connection->base_url . '/rest/all/V1/modules', [
+        return Client::get($connection->api_access_token, $connection->base_url.'/rest/all/V1/modules', [
             'searchCriteria' => [
                 'filterGroups' => [
                     [
                         'filters' => [
-//                            [
-//                                'field' => '',
-//                                'value' => '',
-//                                'condition_type' => 'in'
-//                            ]
-                        ]
+                            //                            [
+                            //                                'field' => '',
+                            //                                'value' => '',
+                            //                                'condition_type' => 'in'
+                            //                            ]
+                        ],
                     ],
-                ]
+                ],
             ],
         ]);
     }
 
     public static function getInventorySources(Magento2msiConnection $connection): ?Response
     {
-        return Client::get($connection->api_access_token, $connection->base_url . '/rest/all/V1/inventory/sources', [
+        return Client::get($connection->api_access_token, $connection->base_url.'/rest/all/V1/inventory/sources', [
             'searchCriteria' => [
                 'filterGroups' => [
                     [
                         'filters' => [
-//                            [
-//                                'field' => '',
-//                                'value' => '',
-//                                'condition_type' => 'in'
-//                            ]
-                        ]
+                            //                            [
+                            //                                'field' => '',
+                            //                                'value' => '',
+                            //                                'condition_type' => 'in'
+                            //                            ]
+                        ],
                     ],
-                ]
+                ],
             ],
         ]);
     }
@@ -73,7 +74,7 @@ class MagentoApi
 
     public static function postProductsSpecialPrice($baseUrl, $token, $store_id, $sku, $price, $price_from, $price_to): ?Response
     {
-        return Client::post($token, $baseUrl . '/rest/all/V1/products/special-price', [
+        return Client::post($token, $baseUrl.'/rest/all/V1/products/special-price', [
             'prices' => [
                 [
                     'sku' => $sku,
@@ -81,22 +82,22 @@ class MagentoApi
                     'price' => $price,
                     'price_from' => $price_from,
                     'price_to' => $price_to,
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 
     public static function postProductsSpecialPriceInformation($token, $sku): ?Response
     {
         return Client::post($token, 'https://guineys.ie/rest/all/V1/products/special-price-information', [
-            'skus' => Arr::wrap($sku)
+            'skus' => Arr::wrap($sku),
         ]);
     }
 
     public static function postProductsBasePricesInformation($token, $sku): ?Response
     {
         return Client::post($token, '/rest/all/V1/products/base-prices-information', [
-            'skus' => Arr::wrap($sku)
+            'skus' => Arr::wrap($sku),
         ]);
     }
 
@@ -116,7 +117,7 @@ class MagentoApi
     {
         $skus = collect($skuList)->implode(',');
 
-        return Client::get($connection->api_access_token, $connection->base_url . '/rest/all/V1/products', [
+        return Client::get($connection->api_access_token, $connection->base_url.'/rest/all/V1/products', [
             'searchCriteria' => [
                 'filterGroups' => [
                     [
@@ -124,19 +125,20 @@ class MagentoApi
                             [
                                 'field' => 'sku',
                                 'value' => $skus,
-                                'condition_type' => 'in'
-                            ]
-                        ]
+                                'condition_type' => 'in',
+                            ],
+                        ],
                     ],
-                ]
+                ],
             ],
         ]);
     }
+
     public static function getInventorySourceItems(Magento2msiConnection $connection, $skuList): ?Response
     {
         $skus = collect($skuList)->implode(',');
 
-        return Client::get($connection->api_access_token, $connection->base_url . '/rest/all/V1/inventory/source-items', [
+        return Client::get($connection->api_access_token, $connection->base_url.'/rest/all/V1/inventory/source-items', [
             'searchCriteria' => [
                 'filterGroups' => [
                     [
@@ -144,50 +146,50 @@ class MagentoApi
                             [
                                 'field' => 'sku',
                                 'value' => $skus,
-                                'condition_type' => 'in'
-                            ]
-                        ]
+                                'condition_type' => 'in',
+                            ],
+                        ],
                     ],
                     [
                         'filters' => [
                             [
                                 'field' => 'source_code',
                                 'value' => $connection->magento_source_code,
-                            ]
-                        ]
-                    ]
-                ]
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ]);
     }
 
-//    public static function postInventorySourceItems($token, $sku, $storeCode, $quantity): ?Response
+    //    public static function postInventorySourceItems($token, $sku, $storeCode, $quantity): ?Response
     public static function postInventorySourceItems(Magento2msiConnection $connection, $sourceItems): ?Response
     {
-        return Client::post($connection->api_access_token, $connection->base_url . '/rest/all/V1/inventory/source-items', [
+        return Client::post($connection->api_access_token, $connection->base_url.'/rest/all/V1/inventory/source-items', [
             'sourceItems' =>
 //                [
-                $sourceItems
-//                [
-//                    'source_code' => $storeCode,
-//                    'sku' => $sku,
-//                    'quantity' => $quantity,
-//                    'status' => 1,
-//                ]
-//            ],
+                $sourceItems,
+            //                [
+            //                    'source_code' => $storeCode,
+            //                    'sku' => $sku,
+            //                    'quantity' => $quantity,
+            //                    'status' => 1,
+            //                ]
+            //            ],
         ]);
     }
 
     public static function postProductsBasePrices(MagentoConnection $connection, string $sku, float $price, int $store_id): ?Response
     {
-        return Client::post($connection->api_access_token, $connection->base_url . '/rest/all/V1/products/base-prices', [
+        return Client::post($connection->api_access_token, $connection->base_url.'/rest/all/V1/products/base-prices', [
             'prices' => [
                 [
                     'sku' => $sku,
                     'price' => $price,
                     'store_id' => $store_id,
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 }

@@ -16,8 +16,6 @@ class NavigationMenuController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return AnonymousResourceCollection
      */
     public function index(NavigationMenuIndexRequest $request): AnonymousResourceCollection
     {
@@ -28,9 +26,6 @@ class NavigationMenuController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  StoreRequest  $request
-     * @return NavigationMenuResource
      */
     public function store(StoreRequest $request): NavigationMenuResource
     {
@@ -41,10 +36,6 @@ class NavigationMenuController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  UpdateRequest $request
-     * @param  NavigationMenu $navigationMenu
-     * @return NavigationMenuResource
      */
     public function update(UpdateRequest $request, NavigationMenu $navigationMenu): NavigationMenuResource
     {
@@ -56,8 +47,6 @@ class NavigationMenuController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param NavigationMenu $navigationMenu
-     * @return NavigationMenuResource
      * @throws Exception
      */
     public function destroy(NavigationMenuDestroyRequest $request, NavigationMenu $navigationMenu): NavigationMenuResource

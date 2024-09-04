@@ -15,9 +15,9 @@ class HeartbeatResources extends JsonResource
     public function toArray($request): array
     {
         return [
-            'code'              => $this->code,
-            'expires_at'        => $this->expires_at,
-            'error_message'     => $this->error_message,
+            'code' => $this->code,
+            'expires_at' => $this->expires_at,
+            'error_message' => $this->error_message,
             'auto_heal_job_class' => $this->auto_heal_job_class,
         ];
     }

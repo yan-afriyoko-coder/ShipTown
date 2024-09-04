@@ -40,9 +40,6 @@ class AddOutdatedCountSuggestionListener
         ], ['inventory_id', 'reason']);
     }
 
-    /**
-     * @return mixed
-     */
     protected function getMinCountDate(): mixed
     {
         return Cache::get('stocktake_suggestions_min_count_date', function () {

@@ -7,9 +7,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
-/**
- *
- */
 class AppGenerateRoutesTests extends Command
 {
     protected $signature = 'app:generate-routes-tests';
@@ -36,24 +33,20 @@ class AppGenerateRoutesTests extends Command
                 return ! Str::startsWith($route->uri, $exceptedRoute);
             });
         })
-        ->each(function ($route) {
-            $testName = self::getWebRouteTestName($route);
+            ->each(function ($route) {
+                $testName = self::getWebRouteTestName($route);
 
-            $fullFileName = app()->basePath();
-            $fullFileName .= '/tests/';
-            $fullFileName .= $testName;
-            $fullFileName .= '.php';
+                $fullFileName = app()->basePath();
+                $fullFileName .= '/tests/';
+                $fullFileName .= $testName;
+                $fullFileName .= '.php';
 
-
-            if (! file_exists($fullFileName)) {
-                Artisan::call('app:make-test '.$testName.' --stub=test.controller');
-            }
-        });
+                if (! file_exists($fullFileName)) {
+                    Artisan::call('app:make-test '.$testName.' --stub=test.controller');
+                }
+            });
     }
 
-    /**
-     *
-     */
     private function generateWebRoutesTestsFiles(Collection $except): void
     {
         Artisan::call('route:list --json --env=production');
@@ -71,7 +64,6 @@ class AppGenerateRoutesTests extends Command
                 return $isNotExcluded & $isNotApiRoute && $isGetMethod && $isNotDevRoute;
             });
 
-
         $routes->each(function ($route) {
             $testName = self::getWebRouteTestName($route);
 
@@ -88,21 +80,17 @@ class AppGenerateRoutesTests extends Command
         });
     }
 
-    /**
-     * @param $route
-     * @return string
-     */
     public static function getWebRouteTestName($route): string
     {
         $m = [
-            'GET|HEAD'  => 'index',
-            'POST'      => 'store',
+            'GET|HEAD' => 'index',
+            'POST' => 'store',
             'PUT|PATCH' => 'update',
-            'PUT'       => 'update',
-            'DELETE'    => 'destroy',
+            'PUT' => 'update',
+            'DELETE' => 'destroy',
         ];
 
-        $routeName = 'Feature/' . $route->uri . '/'. $m[$route->method] .'Test';
+        $routeName = 'Feature/'.$route->uri.'/'.$m[$route->method].'Test';
 
         $routeName = str_replace('-', '_', $routeName);
         $routeName = str_replace('.', '_', $routeName);

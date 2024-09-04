@@ -16,7 +16,7 @@ class StoreTest extends TestCase
 
         $attributes = [
             'data_collection_id' => $dataCollection->getKey(),
-            'comment'  => 'Test comment',
+            'comment' => 'Test comment',
         ];
 
         $response = $this->actingAs($user, 'api')->postJson('api/data-collector/comments', $attributes);

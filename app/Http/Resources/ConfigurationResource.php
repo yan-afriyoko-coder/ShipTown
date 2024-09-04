@@ -17,7 +17,7 @@ class ConfigurationResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'business_name' => $this->business_name
+            'business_name' => $this->business_name,
         ];
     }
 }

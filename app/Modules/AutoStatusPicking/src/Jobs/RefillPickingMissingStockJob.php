@@ -44,7 +44,7 @@ class RefillPickingMissingStockJob implements ShouldQueue
 
         logger('Refilling "picking" status (warehouse stock)', [
             'current_order_count_with_status' => $this->configuration->current_count_with_status,
-            'max_batch_size'                  => $this->configuration->max_batch_size,
+            'max_batch_size' => $this->configuration->max_batch_size,
         ]);
 
         if ($this->configuration->current_count_with_status >= $this->configuration->max_batch_size) {

@@ -23,7 +23,7 @@ class DataCollectorService
 {
     public static function recalculate(DataCollection $dataCollection): void
     {
-        $lockKey = 'recalculating_data_collection_lock_' . $dataCollection->id;
+        $lockKey = 'recalculating_data_collection_lock_'.$dataCollection->id;
 
         Cache::lock($lockKey, 5)->get(function () use ($dataCollection) {
             DataCollectionRecalculateRequestEvent::dispatch($dataCollection);
@@ -38,41 +38,44 @@ class DataCollectorService
                 'currently_running_task' => TransferInJob::class,
             ]);
 
-            if (!$dataCollection->records()
+            if (! $dataCollection->records()
                 ->where('quantity_to_scan', '>', 0)
                 ->exists()) {
                 $dataCollection->delete();
             }
 
             TransferInJob::dispatch($dataCollection->id);
+
             return;
         }
 
         if ($action === 'transfer_out_scanned') {
             $dataCollection->update([
                 'type' => DataCollectionTransferOut::class,
-                'currently_running_task' => TransferOutJob::class
+                'currently_running_task' => TransferOutJob::class,
             ]);
 
-            if (!$dataCollection->records()
+            if (! $dataCollection->records()
                 ->where('quantity_to_scan', '>', 0)
                 ->exists()) {
                 $dataCollection->delete();
             }
 
             TransferOutJob::dispatch($dataCollection->id);
+
             return;
         }
 
         if ($action === 'transfer_to_scanned') {
             $dataCollection->update([
                 'type' => DataCollectionTransferOut::class,
-                'currently_running_task' => TransferToJob::class
+                'currently_running_task' => TransferToJob::class,
             ]);
 
             $dataCollection->delete();
 
             TransferToJob::dispatch($dataCollection->id);
+
             return;
         }
 
@@ -83,13 +86,14 @@ class DataCollectorService
                     ->where('quantity_scanned', 0)
                     ->update(['quantity_scanned' => DB::raw('quantity_to_scan')]);
             });
+
             return;
         }
 
         if ($action === 'import_as_stocktake') {
             $dataCollection->update([
                 'type' => DataCollectionStocktake::class,
-                'currently_running_task' => ImportAsStocktakeJob::class
+                'currently_running_task' => ImportAsStocktakeJob::class,
             ]);
 
             $dataCollection->delete();
@@ -106,7 +110,7 @@ class DataCollectorService
         $destinationWarehouse = Warehouse::findOrFail($warehouse_id);
 
         DB::transaction(function () use (
-            $warehouse_id,
+
             $sourceDataCollection,
             &$destinationDataCollection,
             $destinationWarehouse
@@ -121,7 +125,7 @@ class DataCollectorService
                 $destinationDataCollection = $sourceDataCollection->replicate([
                     'destination_warehouse_id',
                     'currently_running_task',
-                    'deleted_at'
+                    'deleted_at',
                 ]);
                 $destinationDataCollection->type = DataCollectionTransferIn::class;
                 $destinationDataCollection->warehouse_code = $destinationWarehouse->code;
@@ -191,24 +195,23 @@ class DataCollectorService
                 $record->data_collection_id,
                 'data_collection_record_id',
                 $record->getKey(),
-                $record->updated_at
+                $record->updated_at,
             ]);
 
             $inventory = Inventory::query()->firstOrCreate([
                 'warehouse_id' => $record->dataCollection->warehouse_id,
-                'product_id' => $record->product_id
+                'product_id' => $record->product_id,
             ], []);
-
 
             InventoryService::transferIn($inventory, $record->quantity_scanned, [
                 'occurred_at' => $record->dataCollection->deleted_at ?? now()->utc()->toDateTimeLocalString(),
-                'description' => Str::substr('Data Collection - ' . $record->dataCollection->name, 0, 50),
-                'custom_unique_reference_id' => $custom_unique_reference_id
+                'description' => Str::substr('Data Collection - '.$record->dataCollection->name, 0, 50),
+                'custom_unique_reference_id' => $custom_unique_reference_id,
             ]);
 
             $record->update([
                 'total_transferred_in' => $record->total_transferred_in + $record->quantity_scanned,
-                'quantity_scanned' => 0
+                'quantity_scanned' => 0,
             ]);
         });
     }
@@ -224,7 +227,7 @@ class DataCollectorService
 
             $inventory = Inventory::query()->firstOrCreate([
                 'warehouse_id' => $record->dataCollection->warehouse_id,
-                'product_id' => $record->product_id
+                'product_id' => $record->product_id,
             ], []);
 
             $custom_unique_reference_id = implode(':', [
@@ -233,17 +236,17 @@ class DataCollectorService
                 $record->data_collection_id,
                 'data_collection_record_id',
                 $record->getKey(),
-                $record->updated_at
+                $record->updated_at,
             ]);
 
             InventoryService::transferOut($inventory, $record->quantity_scanned * -1, [
-                'description' => Str::substr('Data Collection - ' . $record->dataCollection->name, 0, 50),
-                'custom_unique_reference_id' => $custom_unique_reference_id
+                'description' => Str::substr('Data Collection - '.$record->dataCollection->name, 0, 50),
+                'custom_unique_reference_id' => $custom_unique_reference_id,
             ]);
 
             $record->update([
                 'total_transferred_out' => $record->total_transferred_out + $record->quantity_scanned,
-                'quantity_scanned' => 0
+                'quantity_scanned' => 0,
             ]);
         });
     }
@@ -276,7 +279,7 @@ class DataCollectorService
             ]
         );
 
-//        $newRecord->update($discountedAttributes);
+        //        $newRecord->update($discountedAttributes);
         $newRecord->increment('quantity_scanned', $quantityToExtract);
     }
 }

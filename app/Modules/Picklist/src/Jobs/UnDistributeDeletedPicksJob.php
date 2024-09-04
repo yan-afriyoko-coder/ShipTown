@@ -41,11 +41,11 @@ class UnDistributeDeletedPicksJob extends UniqueJob
 
                     $orderProductPick->orderProduct->update([
                         'quantity_picked' => OrderProductPick::query()
-                                ->where('order_product_id', $orderProductPick->order_product_id)
-                                ->sum('quantity_picked') ?? 0,
+                            ->where('order_product_id', $orderProductPick->order_product_id)
+                            ->sum('quantity_picked') ?? 0,
                         'quantity_skipped_picking' => OrderProductPick::query()
-                                ->where('order_product_id', $orderProductPick->order_product_id)
-                                ->sum('quantity_skipped_picking') ?? 0,
+                            ->where('order_product_id', $orderProductPick->order_product_id)
+                            ->sum('quantity_skipped_picking') ?? 0,
                     ]);
 
                     $orderProductPick->pick->update([

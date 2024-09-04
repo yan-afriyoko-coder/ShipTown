@@ -17,9 +17,9 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'  => 'sometimes|string|max:250',
-            'code'  => ['sometimes', 'string', 'max:5'],
-            'tags'  => 'sometimes|array',
+            'name' => 'sometimes|string|max:250',
+            'code' => ['sometimes', 'string', 'max:5'],
+            'tags' => 'sometimes|array',
         ];
     }
 }

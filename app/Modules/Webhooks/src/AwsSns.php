@@ -9,12 +9,6 @@ use Illuminate\Support\Facades\Log;
 
 class AwsSns
 {
-    /**
-     * @param string $topic
-     * @param string $message
-     *
-     * @return bool
-     */
     public static function publish(string $topic, string $message): bool
     {
         $snsTopic = new SnsService($topic);
@@ -23,19 +17,19 @@ class AwsSns
             return $snsTopic->publish($message);
         } catch (AwsException $e) {
             Log::error('Could not publish SNS message', [
-                'code'           => $e->getStatusCode(),
+                'code' => $e->getStatusCode(),
                 'return_message' => $e->getMessage(),
-                'topic'          => $topic,
-                'message'        => $message,
+                'topic' => $topic,
+                'message' => $message,
             ]);
 
             return false;
         } catch (Exception $e) {
             Log::error('Could not publish SNS message', [
-                'code'           => $e->getCode(),
+                'code' => $e->getCode(),
                 'return_message' => $e->getMessage(),
-                'topic'          => $topic,
-                'message'        => $message,
+                'topic' => $topic,
+                'message' => $message,
             ]);
 
             return false;

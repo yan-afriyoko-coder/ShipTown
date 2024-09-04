@@ -8,7 +8,6 @@ use App\Models\ProductAlias;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
-use Spatie\Tags\Tag;
 use Tests\TestCase;
 
 class ProcessImportedProductsJobTest extends TestCase
@@ -22,7 +21,7 @@ class ProcessImportedProductsJobTest extends TestCase
         $raw_import['is_web_item'] = 1;
         $importData->update(['raw_import' => $raw_import]);
 
-        $job = new ProcessImportedProductRecordsJob();
+        $job = new ProcessImportedProductRecordsJob;
         $job->handle();
 
         // assert

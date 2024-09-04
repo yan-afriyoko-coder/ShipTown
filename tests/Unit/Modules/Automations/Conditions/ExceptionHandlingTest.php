@@ -22,9 +22,9 @@ class ExceptionHandlingTest extends TestCase
         $automation = Automation::factory()->create();
 
         Condition::factory()->create([
-            'automation_id'     => $automation->getKey(),
-            'condition_class'   => ExceptionTestCondition::class,
-            'condition_value'   => ''
+            'automation_id' => $automation->getKey(),
+            'condition_class' => ExceptionTestCondition::class,
+            'condition_value' => '',
         ]);
 
         $automation->update(['enabled' => true]);
@@ -42,11 +42,9 @@ class ExceptionHandlingTest extends TestCase
 
             RunEnabledAutomationsJob::dispatch();
         } catch (Exception $exception) {
-            $this->fail('Exceptions: '. $exception->getMessage());
+            $this->fail('Exceptions: '.$exception->getMessage());
         }
 
         $this->assertTrue(true, 'We just make sure no exceptions returned');
     }
 }
-
-

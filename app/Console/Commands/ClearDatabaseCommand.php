@@ -117,8 +117,8 @@ class ClearDatabaseCommand extends Command
 
         if (file_exists($path)) {
             file_put_contents($path, str_replace(
-                $key . '=' . env($key),
-                $key . '=' . $value,
+                $key.'='.env($key),
+                $key.'='.$value,
                 file_get_contents($path)
             ));
         }

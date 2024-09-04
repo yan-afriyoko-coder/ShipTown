@@ -31,7 +31,7 @@ class IndexTest extends TestCase
         $response = $this->actingAs($user, 'api')
             ->getJson(route('api.restocking.index', [
                 'filter[warehouse_id]' => $warehouse->getKey(),
-                'filter[product_has_tags_containing]' => 'WH'
+                'filter[product_has_tags_containing]' => 'WH',
             ]));
 
         ray($response->json());
@@ -65,7 +65,7 @@ class IndexTest extends TestCase
         $response = $this->actingAs($user, 'api')
             ->getJson(route('api.restocking.index', [
                 'filter[warehouse_id]' => $warehouse->getKey(),
-                'filter[product_has_tags]' => 'test'
+                'filter[product_has_tags]' => 'test',
             ]));
 
         $this->assertCount(1, $response->json('data'));

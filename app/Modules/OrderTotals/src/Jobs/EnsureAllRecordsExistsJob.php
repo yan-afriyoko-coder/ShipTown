@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 class EnsureAllRecordsExistsJob extends UniqueJob
 {
     private mixed $fromDateTime;
+
     private mixed $toDateTime;
 
     public function __construct($fromDateTime = null, $toDateTime = null)

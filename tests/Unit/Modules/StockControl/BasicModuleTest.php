@@ -35,7 +35,7 @@ class BasicModuleTest extends TestCase
 
         StockControlServiceProvider::enableModule();
 
-        $orderProductShipment = new OrderProductShipment();
+        $orderProductShipment = new OrderProductShipment;
         $orderProductShipment->quantity_shipped = $orderProduct->quantity_to_ship * (-1);
         $orderProductShipment->orderProduct()->associate($orderProduct);
         $orderProductShipment->order()->associate($order);

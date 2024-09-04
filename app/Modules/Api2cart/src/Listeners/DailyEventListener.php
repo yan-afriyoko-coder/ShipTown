@@ -13,7 +13,6 @@ class DailyEventListener
     /**
      * Handle the event.
      *
-     * @param EveryDayEvent $event
      *
      * @return void
      */

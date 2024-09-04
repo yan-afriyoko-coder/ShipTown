@@ -44,7 +44,7 @@ class AddSalePriceIfApplicable extends UniqueJob
                 return true;
             }
 
-            if (!now()->between(Carbon::parse($record->prices->sale_price_start_date), Carbon::parse($record->prices->sale_price_end_date))) {
+            if (! now()->between(Carbon::parse($record->prices->sale_price_start_date), Carbon::parse($record->prices->sale_price_end_date))) {
                 return true;
             }
 

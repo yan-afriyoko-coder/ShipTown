@@ -11,7 +11,7 @@ class SetLabelTemplateAction extends BaseOrderActionAbstract
         parent::handle($options);
 
         if ($this->order->label_template !== $options) {
-            $this->order->update(['label_template' => $options]) ;
+            $this->order->update(['label_template' => $options]);
         }
 
         return true;

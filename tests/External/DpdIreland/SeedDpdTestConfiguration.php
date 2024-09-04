@@ -8,8 +8,6 @@ trait SeedDpdTestConfiguration
 {
     /**
      * Seed DpdIreland configuration
-     *
-     * @return void
      */
     protected function setUp(): void
     {

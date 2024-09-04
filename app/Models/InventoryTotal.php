@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  *  InventoryTotal model
- *  @property int $id
- *  @property int $product_id
- *  @property int $quantity
- *  @property int $quantity_reserved
- *  @property int $quantity_incoming
- *  @property int $quantity_available
  *
- *  @property Product $product
+ * @property int $id
+ * @property int $product_id
+ * @property int $quantity
+ * @property int $quantity_reserved
+ * @property int $quantity_incoming
+ * @property int $quantity_available
+ * @property Product $product
  */
 class InventoryTotal extends Model
 {

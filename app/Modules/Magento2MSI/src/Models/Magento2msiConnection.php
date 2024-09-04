@@ -13,12 +13,12 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property string $api_access_token
  * @property string $base_url
  * @property string $magento_source_code
- * @property integer $inventory_source_warehouse_tag_id
+ * @property int $inventory_source_warehouse_tag_id
  */
 class Magento2msiConnection extends BaseModel
 {
-    use HasTagsTrait;
     use HasFactory;
+    use HasTagsTrait;
 
     protected $table = 'modules_magento2msi_connections';
 
@@ -34,14 +34,14 @@ class Magento2msiConnection extends BaseModel
     ];
 
     protected $hidden = [
-        'api_access_token'
+        'api_access_token',
     ];
 
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(self::class)
             ->allowedIncludes([
-                'tags','warehouse'
+                'tags', 'warehouse',
             ]);
     }
 
