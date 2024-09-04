@@ -7,7 +7,7 @@ use App\Http\Requests\PickDestroyRequest;
 use App\Http\Requests\Picklist\StorePickRequest;
 use App\Models\OrderProduct;
 use App\Models\Pick;
-use App\Modules\Picklist\src\Jobs\UnDistributePicksJob;
+use App\Modules\Picklist\src\Jobs\UnDistributeDeletedPicksJob;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -44,7 +44,7 @@ class PicklistPickController extends Controller
     {
         $pick->delete();
 
-        UnDistributePicksJob::dispatchAfterResponse($pick);
+        UnDistributeDeletedPicksJob::dispatchAfterResponse();
 
         return JsonResource::make([$pick]);
     }

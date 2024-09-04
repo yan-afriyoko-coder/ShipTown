@@ -3,13 +3,13 @@
 namespace App\Modules\Picklist\src\Listeners;
 
 use App\Modules\Picklist\src\Jobs\DistributePicksJob;
-use App\Modules\Picklist\src\Jobs\UnDistributePicksJob;
+use App\Modules\Picklist\src\Jobs\UnDistributeDeletedPicksJob;
 
 class EveryMinuteListener
 {
     public function handle(): void
     {
          DistributePicksJob::dispatch();
-         UnDistributePicksJob::dispatch();
+         UnDistributeDeletedPicksJob::dispatch();
     }
 }

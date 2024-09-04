@@ -11,17 +11,19 @@ class PickFactory extends Factory
 {
     public function definition(): array
     {
-        $product = Product::query()->inRandomOrder()->first() ?? Product::factory()->create();
+        $product = Product::factory()->create();
 
-        $user = User::query()->inRandomOrder()->first() ?? User::factory()->create();
+        $user = User::factory()->create();
 
-        $orderProducts = OrderProduct::factory()->count(rand(1, 5))->create([
-            'product_id' => $product->getKey(),
-        ]);
+        $orderProducts = OrderProduct::factory()
+            ->count(rand(1, 5))
+            ->create([
+                'product_id' => $product->getKey(),
+            ]);
 
-        $quantity = $orderProducts->sum('quantity_ordered');
+        $quantityToPick = $orderProducts->sum('quantity_ordered');
 
-        $skippingPick = (rand(1, 20) === 1);
+        $shouldSkipPick = (rand(1, 20) === 1); // 5% chance of skipping pick
 
         return [
             'product_id'               => $product->getKey(),
@@ -29,8 +31,8 @@ class PickFactory extends Factory
             'sku_ordered'              => $product->sku,
             'name_ordered'             => $product->name,
             'user_id'                  => $user->getKey(),
-            'quantity_picked'          => $skippingPick ? 0 : $quantity,
-            'quantity_skipped_picking' => $skippingPick ? $quantity : 0,
+            'quantity_picked'          => $shouldSkipPick ? 0 : $quantityToPick,
+            'quantity_skipped_picking' => $shouldSkipPick ? $quantityToPick : 0,
         ];
     }
 }

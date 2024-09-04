@@ -4,7 +4,7 @@ namespace App\Modules\Picklist\src\Listeners;
 
 use App\Events\Pick\PickDeletedEvent;
 use App\Models\OrderProductPick;
-use App\Modules\Picklist\src\Jobs\UnDistributePicksJob;
+use App\Modules\Picklist\src\Jobs\UnDistributeDeletedPicksJob;
 
 class PickDeletedListener
 {
@@ -12,6 +12,6 @@ class PickDeletedListener
     {
         OrderProductPick::query()->where('pick_id', $event->pick->id)->delete();
 
-        UnDistributePicksJob::dispatch();
+        UnDistributeDeletedPicksJob::dispatch();
     }
 }
