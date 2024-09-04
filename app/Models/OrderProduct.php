@@ -125,7 +125,7 @@ class OrderProduct extends BaseModel
             return $query;
         }
 
-        return $query->whereBetween('created_at', [
+        return $query->whereBetween('orders_products.created_at', [
             $startingDateTime,
             $endingDateTime,
         ]);
