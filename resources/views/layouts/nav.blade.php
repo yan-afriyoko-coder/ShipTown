@@ -51,16 +51,16 @@
                         <a class="dropdown-item text-white lightHover mb-1" href="{{ route('fulfillment-dashboard') }}">{{ __('Orders Dashboard') }}</a>
                         <hr class="m-2">
                         <a class="dropdown-item text-white lightHover" href="{{ route('fulfillment-statistics') .'?between_dates=-7days,now' }}">{{ __('Fulfillment Statistics') }}</a>
-                        <a class="dropdown-item text-white lightHover" href="{{ route('reports.order.index') }}">{{ __('Orders') }}</a>
-                        <a class="dropdown-item text-white lightHover" href="{{ route('reports.picks.index') }}">{{ __('Order Picks') }}</a>
-                        <a class="dropdown-item text-white lightHover" href="{{ route('reports.shipments.index') }}">{{ __('Order Shipments') }}</a>
+                        <a class="dropdown-item text-white lightHover" href="{{ route('reports.order.index', ['sort' => '-order_placed_at']) }}">{{ __('Orders') }}</a>
+                        <a class="dropdown-item text-white lightHover" href="{{ route('reports.picks.index', ['sort' => '-picked_at']) }}">{{ __('Order Picks') }}</a>
+                        <a class="dropdown-item text-white lightHover" href="{{ route('reports.shipments.index', ['sort' => '-created_at']) }}">{{ __('Order Shipments') }}</a>
                         <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory.index', ['filter[warehouse_code]' =>  data_get(Auth::user(), 'warehouse.code'), 'sort' => '-quantity']) }}">{{ __('Inventory') }}</a>
                         <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements.index', ['filter[warehouse_code]' =>  data_get(Auth::user(), 'warehouse.code'), 'sort' => '-occurred_at,-sequence_number']) }}">{{ __('Inventory Movements') }}</a>
                         <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-transfers.index', ['filter[warehouse_code]' =>  data_get(Auth::user(), 'warehouse.code'), 'sort' => '-updated_at']) }}">{{ __('Inventory Transfers') }}</a>
                         <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements-summary.index', ['per_page' => '200', 'sort' => 'type']) }}">{{ __('Inventory Movements Summary') }}</a>
                         <a class="dropdown-item text-white lightHover" href="{{ route('reports.restocking.index') }}">{{ __('Restocking') }}</a>
-                        <a class="dropdown-item text-white lightHover" href="{{ route('reports.stocktake-suggestions.index') }}">{{ __('Stocktake Suggestions') }}</a>
-                        <a class="dropdown-item text-white lightHover" href="{{ route('reports.activity-log.index') }}">{{ __('Activity Log') }}</a>
+                        <a class="dropdown-item text-white lightHover" href="{{ route('reports.stocktake-suggestions.index', ['filter[warehouse_code]' =>  data_get(Auth::user(), 'warehouse.code'), 'sort' => '-points']) }}">{{ __('Stocktake Suggestions') }}</a>
+                        <a class="dropdown-item text-white lightHover" href="{{ route('reports.activity-log.index', ['sort' => '-id']) }}">{{ __('Activity Log') }}</a>
 
                         @if(count($navigationMenuReports) > 0)
                             <hr v-if='{{ count($navigationMenuReports) > 0 }}' class="mb-1 mt-1">
