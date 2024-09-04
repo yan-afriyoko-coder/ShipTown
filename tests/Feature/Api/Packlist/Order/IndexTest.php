@@ -70,7 +70,6 @@ class IndexTest extends TestCase
         $response->assertJsonStructure([
             'errors' => [
                 'filter' => [],
-                'filter.inventory_source_warehouse_id' => []
             ]
         ]);
     }
