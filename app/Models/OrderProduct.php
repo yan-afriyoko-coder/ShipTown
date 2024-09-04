@@ -142,7 +142,6 @@ class OrderProduct extends BaseModel
             ->allowedFilters([
                 AllowedFilter::scope('has_stock_reserved', 'whereHasStockReserved'),
                 AllowedFilter::scope('warehouse_id', 'addWarehouseSource')->default(0),
-                AllowedFilter::scope('inventory_source_warehouse_id', 'addInventorySource')->default(100),
                 AllowedFilter::scope('in_stock_only', 'whereInStock'),
 
                 AllowedFilter::scope('not_picked_only', 'whereNotPicked'),
@@ -272,11 +271,6 @@ class OrderProduct extends BaseModel
         return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {
             $join->on('orders_products.product_id', '=', 'inventory_source_product_id');
         });
-    }
-
-    public function scopeAddInventorySource($query, $inventory_location_id)
-    {
-        return $query;
     }
 
     public function order(): BelongsTo

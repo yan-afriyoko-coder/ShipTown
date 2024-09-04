@@ -25,7 +25,6 @@ class PacklistOrderIndexRequest extends FormRequest
     {
         return [
             'filter' => 'required',
-            'filter.inventory_source_warehouse_id' => 'required',
         ];
     }
 }

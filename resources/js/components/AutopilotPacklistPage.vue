@@ -52,10 +52,6 @@
         },
 
         mounted() {
-            if(Vue.prototype.$currentUser['warehouse_id']) {
-                this.setUrlParameter('inventory_source_warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
-            }
-
             this.apiGetNavigationMenu({
                     'filter[group]': 'packlist',
                     'per_page': 100,
@@ -83,7 +79,6 @@
 
                 let params = {
                     'filter[status]': this.getUrlParameter('status',''),
-                    'filter[inventory_source_warehouse_id]': this.getUrlParameter('inventory_source_warehouse_id', this.currentUser()['warehouse_id']),
                     'sort': this.getUrlParameter('sort', 'order_placed_at'),
                 };
 
