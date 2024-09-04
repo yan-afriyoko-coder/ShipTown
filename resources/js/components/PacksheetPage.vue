@@ -355,6 +355,7 @@
                     const params = {
                         'filter[order_id]': this.order_id,
                         'filter[warehouse_id]': this.getUrlParameter('warehouse_id'),
+                        'filter[inventory_source_warehouse_id]': this.getUrlParameter('warehouse_id'),
                         'sort': 'inventory_source_shelf_location,product.department,product.category,sku_ordered',
                         'include': 'product,product.aliases',
                         'per_page': 999,
