@@ -14,31 +14,36 @@ class RestockingReportSeeder extends Seeder
     {
         /** @var Warehouse $destination_warehouse */
         /** @var Warehouse $source_warehouse */
-        $source_warehouse = Warehouse::whereCode('99')->first()
-            ?? Warehouse::factory()->create(['code' => '99']);
+        $source_warehouse =  Warehouse::withAnyTagsOfAnyType('fulfilment')->first() ?? Warehouse::factory()->create()->attachTag('fulfilment');
+
+        /** @var Warehouse $destination_warehouse */
+        $destination_warehouse = Warehouse::whereCode('DUB')->first() ?? Warehouse::factory()->create(['code' => 'DUB']);
 
         $products = Product::factory()->count(10)->create();
 
-        $products->each(function (Product $product) use ($source_warehouse) {
+        $products->each(function (Product $product) use ($source_warehouse, $destination_warehouse) {
+            /** @var Inventory $source_inventory */
+            $source_inventory = $product->inventory($source_warehouse->code)->first();
 
-            /** @var Inventory $inventory */
-            $inventory = $product->inventory($source_warehouse->code)->first();
+            /** @var Inventory $source_inventory */
+            $destination_inventory = $product->inventory($destination_warehouse->code)->first();
 
-            InventoryService::adjust($inventory, rand(30, 100), [
+            InventoryService::adjust($source_inventory, rand(10, 50), [
+                'description' => 'stocktake for Restocking report sample',
+            ]);
+
+            InventoryService::adjust($destination_inventory, rand(10, 50), [
                 'description' => 'stocktake for Restocking report sample',
             ]);
         });
 
-        $destination_warehouse = Warehouse::whereCode('DUB')->first()
-            ?? Warehouse::factory()->create(['code' => 'DUB']);
 
-        Inventory::query()->where([
-            'warehouse_code' => $destination_warehouse->code,
-        ])->update([
-            'quantity' => 0,
-            'quantity_incoming' => 0,
-            'reorder_point' => 0,
-            'restock_level' => 10,
-        ]);
+        Inventory::query()
+            ->where(['warehouse_code' => $destination_warehouse->code])
+            ->whereIn('product_id', $products->pluck('id'))
+            ->eachById(fn(Inventory $inventory) => $inventory->update([
+                'reorder_point' => rand(50, 70),
+                'restock_level' => rand(70, 90),
+            ]));
     }
 }
