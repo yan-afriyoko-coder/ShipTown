@@ -50,8 +50,7 @@ class InventoryDashboardReport extends Report
             })
             ->leftJoin('products as product', 'inventory.product_id', '=', 'product.id')
             ->where('inventory_source.quantity_available', '>', 0)
-//            ->where('inventory_source.warehouse_code', '=', '99')
-//            ->whereNotIn('inventory.warehouse_code', ['99', '100'])
+            ->where(['inventory.warehouse_id' => auth()->user()->warehouse_id])
             ->groupBy('inventory.warehouse_code', 'inventory.warehouse_id');
 
         $this->setPerPage(100);
