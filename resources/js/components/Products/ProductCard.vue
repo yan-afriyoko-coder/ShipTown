@@ -348,7 +348,8 @@
                     .then(response => {
                         let blob = new Blob([response.data], { type: 'application/pdf' });
                         this.pdfLabelBlob = URL.createObjectURL(blob);
-                    }).catch(error => {
+                    })
+                    .catch(error => {
                         this.displayApiCallError(error);
                     });
             },
@@ -406,7 +407,7 @@
                 const params = {
                     'filter[product_id]': this.product['id'],
                     'filter[order.is_active]': true,
-                    'sort': 'id',
+                    'sort': '-order_placed_at',
                     'include': 'order',
                     'per_page': 999
                 }
@@ -414,6 +415,9 @@
                     .then(({data}) => {
                         this.statusMessageOrder = '';
                         this.activeOrderProducts = data.data;
+                    })
+                    .catch((error) => {
+                        this.displayApiCallError(error);
                     });
             },
 
@@ -421,7 +425,7 @@
                 const params = {
                     'filter[product_id]': this.product['id'],
                     'filter[order.is_active]': false,
-                    'sort': '-id',
+                    'sort': '-order_placed_at',
                     'include': 'order',
                     'per_page': count
                 }
@@ -429,6 +433,9 @@
                     .then(({data}) => {
                         this.statusMessageOrder = '';
                         this.completeOrderProducts = data.data;
+                    })
+                    .catch((error) => {
+                        this.displayApiCallError(error);
                     });
             },
 
@@ -449,6 +456,9 @@
                         if (this.activityLog.length === 0) {
                             this.statusMessageActivity = 'No activities found';
                         }
+                    })
+                    .catch((error) => {
+                        this.displayApiCallError(error);
                     });
             },
 
@@ -482,7 +492,6 @@
                         document.getElementById('newProductAliasInput').value = '';
                     })
                     .catch((error) => {
-                        console.log(error);
                         this.displayApiCallError(error);
                     });
                 return null;
