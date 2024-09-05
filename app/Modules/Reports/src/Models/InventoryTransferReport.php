@@ -22,6 +22,19 @@ class InventoryTransferReport extends Report
             })
             ->leftJoin('warehouses', 'warehouses.id', '=', 'data_collections.warehouse_id');
 
+        $this->fields = [
+            'product_sku' => 'products.sku',
+            'product_name' => 'products.name',
+            'total_transferred_in' => 'data_collection_records.total_transferred_in',
+            'product_cost' => 'products_prices.cost',
+            'department' => 'products.department',
+            'category' => 'products.category',
+            'warehouse_code' => 'warehouses.code',
+            'transfer_name' => 'data_collections.name',
+            'updated_at' => 'data_collection_records.updated_at',
+            'archived_at' => 'data_collection.deleted_at',
+        ];
+
         $this->allowedIncludes = [
             'product',
             'product.tags',
@@ -40,19 +53,7 @@ class InventoryTransferReport extends Report
             'department',
             'category',
             'transfer_name',
-            'updated_at',
-        ];
-
-        $this->fields = [
-            'product_sku' => 'products.sku',
-            'product_name' => 'products.name',
-            'total_transferred_in' => 'data_collection_records.total_transferred_in',
-            'product_cost' => 'products_prices.cost',
-            'department' => 'products.department',
-            'category' => 'products.category',
-            'warehouse_code' => 'warehouses.code',
-            'transfer_name' => 'data_collections.name',
-            'updated_at' => 'data_collection_records.updated_at',
+            'archived_at',
         ];
 
         $this->casts = [
@@ -65,6 +66,7 @@ class InventoryTransferReport extends Report
             'product_cost' => 'float',
             'total_transferred_in' => 'float',
             'updated_at' => 'datetime',
+            'archived_at' => 'datetime',
         ];
 
         $this->addFilter(
