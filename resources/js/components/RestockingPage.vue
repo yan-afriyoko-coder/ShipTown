@@ -78,7 +78,7 @@ export default {
 
         mounted() {
             this.getUrlFilterOrSet('filter[warehouse_code]', this.currentUser()['warehouse']['code']);
-            this.getUrlFilterOrSet('filter[warehouse_has_stock]', true);
+            // this.getUrlFilterOrSet('filter[warehouse_has_stock]', true);
             this.getUrlFilterOrSet('sort', '-warehouse_has_stock,-quantity_required,-quantity_incoming,-warehouse_quantity');
 
             this.loadRestockingRecords();
