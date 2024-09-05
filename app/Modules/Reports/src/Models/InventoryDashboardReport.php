@@ -3,6 +3,7 @@
 namespace App\Modules\Reports\src\Models;
 
 use App\Models\Inventory;
+use App\Models\Warehouse;
 use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
@@ -38,16 +39,19 @@ class InventoryDashboardReport extends Report
                 'END)'),
         ];
 
+        /** @var Warehouse $source_warehouse */
+        $source_warehouses =  Warehouse::withAnyTagsOfAnyType('fulfilment')->get();
+
         $this->baseQuery = Inventory::query()
-            ->rightJoin('inventory as inventory_source', function (JoinClause $join) {
+            ->rightJoin('inventory as inventory_source', function (JoinClause $join) use ($source_warehouses) {
                 $join->on('inventory_source.product_id', '=', 'inventory.product_id');
-                $join->on('inventory_source.warehouse_id', '=', DB::raw(2));
+                $join->whereIn('inventory_source.warehouse_id', $source_warehouses->pluck('id'));
                 $join->where('inventory_source.quantity_available', '>', 0);
             })
             ->leftJoin('products as product', 'inventory.product_id', '=', 'product.id')
-            ->where('inventory_source.warehouse_code', '=', '99')
             ->where('inventory_source.quantity_available', '>', 0)
-            ->whereNotIn('inventory.warehouse_code', ['99', '100'])
+//            ->where('inventory_source.warehouse_code', '=', '99')
+//            ->whereNotIn('inventory.warehouse_code', ['99', '100'])
             ->groupBy('inventory.warehouse_code', 'inventory.warehouse_id');
 
         $this->setPerPage(100);
