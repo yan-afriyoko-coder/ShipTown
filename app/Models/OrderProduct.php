@@ -127,6 +127,21 @@ class OrderProduct extends BaseModel
         ]);
     }
 
+    public function scopeOrderPlacedBetween($query, $min, $max)
+    {
+        try {
+            $startingDateTime = Carbon::parse($min);
+            $endingDateTime = Carbon::parse($max);
+        } catch (Exception $exception) {
+            return $query;
+        }
+
+        return $query->whereBetween('orders.order_placed_at', [
+            $startingDateTime,
+            $endingDateTime,
+        ]);
+    }
+
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(OrderProduct::class)
@@ -147,6 +162,7 @@ class OrderProduct extends BaseModel
                 AllowedFilter::exact('order.status_code')->ignore(''),
                 AllowedFilter::exact('order.is_active'),
                 AllowedFilter::scope('created_between'),
+                AllowedFilter::scope('order_placed_between'),
 
                 AllowedFilter::exact('packer_user_id', 'orders.packer_user_id'),
 

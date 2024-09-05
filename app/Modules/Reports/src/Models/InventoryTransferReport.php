@@ -32,7 +32,8 @@ class InventoryTransferReport extends Report
             'warehouse_code' => 'warehouses.code',
             'transfer_name' => 'data_collections.name',
             'updated_at' => 'data_collection_records.updated_at',
-            'archived_at' => 'data_collection.deleted_at',
+            'archived_at' => 'data_collections.deleted_at',
+            'created_at' => 'data_collections.created_at',
         ];
 
         $this->allowedIncludes = [
@@ -44,7 +45,9 @@ class InventoryTransferReport extends Report
             'products_prices',
         ];
 
-        $this->defaultSelects = [
+        $this->defaultSelect = [
+            'created_at',
+            'archived_at',
             'product_sku',
             'product_name',
             'total_transferred_in',
@@ -53,7 +56,6 @@ class InventoryTransferReport extends Report
             'department',
             'category',
             'transfer_name',
-            'archived_at',
         ];
 
         $this->casts = [
@@ -67,6 +69,7 @@ class InventoryTransferReport extends Report
             'total_transferred_in' => 'float',
             'updated_at' => 'datetime',
             'archived_at' => 'datetime',
+            'created_at' => 'datetime',
         ];
 
         $this->addFilter(
