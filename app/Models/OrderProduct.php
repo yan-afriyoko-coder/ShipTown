@@ -146,7 +146,8 @@ class OrderProduct extends BaseModel
     {
         return QueryBuilder::for(OrderProduct::class)
             ->leftJoin('products as product', 'product.id', '=', 'orders_products.product_id')
-            ->select(['orders_products.*', 'inventory_source.*'])
+            ->leftJoin('orders', 'orders.id', '=', 'orders_products.order_id')
+            ->select(['orders_products.*', 'inventory_source.*', 'orders.order_placed_at'])
             ->allowedFilters([
                 AllowedFilter::scope('has_stock_reserved', 'whereHasStockReserved'),
                 AllowedFilter::scope('warehouse_id', 'addWarehouseSource')->default(0),
@@ -180,6 +181,7 @@ class OrderProduct extends BaseModel
                 'orders_products.id',
                 'product.department',
                 'product.category',
+                'order_placed_at'
             ]);
     }
 
