@@ -32,11 +32,14 @@ class RestockingReportSeeder extends Seeder
                 'description' => 'stocktake for Restocking report sample',
             ]);
 
-            InventoryService::adjust($destination_inventory, rand(10, 50), [
+            InventoryService::adjust($destination_inventory, rand(20, 30), [
                 'description' => 'stocktake for Restocking report sample',
             ]);
-        });
 
+            InventoryService::sell($destination_inventory, -rand(5, 20), [
+                'description' => 'transaction #1234',
+            ]);
+        });
 
         Inventory::query()
             ->where(['warehouse_code' => $destination_warehouse->code])
