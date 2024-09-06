@@ -39,7 +39,7 @@ class MagentoApiConnectionController extends Controller
         return new MagentoConnectionResource($connection);
     }
 
-    public function update(MagentoApiConnectionUpdateRequest $request, MagentoConnection $connection)
+    public function update(MagentoApiConnectionUpdateRequest $request, MagentoConnection $connection): MagentoConnectionResource
     {
         $connection->fill($request->validated());
         if ($request->tag) {
@@ -51,10 +51,10 @@ class MagentoApiConnectionController extends Controller
         return new MagentoConnectionResource($connection);
     }
 
-    public function destroy(MagentoApiConnectionDestroyRequest $request, MagentoConnection $connection)
+    public function destroy(MagentoApiConnectionDestroyRequest $request, MagentoConnection $connection): MagentoConnectionResource
     {
         $connection->delete();
 
-        return response('ok');
+        return MagentoConnectionResource::make($connection);
     }
 }

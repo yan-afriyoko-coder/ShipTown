@@ -18,7 +18,7 @@ class MagentoApiConnectionUpdateRequest extends FormRequest
             'magento_store_id' => 'required|numeric',
             'tag' => 'required',
             'pricing_source_warehouse_id' => 'required|exists:warehouses,id',
-            'access_token_encrypted' => 'required',
+            'api_access_token' => 'required',
         ];
     }
 }
