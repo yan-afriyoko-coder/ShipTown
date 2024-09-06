@@ -2,6 +2,8 @@
 
 namespace App\Modules\MagentoApi\src\Listeners;
 
+use App\Modules\MagentoApi\src\Jobs\CheckIfSyncIsRequiredJob;
+use App\Modules\MagentoApi\src\Jobs\EnsureProductPriceIdIsFilledJob;
 use App\Modules\MagentoApi\src\Jobs\EnsureProductRecordsExistJob;
 use App\Modules\MagentoApi\src\Jobs\FetchBasePricesJob;
 use App\Modules\MagentoApi\src\Jobs\FetchSpecialPricesJob;
@@ -12,7 +14,10 @@ class EveryTenMinutesEventListener
 {
     public function handle(): void
     {
+        CheckIfSyncIsRequiredJob::dispatch();
+
         EnsureProductRecordsExistJob::dispatch();
+        EnsureProductPriceIdIsFilledJob::dispatch();
 
         FetchBasePricesJob::dispatch();
         FetchSpecialPricesJob::dispatch();
