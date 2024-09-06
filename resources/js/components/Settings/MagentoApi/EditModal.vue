@@ -133,7 +133,7 @@ export default {
                 magento_store_id: newVal.magento_store_id,
                 tag: newVal.tags.length ? newVal.tags[0].name : '',
                 pricing_source_warehouse_id: newVal.pricing_source_warehouse_id,
-                access_token_encrypted: newVal.access_token
+                api_access_token: newVal.access_token
             };
         }
     },
@@ -159,6 +159,7 @@ export default {
                     this.$emit('onUpdated', data.data);
                 })
                 .catch((error) => {
+                    this.displayApiCallError(error);
                     if (error.response) {
                         if (error.response.status === 422) {
                             this.$refs.form.setErrors(error.response.data.errors);
