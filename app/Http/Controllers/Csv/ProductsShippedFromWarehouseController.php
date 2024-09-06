@@ -7,12 +7,16 @@ use App\Models\OrderProduct;
 use App\Traits\CsvFileResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use League\Csv\CannotInsertRecord;
 
 class ProductsShippedFromWarehouseController extends Controller
 {
     use CsvFileResponse;
 
-    public function index(Request $request)
+    /**
+     * @throws CannotInsertRecord
+     */
+    public function index(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
         $query = OrderProduct::getSpatieQueryBuilder()
             ->select([
@@ -23,7 +27,6 @@ class ProductsShippedFromWarehouseController extends Controller
                 'orders_products.quantity_shipped',
             ])
             ->join('products', 'products.id', '=', 'orders_products.product_id')
-            ->join('orders', 'orders.id', '=', 'orders_products.order_id')
             ->where('orders_products.quantity_shipped', '>', 0);
 
         return $this->toCsvFileResponse($query->get(), 'warehouse_shipped.csv');
