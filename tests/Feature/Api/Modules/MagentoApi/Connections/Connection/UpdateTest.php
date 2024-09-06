@@ -27,14 +27,21 @@ class UpdateTest extends TestCase
 
         $response = $this->actingAs($user, 'api')
             ->json('put', route('api.modules.magento-api.connections.update', $connection), [
-                'base_url' => 'https://magento2.test',
-                'magento_store_id' => 123456,
-                'tag' => 'some-tag',
+                'base_url' => 'https://magento2.test2',
+                'magento_store_id' => 1234562,
+                'tag' => 'some-tag2',
                 'pricing_source_warehouse_id' => $warehouse->id,
                 'api_access_token' => 'some-token2',
             ]);
 
         $connection->refresh();
+
+        $this->assertDatabaseHas('modules_magento2api_connections', [
+            'id' => $connection->id,
+            'base_url' => 'https://magento2.test2',
+            'magento_store_id' => 1234562,
+            'pricing_source_warehouse_id' => $warehouse->id,
+        ]);
 
         $response->assertSuccessful();
     }
