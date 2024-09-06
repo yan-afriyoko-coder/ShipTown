@@ -32,7 +32,7 @@ class MailTemplateController extends Controller
         $data = $request->validated();
         $data['mailable'] = CustomMail::class;
         
-        if (isset($data['to'])) {
+        if (isset($data['to']) && is_array($data['to'])) {
             $data['to'] = implode(", ", $data['to']);
         }
 
