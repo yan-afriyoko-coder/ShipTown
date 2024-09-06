@@ -80,6 +80,7 @@
                 let params = {
                     'filter[status]': this.getUrlParameter('status',''),
                     'sort': this.getUrlParameter('sort', 'order_placed_at'),
+                    'per_page': this.getUrlParameter('per_page', 1),
                 };
 
                 this.apiGetPacklistOrder(params)
@@ -88,7 +89,7 @@
 
                         // we use array here so we can use v-for component
                         // and auto destroy when loading next order
-                        this.order = response.data.data;
+                        this.order = response.data.data[0];
                         this.hideLoading();
                     })
                     .catch((error) => {
