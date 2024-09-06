@@ -5,6 +5,7 @@ namespace App\Modules\MagentoApi\src;
 use App\Events\EveryTenMinutesEvent;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
+use App\Models\ManualRequestJob;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
@@ -38,4 +39,59 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
             Listeners\ProductTagDetachedEventListener::class,
         ],
     ];
+
+    public static function enabling(): bool
+    {
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2.0 API Price Sync - CheckIfSyncIsRequiredJob',
+            'job_class' => Jobs\CheckIfSyncIsRequiredJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2.0 API Price Sync - EnsureProductPriceIdIsFilledJob',
+            'job_class' => Jobs\EnsureProductPriceIdIsFilledJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2.0 API Price Sync - EnsureProductRecordsExistJob',
+            'job_class' => Jobs\EnsureProductRecordsExistJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2.0 API Price Sync - FetchBasePricesJob',
+            'job_class' => Jobs\FetchBasePricesJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2.0 API Price Sync - FetchSpecialPricesJob',
+            'job_class' => Jobs\FetchSpecialPricesJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2.0 API Price Sync - SyncProductBasePricesJob',
+            'job_class' => Jobs\SyncProductBasePricesJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2.0 API Price Sync - SyncProductSalePricesJob',
+            'job_class' => Jobs\SyncProductSalePricesJob::class,
+        ], ['job_class'], ['job_name']);
+
+        return parent::enabling();
+    }
+
+    public static function disabling(): bool
+    {
+        ManualRequestJob::query()->whereIn('job_class', [
+            Jobs\CheckIfSyncIsRequiredJob::class,
+            Jobs\EnsureProductPriceIdIsFilledJob::class,
+            Jobs\EnsureProductRecordsExistJob::class,
+            Jobs\FetchBasePricesJob::class,
+            Jobs\FetchSpecialPricesJob::class,
+            Jobs\SyncProductBasePricesJob::class,
+            Jobs\SyncProductSalePricesJob::class,
+        ])->delete();
+
+        return parent::disabling();
+    }
 }
