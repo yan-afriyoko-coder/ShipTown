@@ -24,6 +24,7 @@ class FetchSpecialPricesJob extends UniqueJob
                         MagentoService::fetchSpecialPrices($product);
                     } catch (Exception $exception) {
                         report($exception);
+                        return false;
                     }
                 });
             });

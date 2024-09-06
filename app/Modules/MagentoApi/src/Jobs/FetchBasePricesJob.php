@@ -27,10 +27,10 @@ class FetchBasePricesJob extends UniqueJob
                             MagentoService::fetchBasePrices($product);
                         } catch (UnauthorizedException $exception) {
                             report($exception);
-
                             return false;
                         } catch (Exception $exception) {
                             report($exception);
+                            return false;
                         }
 
                         return true;
