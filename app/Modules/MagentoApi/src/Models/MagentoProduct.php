@@ -47,6 +47,7 @@ class MagentoProduct extends BaseModel
     ];
 
     protected $casts = [
+        'exists_in_magento' => 'boolean',
         'base_price_sync_required' => 'boolean',
         'special_price_sync_required' => 'boolean',
         'magento_sale_price_start_date' => 'datetime',

@@ -66,12 +66,15 @@ class BasicWorkflowTest extends TestCase
         $this->assertDatabaseMissing('modules_magento2api_products', ['product_price_id' => null]);
 
         FetchBasePricesJob::dispatch();
+        $this->assertDatabaseMissing('modules_magento2api_products', ['base_prices_fetched_at' => null]);
         $this->assertDatabaseMissing('modules_magento2api_products', ['base_prices_raw_import' => null]);
         $this->assertDatabaseMissing('modules_magento2api_products', ['magento_price' => null]);
+        $this->assertDatabaseHas('modules_magento2api_products', ['exists_in_magento' => true]);
 
         FetchSpecialPricesJob::dispatch();
         $this->assertDatabaseMissing('modules_magento2api_products', ['special_prices_fetched_at' => null]);
         $this->assertDatabaseMissing('modules_magento2api_products', ['special_prices_raw_import' => null]);
+        $this->assertDatabaseHas('modules_magento2api_products', ['exists_in_magento' => true]);
 
         CheckIfSyncIsRequiredJob::dispatch();
         $this->assertDatabaseHas('modules_magento2api_products', ['base_price_sync_required' => true]);
