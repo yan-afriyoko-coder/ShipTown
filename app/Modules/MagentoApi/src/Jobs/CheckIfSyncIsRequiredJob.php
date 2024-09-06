@@ -17,7 +17,7 @@ class CheckIfSyncIsRequiredJob extends UniqueJob
 
                         FROM modules_magento2api_products
 
-                        WHERE (base_price_sync_required IS NULL OR special_price_sync_required IS NOT NULL)
+                        WHERE (base_price_sync_required IS NULL OR special_price_sync_required IS NULL)
                             AND (base_prices_fetched_at IS NOT NULL AND special_prices_fetched_at IS NOT NULL)
 
                         LIMIT 500
