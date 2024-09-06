@@ -68,12 +68,12 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" for="access_token_encrypted">Access Token</label>
-                                <ValidationProvider vid="access_token_encrypted" name="access_token_encrypted" v-slot="{ errors }">
-                                    <input v-model="config.access_token_encrypted" :class="{
+                                <label class="form-label" for="api_access_token">Access Token</label>
+                                <ValidationProvider vid="api_access_token" name="api_access_token" v-slot="{ errors }">
+                                    <input v-model="config.api_access_token" :class="{
                                         'form-control': true,
                                         'is-invalid': errors.length > 0,
-                                    }" id="create-access_token_encrypted" required>
+                                    }" id="create-api_access_token" required>
                                     <div class="invalid-feedback">
                                         {{ errors[0] }}
                                     </div>
@@ -133,7 +133,7 @@ export default {
                 magento_store_id: newVal.magento_store_id,
                 tag: newVal.tags.length ? newVal.tags[0].name : '',
                 pricing_source_warehouse_id: newVal.pricing_source_warehouse_id,
-                api_access_token: newVal.access_token
+                api_access_token: newVal.api_access_token
             };
         }
     },
