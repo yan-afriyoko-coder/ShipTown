@@ -73,7 +73,7 @@
                                     <input v-model="config.api_access_token" :class="{
                                         'form-control': true,
                                         'is-invalid': errors.length > 0,
-                                    }" id="create-api_access_token" required>
+                                    }" id="create-api_access_token" required type="password">
                                     <div class="invalid-feedback">
                                         {{ errors[0] }}
                                     </div>

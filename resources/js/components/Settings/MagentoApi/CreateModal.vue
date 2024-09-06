@@ -32,7 +32,7 @@
 
                 <div class="form-group">
                     <label class="form-label" for="api_access_token">Access Token</label>
-                    <input v-model="config.api_access_token" class="form-control" id="api_access_token" required>
+                    <input v-model="config.api_access_token" class="form-control" id="api_access_token" type="password" required>
                 </div>
             </form>
         </ValidationObserver>
