@@ -19,14 +19,21 @@ class FetchSpecialPricesJob extends UniqueJob
             ->whereNull('special_prices_fetched_at')
             ->orWhereNull('special_prices_raw_import')
             ->chunkById(100, function ($products) {
-                collect($products)->each(function (MagentoProduct $product) {
-                    try {
-                        MagentoService::fetchSpecialPrices($product);
-                    } catch (Exception $exception) {
-                        report($exception);
-                        return false;
-                    }
-                });
+                $result = collect($products)
+                    ->each(function (MagentoProduct $product) {
+                        try {
+                            MagentoService::fetchSpecialPrices($product);
+                        } catch (Exception $exception) {
+                            report($exception);
+                            return false;
+                        }
+
+                        return true;
+                    });
+
+                usleep(100000); // 100ms
+
+                return $result;
             });
     }
 }

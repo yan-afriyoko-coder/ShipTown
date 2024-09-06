@@ -21,7 +21,7 @@ class FetchBasePricesJob extends UniqueJob
             ->whereNull('base_prices_fetched_at')
             ->orWhereNull('base_prices_raw_import')
             ->chunkById(100, function ($products) {
-                return collect($products)
+                $result = collect($products)
                     ->each(function (MagentoProduct $product) {
                         try {
                             MagentoService::fetchBasePrices($product);
@@ -35,6 +35,9 @@ class FetchBasePricesJob extends UniqueJob
 
                         return true;
                     });
+
+                usleep(100000); // 100ms
+                return $result;
             });
     }
 }
