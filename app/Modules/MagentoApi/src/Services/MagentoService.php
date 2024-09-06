@@ -75,6 +75,7 @@ class MagentoService
             $magentoProduct->magento_sale_price_end_date = $specialPrice['price_to'];
         }
 
+        $magentoProduct->exists_in_magento = true;
         $magentoProduct->special_prices_fetched_at = now();
         $magentoProduct->special_prices_raw_import = $response->json();
         $magentoProduct->save();
@@ -101,6 +102,7 @@ class MagentoService
             return;
         }
 
+        $magentoProduct->exists_in_magento = true;
         $magentoProduct->base_prices_fetched_at = now();
         $magentoProduct->base_prices_raw_import = $response->json();
 
