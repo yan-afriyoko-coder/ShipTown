@@ -38,6 +38,10 @@ const Modals = {
             showAddNewQuantityDiscountModal(discount = null) {
                 this.show('new-quantity-discount-modal', {'discount': discount});
             },
+
+            showAddNewMailTemplateModal(template = null) {
+                this.show('new-mail-template-modal', {'template': template});
+            },
         }
     }
 }

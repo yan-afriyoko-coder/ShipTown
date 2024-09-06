@@ -19,7 +19,7 @@ Route::name('api.')->group(function () {
     Route::apiResource('configurations', Api\ConfigurationController::class)->only(['index', 'store']);
     Route::apiResource('heartbeats', Api\HeartbeatsController::class)->only(['index']);
     Route::apiResource('inventory', Api\InventoryController::class)->only(['index', 'store']);
-    Route::apiResource('mail-templates', Api\MailTemplateController::class)->only(['index', 'update']);
+    Route::apiResource('mail-templates', Api\MailTemplateController::class)->only(['index', 'update', 'store']);
     Route::apiResource('modules', Api\ModuleController::class)->only(['index', 'update']);
     Route::apiResource('navigation-menu', Api\NavigationMenuController::class)->except(['show']);
     Route::apiResource('orders-statuses', Api\OrderStatusController::class)->except(['show']);

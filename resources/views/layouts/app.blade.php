@@ -36,6 +36,7 @@
         <product-details-modal></product-details-modal>
         <new-product-modal></new-product-modal>
         <find-product-modal></find-product-modal>
+        <new-mail-template-modal></new-mail-template-modal>
         <new-quantity-discount-modal></new-quantity-discount-modal>
     @endauth
 @endsection

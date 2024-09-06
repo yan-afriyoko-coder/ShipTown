@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Mail\CustomMail;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MailTemplate\StoreRequest;
 use App\Http\Requests\MailTemplate\UpdateRequest;
 use App\Http\Requests\MailTemplateIndexRequest;
 use App\Http\Resources\MailTemplateResource;
@@ -21,6 +23,19 @@ class MailTemplateController extends Controller
         return MailTemplateResource::collection($mailTemplates);
     }
 
+    public function store(StoreRequest $request): MailTemplateResource
+    {
+        $data = $request->validated();
+        $data['mailable'] = CustomMail::class;
+        
+        if (isset($data['to'])) {
+            $data['to'] = implode(", ", $data['to']);
+        }
+
+        $template = MailTemplate::create($data);
+        return MailTemplateResource::make($template);
+    }
+    
     /**
      * Update the specified resource in storage.
      *
