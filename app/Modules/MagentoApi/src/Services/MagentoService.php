@@ -107,9 +107,9 @@ class MagentoService
         $magentoProduct->base_prices_raw_import = $response->json();
 
         collect($response->json())
-//            ->filter(function ($item) use ($magentoProduct) {
-//                return $item['store_id'] === $magentoProduct->magentoConnection->magento_store_id;
-//            })
+            ->filter(function ($item) use ($magentoProduct) {
+                return $item['store_id'] === $magentoProduct->magentoConnection->magento_store_id;
+            })
             ->each(function ($item) use ($magentoProduct) {
                 $magentoProduct->magento_price = $item['price'];
             });
