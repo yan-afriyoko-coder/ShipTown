@@ -6,6 +6,9 @@
                     <span>
                         Mail Templates
                     </span>
+                    <button @click="showNewMailTemplateModal" type="button" class="btn btn-primary ml-2">
+                        <font-awesome-icon icon="plus" class="fa-lg"></font-awesome-icon>
+                    </button>
                 </div>
             </div>
 
@@ -32,7 +35,6 @@
                 </p>
             </div>
         </div>
-        <!-- The modals -->
         <edit-modal :mailTemplate="selectedMailTemplate" id="editForm" @onUpdated="updateMailTemplate"></edit-modal>
     </div>
 </template>
@@ -41,6 +43,7 @@
 
 import EditModal from './MailTemplate/EditModal';
 import api from "../../mixins/api.vue";
+import Modals from "../../plugins/Modals";
 
 export default {
     mixins: [api],
@@ -52,7 +55,8 @@ export default {
         this.apiGetMailTemplate()
             .then(({ data }) => {
                 this.mailTemplates = data.data;
-            })
+            });
+        Modals.EventBus.$on('mailTemplateCreated', this.handleMailTemplateCreated);
     },
 
     data: () => ({
@@ -60,14 +64,25 @@ export default {
         selectedMailTemplate: {}
     }),
 
+    beforeDestroy() {
+        Modals.EventBus.$off('mailTemplateCreated', this.handleMailTemplateCreated);
+    },
+
     methods: {
+        showNewMailTemplateModal() {
+            console.log('clicked')
+            this.$modal.showAddNewMailTemplateModal();
+        },
         showEditForm(mailTemplate) {
             this.selectedMailTemplate = mailTemplate;
             $('#editForm').modal('show');
         },
+        handleMailTemplateCreated(newData) {
+            this.mailTemplates = newData;
+        },
         updateMailTemplate(newValue) {
-            const indexMailTemplate = this.mailTemplates.findIndex(mailTemplate => mailTemplate.id == newValue.id)
-            this.$set(this.mailTemplates, indexMailTemplate, newValue)
+            const indexMailTemplate = this.mailTemplates.findIndex(mailTemplate => mailTemplate.id == newValue.id);
+            this.$set(this.mailTemplates, indexMailTemplate, newValue);
         },
     },
 }

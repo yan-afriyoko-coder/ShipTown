@@ -547,6 +547,10 @@ export default {
         apiRemoveQuantityDiscountProduct: function (id) {
             return axios.delete('/api/quantity-discount-product/' + id);
         },
+
+        apiPostMailTemplate: function (data) {
+            return axios.post('/api/mail-templates/', data);
+        },
     }
 }
 </script>
