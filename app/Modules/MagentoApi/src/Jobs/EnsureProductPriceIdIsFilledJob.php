@@ -3,8 +3,7 @@
 namespace App\Modules\MagentoApi\src\Jobs;
 
 use App\Abstracts\UniqueJob;
-use App\Modules\MagentoApi\src\Models\MagentoProduct;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class SyncCheckFailedProductsJob.
@@ -13,22 +12,29 @@ class EnsureProductPriceIdIsFilledJob extends UniqueJob
 {
     public function handle(): void
     {
-        MagentoProduct::query()
-            ->whereNull('product_price_id')
-            ->chunkById(10, function (Collection $products) {
-                MagentoProduct::query()
-                    ->whereIn('id', $products->pluck('id'))
-                    ->update([
-                        'product_price_id' => MagentoProduct::query()
-                            ->leftJoin('modules_magento2api_connections', 'modules_magento2api_products.connection_id', '=', 'modules_magento2api_connections.id')
-                            ->leftJoin('products_prices', function ($join) {
-                                $join->on('products_prices.product_id', '=', 'modules_magento2api_products.product_id')
-                                    ->on('products_prices.warehouse_id', '=', 'modules_magento2api_connections.pricing_source_warehouse_id');
-                            })
-                            ->max('products_prices.id'),
-                    ]);
+        do {
+            $recordsAffected = DB::affectingStatement('
+                WITH tempTable AS (
+                    SELECT id
+                    FROM `modules_magento2api_products`
+                    WHERE product_price_id IS NULL
+                    LIMIT 500
+                )
 
-                usleep(100000); // 0.1 second
-            });
+                UPDATE modules_magento2api_products
+
+                INNER JOIN tempTable ON tempTable.id = modules_magento2api_products.id
+
+                LEFT JOIN modules_magento2api_connections
+                  ON modules_magento2api_products.connection_id = modules_magento2api_connections.id
+                LEFT JOIN products_prices
+                  ON products_prices.product_id = modules_magento2api_products.product_id
+                  AND products_prices.warehouse_id = modules_magento2api_connections.pricing_source_warehouse_id
+
+                SET modules_magento2api_products.product_price_id = products_prices.id
+            ');
+
+            usleep(100000); // 100ms
+        } while ($recordsAffected > 0);
     }
 }
