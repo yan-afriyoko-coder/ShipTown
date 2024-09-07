@@ -7,7 +7,7 @@ use App\Modules\MagentoApi\src\Models\MagentoProduct;
 
 class ProductTagDetachedEventListener
 {
-    public function handle(ProductTagDetachedEvent $event)
+    public function handle(ProductTagDetachedEvent $event): void
     {
         if ($event->tag() === 'Available Online') {
             MagentoProduct::query()

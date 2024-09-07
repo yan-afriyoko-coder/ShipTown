@@ -8,19 +8,13 @@ use App\Modules\MagentoApi\src\Models\MagentoProduct;
 
 class ProductTagAttachedEventListener
 {
-    /**
-     * Handle the event.
-     *
-     *
-     * @return void
-     */
-    public function handle(ProductTagAttachedEvent $event)
+    public function handle(ProductTagAttachedEvent $event): void
     {
         if ($event->tag === 'Available Online') {
             MagentoConnection::query()
                 ->get()
                 ->each(function (MagentoConnection $connection) use ($event) {
-                    MagentoProduct::firstOrCreate([
+                    MagentoProduct::query()->firstOrCreate([
                         'connection_id' => $connection->getKey(),
                         'product_id' => $event->product->id,
                     ], []);
