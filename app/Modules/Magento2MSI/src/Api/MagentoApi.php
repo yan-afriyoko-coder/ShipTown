@@ -87,6 +87,13 @@ class MagentoApi
         ]);
     }
 
+    public static function postProductsSpecialPriceArray($baseUrl, $token, array $special_prices): ?Response
+    {
+        return Client::post($token, $baseUrl.'/rest/all/V1/products/special-price', [
+            'prices' => $special_prices,
+        ]);
+    }
+
     public static function postProductsSpecialPriceInformation($token, $sku): ?Response
     {
         return Client::post($token, 'https://guineys.ie/rest/all/V1/products/special-price-information', [

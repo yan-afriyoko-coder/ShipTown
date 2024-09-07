@@ -17,8 +17,8 @@ class CheckIfSyncIsRequiredJob extends UniqueJob
 
                         FROM modules_magento2api_products
 
-                        WHERE (base_price_sync_required IS NULL AND base_prices_fetched_at IS NOT NULL)
-                            OR (special_price_sync_required IS NULL AND special_prices_fetched_at IS NOT NULL)
+                        WHERE (base_price_sync_required IS NULL AND base_prices_fetched_at IS NOT NULL AND magento_price IS NOT NULL)
+                            OR (special_price_sync_required IS NULL AND special_prices_fetched_at IS NOT NULL AND magento_sale_price IS NOT NULL)
 
                         LIMIT 500
                 )
@@ -30,9 +30,9 @@ class CheckIfSyncIsRequiredJob extends UniqueJob
                 LEFT JOIN products_prices
                   ON products_prices.id = modules_magento2api_products.product_price_id
 
-                SET modules_magento2api_products.base_price_sync_required = (IFNULL(modules_magento2api_products.magento_price, 0) != products_prices.price),
+                SET modules_magento2api_products.base_price_sync_required = NOT (modules_magento2api_products.magento_price = products_prices.price),
                     modules_magento2api_products.special_price_sync_required = NOT (
-                        IFNULL(modules_magento2api_products.magento_sale_price, 0) = products_prices.sale_price
+                            modules_magento2api_products.magento_sale_price = products_prices.sale_price
                         AND date(modules_magento2api_products.magento_sale_price_start_date) = date(products_prices.sale_price_start_date)
                         AND date(modules_magento2api_products.magento_sale_price_end_date) = date(products_prices.sale_price_end_date)
                     ),

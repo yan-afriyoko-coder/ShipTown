@@ -58,6 +58,8 @@ class MagentoProduct extends BaseModel
         'stock_items_raw_import' => 'array',
         'base_prices_raw_import' => 'array',
         'special_prices_raw_import' => 'array',
+        'magento_sale_price' => 'float',
+        'magento_price' => 'float',
     ];
 
     public function product(): BelongsTo
