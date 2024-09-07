@@ -11,6 +11,7 @@ use App\Modules\MagentoApi\src\Jobs\EnsureProductPriceIdIsFilledJob;
 use App\Modules\MagentoApi\src\Jobs\EnsureProductRecordsExistJob;
 use App\Modules\MagentoApi\src\Jobs\FetchBasePricesJob;
 use App\Modules\MagentoApi\src\Jobs\FetchSpecialPricesJob;
+use App\Modules\MagentoApi\src\Jobs\SyncProductBasePricesBulkJob;
 use App\Modules\MagentoApi\src\Jobs\SyncProductBasePricesJob;
 use App\Modules\MagentoApi\src\Jobs\SyncProductSalePricesBulkJob;
 use App\Modules\MagentoApi\src\Jobs\SyncProductSalePricesJob;
@@ -77,7 +78,8 @@ class BasicWorkflowTest extends TestCase
         $this->assertDatabaseHas('modules_magento2api_products', ['base_price_sync_required' => true]);
         $this->assertDatabaseHas('modules_magento2api_products', ['special_price_sync_required' => true]);
 
-        SyncProductBasePricesJob::dispatch();
+//        SyncProductBasePricesJob::dispatch();
+        SyncProductBasePricesBulkJob::dispatch();
         $this->assertDatabaseHas('modules_magento2api_products', ['base_prices_raw_import' => null]);
         $this->assertDatabaseHas('modules_magento2api_products', ['base_price_sync_required' => null]);
 
@@ -95,8 +97,8 @@ class BasicWorkflowTest extends TestCase
         $this->assertDatabaseMissing('modules_magento2api_products', ['special_prices_raw_import' => null]);
 
         CheckIfSyncIsRequiredJob::dispatch();
-        $this->assertDatabaseHas('modules_magento2api_products', ['base_price_sync_required' => false]);
         ray(MagentoProduct::query()->with('prices')->get()->toArray())->expand(2);
+        $this->assertDatabaseHas('modules_magento2api_products', ['base_price_sync_required' => false]);
         $this->assertDatabaseHas('modules_magento2api_products', ['special_price_sync_required' => false]);
     }
 }

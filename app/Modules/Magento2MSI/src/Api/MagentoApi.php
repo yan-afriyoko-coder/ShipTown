@@ -199,4 +199,11 @@ class MagentoApi
             ],
         ]);
     }
+
+    public static function postProductsBaseBulkPrices(string $api_access_token, string $base_url, array $attributes): ?Response
+    {
+        return Client::post($api_access_token, $base_url . '/rest/all/V1/products/base-prices', [
+            'prices' => $attributes,
+        ]);
+    }
 }
