@@ -45,6 +45,7 @@ class BasicWorkflowTest extends TestCase
 
         $magentoConnection = MagentoConnection::query()->create([
             'base_url' => env('TEST_MODULES_MAGENTO2MSI_BASE_URL'),
+            'magento_store_id' => env('TEST_MODULES_MAGENTO2MSI_STORE_ID'),
             'pricing_source_warehouse_id' => $warehouse->id,
         ]);
 

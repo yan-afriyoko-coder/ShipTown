@@ -5,6 +5,7 @@ namespace App\Modules\MagentoApi\src\Jobs;
 use App\Abstracts\UniqueJob;
 use App\Modules\Magento2MSI\src\Api\MagentoApi;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
+use Illuminate\Support\Collection;
 
 /**
  * Class SyncCheckFailedProductsJob.
@@ -16,8 +17,8 @@ class SyncProductBasePricesJob extends UniqueJob
         MagentoProduct::query()
             ->with(['magentoConnection', 'product', 'prices'])
             ->where(['base_price_sync_required' => true])
-            ->chunkById(10, function ($products) {
-                collect($products)->each(function (MagentoProduct $magentoProduct) {
+            ->chunkById(10, function (Collection $chunk) {
+                $chunk->each(function (MagentoProduct $magentoProduct) {
                     MagentoApi::postProductsBasePrices(
                         $magentoProduct->magentoConnection,
                         $magentoProduct->product->sku,
