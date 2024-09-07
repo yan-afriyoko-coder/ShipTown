@@ -206,4 +206,11 @@ class MagentoApi
             'prices' => $attributes,
         ]);
     }
+
+    public static function fetchBasePricesBulk(string $api_access_token, string $base_url, array $attributes): ?Response
+    {
+        return Client::post($api_access_token, $base_url . '/rest/all/V1/products/base-prices-information', [
+            'skus' => $attributes
+        ]);
+    }
 }
