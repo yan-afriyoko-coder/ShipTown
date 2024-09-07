@@ -14,8 +14,6 @@ class EveryTenMinutesEventListener
 {
     public function handle(): void
     {
-        CheckIfSyncIsRequiredJob::dispatch();
-
         EnsureProductRecordsExistJob::dispatch();
         EnsureProductPriceIdIsFilledJob::dispatch();
 
