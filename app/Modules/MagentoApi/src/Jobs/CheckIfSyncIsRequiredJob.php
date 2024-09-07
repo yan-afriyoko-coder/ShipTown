@@ -30,11 +30,11 @@ class CheckIfSyncIsRequiredJob extends UniqueJob
                 LEFT JOIN products_prices
                   ON products_prices.id = modules_magento2api_products.product_price_id
 
-                SET modules_magento2api_products.base_price_sync_required = (modules_magento2api_products.magento_price != products_prices.price),
+                SET modules_magento2api_products.base_price_sync_required = (IFNULL(modules_magento2api_products.magento_price, 0) != products_prices.price),
                     modules_magento2api_products.special_price_sync_required = NOT (
-                        modules_magento2api_products.magento_sale_price = products_prices.sale_price
-                        AND modules_magento2api_products.magento_sale_price_start_date = products_prices.sale_price_start_date
-                        AND modules_magento2api_products.magento_sale_price_end_date = products_prices.sale_price_end_date
+                        IFNULL(modules_magento2api_products.magento_sale_price, 0) = products_prices.sale_price
+                        AND date(modules_magento2api_products.magento_sale_price_start_date) = date(products_prices.sale_price_start_date)
+                        AND date(modules_magento2api_products.magento_sale_price_end_date) = date(products_prices.sale_price_end_date)
                     ),
                     modules_magento2api_products.updated_at = NOW()
            ');
