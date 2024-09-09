@@ -9,6 +9,7 @@ use App\Modules\MagentoApi\src\EventServiceProviderBase;
 use App\Modules\MagentoApi\src\Jobs\CheckIfSyncIsRequiredJob;
 use App\Modules\MagentoApi\src\Jobs\EnsureProductPriceIdIsFilledJob;
 use App\Modules\MagentoApi\src\Jobs\EnsureProductRecordsExistJob;
+use App\Modules\MagentoApi\src\Jobs\EnsureProductSkuIsFilledJob;
 use App\Modules\MagentoApi\src\Jobs\FetchBasePricesJob;
 use App\Modules\MagentoApi\src\Jobs\FetchSpecialPricesJob;
 use App\Modules\MagentoApi\src\Jobs\SyncProductBasePricesBulkJob;
@@ -63,10 +64,17 @@ class BasicWorkflowTest extends TestCase
         EnsureProductPriceIdIsFilledJob::dispatch();
         $this->assertDatabaseMissing('modules_magento2api_products', ['product_price_id' => null]);
 
+        EnsureProductSkuIsFilledJob::dispatch();
+        $this->assertDatabaseMissing('modules_magento2api_products', ['sku' => null]);
+
         FetchBasePricesJob::dispatch();
-        $this->assertDatabaseMissing('modules_magento2api_products', ['base_prices_fetched_at' => null]);
-        $this->assertDatabaseMissing('modules_magento2api_products', ['base_prices_raw_import' => null]);
-        $this->assertDatabaseHas('modules_magento2api_products', ['exists_in_magento' => true]);
+        ray(MagentoProduct::query()->with('prices')->get()->toArray())->expand(2);
+        $this->assertDatabaseHas('modules_magento2api_products', ['sku' => '45', 'exists_in_magento' => true]);
+        $this->assertDatabaseMissing('modules_magento2api_products', ['sku' => '45', 'base_prices_fetched_at' => null]);
+        $this->assertDatabaseMissing('modules_magento2api_products', ['sku' => '45', 'base_prices_raw_import' => null]);
+        $this->assertDatabaseHas('modules_magento2api_products', ['sku' => '46', 'exists_in_magento' => false]);
+        $this->assertDatabaseMissing('modules_magento2api_products', ['sku' => '46', 'base_prices_fetched_at' => null]);
+        $this->assertDatabaseHas('modules_magento2api_products', ['sku' => '46', 'base_prices_raw_import' => null]);
 
         FetchSpecialPricesJob::dispatch();
         $this->assertDatabaseMissing('modules_magento2api_products', ['special_prices_fetched_at' => null]);
@@ -74,30 +82,30 @@ class BasicWorkflowTest extends TestCase
         $this->assertDatabaseHas('modules_magento2api_products', ['exists_in_magento' => true]);
 
         CheckIfSyncIsRequiredJob::dispatch();
-        ray(MagentoProduct::query()->get()->toArray());
         $this->assertDatabaseHas('modules_magento2api_products', ['base_price_sync_required' => true]);
         $this->assertDatabaseHas('modules_magento2api_products', ['special_price_sync_required' => true]);
 
-//        SyncProductBasePricesJob::dispatch();
         SyncProductBasePricesBulkJob::dispatch();
         $this->assertDatabaseHas('modules_magento2api_products', ['base_prices_raw_import' => null]);
         $this->assertDatabaseHas('modules_magento2api_products', ['base_price_sync_required' => null]);
 
-//        SyncProductSalePricesJob::dispatch();
         SyncProductSalePricesBulkJob::dispatch();
         $this->assertDatabaseHas('modules_magento2api_products', ['special_price_sync_required' => null]);
         $this->assertDatabaseHas('modules_magento2api_products', ['special_prices_fetched_at' => null]);
 
         FetchBasePricesJob::dispatch();
-        $this->assertDatabaseMissing('modules_magento2api_products', ['base_prices_fetched_at' => null]);
-        $this->assertDatabaseMissing('modules_magento2api_products', ['base_prices_raw_import' => null]);
+        $this->assertDatabaseHas('modules_magento2api_products', ['sku' => '45', 'exists_in_magento' => true]);
+        $this->assertDatabaseMissing('modules_magento2api_products', ['sku' => '45', 'base_prices_fetched_at' => null]);
+        $this->assertDatabaseMissing('modules_magento2api_products', ['sku' => '45', 'base_prices_raw_import' => null]);
+        $this->assertDatabaseHas('modules_magento2api_products', ['sku' => '46', 'exists_in_magento' => false]);
+        $this->assertDatabaseMissing('modules_magento2api_products', ['sku' => '46', 'base_prices_fetched_at' => null]);
+        $this->assertDatabaseHas('modules_magento2api_products', ['sku' => '46', 'base_prices_raw_import' => null]);
 
         FetchSpecialPricesJob::dispatch();
         $this->assertDatabaseMissing('modules_magento2api_products', ['special_prices_fetched_at' => null]);
         $this->assertDatabaseMissing('modules_magento2api_products', ['special_prices_raw_import' => null]);
 
         CheckIfSyncIsRequiredJob::dispatch();
-        ray(MagentoProduct::query()->with('prices')->get()->toArray())->expand(2);
         $this->assertDatabaseHas('modules_magento2api_products', ['base_price_sync_required' => false]);
         $this->assertDatabaseHas('modules_magento2api_products', ['special_price_sync_required' => false]);
     }
