@@ -41,8 +41,10 @@ class FetchBasePricesJob extends UniqueJob
                             // Update existing records
                             $responseRecords->each(function ($apiBasePriceRecord) use ($magentoConnection) {
                                 MagentoProduct::query()
-                                    ->where('connection_id', $magentoConnection->getKey())
-                                    ->where('sku', $apiBasePriceRecord['sku'])
+                                    ->where([
+                                        'connection_id' => $magentoConnection->getKey(),
+                                        'sku' => $apiBasePriceRecord['sku']
+                                    ])
                                     ->update([
                                         'exists_in_magento' => true,
                                         'magento_price' => $apiBasePriceRecord['price'],

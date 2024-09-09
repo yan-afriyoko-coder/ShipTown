@@ -26,9 +26,8 @@ class FetchSpecialPricesJob extends UniqueJob
                         ->where([
                             'connection_id' => $magentoConnection->getKey(),
                             'exists_in_magento' => true,
+                            'special_prices_fetched_at' => null,
                         ])
-                        ->whereNull('special_prices_fetched_at')
-                        ->orWhereNull('special_prices_raw_import')
                         ->chunkById(50, function (Collection $chunk) use ($magentoConnection) {
                             $productSkus = $chunk->map(function (MagentoProduct $product) {
                                 return $product->product->sku;
@@ -44,8 +43,10 @@ class FetchSpecialPricesJob extends UniqueJob
                             // Update existing records
                             $responseRecords->each(function ($apiBasePriceRecord) use ($magentoConnection) {
                                 MagentoProduct::query()
-                                    ->where('connection_id', $magentoConnection->getKey())
-                                    ->where('sku', $apiBasePriceRecord['sku'])
+                                    ->where([
+                                        'connection_id' => $magentoConnection->getKey(),
+                                        'sku' => $apiBasePriceRecord['sku']
+                                    ])
                                     ->update([
                                         'magento_sale_price' => $apiBasePriceRecord['price'],
                                         'magento_sale_price_start_date' => $apiBasePriceRecord['price_from'],

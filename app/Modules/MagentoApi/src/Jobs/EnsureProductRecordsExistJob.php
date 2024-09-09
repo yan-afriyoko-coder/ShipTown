@@ -24,14 +24,21 @@ class EnsureProductRecordsExistJob extends UniqueJob
                 products_prices.id,
                 now(),
                 now()
+
             FROM taggables
-            INNER JOIN products_prices ON products_prices.product_id = taggables.taggable_id
-            INNER JOIN modules_magento2api_connections ON modules_magento2api_connections.pricing_source_warehouse_id = products_prices.warehouse_id
+            LEFT JOIN modules_magento2api_connections ON 1=1
+            LEFT JOIN products_prices
+                ON products_prices.product_id = taggables.taggable_id
+                AND products_prices.warehouse_id = modules_magento2api_connections.pricing_source_warehouse_id
+            LEFT JOIN products
+                ON products.id = products.prices.product_id
+            LEFT JOIN modules_magento2api_products
+                ON modules_magento2api_products.connection_id = modules_magento2api_connections.id
+                AND modules_magento2api_products.product_price_id = products_prices.id
+
             WHERE taggables.tag_id = ?
-            AND taggables.taggable_type = ?
-            AND taggables.taggable_id NOT IN (
-                SELECT modules_magento2api_products.product_id FROM modules_magento2api_products
-            )
+                AND taggables.taggable_type = ?
+                AND modules_magento2api_products.id IS NULL
         ', [$tag->first()->getKey(), Product::class]);
     }
 }
