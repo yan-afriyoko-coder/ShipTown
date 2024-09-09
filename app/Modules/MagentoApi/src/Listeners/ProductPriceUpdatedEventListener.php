@@ -13,7 +13,7 @@ class ProductPriceUpdatedEventListener
             ->where(['product_price_id' => $event->product_price->getKey()])
             ->update([
                 'base_price_sync_required' => null,
-                'sale_price_sync_required' => null,
+                'special_price_sync_required' => null,
             ]);
     }
 }
