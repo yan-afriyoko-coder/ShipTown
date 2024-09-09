@@ -40,6 +40,8 @@ class MagentoProduct extends BaseModel
         'connection_id',
         'magento_price',
         'magento_sale_price',
+        'magento_sale_price_start_date',
+        'magento_sale_price_end_date',
         'base_prices_fetched_at',
         'base_prices_raw_import',
         'special_prices_fetched_at',

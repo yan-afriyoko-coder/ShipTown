@@ -55,7 +55,11 @@ class FetchBasePricesJob extends UniqueJob
                             MagentoProduct::query()
                                 ->whereIn('id', $chunk->pluck('id'))
                                 ->whereNotIn('sku', $responseRecords->pluck('sku'))
-                                ->update(['exists_in_magento' => false, 'base_prices_fetched_at' => now(), 'base_prices_raw_import' => null]);
+                                ->update([
+                                    'exists_in_magento' => false,
+                                    'base_prices_fetched_at' => now(),
+                                    'base_prices_raw_import' => null
+                                ]);
 
                             usleep(100000); // 100ms
                         });

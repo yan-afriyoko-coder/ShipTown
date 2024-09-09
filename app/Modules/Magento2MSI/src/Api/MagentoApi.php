@@ -213,4 +213,11 @@ class MagentoApi
             'skus' => $attributes
         ]);
     }
+
+    public static function fetchSpecialPricesBulk(string $api_access_token, string $base_url, array $attributes): ?Response
+    {
+        return Client::post($api_access_token, $base_url . '/rest/all/V1/products/special-price-information', [
+            'skus' => $attributes,
+        ]);
+    }
 }
