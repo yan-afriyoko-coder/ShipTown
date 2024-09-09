@@ -2,7 +2,12 @@
 
 namespace App\Helpers;
 
+use Closure;
+use Exception;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Str;
 
 class TemporaryTable
 {
@@ -32,5 +37,25 @@ class TemporaryTable
         );
 
         return DB::statement($finalQuery);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function fromArray(string $tableName, mixed $data, Closure $blueprint): Builder
+    {
+        if (! Str::startsWith($tableName, 'tempTable_')) {
+            throw new Exception('Temporary table name must start with "tempTable_"');
+        }
+
+        Schema::dropIfExists($tableName);
+
+        Schema::create($tableName, $blueprint);
+
+        $table = DB::table($tableName);
+
+        $table->insert($data);
+
+        return $table;
     }
 }

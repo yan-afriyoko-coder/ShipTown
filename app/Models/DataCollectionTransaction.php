@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class DataCollectionTransaction extends DataCollection
 {
-    protected static function booted()
+    protected static function booted(): void
     {
         static::addGlobalScope('Transaction', function (Builder $builder) {
             $builder->where('type', '=', self::class);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\TemporaryTable;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
@@ -30,7 +31,7 @@ class CsvImportController extends Controller
 
         $tempTableName = 'temp_csv_import_'.rand(100000000000000000, 999999999999999999);
 
-        Schema::create($tempTableName, function (Blueprint $table) {
+        TemporaryTable::fromArray($tempTableName, $validatedData['data'], function (Blueprint $table) {
             $table->temporary();
             $table->id();
             $table->string('product_sku')->nullable();
@@ -40,10 +41,6 @@ class CsvImportController extends Controller
             $table->double('quantity_to_scan')->nullable();
             $table->timestamps();
         });
-
-        DB::table($tempTableName)->insert($validatedData['data']);
-
-        ray(DB::table($tempTableName)->get());
 
         DB::statement('
             UPDATE '.$tempTableName.'
@@ -104,5 +101,15 @@ class CsvImportController extends Controller
         ');
 
         return JsonResource::make(['success' => true]);
+    }
+
+    /**
+     * @param string $tempTableName
+     * @param \Closure $callback
+     * @param $data
+     * @return void
+     */
+    public function fromArray(string $tempTableName, \Closure $callback, $data): void
+    {
     }
 }
