@@ -17,11 +17,12 @@ class EnsureProductRecordsExistJob extends UniqueJob
         $tag = Tag::findOrCreate(['name' => 'Available Online']);
 
         DB::statement('
-            INSERT INTO modules_magento2api_products (connection_id, product_id, product_price_id, created_at, updated_at)
+            INSERT INTO modules_magento2api_products (connection_id, sku, product_id, product_price_id, created_at, updated_at)
             SELECT
-                modules_magento2api_connections.id,
-                taggables.taggable_id,
-                products_prices.id,
+                modules_magento2api_connections.id as connection_id,
+                products.sku,
+                products_prices.product_id as product_id,
+                products_prices.id as product_prices_id,
                 now(),
                 now()
 
@@ -31,7 +32,7 @@ class EnsureProductRecordsExistJob extends UniqueJob
                 ON products_prices.product_id = taggables.taggable_id
                 AND products_prices.warehouse_id = modules_magento2api_connections.pricing_source_warehouse_id
             LEFT JOIN products
-                ON products.id = products.prices.product_id
+                ON products.id = products_prices.product_id
             LEFT JOIN modules_magento2api_products
                 ON modules_magento2api_products.connection_id = modules_magento2api_connections.id
                 AND modules_magento2api_products.product_price_id = products_prices.id
