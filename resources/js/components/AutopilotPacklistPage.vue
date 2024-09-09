@@ -78,6 +78,7 @@
                 this.showLoading();
 
                 let params = {
+                    'filter[inventory_source_warehouse_id]': this.getUrlParameter('filter[inventory_source_warehouse_id]', Vue.prototype.$currentUser['warehouse_id']),
                     'filter[status]': this.getUrlParameter('status',''),
                     'sort': this.getUrlParameter('sort', 'order_placed_at'),
                     'per_page': this.getUrlParameter('per_page', 1),
