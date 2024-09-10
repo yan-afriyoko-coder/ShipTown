@@ -7,6 +7,7 @@ use App\Helpers\TemporaryTable;
 use App\Modules\Magento2MSI\src\Api\MagentoApi;
 use App\Modules\MagentoApi\src\Models\MagentoConnection;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
+use DB;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Collection;
 
@@ -62,33 +63,17 @@ class FetchSpecialPricesJob extends UniqueJob
                             $table->json('special_prices_raw_import')->nullable();
                         });
 
-                        \DB::statement('
-                        UPDATE modules_magento2api_products
-                        INNER JOIN tempTable_MagentoSpecialPriceFetch
-                            ON tempTable_MagentoSpecialPriceFetch.sku = modules_magento2api_products.sku
-                            AND tempTable_MagentoSpecialPriceFetch.connection_id = modules_magento2api_products.connection_id
-                        SET modules_magento2api_products.magento_sale_price = tempTable_MagentoSpecialPriceFetch.magento_sale_price,
-                              modules_magento2api_products.magento_sale_price_start_date = tempTable_MagentoSpecialPriceFetch.magento_sale_price_start_date,
-                              modules_magento2api_products.magento_sale_price_end_date = tempTable_MagentoSpecialPriceFetch.magento_sale_price_end_date,
-                              modules_magento2api_products.special_prices_fetched_at = tempTable_MagentoSpecialPriceFetch.special_prices_fetched_at,
-                              modules_magento2api_products.special_prices_raw_import = tempTable_MagentoSpecialPriceFetch.special_prices_raw_import
+                        DB::statement('
+                            UPDATE modules_magento2api_products
+                            INNER JOIN tempTable_MagentoSpecialPriceFetch
+                                ON tempTable_MagentoSpecialPriceFetch.sku = modules_magento2api_products.sku
+                                AND tempTable_MagentoSpecialPriceFetch.connection_id = modules_magento2api_products.connection_id
+                            SET modules_magento2api_products.magento_sale_price = tempTable_MagentoSpecialPriceFetch.magento_sale_price,
+                                  modules_magento2api_products.magento_sale_price_start_date = tempTable_MagentoSpecialPriceFetch.magento_sale_price_start_date,
+                                  modules_magento2api_products.magento_sale_price_end_date = tempTable_MagentoSpecialPriceFetch.magento_sale_price_end_date,
+                                  modules_magento2api_products.special_prices_fetched_at = tempTable_MagentoSpecialPriceFetch.special_prices_fetched_at,
+                                  modules_magento2api_products.special_prices_raw_import = tempTable_MagentoSpecialPriceFetch.special_prices_raw_import
                         ');
-
-//                        // Update existing records
-//                        $responseRecords->each(function ($apiBasePriceRecord) use ($magentoConnection) {
-//                            MagentoProduct::query()
-//                                ->where([
-//                                    'connection_id' => $magentoConnection->getKey(),
-//                                    'sku' => $apiBasePriceRecord['sku']
-//                                ])
-//                                ->update([
-//                                    'magento_sale_price' => $apiBasePriceRecord['price'],
-//                                    'magento_sale_price_start_date' => $apiBasePriceRecord['price_from'],
-//                                    'magento_sale_price_end_date' => $apiBasePriceRecord['price_to'],
-//                                    'special_prices_fetched_at' => now(),
-//                                    'special_prices_raw_import' => json_encode($apiBasePriceRecord),
-//                                ]);
-//                        });
 
                         // Update missing records
                         MagentoProduct::query()
