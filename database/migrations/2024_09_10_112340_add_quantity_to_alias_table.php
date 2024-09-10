@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('alias', function (Blueprint $table) {
+        Schema::table('products_aliases', function (Blueprint $table) {
             $table->decimal('quantity', 3)->default(1);
         });
     }
