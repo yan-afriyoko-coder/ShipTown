@@ -10,6 +10,7 @@ use App\Modules\MagentoApi\src\Models\MagentoProduct;
 use Exception;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Collection;
+use Log;
 
 /**
  * Class SyncCheckFailedProductsJob.
@@ -29,11 +30,14 @@ class FetchBasePricesJob extends UniqueJob
                         ->whereNull('base_prices_fetched_at')
                         ->orWhereNull('base_prices_raw_import')
                         ->chunkById(100, function (Collection $chunk) use ($magentoConnection) {
+                            Log::debug('Fetching base prices for ' . $chunk->count() . ' products');
                             $productSkus = $chunk->map(function (MagentoProduct $product) {
                                 return $product->product->sku;
                             });
 
                             $response = MagentoApi::fetchBasePricesBulk($magentoConnection->api_access_token, $magentoConnection->base_url, $productSkus->toArray());
+
+                            Log::debug('Fetched base prices for ' . $response->count() . ' products');
 
                             $responseRecords = collect($response->json())
                                 ->filter(function ($apiBasePriceRecord) use ($magentoConnection) {
@@ -49,6 +53,8 @@ class FetchBasePricesJob extends UniqueJob
                                     ];
                                 });
 
+                            Log::debug('Inserting ' . $responseRecords->count() . ' records into temp table');
+
                             TemporaryTable::fromArray('tempTable_MagentoBasePriceFetch', $responseRecords->toArray(), function (Blueprint $table) {
                                 $table->temporary();
                                 $table->unsignedBigInteger('connection_id')->index();
@@ -58,14 +64,21 @@ class FetchBasePricesJob extends UniqueJob
                                 $table->json('base_prices_raw_import')->nullable();
                             });
 
+                            Log::debug('Updating ' . $chunk->count() . ' records in main table');
+
                             \DB::statement('
                                 UPDATE modules_magento2api_products
-                                INNER JOIN tempTable_MagentoBasePriceFetch ON modules_magento2api_products.sku = tempTable_MagentoBasePriceFetch.sku
+                                INNER JOIN tempTable_MagentoBasePriceFetch
+                                    ON modules_magento2api_products.sku = tempTable_MagentoBasePriceFetch.sku
+                                    AND modules_magento2api_products.connection_id = tempTable_MagentoBasePriceFetch.connection_id
                                 SET modules_magento2api_products.exists_in_magento = 1,
                                     modules_magento2api_products.magento_price = tempTable_MagentoBasePriceFetch.price,
                                     modules_magento2api_products.base_prices_fetched_at = tempTable_MagentoBasePriceFetch.base_prices_fetched_at,
                                     modules_magento2api_products.base_prices_raw_import = tempTable_MagentoBasePriceFetch.base_prices_raw_import
                             ');
+
+
+                            Log::debug('Updating ' . $chunk->count() . ' missing records');
 
                             // Update missing records
                             MagentoProduct::query()
@@ -76,6 +89,8 @@ class FetchBasePricesJob extends UniqueJob
                                     'base_prices_fetched_at' => now(),
                                     'base_prices_raw_import' => null
                                 ]);
+
+                            Log::debug('Finished updating ' . $chunk->count() . ' records');
 
                             usleep(100000); // 100ms
                         });
