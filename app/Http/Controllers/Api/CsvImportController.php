@@ -8,7 +8,6 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -29,9 +28,7 @@ class CsvImportController extends Controller
     {
         $validatedData = Validator::make($request->all(), $this->rules)->validate();
 
-        $tempTableName = 'temp_csv_import_'.rand(100000000000000000, 999999999999999999);
-
-        TemporaryTable::fromArray($tempTableName, $validatedData['data'], function (Blueprint $table) {
+        TemporaryTable::fromArray('tempTable_csv_import', $validatedData['data'], function (Blueprint $table) {
             $table->temporary();
             $table->id();
             $table->string('product_sku')->nullable();
@@ -43,13 +40,13 @@ class CsvImportController extends Controller
         });
 
         DB::statement('
-            UPDATE '.$tempTableName.'
-            LEFT JOIN products_aliases ON '.$tempTableName.'.product_sku = products_aliases.alias
-            SET '.$tempTableName.'.product_id = products_aliases.product_id
-            WHERE '.$tempTableName.'.product_id IS NULL
+            UPDATE tempTable_csv_import
+            LEFT JOIN products_aliases ON tempTable_csv_import.product_sku = products_aliases.alias
+            SET tempTable_csv_import.product_id = products_aliases.product_id
+            WHERE tempTable_csv_import.product_id IS NULL
         ');
 
-        $skuNotFoundErrors = DB::table($tempTableName)
+        $skuNotFoundErrors = DB::table('tempTable_csv_import')
             ->whereNull('product_id')
             ->select('product_sku')
             ->get()
@@ -90,7 +87,7 @@ class CsvImportController extends Controller
                 NOW(),
                 NOW()
 
-            FROM '.$tempTableName.' as tempTable
+            FROM tempTable_csv_import as tempTable
             LEFT JOIN data_collections
                 ON data_collections.id = '.$validatedData['data_collection_id'].'
             LEFT JOIN inventory
