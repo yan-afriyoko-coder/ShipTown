@@ -1,10 +1,9 @@
 <?php
 
-namespace Database\Seeders\Demo;
+namespace Database\Seeders;
 
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
-use App\Models\Product;
 use App\Modules\InventoryMovements\src\Jobs\SequenceNumberJob;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +21,8 @@ class InventorySeeder extends Seeder
         $movements = Inventory::query()
             ->with('prices')
             ->where('warehouse_code', '!=', DB::raw('999'))
+            ->inRandomOrder()
+            ->limit(1000)
             ->get()
             ->map(function (Inventory $inventory) {
                 $restock_level = fake()->randomElement([1, 6, 6, 6, 12, 12, 12, 12, 24, 24, 24, 36, 72]);

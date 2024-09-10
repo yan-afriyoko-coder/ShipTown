@@ -15,6 +15,9 @@ class BigDatabaseSeeder extends Seeder
 
         while ($i > 0) {
             ProductsManySeeder::creteRecords(500);
+            $this->call([
+                InventorySeeder::class
+            ]);
             $i--;
         }
     }

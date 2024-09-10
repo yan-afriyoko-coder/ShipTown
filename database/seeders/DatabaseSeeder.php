@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
             Demo\ProductsSeeder::class,
             Demo\ProductsTagsSeeder::class,
             Demo\ProductsPricesSeeder::class,
-            Demo\InventorySeeder::class,
+            \Database\Seeders\InventorySeeder::class,
             Demo\QuantityDiscountSeeder::class,
 
             // Orders Seeders
