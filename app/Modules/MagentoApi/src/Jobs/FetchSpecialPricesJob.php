@@ -38,21 +38,20 @@ class FetchSpecialPricesJob extends UniqueJob
                         $responseRecords = collect($response->json())
                             ->filter(function ($apiBasePriceRecord) use ($magentoConnection) {
                                 return $apiBasePriceRecord['store_id'] == $magentoConnection->magento_store_id;
+                            })
+                            ->map(function ($apiBasePriceRecord) use ($magentoConnection) {
+                                return [
+                                    'connection_id' => $magentoConnection->getKey(),
+                                    'sku' => $apiBasePriceRecord['sku'],
+                                    'magento_sale_price' => $apiBasePriceRecord['price'],
+                                    'magento_sale_price_start_date' => $apiBasePriceRecord['price_from'],
+                                    'magento_sale_price_end_date' => $apiBasePriceRecord['price_to'],
+                                    'special_prices_fetched_at' => now(),
+                                    'special_prices_raw_import' => json_encode($apiBasePriceRecord),
+                                ];
                             });
 
-                        $records = $responseRecords->map(function ($apiBasePriceRecord) use ($magentoConnection) {
-                            return [
-                                'connection_id' => $magentoConnection->getKey(),
-                                'sku' => $apiBasePriceRecord['sku'],
-                                'magento_sale_price' => $apiBasePriceRecord['price'],
-                                'magento_sale_price_start_date' => $apiBasePriceRecord['price_from'],
-                                'magento_sale_price_end_date' => $apiBasePriceRecord['price_to'],
-                                'special_prices_fetched_at' => now(),
-                                'special_prices_raw_import' => json_encode($apiBasePriceRecord),
-                            ];
-                        });
-
-                        TemporaryTable::fromArray('tempTable_MagentoSpecialPriceFetch', $records->toArray(), function (Blueprint $table) {
+                        TemporaryTable::fromArray('tempTable_MagentoSpecialPriceFetch', $responseRecords->toArray(), function (Blueprint $table) {
                             $table->temporary();
                             $table->unsignedBigInteger('connection_id')->index();
                             $table->string('sku')->index();
