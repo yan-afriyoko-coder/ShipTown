@@ -20,7 +20,7 @@ class CheckIfSyncIsRequiredJob extends UniqueJob
                         WHERE (base_price_sync_required IS NULL AND base_prices_fetched_at IS NOT NULL AND magento_price IS NOT NULL)
                             OR (special_price_sync_required IS NULL AND special_prices_fetched_at IS NOT NULL AND magento_sale_price IS NOT NULL)
 
-                        LIMIT 500
+                        LIMIT 100
                 )
 
                 UPDATE modules_magento2api_products
@@ -32,9 +32,9 @@ class CheckIfSyncIsRequiredJob extends UniqueJob
 
                 SET modules_magento2api_products.base_price_sync_required = NOT (modules_magento2api_products.magento_price = products_prices.price),
                     modules_magento2api_products.special_price_sync_required = NOT (
-                            modules_magento2api_products.magento_sale_price = products_prices.sale_price
-                        AND date(modules_magento2api_products.magento_sale_price_start_date) = date(products_prices.sale_price_start_date)
-                        AND date(modules_magento2api_products.magento_sale_price_end_date) = date(products_prices.sale_price_end_date)
+                            IFNULL(modules_magento2api_products.magento_sale_price, 0) = products_prices.sale_price
+                        AND date(IFNULL(modules_magento2api_products.magento_sale_price_start_date, "2000-01-01")) = date(products_prices.sale_price_start_date)
+                        AND date(IFNULL(modules_magento2api_products.magento_sale_price_end_date, "2000-01-01")) = date(products_prices.sale_price_end_date)
                     ),
                     modules_magento2api_products.updated_at = NOW()
            ');
