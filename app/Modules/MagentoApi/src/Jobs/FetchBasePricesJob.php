@@ -8,6 +8,7 @@ use App\Modules\Magento2MSI\src\Api\MagentoApi;
 use App\Modules\MagentoApi\src\Models\MagentoConnection;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
 use Exception;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Collection;
 
 /**
