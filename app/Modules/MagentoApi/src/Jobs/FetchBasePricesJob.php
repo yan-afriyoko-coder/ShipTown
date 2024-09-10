@@ -30,14 +30,14 @@ class FetchBasePricesJob extends UniqueJob
                         ->whereNull('base_prices_fetched_at')
                         ->orWhereNull('base_prices_raw_import')
                         ->chunkById(100, function (Collection $chunk) use ($magentoConnection) {
-                            Log::debug('Fetching base prices for ' . $chunk->count() . ' products');
+                            Log::debug('Fetching base prices for ' . $chunk->count() . ' products', ['job' => self::class]);
                             $productSkus = $chunk->map(function (MagentoProduct $product) {
                                 return $product->product->sku;
                             });
 
                             $response = MagentoApi::fetchBasePricesBulk($magentoConnection->api_access_token, $magentoConnection->base_url, $productSkus->toArray());
 
-                            Log::debug('Fetched base prices for ' . $response->count() . ' products');
+                            Log::debug('Fetched base prices', ['job' => self::class]);
 
                             $responseRecords = collect($response->json())
                                 ->filter(function ($apiBasePriceRecord) use ($magentoConnection) {
@@ -53,7 +53,7 @@ class FetchBasePricesJob extends UniqueJob
                                     ];
                                 });
 
-                            Log::debug('Inserting ' . $responseRecords->count() . ' records into temp table');
+                            Log::debug('Inserting ' . $responseRecords->count() . ' records into temp table', ['job' => self::class]);
 
                             TemporaryTable::fromArray('tempTable_MagentoBasePriceFetch', $responseRecords->toArray(), function (Blueprint $table) {
                                 $table->temporary();
@@ -64,7 +64,7 @@ class FetchBasePricesJob extends UniqueJob
                                 $table->json('base_prices_raw_import')->nullable();
                             });
 
-                            Log::debug('Updating ' . $chunk->count() . ' records in main table');
+                            Log::debug('Updating ' . $chunk->count() . ' records in main table', ['job' => self::class]);
 
                             \DB::statement('
                                 UPDATE modules_magento2api_products
@@ -78,7 +78,7 @@ class FetchBasePricesJob extends UniqueJob
                             ');
 
 
-                            Log::debug('Updating ' . $chunk->count() . ' missing records');
+                            Log::debug('Updating ' . $chunk->count() . ' missing records', ['job' => self::class]);
 
                             // Update missing records
                             MagentoProduct::query()
@@ -90,7 +90,7 @@ class FetchBasePricesJob extends UniqueJob
                                     'base_prices_raw_import' => null
                                 ]);
 
-                            Log::debug('Finished updating ' . $chunk->count() . ' records');
+                            Log::debug('Finished updating ' . $chunk->count() . ' records', ['job' => self::class]);
 
                             usleep(100000); // 100ms
                         });
