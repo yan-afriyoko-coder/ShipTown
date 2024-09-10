@@ -93,7 +93,7 @@ class FetchBasePricesJob extends UniqueJob
 
                             Log::debug('Finished updating ' . $chunk->count() . ' records', ['job' => self::class]);
 
-                            sleep(1); // avoid rate limiting
+                            usleep(500000); // 0.5 seconds
                         });
                 });
         } catch (Exception $exception) {
