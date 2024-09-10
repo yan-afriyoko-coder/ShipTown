@@ -88,6 +88,16 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
         ], ['job_class'], ['job_name']);
 
         ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2.0 API Price Sync - SyncProductBasePricesBulkJob',
+            'job_class' => Jobs\SyncProductBasePricesBulkJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
+            'job_name' => 'Magento 2.0 API Price Sync - SyncProductSalePricesBulkJob',
+            'job_class' => Jobs\SyncProductSalePricesBulkJob::class,
+        ], ['job_class'], ['job_name']);
+
+        ManualRequestJob::query()->upsert([
             'job_name' => 'Magento 2.0 API Price Sync - SyncProductSalePricesJob',
             'job_class' => Jobs\SyncProductSalePricesJob::class,
         ], ['job_class'], ['job_name']);

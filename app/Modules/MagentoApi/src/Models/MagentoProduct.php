@@ -32,18 +32,17 @@ class MagentoProduct extends BaseModel
 
     protected $fillable = [
         'connection_id',
-        'base_price_sync_required',
-        'special_price_sync_required',
+        'exists_in_magento',
         'product_price_id',
         'product_id',
-        'exists_in_magento',
-        'connection_id',
         'magento_price',
         'magento_sale_price',
         'magento_sale_price_start_date',
         'magento_sale_price_end_date',
+        'base_price_sync_required',
         'base_prices_fetched_at',
         'base_prices_raw_import',
+        'special_price_sync_required',
         'special_prices_fetched_at',
         'special_prices_raw_import',
     ];
