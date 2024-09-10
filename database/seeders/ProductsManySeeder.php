@@ -2,26 +2,36 @@
 
 namespace Database\Seeders;
 
-use App\Models\Product;
+use DB;
 use Illuminate\Database\Seeder;
 
 class ProductsManySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-        $i = 50000;
+        $i = 1000;
+
+        while ($i > 0) {
+            $this->creteRecords(500);
+            $i--;
+        }
+    }
+
+    public static function creteRecords(int $i): array
+    {
+        $records = [];
+
         while ($i > 0) {
             try {
-                Product::query()->create(['sku' => rand(1000000, 1000000000), 'name' => 'test']);
+                $rand = \Str::uuid();
+                $records[] = ['sku' => $rand, 'name' => 'test_' . $rand];
                 $i--;
             } catch (\Exception $e) {
                 report($e);
             }
         }
+
+        DB::table('products')->insert($records);
+        return $records;
     }
 }

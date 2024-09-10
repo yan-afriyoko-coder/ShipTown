@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             Demo\OrderStatusesSeeder::class,
             Demo\UsersSeeder::class,
 
-            Demo\WarehousesSeeder::class,
+            \Database\Seeders\WarehousesSeeder::class,
 
             Demo\ProductsSeeder::class,
             Demo\ProductsTagsSeeder::class,
