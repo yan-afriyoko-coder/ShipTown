@@ -67,11 +67,12 @@ class FetchSpecialPricesJob extends UniqueJob
                             INNER JOIN tempTable_MagentoSpecialPriceFetch
                                 ON tempTable_MagentoSpecialPriceFetch.sku = modules_magento2api_products.sku
                                 AND tempTable_MagentoSpecialPriceFetch.connection_id = modules_magento2api_products.connection_id
-                            SET modules_magento2api_products.magento_sale_price = tempTable_MagentoSpecialPriceFetch.magento_sale_price,
-                                  modules_magento2api_products.magento_sale_price_start_date = tempTable_MagentoSpecialPriceFetch.magento_sale_price_start_date,
-                                  modules_magento2api_products.magento_sale_price_end_date = tempTable_MagentoSpecialPriceFetch.magento_sale_price_end_date,
-                                  modules_magento2api_products.special_prices_fetched_at = tempTable_MagentoSpecialPriceFetch.special_prices_fetched_at,
-                                  modules_magento2api_products.special_prices_raw_import = tempTable_MagentoSpecialPriceFetch.special_prices_raw_import
+                            SET modules_magento2api_products.special_price_sync_required = null,
+                                modules_magento2api_products.magento_sale_price = tempTable_MagentoSpecialPriceFetch.magento_sale_price,
+                                modules_magento2api_products.magento_sale_price_start_date = tempTable_MagentoSpecialPriceFetch.magento_sale_price_start_date,
+                                modules_magento2api_products.magento_sale_price_end_date = tempTable_MagentoSpecialPriceFetch.magento_sale_price_end_date,
+                                modules_magento2api_products.special_prices_fetched_at = tempTable_MagentoSpecialPriceFetch.special_prices_fetched_at,
+                                modules_magento2api_products.special_prices_raw_import = tempTable_MagentoSpecialPriceFetch.special_prices_raw_import
                         ');
 
                         // Update missing records

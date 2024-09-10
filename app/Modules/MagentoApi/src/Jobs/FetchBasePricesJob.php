@@ -72,6 +72,7 @@ class FetchBasePricesJob extends UniqueJob
                                     ON modules_magento2api_products.sku = tempTable_MagentoBasePriceFetch.sku
                                     AND modules_magento2api_products.connection_id = tempTable_MagentoBasePriceFetch.connection_id
                                 SET modules_magento2api_products.exists_in_magento = 1,
+                                    modules_magento2api_products.base_price_sync_required = null,
                                     modules_magento2api_products.magento_price = tempTable_MagentoBasePriceFetch.price,
                                     modules_magento2api_products.base_prices_fetched_at = tempTable_MagentoBasePriceFetch.base_prices_fetched_at,
                                     modules_magento2api_products.base_prices_raw_import = tempTable_MagentoBasePriceFetch.base_prices_raw_import
