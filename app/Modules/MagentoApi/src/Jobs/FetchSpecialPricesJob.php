@@ -28,7 +28,7 @@ class FetchSpecialPricesJob extends UniqueJob
                         'exists_in_magento' => true,
                         'special_prices_fetched_at' => null,
                     ])
-                    ->chunkById(50, function (Collection $chunk) use ($magentoConnection) {
+                    ->chunkById(100, function (Collection $chunk) use ($magentoConnection) {
                         $productSkus = $chunk->map(function (MagentoProduct $product) {
                             return $product->product->sku;
                         });

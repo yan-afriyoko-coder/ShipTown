@@ -3,6 +3,7 @@
 namespace App\Modules\MagentoApi\src\Jobs;
 
 use App\Abstracts\UniqueJob;
+use App\Helpers\TemporaryTable;
 use App\Modules\Magento2MSI\src\Api\MagentoApi;
 use App\Modules\MagentoApi\src\Models\MagentoConnection;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
@@ -26,7 +27,7 @@ class FetchBasePricesJob extends UniqueJob
                         ->whereRaw('IFNULL(exists_in_magento, 1) = 1')
                         ->whereNull('base_prices_fetched_at')
                         ->orWhereNull('base_prices_raw_import')
-                        ->chunkById(50, function (Collection $chunk) use ($magentoConnection) {
+                        ->chunkById(100, function (Collection $chunk) use ($magentoConnection) {
                             $productSkus = $chunk->map(function (MagentoProduct $product) {
                                 return $product->product->sku;
                             });
@@ -36,22 +37,34 @@ class FetchBasePricesJob extends UniqueJob
                             $responseRecords = collect($response->json())
                                 ->filter(function ($apiBasePriceRecord) use ($magentoConnection) {
                                     return $apiBasePriceRecord['store_id'] == $magentoConnection->magento_store_id;
-                                });
-
-                            // Update existing records
-                            $responseRecords->each(function ($apiBasePriceRecord) use ($magentoConnection) {
-                                MagentoProduct::query()
-                                    ->where([
+                                })
+                                ->map(function ($apiBasePriceRecord) use ($magentoConnection) {
+                                    return [
                                         'connection_id' => $magentoConnection->getKey(),
-                                        'sku' => $apiBasePriceRecord['sku']
-                                    ])
-                                    ->update([
-                                        'exists_in_magento' => true,
-                                        'magento_price' => $apiBasePriceRecord['price'],
+                                        'sku' => $apiBasePriceRecord['sku'],
+                                        'price' => $apiBasePriceRecord['price'],
                                         'base_prices_fetched_at' => now(),
                                         'base_prices_raw_import' => json_encode($apiBasePriceRecord),
-                                    ]);
+                                    ];
+                                });
+
+                            TemporaryTable::fromArray('tempTable_MagentoBasePriceFetch', $responseRecords->toArray(), function (Blueprint $table) {
+                                $table->temporary();
+                                $table->unsignedBigInteger('connection_id')->index();
+                                $table->string('sku')->index();
+                                $table->decimal('price', 20, 3)->nullable();
+                                $table->dateTime('base_prices_fetched_at')->nullable();
+                                $table->json('base_prices_raw_import')->nullable();
                             });
+
+                            \DB::statement('
+                                UPDATE modules_magento2api_products
+                                INNER JOIN tempTable_MagentoBasePriceFetch ON modules_magento2api_products.sku = tempTable_MagentoBasePriceFetch.sku
+                                SET modules_magento2api_products.exists_in_magento = 1,
+                                    modules_magento2api_products.magento_price = tempTable_MagentoBasePriceFetch.price,
+                                    modules_magento2api_products.base_prices_fetched_at = tempTable_MagentoBasePriceFetch.base_prices_fetched_at,
+                                    modules_magento2api_products.base_prices_raw_import = tempTable_MagentoBasePriceFetch.base_prices_raw_import
+                            ');
 
                             // Update missing records
                             MagentoProduct::query()
