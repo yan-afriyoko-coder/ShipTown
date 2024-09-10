@@ -87,7 +87,7 @@ class FetchSpecialPricesJob extends UniqueJob
                                 'magento_sale_price_end_date' => null,
                             ]);
 
-                        usleep(100000); // 100ms
+                        sleep(1); // avoid rate limiting
                     });
             });
     }
