@@ -7,7 +7,7 @@ use App\Models\ShippingLabel;
 use App\Modules\PrintNode\src\Models\PrintJob;
 use Exception;
 
-class PrintShippingLabelListener
+class ShippingLabelCreatedListener
 {
     /**
      * @throws Exception

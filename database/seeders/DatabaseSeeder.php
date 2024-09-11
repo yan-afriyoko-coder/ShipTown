@@ -48,6 +48,7 @@ class DatabaseSeeder extends Seeder
             Demo\DataCollections\TransferToCorkBranchSeeder::class,
             Demo\DataCollections\TransfersFromWarehouseSeeder::class,
             Demo\DataCollections\ArchivedTransfersFromWarehouseSeeder::class,
+            Demo\DataCollections\TransactionInProcessSeeder::class,
 
             SalesSeeder::class,
             StocktakeSuggestionsSeeder::class,

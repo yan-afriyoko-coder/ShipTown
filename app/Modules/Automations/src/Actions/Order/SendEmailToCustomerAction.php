@@ -6,6 +6,7 @@ use App\Mail\OrderMail;
 use App\Models\MailTemplate;
 use App\Models\Order;
 use App\Modules\Automations\src\Abstracts\BaseOrderActionAbstract;
+//use App\Services\PdfService;
 use Illuminate\Support\Facades\Mail;
 
 class SendEmailToCustomerAction extends BaseOrderActionAbstract

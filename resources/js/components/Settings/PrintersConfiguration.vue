@@ -9,7 +9,6 @@
                 </div>
             </div>
             <div class="card-body">
-
                 <div class="row mb-2" v-for="printer in printers" :key="printer['id']" :class="{'table-primary': isDefaultPrinter(printer['id'])}">
                     <div class="col-lg-6 col-md-12">
                         {{ printer['name'] }} <br>
@@ -55,11 +54,13 @@ export default {
             });
     },
 
-    data: () => ({
-        defaultPrinter: 0,
-        printers: [],
-        errorMessage: null,
-    }),
+    data() {
+        return {
+            defaultPrinter: 0,
+            printers: [],
+            errorMessage: null,
+        };
+    },
 
     methods: {
         setUserPrinter(printerId) {
@@ -78,13 +79,13 @@ export default {
             let data = {
                 'printer_id': printer.id,
                 'content_type': 'raw_base64',
-                'content': btoa('Hello World/n' +
-                    'blue rectangle/n' +
-                    'A50,50'
+                'content': btoa('ShipTown - Raw Text Print /n' +
+                    '' +
+                    ''
                 ),
             };
 
-            this.apiPostPrintnodePrintJob(data)
+            this.apiPostPrintNodePrintJob(data)
                 .then(() => {
                     this.$snotify.info('Test page sent to PrintNode');
                 })
@@ -99,7 +100,7 @@ export default {
                 'pdf_url': 'https://api.printnode.com/static/test/pdf/label_4in_x_6in.pdf'
             };
 
-            this.apiPostPrintnodePrintJob(data)
+            this.apiPostPrintNodePrintJob(data)
                 .then(() => {
                     this.$snotify.info('Test page sent to PrintNode');
                 })
@@ -115,7 +116,7 @@ export default {
                 'base64raw_url': 'http://management.products.api.test/label_4in_x_6in.epl'
             };
 
-            this.apiPostPrintnodePrintJob(data)
+            this.apiPostPrintNodePrintJob(data)
                 .then(() => {
                     this.$snotify.info('Test page sent to PrintNode');
                 })

@@ -81,5 +81,7 @@ class DataCollectorListReport extends Report
 
         $this->addAllowedInclude('comments');
         $this->addAllowedInclude('comments.user');
+        $this->addAllowedInclude('shippingAddress');
+        $this->addAllowedInclude('billingAddress');
     }
 }

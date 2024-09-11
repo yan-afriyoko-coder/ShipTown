@@ -46,9 +46,9 @@ class StoreTest extends TestCase
 
     public function test_store_available_product_return_ok()
     {
-        $produc = Product::factory()->create();
+        $product = Product::factory()->create();
         $params = [
-            'sku' => $produc->sku,
+            'sku' => $product->sku,
             'name' => 'Product Name',
             'price' => 200,
         ];

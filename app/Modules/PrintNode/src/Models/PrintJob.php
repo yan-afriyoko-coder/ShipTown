@@ -2,6 +2,7 @@
 
 namespace App\Modules\PrintNode\src\Models;
 
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,9 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $pdf_url
  * @property int $expire_after
  *
- * @method static Builder|PrintJob newModelQuery()
- * @method static Builder|PrintJob newQuery()
- * @method static Builder|PrintJob query()
+ * @mixin Eloquent
  */
 class PrintJob extends Model
 {

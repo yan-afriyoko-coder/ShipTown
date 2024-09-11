@@ -427,7 +427,6 @@ export default {
                 });
         },
 
-
         transferStockIn() {
             let data = {
                 'action': 'transfer_in_scanned',

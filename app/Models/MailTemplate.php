@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Barryvdh\LaravelIdeHelper\Eloquent;
+use Spatie\MailTemplates\Models\MailTemplate as SpatieMailTemplate;
 
 /**
  * @mixin Eloquent
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string reply_to
  * @property string html_template
  */
-class MailTemplate extends \Spatie\MailTemplates\Models\MailTemplate
+class MailTemplate extends SpatieMailTemplate
 {
     use HasFactory;
 

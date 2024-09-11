@@ -16,6 +16,7 @@
                 </option>
             </select>
         </div>
+
         <template #modal-footer>
             <b-button variant="secondary" class="float-right" @click="$bvModal.hide(modal_id);">
                 Cancel
@@ -73,7 +74,7 @@ export default {
     },
 
     beforeMount() {
-        Modals.EventBus.$on('show::modal::' + this.modal_id, (data) => {
+        Modals.EventBus.$on(`show::modal::${this.modal_id}`, (data) => {
             this.discount = data['discount'];
 
             this.newDiscount = {
@@ -111,7 +112,7 @@ export default {
         },
 
         emitNotification() {
-            Modals.EventBus.$emit('hide::modal::' + this.modal_id, this.newProduct);
+            Modals.EventBus.$emit(`hide::modal::${this.modal_id}`, this.newProduct);
         }
     }
 };

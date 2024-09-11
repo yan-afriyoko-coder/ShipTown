@@ -39,7 +39,7 @@ export default {
     mixins: [api, helpers],
 
     created() {
-        this.apiGetModulePrintnodeClients()
+        this.apiGetModulePrintNodeClients()
             .then(({ data }) => {
                 this.client = data.data[0];
             });
@@ -52,7 +52,7 @@ export default {
 
     methods: {
         disconnectClient() {
-            this.apiDeletePrintnodeClient(this.client.id)
+            this.apiDeletePrintNodeClient(this.client.id)
                 .then(() => {
                     this.client = null;
                 })
@@ -66,7 +66,7 @@ export default {
                 return;
             }
 
-            this.apiPostModulePrintnodeClients({
+            this.apiPostModulePrintNodeClients({
                     'api_key': this.apiKey
                 })
                 .then((data) => {

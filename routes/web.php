@@ -18,6 +18,7 @@ use App\Http\Controllers\Auth;
 use App\Http\Controllers\Csv;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataCollectorController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\FulfillmentDashboardController;
 use App\Http\Controllers\MailTemplatePreviewController;
 use App\Http\Controllers\Order;
@@ -37,6 +38,7 @@ Route::view('quick-connect/magento', 'quick-connect.magento');
 Route::view('quick-connect/shopify', 'quick-connect.shopify');
 
 Route::apiResource('barcode-generator', BarcodeGeneratorController::class)->only(['index']);
+Route::resource('documents', DocumentController::class, ['index'])->only(['index']);
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('fulfillment-dashboard', [FulfillmentDashboardController::class, 'index'])->name('fulfillment-dashboard');

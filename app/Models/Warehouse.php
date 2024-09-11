@@ -27,16 +27,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property Carbon|null $updated_at
  * @property OrderAddress|null $address
  *
- * @method static Builder|Warehouse newModelQuery()
- * @method static Builder|Warehouse newQuery()
- * @method static Builder|Warehouse query()
- * @method static Builder|Warehouse whereCode($value)
- * @method static Builder|Warehouse whereCreatedAt($value)
- * @method static Builder|Warehouse whereDeletedAt($value)
- * @method static Builder|Warehouse whereId($value)
- * @method static Builder|Warehouse whereName($value)
- * @method static Builder|Warehouse whereUpdatedAt($value)
- *
  * @mixin Eloquent
  * @mixin HasTagsTrait
  */

@@ -3,13 +3,15 @@
 namespace App\Console\Commands;
 
 use App\Events\AfterInstallEvent;
+use App\Mail\ShipmentConfirmationMail;
+use App\Mail\TransactionEmailReceiptMail;
+use App\Modules;
 use App\Mail\OrderMail;
 use App\Models\Configuration;
 use App\Models\MailTemplate;
 use App\Models\NavigationMenu;
 use App\Models\OrderStatus;
 use App\Models\Warehouse;
-use App\Modules;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\Conditions\Order\HasAnyShipmentCondition;
 use App\Modules\Automations\src\Conditions\Order\IsFullyPackedCondition;
@@ -30,6 +32,7 @@ use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
 use App\Modules\Slack\src\SlackServiceProvider;
 use App\Modules\StocktakeSuggestions\src\StocktakeSuggestionsServiceProvider;
 use App\Modules\Telescope\src\TelescopeModuleServiceProvider;
+use App\Services\ModulesService;
 use Artisan;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
@@ -73,8 +76,8 @@ class AppInstall extends Command
 
         if (file_exists($path)) {
             file_put_contents($path, str_replace(
-                $key.'='.env($key),
-                $key.'='.$value,
+                $key . '=' . env($key),
+                $key . '=' . $value,
                 file_get_contents($path)
             ));
         }
@@ -174,6 +177,7 @@ class AppInstall extends Command
         $this->createReadyForCollectionNotificationTemplate();
         $this->createDefaultMailTemplateShipmentNotification();
         $this->createDefaultMailTemplateOversoldProduct();
+        $this->createDefaultTransactionEmailReceiptMailTemplate();
 
         $this->createDefaultOrderStatuses();
 
@@ -190,11 +194,11 @@ class AppInstall extends Command
         $this->createPackingToCompleteAutomation();
         $this->createSingleLineOrdersToCompleteAutomation();
 
-        \App\Services\ModulesService::updateModulesTable();
+        ModulesService::updateModulesTable();
 
         Configuration::query()->firstOrCreate();
 
-        Warehouse::query()->firstOrCreate(['code' => 'WH'], ['name' => 'Warehouse']);
+        Warehouse::query()->insert(['code' => 'WH', 'name' => 'Warehouse']);
 
         StocktakeSuggestionsServiceProvider::installModule();
         AutoRestockLevelsServiceProvider::installModule();
@@ -459,7 +463,7 @@ class AppInstall extends Command
     private function createDefaultMailTemplateShipmentNotification(): void
     {
         MailTemplate::create([
-            'mailable' => \App\Mail\ShipmentConfirmationMail::class,
+            'mailable' => ShipmentConfirmationMail::class,
             'code' => 'module_shipment_confirmation',
             'subject' => 'Your Order #{{ variables.order.order_number }} has been Shipped!',
             'html_template' => '
@@ -948,6 +952,256 @@ class AppInstall extends Command
         ]);
     }
 
+    private function createDefaultTransactionEmailReceiptMailTemplate(): void
+    {
+        MailTemplate::query()->firstOrCreate(['code' => 'transaction_email_receipt'], [
+            'mailable' => TransactionEmailReceiptMail::class,
+            'subject' => 'You just completed a #{{ variables.transaction.id }} transaction! Here is your receipt.',
+            'html_template' => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml"
+          xmlns="http://www.w3.org/1999/xhtml"
+          style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>You just completed a transaction! Here is your receipt.</title>
+
+        <style>img {
+            max-width: 100%;
+        }
+        body {
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-size-adjust: none;
+            width: 100% !important;
+            height: 100%;
+            line-height: 1.6;
+        }
+        body {
+            background-color: #f6f6f6;
+        }
+        @media only screen and (max-width: 640px) {
+            h1 {
+                font-weight: 600 !important; margin: 20px 0 5px !important;
+            }
+            h2 {
+                font-weight: 600 !important; margin: 20px 0 5px !important;
+            }
+            h3 {
+                font-weight: 600 !important; margin: 20px 0 5px !important;
+            }
+            h4 {
+                font-weight: 600 !important; margin: 20px 0 5px !important;
+            }
+            h1 {
+                font-size: 22px !important;
+            }
+            h2 {
+                font-size: 18px !important;
+            }
+            h3 {
+                font-size: 16px !important;
+            }
+            .container {
+                width: 100% !important;
+            }
+            .content {
+                padding: 10px !important;
+            }
+            .content-wrapper {
+                padding: 10px !important;
+            }
+            .invoice {
+                width: 100% !important;
+            }
+        }
+        </style></head>
+
+        <body style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6; margin: 0; padding: 0;" bgcolor="#f6f6f6">
+            <table class="body-wrap" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; margin: 0; padding: 0;" bgcolor="#f6f6f6">
+                <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                    <td style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;" valign="top"></td>
+                    <td class="container" width="600" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto; padding: 0;" valign="top">
+                        <div class="content" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">
+                            <table class="main" width="100%" cellpadding="0" cellspacing="0" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; margin: 0; padding: 0; border: 1px solid #e9e9e9;" bgcolor="#fff">
+                                <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                    <td class="content-wrap aligncenter" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 20px;" align="center" valign="top">
+                                        <table width="100%" cellpadding="0" cellspacing="0" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                            <!-------- main message -------->
+                                            <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                                <td class="content-block" style="text-align: center; align-content: center; font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0 0 20px;" valign="top">
+                                                    <h2 style="font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, &quot;Lucida Grande&quot;, sans-serif; box-sizing: border-box; font-size: 24px; color: #000; line-height: 1.2; font-weight: 400; margin: 40px 0 0; padding: 0;">
+                                                        Thanks for your order!
+                                                    </h2>
+                                                    <p style="font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, &quot;Lucida Grande&quot;, sans-serif; box-sizing: border-box; font-size: 14px; color: #000; line-height: 1.2; font-weight: 400; margin: 20px 0 0; padding: 0;">
+                                                        Order: <strong>#{{ variables.transaction.id }}</strong> | Date ordered: <strong>{{ variables.transaction.created_at }}</strong>
+                                                    </p>
+                                                </td>
+                                            </tr>
+
+                                            <!-------- addresses -------->
+                                            <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                                <td class="content-block" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;" valign="top">
+                                                    <table class="invoice" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; text-align: left; margin: 20px auto 0; padding: 0;">
+                                                        <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                                            <td style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 5px 0;" valign="top">
+                                                                <table class="invoice-items" cellpadding="0" cellspacing="0" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; margin: 0; padding: 0;">
+                                                                    <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                                                        <td style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 20px 0 0;" valign="top">
+                                                                            <p style="font-weight: 500;">Billing Address:</p>
+                                                                            <p>{{ variables.billing_address.gender }} {{ variables.billing_address.first_name }} {{ variables.billing_address.last_name }}</p>
+                                                                            <p>{{ variables.billing_address.company }}</p>
+                                                                            <p>{{ variables.billing_address.address1 }}</p>
+                                                                            <p>{{ variables.billing_address.address2 }}</p>
+                                                                            <p>{{ variables.billing_address.city }} {{ variables.billing_address.postcode }}</p>
+                                                                            <p>{{ variables.billing_address.country_name }}</p>
+                                                                        </td>
+                                                                        <td style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" valign="top">
+                                                                            <p style="font-weight: 500;">Shipping Address:</p>
+                                                                            <p>{{ variables.shipping_address.gender }} {{ variables.shipping_address.first_name }} {{ variables.shipping_address.last_name }}</p>
+                                                                            <p>{{ variables.shipping_address.company }}</p>
+                                                                            <p>{{ variables.shipping_address.address1 }}</p>
+                                                                            <p>{{ variables.shipping_address.address2 }}</p>
+                                                                            <p>{{ variables.shipping_address.city }} {{ variables.shipping_address.postcode }}</p>
+                                                                            <p>{{ variables.shipping_address.country_name }}</p>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td style="border-top-width: 1px; border-top-color: #eee; border-top-style: solid;"></td>
+                                            </tr>
+
+                                            <!-------- products -------->
+                                            <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                                <td class="content-block" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0 0 20px;" valign="top">
+                                                    <table class="invoice" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; text-align: left; width: 100%; margin: 20px auto; padding: 0;">
+                                                        <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                                            <td style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 5px 0;" valign="top">
+                                                                Products:
+                                                            </td>
+                                                        </tr>
+                                                        <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                                            <td style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 5px 0;" valign="top">
+                                                                <table class="invoice-items" cellpadding="0" cellspacing="0" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; margin: 0; padding: 0;">
+                                                                    <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                                                        <td style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 5px 0;" valign="top">
+                                                                            <table class="invoice-items" cellpadding="0" cellspacing="0" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; margin: 0; padding: 0;">
+                                                                                <thead style="text-align:center;">
+                                                                                    <tr>
+                                                                                        <th>Product</th>
+                                                                                        <th>Quantity</th>
+                                                                                        <th>Price</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody style="text-align:center;">
+                                                                                    {{#variables.products}}
+                                                                                        <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                                                                            <td style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" valign="top">
+                                                                                                {{name}}
+                                                                                            </td>
+                                                                                            <td style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" valign="top">
+                                                                                                {{quantity}}
+                                                                                            </td>
+                                                                                            <td style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" valign="top">
+                                                                                                {{price}}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    {{/variables.products}}
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td style="border-top-width: 1px; border-top-color: #eee; border-top-style: solid;"></td>
+                                            </tr>
+
+                                            <!-------- summary -------->
+                                            <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                                <td class="content-block" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0 0 20px;" valign="top">
+                                                    <table class="invoice" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; text-align: left; margin: 20px 0 0 auto; padding: 0;">
+                                                        <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                                            <td style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 5px 0;" valign="top">
+                                                                <table class="invoice-items" cellpadding="0" cellspacing="0" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; margin: 0; padding: 0;">
+                                                                    <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                                                        <td class="alignright" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; border-top-width: 1px; border-top-color: #eee; padding: 5px 10px 5px 0;" valign="top">
+                                                                            Subtotal
+                                                                        </td>
+                                                                        <td class="alignright" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 5px 0;" align="right" valign="top">
+                                                                            {{ variables.transaction.subtotal }}
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                                                        <td class="alignright" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 10px 5px 0;" valign="top">
+                                                                            Shipping
+                                                                        </td>
+                                                                        <td class="alignright" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" align="right" valign="top">
+                                                                            {{ variables.transaction.shipping }}
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                                                        <td class="alignright" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 10px 5px 0;" valign="top">
+                                                                            Tax
+                                                                        </td>
+                                                                        <td class="alignright" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" align="right" valign="top">
+                                                                            {{ variables.transaction.tax }}
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                                                        <td class="alignright" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 10px 5px 0;" valign="top">
+                                                                            <strong>Total</strong>
+                                                                        </td>
+                                                                        <td class="alignright" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" align="right" valign="top">
+                                                                            <strong>{{ variables.transaction.total }}</strong>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td style="border-top-width: 1px; border-top-color: #eee; border-top-style: solid;"></td>
+                                            </tr>
+
+                                            <!-------- footer -------->
+                                            <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+                                                <td class="content-block" style="text-align: center; align-content: center; font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0 0 20px;" valign="top">
+                                                    <p>
+                                                        If you have any questions, please feel free <br>
+                                                        to email us at <a href="mailto:support@ship.town?subject=Order #{{ variables.order.order_number }} Enquiry">no-reply@products.management</a></br>
+                                                        or call us on <b>+353 (1) 1234567</b><br>
+                                                    </p>
+                                                    <p>Thank you again for your business.</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </body>
+        </html>
+        '
+        ]);
+    }
+
     private function createReadyForCollectionNotificationTemplate()
     {
         MailTemplate::query()->firstOrCreate(['code' => 'ready_for_collection_notification'], [
@@ -959,7 +1213,7 @@ class AppInstall extends Command
           style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
     <head>
         <meta name="viewport" content="width=device-width" />
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="Content-Type" c\ontent="text/html; charset=UTF-8" />
         <title>We shipped your order!</title>
 
         <style>img {

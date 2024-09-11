@@ -20,7 +20,7 @@
             <breadcrumbs></breadcrumbs>
         </div>
 
-        <template  v-if="isLoading === false && products !== null && products.length === 0" >
+        <template v-if="isLoading === false && products !== null && products.length === 0" >
             <div class="text-secondary small text-center mt-3">
                 No records found<br>
                 Click + to create one<br>

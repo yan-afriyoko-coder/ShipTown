@@ -3,23 +3,35 @@
 namespace App\Services;
 
 use Dompdf\Dompdf;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Mustache_Engine;
 
 class PdfService
 {
+    public static function fromMustacheTemplate(string $template, array $data, bool $returnHtml = false): string
+    {
+        $engine = new Mustache_Engine();
+
+        $html = $engine->render($template, $data);
+
+        return $returnHtml ? $html : self::fromHtml($html);
+    }
+
     /**
-     * @return Dompdf
+     * @throws BindingResolutionException
      */
-    public static function fromView(string $view, array $data, $raw = false): Dompdf|string
+    public static function fromView(string $view, array $data): Dompdf|string
     {
         $html = view()->make($view, $data);
 
-        $dompdf = new Dompdf;
+        return self::fromHtml($html);
+    }
+
+    public static function fromHtml(string $html): string
+    {
+        $dompdf = new Dompdf();
         $dompdf->loadHtml($html);
         $dompdf->render();
-
-        if ($raw) {
-            return $dompdf;
-        }
 
         return $dompdf->output();
     }

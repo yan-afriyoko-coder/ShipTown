@@ -18,7 +18,7 @@ class DataCollectionRecordFactory extends Factory
                 return DataCollection::factory()->create();
             },
             'product_id' => function () {
-                return Product::factory()->create();
+                return Product::query()->inRandomOrder()->first() ?? Product::factory()->create();
             },
             'quantity_requested' => rand(1, 100),
             'quantity_scanned' => rand(1, 100),

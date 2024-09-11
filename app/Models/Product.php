@@ -222,6 +222,8 @@ class Product extends BaseModel
     }
 
     /**
+     * @param float $quantity
+     *
      * @return $this
      */
     public function reserveStock(float $quantity): Product
@@ -233,7 +235,7 @@ class Product extends BaseModel
     }
 
     /**
-     * @return HasMany|InventoryTotal
+     * @return HasMany
      */
     public function inventoryTotals(): HasMany
     {
@@ -251,23 +253,26 @@ class Product extends BaseModel
     }
 
     /**
-     * @param  mixed  $query
+     * @param mixed $query
+     * @param string $text
+     *
      * @return mixed
      */
-    public function scopeWhereHasText($query, string $text)
+    public function scopeWhereHasText($query, string $text): mixed
     {
         return $query->where('sku', $text)
             ->orWhereHas('aliases', function (Builder $query) use ($text) {
                 return $query->where('alias', '=', $text)
-                    ->orWhere('alias', 'like', '%'.$text.'%');
+                    ->orWhere('alias', 'like', '%' . $text . '%');
             })
-            ->orWhere('sku', 'like', '%'.$text.'%')
-            ->orWhere('name', 'like', '%'.$text.'%');
+            ->orWhere('sku', 'like', '%' . $text . '%')
+            ->orWhere('name', 'like', '%' . $text . '%');
     }
 
     /**
-     * @param  mixed  $query
-     * @param  mixed  $inventory_warehouse_code
+     * @param mixed $query
+     * @param mixed $inventory_warehouse_code
+     *
      * @return mixed
      */
     public function scopeAddInventorySource($query, $inventory_warehouse_code)
@@ -314,7 +319,11 @@ class Product extends BaseModel
             ->where(['warehouse_id' => $user->warehouse_id]);
     }
 
-    public function prices(?string $warehouse_code = null): HasMany
+    /**
+     * @param string|null $warehouse_code
+     * @return HasMany
+     */
+    public function prices(string $warehouse_code = null): HasMany
     {
         return $this->hasMany(ProductPrice::class)
             ->whereHas('warehouse', function ($query) {
@@ -326,6 +335,9 @@ class Product extends BaseModel
             ->keyBy('warehouse_code');
     }
 
+    /**
+     * @return HasMany
+     */
     public function aliases(): HasMany
     {
         return $this->hasMany(ProductAlias::class);
@@ -338,6 +350,9 @@ class Product extends BaseModel
             ->first();
     }
 
+    /**
+     * @return bool
+     */
     public function isInStock(): bool
     {
         return $this->quantity_available > 0;

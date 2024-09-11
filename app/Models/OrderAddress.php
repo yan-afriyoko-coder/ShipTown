@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Crypt;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  * App\Models\OrderAddress.
@@ -159,12 +161,41 @@ class OrderAddress extends BaseModel
 
     public function getFullNameAttribute(): string
     {
-        return $this->first_name.' '.$this->last_name;
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     protected function setFullNameAttribute(string $value): void
     {
         $this->first_name = explode(' ', $value)[0];
         $this->last_name = explode(' ', $value)[1];
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public static function getSpatieQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for(OrderAddress::class)
+            ->allowedFilters([AllowedFilter::scope('search', 'whereHasText')]);
+    }
+
+    /**
+     * @param mixed $query
+     * @param string $text
+     *
+     * @return mixed
+     */
+    public function scopeWhereHasText(mixed $query, string $text): mixed
+    {
+        return $query->where('company', $text)
+            ->orWhere('company', 'like', '%' . $text . '%')
+            ->orWhere('address1', $text)
+            ->orWhere('address1', 'like', '%' . $text . '%')
+            ->orWhere('address2', $text)
+            ->orWhere('address2', 'like', '%' . $text . '%')
+            ->orWhere('postcode', $text)
+            ->orWhere('postcode', 'like', '%' . $text . '%')
+            ->orWhere('city', $text)
+            ->orWhere('city', 'like', '%' . $text . '%');
     }
 }
