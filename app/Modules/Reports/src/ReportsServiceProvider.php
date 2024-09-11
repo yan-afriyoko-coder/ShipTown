@@ -2,6 +2,7 @@
 
 namespace App\Modules\Reports\src;
 
+use App\Events\EveryMinuteEvent;
 use App\Modules\BaseModuleServiceProvider;
 use Exception;
 
@@ -18,7 +19,11 @@ class ReportsServiceProvider extends BaseModuleServiceProvider
     /**
      * @var array
      */
-    protected $listen = [];
+    protected $listen = [
+        EveryMinuteEvent::class => [
+            Listeners\EveryMinuteEventListener::class,
+        ],
+    ];
 
     public static function disabling(): bool
     {
@@ -45,7 +50,7 @@ class ReportsServiceProvider extends BaseModuleServiceProvider
         //        );
 
         $this->loadViewsFrom(
-            __DIR__.'/../resources/views',
+            __DIR__ . '/../resources/views',
             $module_filename
         );
 

@@ -165,7 +165,6 @@ class ReportBase extends Model
 
         $requestedSelect
             ->each(function ($selectFieldName) use ($queryBuilder) {
-
                 $field = data_get($this->allFields, $selectFieldName);
 
                 if ($field && $field['displayable'] === false) {
@@ -193,7 +192,6 @@ class ReportBase extends Model
 
     private function addExactFilters(): array
     {
-
         $allowedFilters = [];
 
         // add exact filters

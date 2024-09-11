@@ -12,12 +12,12 @@ class ProductsManySeeder extends Seeder
         $i = 1000;
 
         while ($i > 0) {
-            $this->creteRecords(500);
+            $this->createRecords(500);
             $i--;
         }
     }
 
-    public static function creteRecords(int $i): array
+    public static function createRecords(int $i): array
     {
         $records = [];
 
